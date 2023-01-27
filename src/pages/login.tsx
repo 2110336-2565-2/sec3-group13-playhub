@@ -9,6 +9,26 @@ import EmailTextFeild from "@/components/EmailTextFeild";
 import ActionButton from "@/components/ActionButton";
 
 export default function Home() {
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+
+  function validateForm() {
+    return email.length > 0 && password.length > 0;
+  }
+
+  function handleSubmit() {
+    validateForm();
+    //login endpoint
+  }
+
+  function handleEmailChange(event: any) {
+    setEmail(event.target.value);
+  }
+
+  function handlePasswordChange(event: any) {
+    setPassword(event.target.value);
+  }
+
   return (
     <>
       <Grid
@@ -23,13 +43,16 @@ export default function Home() {
           <Image src="/images/logo.png" height={119} width={119} alt="Logo" />
         </Grid>
         <Grid item>
-          <EmailTextFeild />
+          <EmailTextFeild handleChange={handleEmailChange} value={email} />
         </Grid>
         <Grid item>
-          <PasswordTextFeild />
+          <PasswordTextFeild
+            handleChange={handlePasswordChange}
+            value={password}
+          />
         </Grid>
         <Grid item>
-          <ActionButton />
+          <ActionButton onClick={handleSubmit}/>
         </Grid>
         <Grid item>
           <Box sx={{ width: "20vw", minWidth: "260px" }}>
