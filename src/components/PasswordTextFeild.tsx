@@ -12,6 +12,7 @@ export default function PasswordTextFeild() {
   return (
     <>
       <TextField
+        sx={{ width: "20vw", minWidth: "260px" }}
         label="Password"
         variant="outlined"
         type={showPassword ? "text" : "password"}
