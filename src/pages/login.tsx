@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import Image from "next/image";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
@@ -11,22 +11,34 @@ import ActionButton from "@/components/ActionButton";
 export default function Home() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [isSubmit, setIsSubmit] = React.useState(0);
 
   function validateForm() {
-    return email.length > 0 && password.length > 0;
+    return validateEmail() && validatePassword();
+  }
+
+  function validateEmail(){
+    return email.length > 0;
+  }
+
+  function validatePassword(){
+    return password.length > 0;
   }
 
   function handleSubmit() {
     validateForm();
+    setIsSubmit(1);
     //login endpoint
   }
 
   function handleEmailChange(event: any) {
     setEmail(event.target.value);
+    setIsSubmit(0);
   }
 
   function handlePasswordChange(event: any) {
     setPassword(event.target.value);
+    setIsSubmit(0);
   }
 
   return (
@@ -43,20 +55,25 @@ export default function Home() {
           <Image src="/images/logo.png" height={119} width={119} alt="Logo" />
         </Grid>
         <Grid item>
-          <EmailTextFeild handleChange={handleEmailChange} value={email} />
+          <EmailTextFeild
+            handleChange={handleEmailChange}
+            value={email}
+            error={!validateEmail() && isSubmit}
+          />
         </Grid>
         <Grid item>
           <PasswordTextFeild
             handleChange={handlePasswordChange}
             value={password}
+            error={!validatePassword() && isSubmit}
           />
         </Grid>
         <Grid item>
-          <ActionButton onClick={handleSubmit}/>
+          <ActionButton onClick={handleSubmit} />
         </Grid>
         <Grid item>
           <Box sx={{ width: "20vw", minWidth: "260px" }}>
-            <Link color="neutral" underline="hover" href="/register">
+            <Link color="inherit" underline="hover" href="/register">
               Register?
             </Link>
           </Box>
