@@ -1,9 +1,14 @@
 import Button from "@mui/material/Button";
+import { MouseEventHandler } from "react";
 
-export default function ActionButton({onClick} : any) {
+type props = {
+  onClick : () => void;
+}
+
+export default function ActionButton(props : props) {
   return (
     <>
-      <Button onClick={onClick} sx={{ width: "10vw", minWidth: "200px" }} variant="contained">
+      <Button onClick={props.onClick} sx={{ width: "10vw", minWidth: "200px" }} variant="contained">
         Login
       </Button>
     </>

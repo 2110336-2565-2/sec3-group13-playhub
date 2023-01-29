@@ -5,16 +5,24 @@ import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 
-export default function PasswordTextFeild({ handleChange, value, error }: any) {
+type props = {
+  handleChange: (
+    event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => void;
+  value: string;
+  error: boolean;
+};
+
+export default function PasswordTextFeild(props: props) {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   return (
     <>
       <TextField
-        error={error}
-        onChange={(e) => handleChange(e)}
-        value={value}
+        error={props.error}
+        onChange={(e) => props.handleChange(e)}
+        value={props.value}
         sx={{ width: "20vw", minWidth: "260px" }}
         label="Password"
         variant="outlined"
