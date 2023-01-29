@@ -16,6 +16,7 @@ type User = {
   brithdate: string;
   description: string;
   image: string;
+  email: string;
 };
 
 export default function Home() {
@@ -25,7 +26,10 @@ export default function Home() {
     brithdate: "26/4/2002",
     description: "ชอบเล่นแนวบลัฟครับ หรือจะไปเล่นห้องผมก็ได้นะ",
     image: "/images/aom.jpg",
+    email: "aom@gmail.com",
   };
+
+  const owner: boolean = false;
 
   return (
     <>
@@ -64,11 +68,23 @@ export default function Home() {
         <Grid item sx={{ width: "20vw", minWidth: "260px" }}>
           <Divider />
         </Grid>
-        <Grid item>
-          <IconButton>
-            <EditIcon />
-          </IconButton>
-        </Grid>
+        {owner ? (
+          <>
+            <Grid item>
+              <Typography variant="body1">{tmpUser.email}</Typography>
+            </Grid>
+            <Grid item sx={{ width: "20vw", minWidth: "260px" }}>
+              <Divider />
+            </Grid>
+            <Grid item>
+              <IconButton>
+                <EditIcon />
+              </IconButton>
+            </Grid>
+          </>
+        ) : (
+          <></>
+        )}
       </Grid>
     </>
   );
