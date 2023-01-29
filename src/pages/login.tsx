@@ -11,7 +11,7 @@ import ActionButton from "@/components/ActionButton";
 export default function Home() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [isSubmit, setIsSubmit] = React.useState(0);
+  const [isSubmit, setIsSubmit] = React.useState(false);
 
   function validateForm() {
     return validateEmail() && validatePassword();
@@ -27,18 +27,18 @@ export default function Home() {
 
   function handleSubmit() {
     validateForm();
-    setIsSubmit(1);
+    setIsSubmit(true);
     //login endpoint
   }
 
   function handleEmailChange(event: any) {
     setEmail(event.target.value);
-    setIsSubmit(0);
+    setIsSubmit(false);
   }
 
   function handlePasswordChange(event: any) {
     setPassword(event.target.value);
-    setIsSubmit(0);
+    setIsSubmit(false);
   }
 
   return (
