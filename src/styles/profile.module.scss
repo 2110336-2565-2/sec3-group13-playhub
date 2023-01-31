@@ -1,0 +1,25 @@
+@use "variables" as v;
+
+.avatar {
+  width: 200px;
+  height: 200px;
+}
+.avatar-img {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  opacity: 0.5;
+}
+.overlay-img {
+  position: absolute;
+  color: black;
+  font-size: 7.5vw;
+  opacity: 0.5;
+}
+.save-btn {
+  background-color: v.$primary;
+  color: black;
+}
+.warning-txt {
+  color: v.$error;
+}
