@@ -50,6 +50,7 @@ export default function Home() {
         alignItems="center"
         justifyContent="center"
         style={{ minHeight: "80vh" }}
+        marginTop="5vh"
       >
         <Grid item>
           <Avatar alt="Anya" className={`${styles["avatar"]}`}>
