@@ -21,13 +21,13 @@ export default function Navbar() {
 
   return (
     <>
-      <AppBar position="static">
+      <AppBar position="static" color="secondary">
         <Toolbar>
           <Image src="/images/logo.png" width={50} height={50} alt="Logo" />
-          <Box sx={{ flexGrow: 1 }}></Box>
           <Button color="inherit">
-            <Typography variant="body1">New Game</Typography>
+            <Typography variant="body1">Home</Typography>
           </Button>
+          <Box sx={{ flexGrow: 1 }}></Box>
           <IconButton onClick={handleMenu}>
             <Avatar alt="Anya" src="/images/aom.jpg" />
           </IconButton>

@@ -1,8 +1,10 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import DeleteIcon from "@mui/icons-material/Delete";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 
 import DeletePostDialog from "./DeletePostDialog";
+import IconButton from "@mui/material/IconButton";
 
 export default function DeletePostButton() {
   const [openDeletePostModal, setOpenDeletePostModal] = React.useState(false);
@@ -18,14 +20,9 @@ export default function DeletePostButton() {
 
   return (
     <>
-      <Button
-        variant="contained"
-        startIcon={<DeleteIcon />}
-        color="error"
-        onClick={handleOpenModal}
-      >
-        Delete
-      </Button>
+      <IconButton color="error" onClick={handleOpenModal}>
+        <DeleteOutlineIcon />
+      </IconButton>
       <DeletePostDialog 
         openModal = {openDeletePostModal}
         handleCloseModal = {handleCloseModal}
