@@ -1,3 +1,4 @@
+import { styled } from "@mui/material/styles";
 import TextField from "@mui/material/TextField";
 
 // type
@@ -19,10 +20,16 @@ const email_input = {
   minHeight: "40px",
 };
 
+const CssTextField = styled(TextField)({
+  "& .MuiFormHelperText-root": {
+    margin: "0px",
+  },
+});
+
 export default function CommonTextFeild(props: props) {
   return (
     <>
-      <TextField
+      <CssTextField
         error={props.error}
         value={props.value}
         onChange={(e) => props.handleChange(e)}
