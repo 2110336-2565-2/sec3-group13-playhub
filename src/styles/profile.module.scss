@@ -1,5 +1,11 @@
 @use "variables" as v;
 
+.grid-container {
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  margin: 2vh 0 0 0;
+}
 .avatar {
   width: 200px;
   height: 200px;
@@ -15,6 +21,27 @@
   color: black;
   font-size: 7.5vw;
   opacity: 0.5;
+}
+.img-warning {
+  text-align: center;
+}
+.edit-info-container {
+  width: 50vw;
+  margin: 3vh 0 0 0;
+}
+.helper-text-box {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+.helper-text-error {
+  display: none; // trigger when error only
+  text-align: start;
+  grid-column: 1;
+  color: v.$error;
+}
+.helper-text {
+  text-align: end;
+  grid-column: 2;
 }
 .save-btn {
   background-color: v.$primary;
