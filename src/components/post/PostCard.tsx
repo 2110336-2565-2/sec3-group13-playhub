@@ -61,13 +61,14 @@ export default function PostCard() {
           </Collapse>
         </CardContent>
         <CardActions>
-          <Box sx={{ flexGrow: 1 }}>
-            <Grow in={!hidden} style={{ transformOrigin: '0 0 0' }}>
+          <Box sx={{ flexGrow: 1 }}></Box>
+          
+            <Grow in={!hidden} style={{ transformOrigin: "0 0 0" }}>
               <Box>
-                <CommonButton label="Join"/>
+              <CommonButton label="Join" />
               </Box>
             </Grow>
-          </Box>
+          
           <ExpandMore expand={!hidden} onClick={() => setHidden(!hidden)}>
             <ArrowDownwardIcon />
           </ExpandMore>
