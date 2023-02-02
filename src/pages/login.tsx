@@ -5,9 +5,9 @@ import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import { Typography } from "@mui/material";
 
-import PasswordTextFeild from "@/components/login/PasswordTextFeild";
+import PasswordTextFeild from "@/components/login/PasswordTextField";
 import CommonButton from "@/components/public/CommonButton";
-import CommonTextFeild from "@/components/public/CommonTextFeild";
+import CommonTextFeild from "@/components/public/CommonTextField";
 
 // style
 const login_components = {
