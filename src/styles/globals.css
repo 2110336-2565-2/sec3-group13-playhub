@@ -1,6 +1,13 @@
-*{
+* {
   padding:0;
   margin:0;
+  font-family: LINESeed;
+}
+
+@font-face {
+  font-family: LINESeed;
+  src: url("/fonts/LINESeedSansTH_W_Rg.woff2");
+  format: ("woff2");
 }
 
 /* :root {

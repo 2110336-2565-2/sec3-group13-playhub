@@ -9,7 +9,13 @@ const mainTheme = createTheme({
       light: "#ffe1b4",
       dark: "#a66300",
     },
+    secondary: {
+      main: "#000000",
+    },
   },
+  typography: {
+    fontFamily: "LINESeed",
+  }
 });
 
 export default function App({ Component, pageProps }: AppProps) {
