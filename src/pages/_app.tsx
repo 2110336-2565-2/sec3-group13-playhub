@@ -13,6 +13,9 @@ const mainTheme = createTheme({
       main: "#000000",
     },
   },
+  typography: {
+    fontFamily: "LINESeed",
+  }
 });
 
 export default function App({ Component, pageProps }: AppProps) {
