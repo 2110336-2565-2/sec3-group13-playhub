@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import AppBar from "@mui/material/AppBar";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
@@ -10,6 +9,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Toolbar from "@mui/material/Toolbar";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import Logo from "./Logo";
 
 export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -23,7 +23,7 @@ export default function Navbar() {
     <>
       <AppBar position="static" color="secondary">
         <Toolbar>
-          <Image src="/images/logo.png" width={50} height={50} alt="Logo" />
+          <Logo width={50} height={50} />
           <Button color="inherit">
             <Typography variant="body1">Home</Typography>
           </Button>

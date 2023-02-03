@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
@@ -8,6 +7,7 @@ import { Typography, TextField } from "@mui/material";
 import PasswordTextFeild from "@/components/login/PasswordTextField";
 import CommonButton from "@/components/public/CommonButton";
 import { validateEmail, validateTextField } from "@/utilities/validation";
+import Logo from "@/components/public/Logo";
 
 // style
 const login_components = {
@@ -57,9 +57,8 @@ export default function Home() {
         style={{ minHeight: "100vh" }}
       >
         <Grid item>
-          <Image src="/images/logo.png" height={119} width={119} alt="Logo" />
+          <Logo width={119} height={119}/>
         </Grid>
-
         <Grid item>
           <TextField
             sx={{
