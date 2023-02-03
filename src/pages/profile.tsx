@@ -23,16 +23,25 @@ const tmpUser: User = {
 const owner: boolean = true;
 const avatar = { width: 200, height: 200 };
 
+const email_txt = {
+  fontSize: "body1.fontSize",
+  fontWeight: "regular",
+  textAlign: "center",
+  m: 1,
+};
+
+const desc_txt = {
+  fontSize: "body1.fontSize",
+  fontWeight: "bold",
+  textAlign: "center",
+  m: 1,
+};
+
 export default function Home() {
   return (
     <>
       <Navbar />
-      <Stack
-        spacing={2}
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: "90vh" }}
-      >
+      <Stack spacing={2} alignItems="center" justifyContent="center" style={{ minHeight: "90vh" }}>
         <Typography variant="h1">{tmpUser.name}</Typography>
         {owner && <Typography variant="body1">{tmpUser.email}</Typography>}
         <Avatar sx={avatar} alt="Profile picture" src={tmpUser.image} />

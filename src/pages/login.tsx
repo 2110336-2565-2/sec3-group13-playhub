@@ -26,7 +26,6 @@ export default function Home() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isSubmit, setIsSubmit] = React.useState(false);
-
   const [foundUser, setFoundUser] = React.useState(true);
 
   // supabase use a little time to get current session, so some stall display might be needed
@@ -50,18 +49,14 @@ export default function Home() {
     setSession(signInResult.data.session);
   }
 
-  function handleEmailChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) {
+  function handleEmailChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setEmail(event.target.value);
     setIsSubmit(false);
 
     setFoundUser(true);
   }
 
-  function handlePasswordChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) {
+  function handlePasswordChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
     setPassword(event.target.value);
     setIsSubmit(false);
 
@@ -108,9 +103,7 @@ export default function Home() {
         <PasswordTextFeild
           handleChange={handlePasswordChange}
           value={password}
-          error={
-            isSubmit && (validateTextField(password, 1) !== "" || !foundUser)
-          }
+          error={isSubmit && (validateTextField(password, 1) !== "" || !foundUser)}
           errorMsg={isSubmit && validateTextField(password, 1)}
         />
 
