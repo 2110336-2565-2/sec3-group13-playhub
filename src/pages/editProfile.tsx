@@ -15,7 +15,6 @@ import {
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
-import styles from "../styles/profile.module.scss";
 import { Gender } from "enum/gender";
 
 type User = {
@@ -37,6 +36,45 @@ export default function Home() {
     email: "aom@gmail.com",
   };
 
+  const error = "#ff0000";
+  const avatar = { width: 200, height: 200 };
+  const overlayIcon = {
+    position: "absolute",
+    color: "black",
+    fontSize: "7.5vw",
+    opacity: "0.5",
+  };
+  const imgErrorWarning = {
+    textAlign: "center",
+    color: error,
+    display: "none",
+  };
+  const editInfoContainer = {
+    width: "50vw",
+    margin: "3vh 0 0 0",
+  };
+  const helperTextBox = {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+  };
+  const helperTextError = {
+    textAlign: "start",
+    gridColumn: 1,
+    color: error,
+    display: "none",
+  };
+  const helperText = {
+    textAlign: "end",
+    gridColumn: 2,
+  };
+  const saveBtn = {
+    backgroundColor: "#ffa31a",
+    color: "black",
+  };
+  const warningTxt = {
+    color: error,
+  };
+
   const controller = new AbortController();
   const [displayName, setDisplayName] = useState("");
   const [gender, setGender] = useState({});
@@ -55,30 +93,38 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Grid container direction="column" spacing={2} className={`${styles["grid-container"]}`}>
+      <Grid
+        container
+        direction="column"
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+        style={{ minHeight: "80vh" }}
+        margin="2vh 0 0 0"
+      >
         <Grid item>
-          <Avatar alt="Anya" className={`${styles["avatar"]}`}>
-            <div className={`${styles["avatar-img-container"]}`}>
-              <img src={tmpUser.image} className={`${styles["avatar-img"]}`} />
-            </div>
-            <CameraAltIcon className={`${styles["overlay-img"]}`} />
+          <Avatar alt="Anya" sx={avatar}>
+            <img
+              src={tmpUser.image}
+              style={{ position: "relative", opacity: "0.5", width: "200px", height: "200px" }}
+            />
+            <CameraAltIcon sx={overlayIcon} />
           </Avatar>
         </Grid>
-        <Grid item className={`${styles["img-warning"]} ${styles["warning-txt"]}`}>
+        {/* image error warning */}
+        <Grid item sx={imgErrorWarning}>
           <Typography variant="body1">
             นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .png) ขนาดไฟล์จะต้องไม่เกิน 1 MB
           </Typography>
           <Typography variant="body1">ขนาดไฟล์จะต้องไม่เกิน 1 MB</Typography>
         </Grid>
-        <div className={`${styles["edit-info-container"]}`}>
+        <div style={editInfoContainer}>
           <Grid item>
             <Typography variant="body1">{editProfileHeader.displayName}</Typography>
             <TextField variant="outlined" fullWidth size="small" />
-            <div className={`${styles["helper-text-box"]}`}>
-              <FormHelperText className={`${styles["helper-text-error"]}`}>
-                ช่องนี้ไม่สามารถเว้นว่างได้
-              </FormHelperText>
-              <FormHelperText className={`${styles["helper-text"]}`}>123/xxx</FormHelperText>
+            <div style={helperTextBox}>
+              <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
+              <FormHelperText sx={helperText}>123/xxx</FormHelperText>
             </div>
           </Grid>
           <Grid item>
@@ -91,11 +137,11 @@ export default function Home() {
               fullWidth
               size="small"
             />
-            <div className={`${styles["helper-text-box"]}`}>
-              <FormHelperText className={`${styles["helper-text-error"]}`}>
+            <div style={helperTextBox}>
+              <FormHelperText sx={helperTextError}>
                 {`ช่องนี้มีตัวอักษรได้ไม่เกิน ${"xxx"} ตัว`}
               </FormHelperText>
-              <FormHelperText className={`${styles["helper-text"]}`}>123/xxx</FormHelperText>
+              <FormHelperText sx={helperText}>123/xxx</FormHelperText>
             </div>
           </Grid>
           <Grid item>
@@ -113,12 +159,12 @@ export default function Home() {
           </Grid>
         </div>
         <Grid item>
-          <Button variant="contained" className={`${styles["save-btn"]}`}>
+          <Button variant="contained" sx={saveBtn}>
             SAVE
           </Button>
         </Grid>
         <Grid item>
-          <Typography variant="body1" className={`${styles["warning-txt"]}`}>
+          <Typography variant="body1" sx={warningTxt}>
             ท่านต้องกด SAVE เพื่อบันทึกข้อมูลใหม่
           </Typography>
         </Grid>
