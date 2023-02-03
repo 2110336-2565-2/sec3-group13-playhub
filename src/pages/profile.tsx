@@ -1,8 +1,8 @@
 import Avatar from "@mui/material/Avatar";
-import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Chip from "@mui/material/Chip";
 import Typography from "@mui/material/Typography";
+import Stack from "@mui/material/Stack";
 
 import EditIcon from "@mui/icons-material/Edit";
 import MaleIcon from "@mui/icons-material/Male";
@@ -10,7 +10,6 @@ import CakeIcon from "@mui/icons-material/Cake";
 
 import { User } from "@/types/User";
 import Navbar from "@/components/public/Navbar";
-import PostCard from "@/components/post/PostCard";
 
 // mocked user information
 const tmpUser: User = {
@@ -28,47 +27,26 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Grid
-        container
-        direction="column"
+      <Stack
         spacing={2}
         alignItems="center"
         justifyContent="center"
-        style={{ minHeight: "80vh" }}
+        style={{ minHeight: "90vh" }}
       >
-        <Grid item>
-            <Typography variant="h1" sx={{m:1}}>{tmpUser.name}</Typography>
-            {owner && <Typography variant="body1" sx={{m:1,textAlign:"center"}}>
-              {tmpUser.email}</Typography> 
-            }
-        </Grid>
-        <Grid item>
-          <Avatar sx={avatar} alt="Profile picture" src={tmpUser.image} />
-        </Grid>
-        <Grid item>
-          <Grid container direction="row" spacing={1}>
-            <Grid item>
-              <Chip icon={<MaleIcon />} label={tmpUser.sex} />
-            </Grid>
-            <Grid item>
-              <Chip icon={<CakeIcon />} label={tmpUser.birthdate} />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item>
-          <Typography variant="body1">{tmpUser.description}</Typography>
-        </Grid>
-        {owner &&
-          <Grid item>
-            <IconButton>
-              <EditIcon />
-            </IconButton>
-          </Grid>
-        }
-        <Grid item>
-          <PostCard />
-        </Grid>
-      </Grid>
+        <Typography variant="h1">{tmpUser.name}</Typography>
+        {owner && <Typography variant="body1">{tmpUser.email}</Typography>}
+        <Avatar sx={avatar} alt="Profile picture" src={tmpUser.image} />
+        <Stack direction="row" spacing={1}>
+          <Chip icon={<MaleIcon />} label={tmpUser.sex} />
+          <Chip icon={<CakeIcon />} label={tmpUser.birthdate} />
+        </Stack>
+        <Typography variant="body1">{tmpUser.description}</Typography>
+        {owner && (
+          <IconButton>
+            <EditIcon />
+          </IconButton>
+        )}
+      </Stack>
     </>
   );
 }
