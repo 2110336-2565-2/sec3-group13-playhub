@@ -15,6 +15,15 @@ const mainTheme = createTheme({
   },
   typography: {
     fontFamily: "LINESeed",
+    h1: {
+      fontSize: 20,
+      textAlign: "center",
+      fontWeight: 800
+    },
+    body1: {
+      fontSize: 16,
+      fontWeight: 700
+    }
   },
   components: {
     MuiFormHelperText: {
