@@ -24,8 +24,6 @@ export default function Home() {
   const [isSubmit, setIsSubmit] = React.useState(false);
   const [foundUser, setFoundUser] = React.useState(true);
 
-  const [foundUser, setFoundUser] = React.useState(true);
-
   async function handleSubmit() {
     setIsSubmit(true);
   }

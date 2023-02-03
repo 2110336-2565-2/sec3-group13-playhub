@@ -37,8 +37,6 @@ const desc_txt = {
   m: 1,
 };
 
-const avatar = { width: 200, height: 200 };
-
 export default function Home() {
   return (
     <>

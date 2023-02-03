@@ -22,13 +22,6 @@ const password_input = {
   minHeight: "40px",
 };
 
-// style
-const password_input = {
-  width: "23vw",
-  minWidth: "260px",
-  height: "7vh",
-  minHeight: "40px",
-};
 const CssTextField = styled(TextField)({
   "& .MuiFormHelperText-root": {
     margin: "0px",
