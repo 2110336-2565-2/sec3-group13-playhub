@@ -15,6 +15,15 @@ const mainTheme = createTheme({
   },
   typography: {
     fontFamily: "LINESeed",
+  },
+  components: {
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          margin : 0
+        }
+      }
+    }
   }
 });
 

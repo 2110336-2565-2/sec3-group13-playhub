@@ -3,11 +3,10 @@ import Image from "next/image";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
-import { Typography } from "@mui/material";
+import { Typography, TextField } from "@mui/material";
 
 import PasswordTextFeild from "@/components/login/PasswordTextField";
 import CommonButton from "@/components/public/CommonButton";
-import CommonTextFeild from "@/components/public/CommonTextField";
 
 // style
 const login_components = {
@@ -64,18 +63,24 @@ export default function Home() {
         spacing={3}
         alignItems="center"
         justifyContent="center"
-        style={{ minHeight: "80vh" }}
+        style={{ minHeight: "100vh" }}
       >
         <Grid item>
           <Image src="/images/logo.png" height={119} width={119} alt="Logo" />
         </Grid>
         <Grid item>
-          <CommonTextFeild
-            placeHolder="Email"
-            handleChange={handleEmailChange}
+          <TextField
+            sx={{
+              width: "23vw",
+              minWidth: "260px",
+              height: "7vh",
+              minHeight: "40px",
+            }}
+            label="Email"
+            onChange={handleEmailChange}
             value={email}
             error={(isEmptyEmail() || !isValidForm() || !foundUser) && isSubmit}
-            errorMsg={
+            helperText={
               isSubmit
                 ? isEmptyEmail()
                   ? "ช่องนี้ไม่สามารถเว้นว่างได้"

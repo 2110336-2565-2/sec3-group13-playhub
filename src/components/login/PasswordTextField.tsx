@@ -4,7 +4,6 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { styled } from "@mui/material/styles";
 
 // type
 type props = {
@@ -23,11 +22,6 @@ const password_input = {
   height: "7vh",
   minHeight: "40px",
 };
-const CssTextField = styled(TextField)({
-  "& .MuiFormHelperText-root": {
-    margin: "0px",
-  },
-});
 
 export default function PasswordTextFeild(props: props) {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -35,14 +29,13 @@ export default function PasswordTextFeild(props: props) {
 
   return (
     <>
-      <CssTextField
+      <TextField
         error={props.error}
         helperText={props.errorMsg}
         onChange={(e) => props.handleChange(e)}
         value={props.value}
         sx={password_input}
         label="Password"
-        variant="outlined"
         type={showPassword ? "text" : "password"}
         InputProps={{
           endAdornment: (
