@@ -16,7 +16,7 @@ import PostCard from "@/components/post/PostCard";
 const tmpUser: User = {
   name: "Chanathip sombuthong",
   sex: "Male",
-  brithdate: "26/4/2002",
+  birthdate: "26/4/2002",
   description: "ชอบเล่นแนวบลัฟครับ หรือจะไปเล่นห้องผมก็ได้นะ",
   image: "/images/aom.jpg",
   email: "aom@gmail.com",
@@ -51,7 +51,7 @@ export default function Home() {
               <Chip icon={<MaleIcon />} label={tmpUser.sex} />
             </Grid>
             <Grid item>
-              <Chip icon={<CakeIcon />} label={tmpUser.brithdate} />
+              <Chip icon={<CakeIcon />} label={tmpUser.birthdate} />
             </Grid>
           </Grid>
         </Grid>
