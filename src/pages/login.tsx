@@ -86,13 +86,13 @@ export default function Home() {
           />
         </Grid>
 
-        <Grid item>
-          <Box sx={login_components} display="flex">
-            <Typography color="error">
-              {isSubmit && !foundUser && "อีเมลหรือรหัสผ่านไม่ถูกต้อง"}
-            </Typography>
-          </Box>
-        </Grid>
+        {isSubmit && !foundUser && (
+          <Grid item>
+            <Box sx={login_components} display="flex">
+              <Typography color="error">อีเมลหรือรหัสผ่านไม่ถูกต้อง</Typography>
+            </Box>
+          </Grid>)
+        }
 
         <Grid item>
           <CommonButton label="Login" onClick={handleSubmit} />
