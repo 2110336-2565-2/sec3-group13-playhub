@@ -8,11 +8,11 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 // type
 type props = {
   handleChange: (
-    event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => void;
   value: string;
   error: boolean;
-  errorMsg: string;
+  errorMsg: string | boolean;
 };
 
 // style
