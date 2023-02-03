@@ -1,15 +1,14 @@
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Chip from "@mui/material/Chip";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
+import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 import MaleIcon from "@mui/icons-material/Male";
+import FemaleIcon from "@mui/icons-material/Female";
+import TransgenderIcon from "@mui/icons-material/Transgender";
 import CakeIcon from "@mui/icons-material/Cake";
 
 import { User } from "@/types/User";
 import Navbar from "@/components/public/Navbar";
+import { Gender } from "enum/gender";
 
 // mocked user information
 const tmpUser: User = {
@@ -23,21 +22,9 @@ const tmpUser: User = {
 const owner: boolean = true;
 const avatar = { width: 200, height: 200 };
 
-const email_txt = {
-  fontSize: "body1.fontSize",
-  fontWeight: "regular",
-  textAlign: "center",
-  m: 1,
-};
-
-const desc_txt = {
-  fontSize: "body1.fontSize",
-  fontWeight: "bold",
-  textAlign: "center",
-  m: 1,
-};
-
 export default function Home() {
+  function handleEdit(): void {}
+
   return (
     <>
       <Navbar />
@@ -46,12 +33,23 @@ export default function Home() {
         {owner && <Typography variant="body1">{tmpUser.email}</Typography>}
         <Avatar sx={avatar} alt="Profile picture" src={tmpUser.image} />
         <Stack direction="row" spacing={1}>
-          <Chip icon={<MaleIcon />} label={tmpUser.sex} />
+          <Chip
+            icon={
+              tmpUser.sex === Gender.male ? (
+                <MaleIcon />
+              ) : tmpUser.sex === Gender.female ? (
+                <FemaleIcon />
+              ) : (
+                <TransgenderIcon />
+              )
+            }
+            label={tmpUser.sex}
+          />
           <Chip icon={<CakeIcon />} label={tmpUser.birthdate} />
         </Stack>
         <Typography variant="body1">{tmpUser.description}</Typography>
         {owner && (
-          <IconButton>
+          <IconButton onClick={handleEdit}>
             <EditIcon />
           </IconButton>
         )}
