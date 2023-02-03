@@ -7,6 +7,7 @@ import { Typography, TextField } from "@mui/material";
 
 import PasswordTextFeild from "@/components/login/PasswordTextField";
 import CommonButton from "@/components/public/CommonButton";
+import { validateEmail, validateTextField } from "@/utilities/validation";
 
 // style
 const login_components = {
@@ -16,42 +17,32 @@ const login_components = {
   minHeight: "40px",
 };
 
-const expression: RegExp =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
 export default function Home() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isSubmit, setIsSubmit] = React.useState(false);
+
   const [foundUser, setFoundUser] = React.useState(true);
-
-  function isEmptyEmail() {
-    return email.length == 0;
-  }
-
-  function isEmptyPassword() {
-    return password.length == 0;
-  }
-
-  function isValidForm() {
-    return expression.test(email);
-  }
 
   async function handleSubmit() {
     setIsSubmit(true);
-    fetch("/api/hello").then;
   }
 
-  function handleEmailChange(event: any) {
+  function handleEmailChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) {
     setEmail(event.target.value);
     setIsSubmit(false);
 
     setFoundUser(true);
   }
 
-  function handlePasswordChange(event: any) {
+  function handlePasswordChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) {
     setPassword(event.target.value);
     setIsSubmit(false);
+
     setFoundUser(true);
   }
 
@@ -68,6 +59,7 @@ export default function Home() {
         <Grid item>
           <Image src="/images/logo.png" height={119} width={119} alt="Logo" />
         </Grid>
+
         <Grid item>
           <TextField
             sx={{
@@ -79,47 +71,34 @@ export default function Home() {
             label="Email"
             onChange={handleEmailChange}
             value={email}
-            error={(isEmptyEmail() || !isValidForm() || !foundUser) && isSubmit}
-            helperText={
-              isSubmit
-                ? isEmptyEmail()
-                  ? "ช่องนี้ไม่สามารถเว้นว่างได้"
-                  : isValidForm()
-                  ? ""
-                  : "รูปแบบอีเมลไม่ถูกต้อง"
-                : ""
-            }
+            error={isSubmit && (validateEmail(email) !== "" || !foundUser)}
+            helperText={isSubmit && validateEmail(email)}
           />
         </Grid>
+
         <Grid item>
           <PasswordTextFeild
             handleChange={handlePasswordChange}
             value={password}
-            error={(isEmptyPassword() || !foundUser) && isSubmit}
-            errorMsg={
-              isSubmit
-                ? isEmptyPassword()
-                  ? "ช่องนี้ไม่สามารถเว้นว่างได้"
-                  : ""
-                : ""
+            error={
+              isSubmit && (validateTextField(password, 1) !== "" || !foundUser)
             }
+            errorMsg={isSubmit && validateTextField(password, 1)}
           />
         </Grid>
-        {isSubmit && !foundUser ? (
-          <Grid item>
-            <Box sx={login_components} display="flex">
-              (
-              <Typography color="error">อีเมลหรือรหัสผ่านไม่ถูกต้อง</Typography>
-              )
-            </Box>
-          </Grid>
-        ) : (
-          <></>
-        )}
+
+        <Grid item>
+          <Box sx={login_components} display="flex">
+            <Typography color="error">
+              {isSubmit && !foundUser && "อีเมลหรือรหัสผ่านไม่ถูกต้อง"}
+            </Typography>
+          </Box>
+        </Grid>
 
         <Grid item>
           <CommonButton label="Login" onClick={handleSubmit} />
         </Grid>
+
         <Grid item>
           <Box sx={login_components} display="flex">
             <Typography>Create account{"\u00A0"}</Typography>
@@ -128,6 +107,7 @@ export default function Home() {
             </Link>
           </Box>
         </Grid>
+
       </Grid>
     </>
   );
