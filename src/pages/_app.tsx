@@ -18,22 +18,22 @@ const mainTheme = createTheme({
     h1: {
       fontSize: 20,
       textAlign: "center",
-      fontWeight: 800
+      fontWeight: 800,
     },
     body1: {
       fontSize: 16,
-      fontWeight: 700
-    }
+      fontWeight: 700,
+    },
   },
   components: {
     MuiFormHelperText: {
       styleOverrides: {
         root: {
-          margin : 0
-        }
-      }
-    }
-  }
+          margin: 0,
+        },
+      },
+    },
+  },
 });
 
 export default function App({ Component, pageProps }: AppProps) {

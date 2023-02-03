@@ -4,12 +4,11 @@ import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import { styled } from "@mui/material/styles";
 
 // type
 type props = {
-  handleChange: (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => void;
+  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   value: string;
   error: boolean;
   errorMsg: string | boolean;
@@ -23,13 +22,26 @@ const password_input = {
   minHeight: "40px",
 };
 
+// style
+const password_input = {
+  width: "23vw",
+  minWidth: "260px",
+  height: "7vh",
+  minHeight: "40px",
+};
+const CssTextField = styled(TextField)({
+  "& .MuiFormHelperText-root": {
+    margin: "0px",
+  },
+});
+
 export default function PasswordTextFeild(props: props) {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   return (
     <>
-      <TextField
+      <CssTextField
         error={props.error}
         helperText={props.errorMsg}
         onChange={(e) => props.handleChange(e)}

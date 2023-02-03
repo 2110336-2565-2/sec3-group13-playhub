@@ -46,22 +46,12 @@ export default function Navbar() {
             onClose={handleClose}
           >
             <MenuItem>
-              <Link
-                textAlign="center"
-                color="inherit"
-                underline="none"
-                href="/profile"
-              >
+              <Link textAlign="center" color="inherit" underline="none" href="/profile">
                 Profile
               </Link>
             </MenuItem>
             <MenuItem>
-              <Link
-                textAlign="center"
-                color="error"
-                underline="none"
-                href="/login"
-              >
+              <Link textAlign="center" color="error" underline="none" href="/login">
                 Logout
               </Link>
             </MenuItem>
