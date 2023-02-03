@@ -10,6 +10,10 @@ import { validateEmail, validateTextField } from "@/utilities/validation";
 import Logo from "@/components/public/Logo";
 import Stack from "@mui/material/Stack";
 
+import { supabase } from "supabase/init";
+import { Session } from '@supabase/supabase-js'
+import { SUPABASE_LOGIN_CREDENTIALS_ERROR, SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR } from "@/constants/authentication";
+
 // style
 const login_components = {
   width: "23vw",
@@ -25,8 +29,25 @@ export default function Home() {
 
   const [foundUser, setFoundUser] = React.useState(true);
 
+  // supabase use a little time to get current session, so some stall display might be needed
+  const [isLoadingSession, setIsLoadingSession] = React.useState(true);
+  // current session will be null if no user is logged in or supabase is currently getting current session at the start
+  const [session, setSession] = React.useState<Session | null>(null);
+
   async function handleSubmit() {
     setIsSubmit(true);
+    const signInResult = await supabase.auth.signInWithPassword({email, password});
+    if (signInResult.error && signInResult.error.message == SUPABASE_LOGIN_CREDENTIALS_ERROR) {
+      // wrong email or password
+      console.log("wrong email or password")
+      return;
+    }
+    if (signInResult.error && signInResult.error.message == SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR) {
+      // user have not validate email yet
+      console.log("You have not validate your email yet")
+      return;
+    }
+    setSession(signInResult.data.session);
   }
 
   function handleEmailChange(
@@ -47,6 +68,24 @@ export default function Home() {
     setFoundUser(true);
   }
 
+  async function handleSignOut() {
+    const signOutResult = await supabase.auth.signOut()
+    if (signOutResult.error) {
+      console.log(signOutResult.error)
+      return
+    }
+    setSession(null)
+  }
+
+  React.useEffect(() => {
+    supabase.auth.getSession().then((getSessionResult) => {
+      setSession(getSessionResult.data.session)
+      setIsLoadingSession(false)
+    })
+  }, [])
+
+  if (isLoadingSession) return <p>getting session...</p> // temporary display that supabase is processing
+  if (session != null) return <button onClick={handleSignOut}>logout</button> // temporay display if logged in
   return (
     <>
       <Stack
