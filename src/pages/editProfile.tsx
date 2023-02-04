@@ -17,26 +17,18 @@ import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
 import CommonButton from "@/components/public/CommonButton";
 
-type User = {
-  name: string;
-  sex: string;
-  brithdate: string;
-  description: string;
-  image: string;
-  email: string;
-};
+import { User } from "@/types/User"
 
 export default function Home() {
   const tmpUser: User = {
     name: "Chanathip sombuthong",
     sex: "Male",
-    brithdate: "26/4/2002",
+    birthdate: "26/4/2002",
     description: "ชอบเล่นแนวบลัฟครับ หรือจะไปเล่นห้องผมก็ได้นะ",
     image: "/images/aom.jpg",
     email: "aom@gmail.com",
   };
 
-  const error = "#ff0000";
   const avatar = { width: 200, height: 200 };
   const overlayIcon = {
     position: "absolute",
@@ -45,8 +37,6 @@ export default function Home() {
     opacity: "0.5",
   };
   const imgErrorWarning = {
-    textAlign: "center",
-    color: error,
     display: "none",
   };
   const editInfoContainer = {
@@ -60,7 +50,6 @@ export default function Home() {
   const helperTextError = {
     textAlign: "start",
     gridColumn: 1,
-    color: error,
     display: "none",
   };
   const helperText = {
@@ -106,17 +95,17 @@ export default function Home() {
         </Grid>
         {/* image error warning */}
         <Grid item sx={imgErrorWarning}>
-          <Typography variant="body1">
+          <Typography variant="body1" color="error">
             นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .png) ขนาดไฟล์จะต้องไม่เกิน 1 MB
           </Typography>
-          <Typography variant="body1">ขนาดไฟล์จะต้องไม่เกิน 1 MB</Typography>
+          <Typography align="center" variant="body1" color="error">ขนาดไฟล์จะต้องไม่เกิน 1 MB</Typography>
         </Grid>
         <div style={editInfoContainer}>
           <Grid item>
             <Typography variant="body1">{editProfileHeader.displayName}</Typography>
             <TextField fullWidth size="small" />
             <div style={helperTextBox}>
-              <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
+              <FormHelperText error={true} sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
               <FormHelperText sx={helperText}>123/xxx</FormHelperText>
             </div>
           </Grid>
@@ -130,7 +119,7 @@ export default function Home() {
               size="small"
             />
             <div style={helperTextBox}>
-              <FormHelperText sx={helperTextError}>
+              <FormHelperText error={true} sx={helperTextError}>
                 {`ช่องนี้มีตัวอักษรได้ไม่เกิน ${"xxx"} ตัว`}
               </FormHelperText>
               <FormHelperText sx={helperText}>123/xxx</FormHelperText>
