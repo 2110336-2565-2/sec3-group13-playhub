@@ -9,13 +9,13 @@ import {
   Select,
   MenuItem,
   FormHelperText,
+  Button,
 } from "@mui/material";
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
-import CommonButton from "@/components/public/CommonButton";
 
 import { User } from "@/types/User"
 
@@ -140,7 +140,9 @@ export default function Home() {
           </Grid>
         </div>
         <Grid item>
-          <CommonButton label="SAVE" onClick={() => console.log("SAVE BUTTON IS CLICKED")} />
+          <Button variant="contained" onClick={() => console.log("SAVE BUTTON IS CLICKED")}>
+            SAVE
+          </Button>
         </Grid>
         <Grid item>
           <Typography variant="body1" color="warning.main">
