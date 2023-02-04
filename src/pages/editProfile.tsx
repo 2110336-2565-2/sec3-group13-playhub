@@ -13,11 +13,14 @@ import {
 } from "@mui/material";
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
 
 import { User } from "@/types/User"
+
+import Link from "next/link";
 
 export default function Home() {
   const tmpUser: User = {
@@ -75,6 +78,9 @@ export default function Home() {
   return (
     <>
       <Navbar />
+      <Link href={"/profile"}>
+        <ArrowBackIcon fontSize="large" sx={{margin:"3vh 0 0 3vh",color:"black"}}/>
+      </Link>
       <Grid
         container
         direction="column"
