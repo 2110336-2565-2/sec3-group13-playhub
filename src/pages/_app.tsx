@@ -45,6 +45,16 @@ const mainTheme = createTheme({
         },
       },
     },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "10px",
+          fontSize: 16,
+          fontWeight: 800,
+          padding: "10px 64px",
+        },
+      },
+    },
   },
 });
 

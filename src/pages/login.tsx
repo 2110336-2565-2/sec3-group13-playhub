@@ -1,10 +1,10 @@
 import React from "react";
-import { Link, Box, Typography, TextField, Stack, FormHelperText } from "@mui/material";
+import { Link, Box, Typography, TextField, Stack, FormHelperText, Button } from "@mui/material";
 
 import PasswordTextFeild from "@/components/public/PasswordTextField";
-import CommonButton from "@/components/public/CommonButton";
 import Logo from "@/components/public/Logo";
 import { validateEmail, validateTextField } from "@/utilities/validation";
+import { PagePaths } from "enum/pages";
 
 import { supabase } from "supabase/init";
 import { Session } from "@supabase/supabase-js";
@@ -13,7 +13,6 @@ import {
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
 } from "@/constants/authentication";
 import { useRouter } from "next/router";
-import { PagePaths } from "enum/pages";
 
 // style
 const login_layout = {
@@ -150,8 +149,9 @@ export default function Home() {
           </Box>
         )}
 
-        <CommonButton label="Login" onClick={handleSubmit} />
-
+        <Button variant="contained" onClick={handleSubmit}>
+          Login
+        </Button>
         <Box sx={login_layout} display="flex">
           <Typography variant="body1">Create account{"\u00A0"}</Typography>
           <Link color="primary" underline="hover" href={PagePaths.register}>
