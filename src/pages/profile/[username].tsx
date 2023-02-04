@@ -39,7 +39,7 @@ export default function Home() {
   const [isLoadingSession, setIsLoadingSession] = React.useState(true);
   // current session will be null if no user is logged in or supabase is currently getting current session at the start
   const [session, setSession] = React.useState<Session | null>(null);
-  const [userData, setUserData] = React.useState<any | null>(null);
+  const [userData, setUserData] = React.useState<User | null>(null);
 
   React.useEffect(() => {
     async function setup () {

@@ -1,9 +1,11 @@
-import Button from "@mui/material/Button";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Typography from "@mui/material/Typography";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Typography,
+} from "@mui/material";
 
 type props = {
   openModal: boolean;
@@ -25,16 +27,11 @@ export default function DeletePostDialog(props: props) {
         </DialogTitle>
         <DialogContent dividers>
           <Typography>
-            Do you really want to delete the post? This process cannot be
-            undone.
+            Do you really want to delete the post? This process cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="contained"
-            color="inherit"
-            onClick={props.handleCloseModal}
-          >
+          <Button variant="contained" color="inherit" onClick={props.handleCloseModal}>
             cancel
           </Button>
           <Button variant="contained" color="error" onClick={props.deletePost}>

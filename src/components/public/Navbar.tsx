@@ -54,22 +54,22 @@ export default function Navbar() {
     setAnchorEl(event.currentTarget);
   };
 
-  function routeToHome() : void {
-    router.push(PagePaths.home)
-    return ;
+  function routeToHome(): void {
+    router.push(PagePaths.home);
+    return;
   }
 
   return (
     <>
       <AppBar position="static" color="secondary">
         <Toolbar>
-          <Button color="inherit" disableRipple onClick={routeToHome}>
+          <IconButton disableRipple onClick={routeToHome}>
             <Logo width={50} height={50} />
-          </Button>
+          </IconButton>
           <Box sx={{ flexGrow: 1 }}>
-            <Button color="inherit" disableRipple onClick={routeToHome}>
+            <IconButton color="inherit" disableRipple onClick={routeToHome}>
               <Typography variant="body1">{NavbarPages.home}</Typography>
-            </Button>
+            </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
             <Avatar alt="Profile picture" src={tmpUser.image} />
@@ -88,8 +88,8 @@ export default function Navbar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            {menuItems.map((item: page) => (
-              <MenuItem>
+            {menuItems.map((item: page, idx: number) => (
+              <MenuItem key={idx}>
                 <Link
                   textAlign="center"
                   color={item.name === NavbarPages.logout ? "error" : "inherit"}

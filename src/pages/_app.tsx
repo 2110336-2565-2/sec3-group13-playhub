@@ -16,8 +16,8 @@ const mainTheme = createTheme({
       main: "#ff0000",
     },
     warning: {
-      main: "#ff0000"
-    }
+      main: "#ff0000",
+    },
   },
   typography: {
     fontFamily: "LINESeed",
@@ -30,12 +30,28 @@ const mainTheme = createTheme({
       fontSize: 16,
       fontWeight: 700,
     },
+    body2: {
+      fontSize: 14,
+      fontWeight: 650,
+    },
   },
   components: {
     MuiFormHelperText: {
       styleOverrides: {
         root: {
           margin: 0,
+          fontSize: 14,
+          fontWeight: 650,
+        },
+      },
+    },
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          borderRadius: "10px",
+          fontSize: 16,
+          fontWeight: 800,
+          padding: "10px 64px",
         },
       },
     },
