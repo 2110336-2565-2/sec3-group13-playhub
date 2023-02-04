@@ -1,19 +1,25 @@
-import Typography from "@mui/material/Typography";
-import DeletePostButton from "@/components/post/DeletePostButton";
-
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import Avatar from "@mui/material/Avatar";
-import Box from "@mui/material/Box";
-import { styled } from "@mui/material/styles";
-import Collapse from "@mui/material/Collapse";
-import Card from "@mui/material/Card";
-import CardHeader from "@mui/material/CardHeader";
-import CardContent from "@mui/material/CardContent";
-import CardActions from "@mui/material/CardActions";
-import IconButton, { IconButtonProps } from "@mui/material/IconButton";
 import React from "react";
-import CommonButton from "@/components/public/CommonButton";
-import Grow from "@mui/material/Grow";
+import {
+  Typography,
+  Avatar,
+  Box,
+  Collapse,
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Grow,
+  Button,
+  IconButton,
+} from "@mui/material";
+
+import EditIcon from "@mui/icons-material/Edit";
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+
+import { styled } from "@mui/material/styles";
+import { IconButtonProps } from "@mui/material/IconButton";
+import DeletePostDialog from "@/components/post/DeletePostDialog";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -24,56 +30,100 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
   transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
   transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
   }),
 }));
 
+// mock data
+const tmpPost: any = {
+  title: "ชวนไปดูแงว",
+  ownerName: "น้องออม",
+  ownerProfilePic: "/images/aom.jpg",
+  // there are more data but omitted for now
+};
+const owner: boolean = true;
+
 export default function PostCard() {
-  const [hidden, setHidden] = React.useState(true);
+  const [hiddenPostDetail, setHiddenPostDetail] = React.useState(true);
+  const [openDeletePostModal, setOpenDeletePostModal] = React.useState(false);
+
+  const handleOpenModal = () => setOpenDeletePostModal(true);
+  const handleCloseModal = () => setOpenDeletePostModal(false);
+  const handleExpandDetail = () => setHiddenPostDetail(!hiddenPostDetail);
+
+  function handleDeletePost() {
+    console.log("The post is deleted");
+    handleCloseModal();
+    // delete post end-point
+  }
+
+  function handleEditPost() {
+    console.log("The post is edited");
+    // edit post end-point
+  }
 
   return (
     <>
       <Card
         sx={{
           border: "solid 4px",
-          width: "80vw",
-          minWidth: "260px",
           borderRadius: "16px",
         }}
       >
         <CardHeader
-          avatar={<Avatar alt="Anya" src="/images/aom.jpg" />}
-          title="ชวนไปดูแงว"
-          subheader="น้องออม"
-          action={<DeletePostButton />}
+          avatar={<Avatar alt="Profile picture" src={tmpPost.ownerProfilePic} />}
+          title={tmpPost.title}
+          subheader={tmpPost.ownerName}
+          action={
+            <>
+              {owner && (
+                <>
+                  <IconButton size="large" onClick={handleEditPost}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton size="large" color="error" onClick={handleOpenModal}>
+                    <DeleteOutlineIcon />
+                  </IconButton>
+                </>
+              )}
+            </>
+          }
         />
         <CardContent>
+          {/* post preview details start here */}
           <Typography>location</Typography>
           <Typography>time</Typography>
-          <Collapse in={!hidden}>
+          {/* post preview details end here */}
+
+          <Collapse in={!hiddenPostDetail}>
+            {/* post hidden details start here */}
             <Typography>hihiihih</Typography>
             <Typography>hihiihih</Typography>
             <Typography>hihiihih</Typography>
             <Typography>hihiihih</Typography>
             <Typography>hihiihih</Typography>
+            {/* post hidden details end here */}
           </Collapse>
         </CardContent>
         <CardActions>
           <Box sx={{ flexGrow: 1 }}></Box>
-          
-            <Grow in={!hidden} style={{ transformOrigin: "0 0 0" }}>
-              <Box>
-              <CommonButton label="Join" />
-              </Box>
-            </Grow>
-          
-          <ExpandMore expand={!hidden} onClick={() => setHidden(!hidden)}>
+
+          <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
+            <Button variant="contained">Join</Button>
+          </Grow>
+
+          <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
             <ArrowDownwardIcon />
           </ExpandMore>
         </CardActions>
       </Card>
+
+      <DeletePostDialog
+        openModal={openDeletePostModal}
+        handleCloseModal={handleCloseModal}
+        deletePost={handleDeletePost}
+      />
     </>
   );
 }
