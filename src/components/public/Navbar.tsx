@@ -88,8 +88,8 @@ export default function Navbar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            {menuItems.map((item: page) => (
-              <MenuItem>
+            {menuItems.map((item: page, idx: number) => (
+              <MenuItem key={idx}>
                 <Link
                   textAlign="center"
                   color={item.name === NavbarPages.logout ? "error" : "inherit"}
