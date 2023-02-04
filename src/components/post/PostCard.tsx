@@ -21,6 +21,7 @@ import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
 import DeletePostDialog from "@/components/post/DeletePostDialog";
 
+import { Post } from "../../types/Post";
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -36,10 +37,15 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 // mock data
-const tmpPost: any = {
+const tmpPost: Post = {
   title: "ชวนไปดูแงว",
   ownerName: "น้องออม",
   ownerProfilePic: "/images/aom.jpg",
+  tags: ["A", "B"],
+  description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
+  image: [],
+  location: "หอใน",
+  time: "2/4/2023",
   // there are more data but omitted for now
 };
 const owner: boolean = true;
@@ -98,11 +104,9 @@ export default function PostCard() {
 
           <Collapse in={!hiddenPostDetail}>
             {/* post hidden details start here */}
-            <Typography>hihiihih</Typography>
-            <Typography>hihiihih</Typography>
-            <Typography>hihiihih</Typography>
-            <Typography>hihiihih</Typography>
-            <Typography>hihiihih</Typography>
+            {tmpPost.description.split("\n").map((row) => (
+              <Typography key={row}>{row}</Typography>
+            ))}
             {/* post hidden details end here */}
           </Collapse>
         </CardContent>
