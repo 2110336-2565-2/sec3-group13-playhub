@@ -8,7 +8,6 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Button,
   FormHelperText,
 } from "@mui/material";
 
@@ -16,27 +15,20 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
+import CommonButton from "@/components/public/CommonButton";
 
-type User = {
-  name: string;
-  sex: string;
-  brithdate: string;
-  description: string;
-  image: string;
-  email: string;
-};
+import { User } from "@/types/User"
 
 export default function Home() {
   const tmpUser: User = {
     name: "Chanathip sombuthong",
     sex: "Male",
-    brithdate: "26/4/2002",
+    birthdate: "26/4/2002",
     description: "ชอบเล่นแนวบลัฟครับ หรือจะไปเล่นห้องผมก็ได้นะ",
     image: "/images/aom.jpg",
     email: "aom@gmail.com",
   };
 
-  const error = "#ff0000";
   const avatar = { width: 200, height: 200 };
   const overlayIcon = {
     position: "absolute",
@@ -45,8 +37,6 @@ export default function Home() {
     opacity: "0.5",
   };
   const imgErrorWarning = {
-    textAlign: "center",
-    color: error,
     display: "none",
   };
   const editInfoContainer = {
@@ -60,19 +50,11 @@ export default function Home() {
   const helperTextError = {
     textAlign: "start",
     gridColumn: 1,
-    color: error,
     display: "none",
   };
   const helperText = {
     textAlign: "end",
     gridColumn: 2,
-  };
-  const saveBtn = {
-    backgroundColor: "#ffa31a",
-    color: "black",
-  };
-  const warningTxt = {
-    color: error,
   };
 
   const controller = new AbortController();
@@ -113,17 +95,17 @@ export default function Home() {
         </Grid>
         {/* image error warning */}
         <Grid item sx={imgErrorWarning}>
-          <Typography variant="body1">
+          <Typography variant="body1" color="error">
             นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .png) ขนาดไฟล์จะต้องไม่เกิน 1 MB
           </Typography>
-          <Typography variant="body1">ขนาดไฟล์จะต้องไม่เกิน 1 MB</Typography>
+          <Typography align="center" variant="body1" color="error">ขนาดไฟล์จะต้องไม่เกิน 1 MB</Typography>
         </Grid>
         <div style={editInfoContainer}>
           <Grid item>
             <Typography variant="body1">{editProfileHeader.displayName}</Typography>
-            <TextField variant="outlined" fullWidth size="small" />
+            <TextField fullWidth size="small" />
             <div style={helperTextBox}>
-              <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
+              <FormHelperText error={true} sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
               <FormHelperText sx={helperText}>123/xxx</FormHelperText>
             </div>
           </Grid>
@@ -133,12 +115,11 @@ export default function Home() {
               id="outlined-multiline-flexible"
               multiline
               rows={4}
-              variant="outlined"
               fullWidth
               size="small"
             />
             <div style={helperTextBox}>
-              <FormHelperText sx={helperTextError}>
+              <FormHelperText error={true} sx={helperTextError}>
                 {`ช่องนี้มีตัวอักษรได้ไม่เกิน ${"xxx"} ตัว`}
               </FormHelperText>
               <FormHelperText sx={helperText}>123/xxx</FormHelperText>
@@ -159,12 +140,10 @@ export default function Home() {
           </Grid>
         </div>
         <Grid item>
-          <Button variant="contained" sx={saveBtn}>
-            SAVE
-          </Button>
+          <CommonButton label="SAVE" onClick={() => console.log("SAVE BUTTON IS CLICKED")} />
         </Grid>
         <Grid item>
-          <Typography variant="body1" sx={warningTxt}>
+          <Typography variant="body1" color="warning.main">
             ท่านต้องกด SAVE เพื่อบันทึกข้อมูลใหม่
           </Typography>
         </Grid>
