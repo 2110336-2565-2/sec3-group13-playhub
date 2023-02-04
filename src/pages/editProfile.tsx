@@ -8,7 +8,6 @@ import {
   FormControl,
   Select,
   MenuItem,
-  Button,
   FormHelperText,
 } from "@mui/material";
 
@@ -16,6 +15,7 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
+import CommonButton from "@/components/public/CommonButton";
 
 type User = {
   name: string;
@@ -67,13 +67,6 @@ export default function Home() {
     textAlign: "end",
     gridColumn: 2,
   };
-  const saveBtn = {
-    backgroundColor: "#ffa31a",
-    color: "black",
-  };
-  const warningTxt = {
-    color: error,
-  };
 
   const controller = new AbortController();
   const [displayName, setDisplayName] = useState("");
@@ -121,7 +114,7 @@ export default function Home() {
         <div style={editInfoContainer}>
           <Grid item>
             <Typography variant="body1">{editProfileHeader.displayName}</Typography>
-            <TextField variant="outlined" fullWidth size="small" />
+            <TextField fullWidth size="small" />
             <div style={helperTextBox}>
               <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
               <FormHelperText sx={helperText}>123/xxx</FormHelperText>
@@ -133,7 +126,6 @@ export default function Home() {
               id="outlined-multiline-flexible"
               multiline
               rows={4}
-              variant="outlined"
               fullWidth
               size="small"
             />
@@ -159,12 +151,10 @@ export default function Home() {
           </Grid>
         </div>
         <Grid item>
-          <Button variant="contained" sx={saveBtn}>
-            SAVE
-          </Button>
+          <CommonButton label="SAVE" onClick={() => console.log("SAVE BUTTON IS CLICKED")} />
         </Grid>
         <Grid item>
-          <Typography variant="body1" sx={warningTxt}>
+          <Typography variant="body1" color="warning.main">
             ท่านต้องกด SAVE เพื่อบันทึกข้อมูลใหม่
           </Typography>
         </Grid>

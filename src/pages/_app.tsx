@@ -12,6 +12,12 @@ const mainTheme = createTheme({
     secondary: {
       main: "#000000",
     },
+    error: {
+      main: "#ff0000",
+    },
+    warning: {
+      main: "#ff0000"
+    }
   },
   typography: {
     fontFamily: "LINESeed",
