@@ -202,7 +202,7 @@ export interface Database {
           created_at: string | null
           description: string
           email: string
-          image: String
+          image: string
           is_enabled: boolean | null
           name: string
           password: string | null
