@@ -3,6 +3,7 @@ import { TextField, InputAdornment, IconButton } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 type props = {
+  label?: string;
   value: string;
   handleChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   error: boolean;
@@ -17,7 +18,7 @@ export default function PasswordTextFeild(props: props) {
     <>
       <TextField
         fullWidth
-        label="Password"
+        label={props.label || "Password"}
         value={props.value}
         onChange={(e) => props.handleChange(e)}
         error={props.error}
