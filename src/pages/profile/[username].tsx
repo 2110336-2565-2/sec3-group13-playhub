@@ -47,7 +47,14 @@ export default function Home() {
       const getSessionResult = await supabase.auth.getSession()
       setSession(getSessionResult.data.session);
       setIsLoadingSession(false);
-      if (getSessionResult.data.session == null) return;
+    }
+    setup()
+  }, [])
+
+  React.useEffect(() => {
+    async function getUserData() {
+      if (session == null) return;
+      if (userData) return
 
       const fetchResult = await supabase.from("User").select("name,sex,birthdate,description,image,email").eq("username", router.query.username)
       if (fetchResult.error) {
@@ -63,8 +70,8 @@ export default function Home() {
 
       setUserData(fetchResult.data[0])
     }
-    setup()
-  }, [router])
+    getUserData()
+  }, [router, session, userData])
 
   if (isLoadingSession) return <p>getting session...</p> //temporary display
   if (session == null) return <p>log in first</p> // temporary display
