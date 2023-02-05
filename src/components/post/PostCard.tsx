@@ -11,12 +11,17 @@ import {
   Grow,
   Button,
   IconButton,
+  Grid,
+  Stack,
+  Chip,
 } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
-
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
 import DeletePostDialog from "@/components/post/DeletePostDialog";
@@ -43,7 +48,7 @@ const tmpPost: Post = {
   ownerProfilePic: "/images/aom.jpg",
   tags: ["A", "B"],
   description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
-  image: [],
+  image: ["/images/avatar.png", "/images/avatar.png", "/images/aom.jpg"],
   location: "หอใน",
   time: "2/4/2023",
   // there are more data but omitted for now
@@ -75,6 +80,7 @@ export default function PostCard() {
         sx={{
           border: "solid 4px",
           borderRadius: "16px",
+          minWidth: "260px",
         }}
       >
         <CardHeader
@@ -98,15 +104,41 @@ export default function PostCard() {
         />
         <CardContent>
           {/* post preview details start here */}
-          <Typography>location</Typography>
-          <Typography>time</Typography>
-          {/* post preview details end here */}
+          <Stack spacing={1} marginBottom={1}>
+            <Typography display="inline-flex">
+              <LocationOnIcon fontSize="medium" />
+              <span style={{ marginLeft: 8 }}>{tmpPost.location}</span>
+            </Typography>
+            <Typography display="inline-flex">
+              <CalendarTodayIcon fontSize="medium" />
+              <span style={{ marginLeft: 8 }}>{tmpPost.time}</span>
+            </Typography>
 
+            <Grid container spacing={1}>
+              {tmpPost.tags.map((e) => (
+                <Grid item>
+                  <Chip
+                    label={e}
+                    variant="outlined"
+                    style={{ minWidth: 100, height: 40, border: "1px solid gray", fontSize: 18 }}
+                  />
+                </Grid>
+              ))}
+            </Grid>
+          </Stack>
+          {/* post preview details end here */}
           <Collapse in={!hiddenPostDetail}>
             {/* post hidden details start here */}
             {tmpPost.description.split("\n").map((row) => (
               <Typography key={row}>{row}</Typography>
             ))}
+            <Grid container spacing={2}>
+              {tmpPost.image.map((e) => (
+                <Grid item>
+                  <Image src={e} alt="location" width={300} height={350} />
+                </Grid>
+              ))}
+            </Grid>
             {/* post hidden details end here */}
           </Collapse>
         </CardContent>
