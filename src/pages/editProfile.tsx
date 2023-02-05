@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import Navbar from "@/components/public/Navbar";
 import {
   Avatar,
@@ -82,6 +82,12 @@ export default function Home() {
     return () => controller.abort();
   }, []);
 
+  const handleDisplayNameChange = (event: any) => {
+    setDisplayName(event.target.value)
+  }
+  const handleDescChange = (event: any) => {
+    setDescription(event.target.value)
+  }
   const handleSelectChange = (event: SelectChangeEvent) => {
     setGender(event.target.value as string);
   };
@@ -132,7 +138,7 @@ export default function Home() {
             <Typography variant="body1">
               {editProfileHeader.displayName}
             </Typography>
-            <TextField value={displayName} fullWidth size="small" />
+            <TextField value={displayName} onChange={handleDisplayNameChange} fullWidth size="small" />
             <div style={helperTextBox}>
               <FormHelperText error={true} sx={helperTextError}>
                 ช่องนี้ไม่สามารถเว้นว่างได้
@@ -147,6 +153,7 @@ export default function Home() {
             <TextField
               id="outlined-multiline-flexible"
               value={description}
+              onChange={handleDescChange}
               multiline
               rows={4}
               fullWidth
