@@ -1,7 +1,6 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/public/Navbar";
 import {
-  Avatar,
   Grid,
   Typography,
   TextField,
@@ -13,7 +12,6 @@ import {
   SelectChangeEvent,
 } from "@mui/material";
 
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
@@ -24,6 +22,7 @@ import { User } from "@/types/User";
 import Link from "next/link";
 
 import { PagePaths } from "enum/pages";
+import UploadAvatar from "@/components/editProfile/uploadAvatar";
 
 export default function Home() {
   const tmpUser: User = {
@@ -35,13 +34,6 @@ export default function Home() {
     email: "aom@gmail.com",
   };
 
-  const avatar = { width: 200, height: 200 };
-  const overlayIcon = {
-    position: "absolute",
-    color: "black",
-    fontSize: "7.5vw",
-    opacity: "0.5",
-  };
   const imgErrorWarning = {
     display: "none",
   };
@@ -115,18 +107,7 @@ export default function Home() {
         style={{ minHeight: "80vh" }}
       >
         <Grid item>
-          <Avatar alt="Anya" sx={avatar}>
-            <img
-              src={image}
-              style={{
-                position: "relative",
-                opacity: "0.5",
-                width: "200px",
-                height: "200px",
-              }}
-            />
-            <CameraAltIcon sx={overlayIcon} />
-          </Avatar>
+          <UploadAvatar src={image} />
         </Grid>
         {/* image error warning */}
         <Grid item sx={imgErrorWarning}>
