@@ -67,12 +67,13 @@ export default function Home() {
   const [displayName, setDisplayName] = useState("");
   const [gender, setGender] = useState("");
   const [description, setDescription] = useState("");
-  const [image, setImage] = useState({});
+  const [image, setImage] = useState("");
 
   const getProfile = async (User: User) => {
     setDisplayName(User.name);
     setDescription(User.description);
     setGender(User.sex);
+    setImage(User.image);
   };
   // const editProfileBtnOnClick = async () => {};
 
@@ -82,12 +83,16 @@ export default function Home() {
     return () => controller.abort();
   }, []);
 
-  const handleDisplayNameChange = (event: any) => {
-    setDisplayName(event.target.value)
-  }
-  const handleDescChange = (event: any) => {
-    setDescription(event.target.value)
-  }
+  const handleDisplayNameChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setDisplayName(event.target.value);
+  };
+  const handleDescChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
+    setDescription(event.target.value);
+  };
   const handleSelectChange = (event: SelectChangeEvent) => {
     setGender(event.target.value as string);
   };
@@ -112,7 +117,7 @@ export default function Home() {
         <Grid item>
           <Avatar alt="Anya" sx={avatar}>
             <img
-              src={tmpUser.image}
+              src={image}
               style={{
                 position: "relative",
                 opacity: "0.5",
@@ -138,7 +143,12 @@ export default function Home() {
             <Typography variant="body1">
               {editProfileHeader.displayName}
             </Typography>
-            <TextField value={displayName} onChange={handleDisplayNameChange} fullWidth size="small" />
+            <TextField
+              value={displayName}
+              onChange={handleDisplayNameChange}
+              fullWidth
+              size="small"
+            />
             <div style={helperTextBox}>
               <FormHelperText error={true} sx={helperTextError}>
                 ช่องนี้ไม่สามารถเว้นว่างได้
