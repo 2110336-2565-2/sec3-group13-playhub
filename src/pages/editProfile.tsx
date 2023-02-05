@@ -74,6 +74,7 @@ export default function Home() {
   const [image, setImage] = useState("");
 
   const [isPressSubmit, setIsPressSubmit] = useState(false);
+  const [isImageUpload,setIsImageUpload] = useState(false)
 
   const displayNameErr = validateTextField(
     displayName,
@@ -112,6 +113,10 @@ export default function Home() {
     return () => controller.abort();
   }, []);
 
+  const handleImageChange = (event: any) => {
+    setImage(URL.createObjectURL(event.target.files[0]))
+    setIsImageUpload(true)
+  }
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -149,18 +154,20 @@ export default function Home() {
             alt="Upload avatar"
             width={200}
             height={200}
-            style={{
-              position: "relative",
-              opacity: "0.5",
-            }}
+            style={ !isImageUpload ? 
+              {opacity: "0.5"} : 
+              {objectFit: "cover"}
+            }
           />
           <IconButton
             sx={overlayIcon}
             aria-label="upload picture"
             component="label"
           >
-            <input hidden accept="image/*" type="file" />
-            <CameraAltIcon sx={{ fontSize: "100px" }} />
+            <input onChange={handleImageChange} hidden accept="image/*" type="file" />
+            { !isImageUpload && 
+              <CameraAltIcon sx={{ fontSize: "100px" }} />
+            }
           </IconButton>
         </Avatar>
 
