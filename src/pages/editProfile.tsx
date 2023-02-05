@@ -27,6 +27,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PagePaths } from "enum/pages";
+import { validateTextField } from "@/utilities/validation";
 
 export default function Home() {
   const tmpUser: User = {
@@ -59,7 +60,7 @@ export default function Home() {
   const helperTextError = {
     textAlign: "start",
     gridColumn: 1,
-    display: "none",
+    // display: "none",
   };
   const helperText = {
     textAlign: "end",
@@ -72,13 +73,38 @@ export default function Home() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState("");
 
+  const [isPressSubmit, setIsPressSubmit] = useState(false);
+
+  const displayNameErr = validateTextField(
+    displayName,
+    1,
+    CHAR_LIMIT.DISPLAY_NAME_LIMIT
+  );
+  const descriptionErr = validateTextField(
+    description,
+    0,
+    CHAR_LIMIT.DESCRIPTION_LIMIT
+  );
+
   const getProfile = async (User: User) => {
     setDisplayName(User.name);
     setDescription(User.description);
     setGender(User.sex);
     setImage(User.image);
   };
-  // const editProfileBtnOnClick = async () => {};
+
+  const editProfileBtnOnClick = async () => {
+    setIsPressSubmit(true);
+    //image validate
+    let readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err);
+
+    if (readyToSubmit) {
+      //send to API
+      console.log("Edit success");
+    } else {
+      console.log("something went wrong");
+    }
+  };
 
   useEffect(() => {
     getProfile(tmpUser);
@@ -90,11 +116,13 @@ export default function Home() {
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setDisplayName(event.target.value);
+    setIsPressSubmit(false);
   };
   const handleDescChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     setDescription(event.target.value);
+    setIsPressSubmit(false);
   };
   const handleSelectChange = (event: SelectChangeEvent) => {
     setGender(event.target.value as string);
@@ -151,9 +179,11 @@ export default function Home() {
             size="small"
           />
           <Box style={helperTextBox}>
-            <FormHelperText error={true} sx={helperTextError}>
-              ช่องนี้ไม่สามารถเว้นว่างได้
-            </FormHelperText>
+            {isPressSubmit && displayNameErr.err && (
+              <FormHelperText error={true} sx={helperTextError}>
+                {displayNameErr.msg}
+              </FormHelperText>
+            )}
             <FormHelperText sx={helperText}>
               {displayName.length}/{CHAR_LIMIT.DISPLAY_NAME_LIMIT}
             </FormHelperText>
@@ -172,9 +202,11 @@ export default function Home() {
             size="small"
           />
           <Box style={helperTextBox}>
-            <FormHelperText error={true} sx={helperTextError}>
-              {`ช่องนี้มีตัวอักษรได้ไม่เกิน ${"xxx"} ตัว`}
-            </FormHelperText>
+            {isPressSubmit && descriptionErr.err && (
+              <FormHelperText error={true} sx={helperTextError}>
+                {descriptionErr.msg}
+              </FormHelperText>
+            )}
             <FormHelperText sx={helperText}>
               {description.length}/{CHAR_LIMIT.DESCRIPTION_LIMIT}
             </FormHelperText>
@@ -192,10 +224,7 @@ export default function Home() {
           </FormControl>
         </Box>
 
-        <Button
-          variant="contained"
-          onClick={() => console.log("SAVE BUTTON IS CLICKED")}
-        >
+        <Button variant="contained" onClick={editProfileBtnOnClick}>
           SAVE
         </Button>
         <Typography variant="body1" color="warning.main">
