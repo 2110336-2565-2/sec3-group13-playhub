@@ -10,8 +10,10 @@ import {
   FormHelperText,
   Button,
   SelectChangeEvent,
+  Avatar
 } from "@mui/material";
 
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
@@ -20,10 +22,10 @@ import { CHAR_LIMIT } from "enum/character_limit";
 
 import { User } from "@/types/User";
 
+import Image from "next/image";
 import Link from "next/link";
 
 import { PagePaths } from "enum/pages";
-import UploadAvatar from "@/components/editProfile/uploadAvatar";
 
 export default function Home() {
   const tmpUser: User = {
@@ -35,6 +37,13 @@ export default function Home() {
     email: "aom@gmail.com",
   };
 
+  const avatar = { width: 200, height: 200 };
+  const overlayIcon = {
+    position: "absolute",
+    color: "black",
+    fontSize: "7.5vw",
+    opacity: "0.5",
+  };
   const imgErrorWarning = {
     display: "none",
   };
@@ -108,7 +117,19 @@ export default function Home() {
         style={{ minHeight: "80vh" }}
       >
         <Grid item>
-          <UploadAvatar src={image} />
+          <Avatar alt="Anya" sx={avatar}>
+            <Image
+              src={image}
+              alt="Upload avatar"
+              width={200}
+              height={200}
+              style={{
+                position: "relative",
+                opacity: "0.5",
+              }}
+            />
+            <CameraAltIcon sx={overlayIcon} />
+          </Avatar>
         </Grid>
         {/* image error warning */}
         <Grid item sx={imgErrorWarning}>
