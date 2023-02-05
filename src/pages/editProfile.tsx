@@ -12,6 +12,7 @@ import {
   Avatar,
   Stack,
   Box,
+  IconButton,
 } from "@mui/material";
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
@@ -43,7 +44,6 @@ export default function Home() {
   const overlayIcon = {
     position: "absolute",
     color: "black",
-    fontSize: "7.5vw",
     opacity: "0.5",
   };
   const imgErrorWarning = {
@@ -154,7 +154,14 @@ export default function Home() {
               opacity: "0.5",
             }}
           />
-          <CameraAltIcon sx={overlayIcon} />
+          <IconButton
+            sx={overlayIcon}
+            aria-label="upload picture"
+            component="label"
+          >
+            <input hidden accept="image/*" type="file" />
+            <CameraAltIcon sx={{ fontSize: "100px" }} />
+          </IconButton>
         </Avatar>
 
         {/* image error warning */}
