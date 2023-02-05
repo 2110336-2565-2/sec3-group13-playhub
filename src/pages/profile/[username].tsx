@@ -11,7 +11,7 @@ import CakeIcon from "@mui/icons-material/Cake";
 import { User } from "@/types/User";
 import Navbar from "@/components/public/Navbar";
 
-import { useSessionContext, useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
+import { useSessionContext } from '@supabase/auth-helpers-react'
 import React from "react";
 import { useRouter } from 'next/router'
 
@@ -35,13 +35,12 @@ const desc_txt = {
 export default function Home() {
   const router = useRouter()
   const sessionContext = useSessionContext()
-  const supabase = useSupabaseClient()
   const [userData, setUserData] = React.useState<User | null>(null);
 
   React.useEffect(() => {
     async function getUserData() {
-      if (!supabase || !router.query.username || !sessionContext.session || userData) return;
-      const fetchResult = await supabase.from("User").select("name,sex,birthdate,description,image,email").eq("username", router.query.username)
+      if (!router.query.username || !sessionContext.session || userData) return;
+      const fetchResult = await sessionContext.supabaseClient.from("User").select("name,sex,birthdate,description,image,email").eq("username", router.query.username)
       if (fetchResult.error) {
         // having query error
         console.log(fetchResult.error)
@@ -55,7 +54,7 @@ export default function Home() {
       setUserData(fetchResult.data[0])
     }
     getUserData()
-  }, [supabase, router, sessionContext, userData])
+  }, [router, sessionContext, userData])
 
   if (sessionContext.isLoading) return <p>getting session...</p> //temporary display
   if (sessionContext.session == null) return <p>log in first</p> // temporary display
