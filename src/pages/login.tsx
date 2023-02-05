@@ -6,7 +6,7 @@ import Logo from "@/components/public/Logo";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 import { PagePaths } from "enum/pages";
 
-import { useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
+import { useSessionContext } from '@supabase/auth-helpers-react';
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
@@ -35,11 +35,10 @@ export default function Home() {
   const supabaseErrMsg = isLoginCredErr ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง" : "โปรดทำการยืนยันอีเมล";
 
   const sessionContext = useSessionContext()
-  const supabase = useSupabaseClient()
 
   async function handleSubmit() {
     setIsSubmit(true);
-    const signInResult = await supabase.auth.signInWithPassword({
+    const signInResult = await sessionContext.supabaseClient.auth.signInWithPassword({
       email,
       password,
     });
@@ -83,7 +82,7 @@ export default function Home() {
   }
 
   async function handleSignOut() {
-    const signOutResult = await supabase.auth.signOut();
+    const signOutResult = await sessionContext.supabaseClient.auth.signOut();
     if (signOutResult.error) {
       console.log(signOutResult.error);
       return;
