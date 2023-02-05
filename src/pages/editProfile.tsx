@@ -20,7 +20,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
-import { CHAR_LIMIT } from "enum/character_limit";
+import { CHAR_LIMIT } from "enum/inputLimit";
 
 import { User } from "@/types/User";
 
@@ -28,7 +28,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { PagePaths } from "enum/pages";
-import { validateTextField } from "@/utilities/validation";
+import { validateImage, validateTextField } from "@/utilities/validation";
 
 export default function Home() {
   const tmpUser: User = {
@@ -46,9 +46,6 @@ export default function Home() {
     color: "black",
     opacity: "0.5",
   };
-  const imgErrorWarning = {
-    display: "none",
-  };
   const editInfoContainer = {
     width: "50vw",
     margin: "3vh 0 0 0",
@@ -60,7 +57,6 @@ export default function Home() {
   const helperTextError = {
     textAlign: "start",
     gridColumn: 1,
-    // display: "none",
   };
   const helperText = {
     textAlign: "end",
@@ -74,7 +70,12 @@ export default function Home() {
   const [image, setImage] = useState("");
 
   const [isPressSubmit, setIsPressSubmit] = useState(false);
-  const [isImageUpload,setIsImageUpload] = useState(false)
+  const [fileImage,setFileImage] = useState();
+  const [isImageUpload, setIsImageUpload] = useState(true);
+  const [showImageUploadError, setShowImageUploadError] = useState({
+    msg: "",
+    err: false,
+  });
 
   const displayNameErr = validateTextField(
     displayName,
@@ -96,14 +97,13 @@ export default function Home() {
 
   const editProfileBtnOnClick = async () => {
     setIsPressSubmit(true);
-    //image validate
-    let readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err);
-
+    const readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err || !isImageUpload);
     if (readyToSubmit) {
       //send to API
       console.log("Edit success");
+      console.log(image)
     } else {
-      console.log("something went wrong");
+      console.log("Something went wrong");
     }
   };
 
@@ -114,9 +114,18 @@ export default function Home() {
   }, []);
 
   const handleImageChange = (event: any) => {
-    setImage(URL.createObjectURL(event.target.files[0]))
-    setIsImageUpload(true)
-  }
+    const tempFile = event.target.files[0]
+    setImage(URL.createObjectURL(tempFile))
+    const imgErrMsg = validateImage(tempFile.type, tempFile.size)
+    setShowImageUploadError(imgErrMsg)
+    if (imgErrMsg.err) {
+      setIsImageUpload(false);
+    }else{
+      setFileImage(event.target.files[0])
+      setIsImageUpload(true);
+    }
+  };
+
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
@@ -154,33 +163,28 @@ export default function Home() {
             alt="Upload avatar"
             width={200}
             height={200}
-            style={ !isImageUpload ? 
-              {opacity: "0.5"} : 
-              {objectFit: "cover"}
-            }
+            style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
           />
           <IconButton
             sx={overlayIcon}
             aria-label="upload picture"
             component="label"
           >
-            <input onChange={handleImageChange} hidden accept="image/*" type="file" />
-            { !isImageUpload && 
-              <CameraAltIcon sx={{ fontSize: "100px" }} />
-            }
+            <input
+              onChange={handleImageChange}
+              hidden
+              accept="image/*"
+              type="file"
+            />
+            <CameraAltIcon sx={{ fontSize: "100px" }} />
           </IconButton>
         </Avatar>
 
-        {/* image error warning */}
-        <Box sx={imgErrorWarning}>
-          <Typography variant="body1" color="error">
-            นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .png)
-            ขนาดไฟล์จะต้องไม่เกิน 1 MB
-          </Typography>
+        {showImageUploadError.err && (
           <Typography align="center" variant="body1" color="error">
-            ขนาดไฟล์จะต้องไม่เกิน 1 MB
+            {showImageUploadError.msg}
           </Typography>
-        </Box>
+        )}
 
         <Box style={editInfoContainer}>
           <Typography variant="body1">
