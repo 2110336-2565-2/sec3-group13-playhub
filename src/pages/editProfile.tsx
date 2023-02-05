@@ -69,11 +69,15 @@ export default function Home() {
   const [description, setDescription] = useState("");
   const [image, setImage] = useState({});
 
-  // const getProfile = async () => {};
+  const getProfile = async (User: User) => {
+    setDisplayName(User.name);
+    setDescription(User.description);
+    setGender(User.sex);
+  };
   // const editProfileBtnOnClick = async () => {};
 
   useEffect(() => {
-    // getProfile();
+    getProfile(tmpUser);
     // clean up
     return () => controller.abort();
   }, []);
@@ -128,7 +132,7 @@ export default function Home() {
             <Typography variant="body1">
               {editProfileHeader.displayName}
             </Typography>
-            <TextField fullWidth size="small" />
+            <TextField value={displayName} fullWidth size="small" />
             <div style={helperTextBox}>
               <FormHelperText error={true} sx={helperTextError}>
                 ช่องนี้ไม่สามารถเว้นว่างได้
@@ -142,6 +146,7 @@ export default function Home() {
             </Typography>
             <TextField
               id="outlined-multiline-flexible"
+              value={description}
               multiline
               rows={4}
               fullWidth
