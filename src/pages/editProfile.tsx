@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Navbar from "@/components/public/Navbar";
 import {
-  Grid,
   Typography,
   TextField,
   FormControl,
@@ -10,7 +9,9 @@ import {
   FormHelperText,
   Button,
   SelectChangeEvent,
-  Avatar
+  Avatar,
+  Stack,
+  Box,
 } from "@mui/material";
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
@@ -108,31 +109,28 @@ export default function Home() {
           sx={{ margin: "3vh 0 0 3vh", color: "black" }}
         />
       </Link>
-      <Grid
-        container
-        direction="column"
+      <Stack
         spacing={2}
         alignItems="center"
         justifyContent="center"
         style={{ minHeight: "80vh" }}
       >
-        <Grid item>
-          <Avatar alt="Anya" sx={avatar}>
-            <Image
-              src={image}
-              alt="Upload avatar"
-              width={200}
-              height={200}
-              style={{
-                position: "relative",
-                opacity: "0.5",
-              }}
-            />
-            <CameraAltIcon sx={overlayIcon} />
-          </Avatar>
-        </Grid>
+        <Avatar alt="Anya" sx={avatar}>
+          <Image
+            src={image}
+            alt="Upload avatar"
+            width={200}
+            height={200}
+            style={{
+              position: "relative",
+              opacity: "0.5",
+            }}
+          />
+          <CameraAltIcon sx={overlayIcon} />
+        </Avatar>
+
         {/* image error warning */}
-        <Grid item sx={imgErrorWarning}>
+        <Box sx={imgErrorWarning}>
           <Typography variant="body1" color="error">
             นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .png)
             ขนาดไฟล์จะต้องไม่เกิน 1 MB
@@ -140,76 +138,70 @@ export default function Home() {
           <Typography align="center" variant="body1" color="error">
             ขนาดไฟล์จะต้องไม่เกิน 1 MB
           </Typography>
-        </Grid>
-        <div style={editInfoContainer}>
-          <Grid item>
-            <Typography variant="body1">
-              {editProfileHeader.displayName}
-            </Typography>
-            <TextField
-              value={displayName}
-              onChange={handleDisplayNameChange}
-              fullWidth
-              size="small"
-            />
-            <div style={helperTextBox}>
-              <FormHelperText error={true} sx={helperTextError}>
-                ช่องนี้ไม่สามารถเว้นว่างได้
-              </FormHelperText>
-              <FormHelperText sx={helperText}>
-                {displayName.length}/{CHAR_LIMIT.DISPLAY_NAME_LIMIT}
-              </FormHelperText>
-            </div>
-          </Grid>
-          <Grid item>
-            <Typography variant="body1">
-              {editProfileHeader.description}
-            </Typography>
-            <TextField
-              id="outlined-multiline-flexible"
-              value={description}
-              onChange={handleDescChange}
-              multiline
-              rows={4}
-              fullWidth
-              size="small"
-            />
-            <div style={helperTextBox}>
-              <FormHelperText error={true} sx={helperTextError}>
-                {`ช่องนี้มีตัวอักษรได้ไม่เกิน ${"xxx"} ตัว`}
-              </FormHelperText>
-              <FormHelperText sx={helperText}>
-                {description.length}/{CHAR_LIMIT.DESCRIPTION_LIMIT}
-              </FormHelperText>
-            </div>
-          </Grid>
-          <Grid item>
-            <Typography variant="body1">{editProfileHeader.gender}</Typography>
-            <FormControl size="small" sx={{ width: "18vw" }}>
-              <Select value={gender} onChange={handleSelectChange}>
-                {(Object.keys(Gender) as (keyof typeof Gender)[]).map((key) => (
-                  <MenuItem key={Gender[key]} value={Gender[key]}>
-                    {Gender[key]}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-        </div>
-        <Grid item>
-          <Button
-            variant="contained"
-            onClick={() => console.log("SAVE BUTTON IS CLICKED")}
-          >
-            SAVE
-          </Button>
-        </Grid>
-        <Grid item>
-          <Typography variant="body1" color="warning.main">
-            ท่านต้องกด SAVE เพื่อบันทึกข้อมูลใหม่
+        </Box>
+
+        <Box style={editInfoContainer}>
+          <Typography variant="body1">
+            {editProfileHeader.displayName}
           </Typography>
-        </Grid>
-      </Grid>
+          <TextField
+            value={displayName}
+            onChange={handleDisplayNameChange}
+            fullWidth
+            size="small"
+          />
+          <Box style={helperTextBox}>
+            <FormHelperText error={true} sx={helperTextError}>
+              ช่องนี้ไม่สามารถเว้นว่างได้
+            </FormHelperText>
+            <FormHelperText sx={helperText}>
+              {displayName.length}/{CHAR_LIMIT.DISPLAY_NAME_LIMIT}
+            </FormHelperText>
+          </Box>
+
+          <Typography variant="body1">
+            {editProfileHeader.description}
+          </Typography>
+          <TextField
+            id="outlined-multiline-flexible"
+            value={description}
+            onChange={handleDescChange}
+            multiline
+            rows={4}
+            fullWidth
+            size="small"
+          />
+          <Box style={helperTextBox}>
+            <FormHelperText error={true} sx={helperTextError}>
+              {`ช่องนี้มีตัวอักษรได้ไม่เกิน ${"xxx"} ตัว`}
+            </FormHelperText>
+            <FormHelperText sx={helperText}>
+              {description.length}/{CHAR_LIMIT.DESCRIPTION_LIMIT}
+            </FormHelperText>
+          </Box>
+
+          <Typography variant="body1">{editProfileHeader.gender}</Typography>
+          <FormControl size="small" sx={{ width: "18vw" }}>
+            <Select value={gender} onChange={handleSelectChange}>
+              {(Object.keys(Gender) as (keyof typeof Gender)[]).map((key) => (
+                <MenuItem key={Gender[key]} value={Gender[key]}>
+                  {Gender[key]}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+
+        <Button
+          variant="contained"
+          onClick={() => console.log("SAVE BUTTON IS CLICKED")}
+        >
+          SAVE
+        </Button>
+        <Typography variant="body1" color="warning.main">
+          ท่านต้องกด SAVE เพื่อบันทึกข้อมูลใหม่
+        </Typography>
+      </Stack>
     </>
   );
 }
