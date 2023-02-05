@@ -13,14 +13,16 @@ import {
 } from "@mui/material";
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
 
-import { User } from "@/types/User"
+import { User } from "@/types/User";
 
 import Link from "next/link";
+
+import { PagePaths } from "enum/pages";
 
 export default function Home() {
   const tmpUser: User = {
@@ -78,8 +80,11 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Link href={"/profile"}>
-        <ArrowBackIcon fontSize="large" sx={{margin:"3vh 0 0 3vh",color:"black"}}/>
+      <Link href={PagePaths.profile}>
+        <ArrowBackIcon
+          fontSize="large"
+          sx={{ margin: "3vh 0 0 3vh", color: "black" }}
+        />
       </Link>
       <Grid
         container
@@ -88,13 +93,17 @@ export default function Home() {
         alignItems="center"
         justifyContent="center"
         style={{ minHeight: "80vh" }}
-        margin="2vh 0 0 0"
       >
         <Grid item>
           <Avatar alt="Anya" sx={avatar}>
             <img
               src={tmpUser.image}
-              style={{ position: "relative", opacity: "0.5", width: "200px", height: "200px" }}
+              style={{
+                position: "relative",
+                opacity: "0.5",
+                width: "200px",
+                height: "200px",
+              }}
             />
             <CameraAltIcon sx={overlayIcon} />
           </Avatar>
@@ -102,21 +111,30 @@ export default function Home() {
         {/* image error warning */}
         <Grid item sx={imgErrorWarning}>
           <Typography variant="body1" color="error">
-            นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .png) ขนาดไฟล์จะต้องไม่เกิน 1 MB
+            นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .png)
+            ขนาดไฟล์จะต้องไม่เกิน 1 MB
           </Typography>
-          <Typography align="center" variant="body1" color="error">ขนาดไฟล์จะต้องไม่เกิน 1 MB</Typography>
+          <Typography align="center" variant="body1" color="error">
+            ขนาดไฟล์จะต้องไม่เกิน 1 MB
+          </Typography>
         </Grid>
         <div style={editInfoContainer}>
           <Grid item>
-            <Typography variant="body1">{editProfileHeader.displayName}</Typography>
+            <Typography variant="body1">
+              {editProfileHeader.displayName}
+            </Typography>
             <TextField fullWidth size="small" />
             <div style={helperTextBox}>
-              <FormHelperText error={true} sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
+              <FormHelperText error={true} sx={helperTextError}>
+                ช่องนี้ไม่สามารถเว้นว่างได้
+              </FormHelperText>
               <FormHelperText sx={helperText}>123/xxx</FormHelperText>
             </div>
           </Grid>
           <Grid item>
-            <Typography variant="body1">{editProfileHeader.description}</Typography>
+            <Typography variant="body1">
+              {editProfileHeader.description}
+            </Typography>
             <TextField
               id="outlined-multiline-flexible"
               multiline
@@ -146,7 +164,10 @@ export default function Home() {
           </Grid>
         </div>
         <Grid item>
-          <Button variant="contained" onClick={() => console.log("SAVE BUTTON IS CLICKED")}>
+          <Button
+            variant="contained"
+            onClick={() => console.log("SAVE BUTTON IS CLICKED")}
+          >
             SAVE
           </Button>
         </Grid>
