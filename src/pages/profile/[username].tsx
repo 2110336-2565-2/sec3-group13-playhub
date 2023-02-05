@@ -11,8 +11,7 @@ import CakeIcon from "@mui/icons-material/Cake";
 import { User } from "@/types/User";
 import Navbar from "@/components/public/Navbar";
 
-import { supabase } from "supabase/init";
-import { Session } from '@supabase/supabase-js'
+import { useSessionContext, useSupabaseClient, useUser } from '@supabase/auth-helpers-react'
 import React from "react";
 import { useRouter } from 'next/router'
 
@@ -35,27 +34,13 @@ const desc_txt = {
 
 export default function Home() {
   const router = useRouter()
-  // supabase use a little time to get current session, so some stall display might be needed
-  const [isLoadingSession, setIsLoadingSession] = React.useState(true);
-  // current session will be null if no user is logged in or supabase is currently getting current session at the start
-  const [session, setSession] = React.useState<Session | null>(null);
+  const sessionContext = useSessionContext()
+  const supabase = useSupabaseClient()
   const [userData, setUserData] = React.useState<User | null>(null);
 
   React.useEffect(() => {
-    async function setup () {
-      console.log("render")
-      const getSessionResult = await supabase.auth.getSession()
-      setSession(getSessionResult.data.session);
-      setIsLoadingSession(false);
-    }
-    setup()
-  }, [])
-
-  React.useEffect(() => {
     async function getUserData() {
-      if (session == null) return;
-      if (userData) return
-
+      if (!supabase || !router.query.username || !sessionContext.session || userData) return;
       const fetchResult = await supabase.from("User").select("name,sex,birthdate,description,image,email").eq("username", router.query.username)
       if (fetchResult.error) {
         // having query error
@@ -67,14 +52,13 @@ export default function Home() {
         console.log("cant find the user")
         return
       }
-
       setUserData(fetchResult.data[0])
     }
     getUserData()
-  }, [router, session, userData])
+  }, [supabase, router, sessionContext, userData])
 
-  if (isLoadingSession) return <p>getting session...</p> //temporary display
-  if (session == null) return <p>log in first</p> // temporary display
+  if (sessionContext.isLoading) return <p>getting session...</p> //temporary display
+  if (sessionContext.session == null) return <p>log in first</p> // temporary display
   if (userData == null) return <p>getting the user data</p> // temporary display
   return (
     <>

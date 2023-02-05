@@ -6,8 +6,7 @@ import Logo from "@/components/public/Logo";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 import { PagePaths } from "enum/pages";
 
-import { supabase } from "supabase/init";
-import { Session } from "@supabase/supabase-js";
+import { useSupabaseClient, useSessionContext } from '@supabase/auth-helpers-react';
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
@@ -35,10 +34,8 @@ export default function Home() {
   const isSupabaseErr = (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg = isLoginCredErr ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง" : "โปรดทำการยืนยันอีเมล";
 
-  // supabase use a little time to get current session, so some stall display might be needed
-  const [isLoadingSession, setIsLoadingSession] = React.useState(true);
-  // current session will be null if no user is logged in or supabase is currently getting current session at the start
-  const [session, setSession] = React.useState<Session | null>(null);
+  const sessionContext = useSessionContext()
+  const supabase = useSupabaseClient()
 
   async function handleSubmit() {
     setIsSubmit(true);
@@ -61,7 +58,6 @@ export default function Home() {
       console.log("You have not validate your email yet");
       return;
     }
-    setSession(signInResult.data.session);
     router.push(PagePaths.profile);
     return;
   }
@@ -92,19 +88,10 @@ export default function Home() {
       console.log(signOutResult.error);
       return;
     }
-    setSession(null);
   }
 
-  React.useEffect(() => {
-    supabase.auth.getSession().then((getSessionResult: any) => {
-      setSession(getSessionResult.data.session);
-      setIsLoadingSession(false);
-    });
-  }, []);
-
-  if (isLoadingSession) return <p>getting session...</p>; // temporary display that supabase is processing
-  if (session != null) return <button onClick={handleSignOut}>logout</button>; // temporay display if logged in
-
+  if (sessionContext.isLoading) return <p>loading...</p> // temporary display
+  if (sessionContext.session) return <button onClick={handleSignOut}>logout</button>; // temporay display if logged in
   return (
     <>
       <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>

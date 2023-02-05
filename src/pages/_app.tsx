@@ -2,6 +2,10 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import { useState } from "react";
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+
 const mainTheme = createTheme({
   palette: {
     primary: {
@@ -59,9 +63,13 @@ const mainTheme = createTheme({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+
   return (
-    <ThemeProvider theme={mainTheme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+      <ThemeProvider theme={mainTheme}>
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </SessionContextProvider>
   );
 }
