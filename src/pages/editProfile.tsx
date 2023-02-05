@@ -10,6 +10,7 @@ import {
   MenuItem,
   FormHelperText,
   Button,
+  SelectChangeEvent,
 } from "@mui/material";
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
@@ -64,7 +65,7 @@ export default function Home() {
 
   const controller = new AbortController();
   const [displayName, setDisplayName] = useState("");
-  const [gender, setGender] = useState({});
+  const [gender, setGender] = useState("");
   const [description, setDescription] = useState("");
   const [image, setImage] = useState({});
 
@@ -76,6 +77,10 @@ export default function Home() {
     // clean up
     return () => controller.abort();
   }, []);
+
+  const handleSelectChange = (event: SelectChangeEvent) => {
+    setGender(event.target.value as string);
+  };
 
   return (
     <>
@@ -152,12 +157,11 @@ export default function Home() {
           <Grid item>
             <Typography variant="body1">{editProfileHeader.gender}</Typography>
             <FormControl size="small" sx={{ width: "18vw" }}>
-              <Select
-                value={tmpUser.sex}
-                // onChange={handleChange}
-              >
+              <Select value={gender} onChange={handleSelectChange}>
                 {(Object.keys(Gender) as (keyof typeof Gender)[]).map((key) => (
-                  <MenuItem>{Gender[key]}</MenuItem>
+                  <MenuItem key={Gender[key]} value={Gender[key]}>
+                    {Gender[key]}
+                  </MenuItem>
                 ))}
               </Select>
             </FormControl>
