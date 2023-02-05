@@ -29,13 +29,10 @@ export default function Home() {
   const [isLoginCredErr, setIsLoginCredErr] = React.useState(false);
   const [isValidateErr, setIsValidateErr] = React.useState(false);
 
-  const emailErrMsg = validateEmail(email);
-  const isEmailErr = emailErrMsg !== "";
+  const emailErr = validateEmail(email);
+  const passwordErr = validateTextField(password, 1);
 
-  const passwordErrMsg = validateTextField(password, 1);
-  const isPasswordErr = passwordErrMsg !== "";
-
-  const isSupabaseErr = (isLoginCredErr || isValidateErr) && !(isEmailErr || isPasswordErr);
+  const isSupabaseErr = (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg = isLoginCredErr ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง" : "โปรดทำการยืนยันอีเมล";
 
   // supabase use a little time to get current session, so some stall display might be needed
@@ -119,11 +116,11 @@ export default function Home() {
             label="Email"
             onChange={handleEmailChange}
             value={email}
-            error={isSubmit && (isEmailErr || isSupabaseErr)}
+            error={isSubmit && (emailErr.err || isSupabaseErr)}
           />
-          {isSubmit && isEmailErr && (
+          {isSubmit && emailErr.err && (
             <Box display="flex">
-              <FormHelperText error>{emailErrMsg}</FormHelperText>
+              <FormHelperText error>{emailErr.msg}</FormHelperText>
             </Box>
           )}
         </Box>
@@ -132,11 +129,11 @@ export default function Home() {
           <PasswordTextFeild
             handleChange={handlePasswordChange}
             value={password}
-            error={isSubmit && (isPasswordErr || isSupabaseErr)}
+            error={isSubmit && (passwordErr.err || isSupabaseErr)}
           />
-          {isSubmit && isPasswordErr && (
+          {isSubmit && passwordErr.err && (
             <Box display="flex">
-              <FormHelperText error>{passwordErrMsg}</FormHelperText>
+              <FormHelperText error>{passwordErr.msg}</FormHelperText>
             </Box>
           )}
         </Box>
