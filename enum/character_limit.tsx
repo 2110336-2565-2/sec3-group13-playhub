@@ -1,0 +1,4 @@
+export enum CHAR_LIMIT {
+  DISPLAY_NAME_LIMIT = 100,
+  DESCRIPTION_LIMIT = 100,
+}

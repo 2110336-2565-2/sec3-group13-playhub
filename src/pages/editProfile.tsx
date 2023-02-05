@@ -16,6 +16,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
+import { CHAR_LIMIT } from "enum/character_limit";
 
 import { User } from "@/types/User";
 
@@ -134,7 +135,9 @@ export default function Home() {
               <FormHelperText error={true} sx={helperTextError}>
                 ช่องนี้ไม่สามารถเว้นว่างได้
               </FormHelperText>
-              <FormHelperText sx={helperText}>123/xxx</FormHelperText>
+              <FormHelperText sx={helperText}>
+                {displayName.length}/{CHAR_LIMIT.DISPLAY_NAME_LIMIT}
+              </FormHelperText>
             </div>
           </Grid>
           <Grid item>
@@ -154,7 +157,9 @@ export default function Home() {
               <FormHelperText error={true} sx={helperTextError}>
                 {`ช่องนี้มีตัวอักษรได้ไม่เกิน ${"xxx"} ตัว`}
               </FormHelperText>
-              <FormHelperText sx={helperText}>123/xxx</FormHelperText>
+              <FormHelperText sx={helperText}>
+                {description.length}/{CHAR_LIMIT.DESCRIPTION_LIMIT}
+              </FormHelperText>
             </div>
           </Grid>
           <Grid item>
