@@ -15,7 +15,7 @@ import {
   Stack,
   Autocomplete,
   Chip,
-  Paper
+  
 } from "@mui/material"
 import Icon from '@mui/material/Icon';
 import dayjs, { Dayjs } from 'dayjs'
@@ -23,8 +23,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
 import { styled } from '@mui/material/styles';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
+import PictureList from '@/components/createPost/pictureList';
 
 const createPost = () => {
   const error = "#ff0000";
@@ -51,56 +50,7 @@ const createPost = () => {
     backgroundColor: "#ffa31a",
     color: "black",
   };
-  const itemData = [
-    {
-      img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
-      title: 'Breakfast',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
-      title: 'Burger',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1522770179533-24471fcdba45',
-      title: 'Camera',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1444418776041-9c7e33cc5a9c',
-      title: 'Coffee',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1533827432537-70133748f5c8',
-      title: 'Hats',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1558642452-9d2a7deb7f62',
-      title: 'Honey',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1516802273409-68526ee1bdd6',
-      title: 'Basketball',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1518756131217-31eb79b20e8f',
-      title: 'Fern',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1597645587822-e99fa5d45d25',
-      title: 'Mushrooms',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af',
-      title: 'Tomato basil',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1471357674240-e1a485acb3e1',
-      title: 'Sea star',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1589118949245-7d38baf380d6',
-      title: 'Bike',
-    },
-  ];
+
 
     const [value, setValue] = React.useState<Dayjs | null>(
       dayjs('2014-08-18T21:11:54'),
@@ -131,14 +81,7 @@ const createPost = () => {
     { key: 4, label: 'Vue.js' }
   ]);
 
-  const handleDelete = (chipToDelete: ChipData) => () => {
-    setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-  };
 
-  const handleAddTag = (chipToAdd: ChipData) => () => {
-    //setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
-    //I don't know how to do, But When click it i want it to show selector(list of tag) then i can click it to add into chipData
-  };
 
   return (
     <>
@@ -192,37 +135,33 @@ const createPost = () => {
               <Typography variant="body1">Start</Typography>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DateTimePicker
-          
-          value={value}
-          onChange={handleChange}
-          renderInput={(params) => <TextField {...params} fullWidth/>}
-          
-        /></LocalizationProvider>
+                  value={value}
+                  onChange={handleChange}
+                  renderInput={(params) => <TextField {...params} fullWidth/>}/>    
+              </LocalizationProvider>
                 <div style={helperTextBox}>
                   <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
                 </div>
             
-            </Grid> 
-
+        </Grid>
+          
           <Grid item xs={6}>
                 <Typography variant="body1">End</Typography>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker
-          
-          value={value}
-          onChange={handleChange}
-          renderInput={(params) => <TextField {...params} fullWidth />}
-          
-        /></LocalizationProvider>
-                  <div style={helperTextBox}>
-                    <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
-                  </div>
+                    <DateTimePicker
+                    value={value}
+                    onChange={handleChange}
+                    renderInput={(params) => <TextField {...params} fullWidth />}/>
+                </LocalizationProvider>
+                    <div style={helperTextBox}>
+                      <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
+                    </div>
             
           </Grid> 
 
         </Grid>
-
           </Grid>
+          
 
 
           <Grid item>
@@ -255,7 +194,18 @@ const createPost = () => {
         </Grid>
         <Grid item>
           <Typography variant="h5">Image(Optional)</Typography> 
+          <Stack
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+            spacing={1}
+          >
+            <PictureList/>
           
+
+
+
+          </Stack>
         </Grid>
 
 
