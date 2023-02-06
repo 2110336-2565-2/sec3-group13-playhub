@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 import {
   AppBar,
   Avatar,
@@ -8,26 +9,18 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-  Button,
   Typography,
 } from "@mui/material";
-import Logo from "./Logo";
-import { User } from "@/types/User";
-import { useRouter } from "next/router";
-import { PagePaths } from "enum/pages";
 
+import Logo from "./Logo";
+
+import { User } from "@/types/User";
 import { page } from "@/types/Page";
+
+import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
 
-// mocked user information
-const tmpUser: User = {
-  name: "Chanathip sombuthong",
-  sex: "Male",
-  birthdate: "26/4/2002",
-  description: "ชอบเล่นแนวบลัฟครับ หรือจะไปเล่นห้องผมก็ได้นะ",
-  image: "/images/aom.jpg",
-  email: "aom@gmail.com",
-};
+import { SessionContext } from "@supabase/auth-helpers-react";
 
 const menuItems: page[] = [
   {
@@ -38,13 +31,14 @@ const menuItems: page[] = [
     name: NavbarPages.myPost,
     path: PagePaths.post,
   },
-  {
-    name: NavbarPages.logout,
-    path: PagePaths.login,
-  },
 ];
 
-export default function Navbar() {
+type props = {
+  user: User;
+  session: SessionContext;
+};
+
+export default function Navbar(props: props) {
   const router = useRouter();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -56,6 +50,16 @@ export default function Navbar() {
 
   function routeToHome(): void {
     router.push(PagePaths.home);
+    return;
+  }
+
+  async function handleSignOut() {
+    const signOutResult = await props.session.supabaseClient.auth.signOut();
+    if (signOutResult.error) {
+      console.log(signOutResult.error);
+      return;
+    }
+    router.push(PagePaths.login);
     return;
   }
 
@@ -72,7 +76,7 @@ export default function Navbar() {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            <Avatar alt="Profile picture" src={tmpUser.image} />
+            <Avatar alt="Profile picture" src={props.user.image} />
           </IconButton>
           <Menu
             sx={{ mt: "40px" }}
@@ -92,14 +96,19 @@ export default function Navbar() {
               <MenuItem key={idx}>
                 <Link
                   textAlign="center"
-                  color={item.name === NavbarPages.logout ? "error" : "inherit"}
+                  color="inherit"
                   underline="none"
-                  href={item.path}
+                  href={item.path + "/" + props.user.username}
                 >
                   <Typography variant="body1">{item.name}</Typography>
                 </Link>
               </MenuItem>
             ))}
+            <MenuItem>
+              <Link textAlign="center" color="error" underline="none" onClick={handleSignOut}>
+                <Typography variant="body1">{NavbarPages.logout}</Typography>
+              </Link>
+            </MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

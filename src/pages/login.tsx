@@ -6,12 +6,13 @@ import Logo from "@/components/public/Logo";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 import { PagePaths } from "enum/pages";
 
-import { useSessionContext } from '@supabase/auth-helpers-react';
+import { useSessionContext } from "@supabase/auth-helpers-react";
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
 } from "@/constants/authentication";
 import { useRouter } from "next/router";
+import Loading from "@/components/public/Loading";
 
 // style
 const login_layout = {
@@ -34,7 +35,7 @@ export default function Home() {
   const isSupabaseErr = (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg = isLoginCredErr ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง" : "โปรดทำการยืนยันอีเมล";
 
-  const sessionContext = useSessionContext()
+  const sessionContext = useSessionContext();
 
   async function handleSubmit() {
     setIsSubmit(true);
@@ -57,7 +58,23 @@ export default function Home() {
       console.log("You have not validate your email yet");
       return;
     }
-    router.push(PagePaths.profile);
+    const fetchResult = await sessionContext.supabaseClient
+      .from("User")
+      .select("username")
+      .eq("email", email);
+    if (fetchResult.error) {
+      // having query error
+      console.log(fetchResult.error);
+      return;
+    }
+    if (fetchResult.count == 0) {
+      // no data entry with matching username
+      console.log("cant find the user");
+      router.push(PagePaths.login);
+      return;
+    }
+    const usernamePath = "/" + fetchResult.data[0].username;
+    router.push(PagePaths.profile + usernamePath);
     return;
   }
 
@@ -80,19 +97,13 @@ export default function Home() {
     setIsLoginCredErr(false);
     setIsValidateErr(false);
   }
-
-  async function handleSignOut() {
-    const signOutResult = await sessionContext.supabaseClient.auth.signOut();
-    if (signOutResult.error) {
-      console.log(signOutResult.error);
-      return;
-    }
+  // in case logged in, the page should go back the page user have been
+  if (sessionContext.session) {
+    router.back();
   }
-
-  if (sessionContext.isLoading) return <p>loading...</p> // temporary display
-  if (sessionContext.session) return <button onClick={handleSignOut}>logout</button>; // temporay display if logged in
   return (
     <>
+      <Loading isLoading={sessionContext.isLoading} />
       <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
         <Logo width={119} height={119} />
 
