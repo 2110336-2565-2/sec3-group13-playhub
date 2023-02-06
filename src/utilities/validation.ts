@@ -1,12 +1,9 @@
+import { validation } from "@/types/Validation";
+
 import { IMG_FILE_SIZE_LIMIT } from "enum/inputLimit";
 
 const expression: RegExp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-type validation = {
-  msg: string;
-  err: boolean;
-};
 
 export function validateEmail(email: string): validation {
   if (email.length === 0) {
@@ -32,15 +29,15 @@ export function validateTextField(
   return { msg: "", err: false };
 }
 
-export function validateImage(
-  fileType: string,
-  fileSize: number
-):validation {
-  if(["image/png","image/jpg","image/jpeg"].indexOf(fileType) === -1){
-    return {msg: "นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .jpg หรือ .png เท่านั้น)", err: true}
+export function validateImage(fileType: string, fileSize: number): validation {
+  if (["image/png", "image/jpg", "image/jpeg"].indexOf(fileType) === -1) {
+    return {
+      msg: "นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .jpg หรือ .png เท่านั้น)",
+      err: true,
+    };
   }
-  if(fileSize > IMG_FILE_SIZE_LIMIT){
-    return {msg:`ขนาดไฟล์จะต้องไม่เกิน ${IMG_FILE_SIZE_LIMIT/1_000_000} MB`,err: true}
+  if (fileSize > IMG_FILE_SIZE_LIMIT) {
+    return { msg: `ขนาดไฟล์จะต้องไม่เกิน ${IMG_FILE_SIZE_LIMIT / 1_000_000} MB`, err: true };
   }
-  return {msg: "",err: false}
+  return { msg: "", err: false };
 }
