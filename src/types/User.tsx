@@ -7,3 +7,8 @@ export type User = {
   image: string;
   email: string;
 };
+
+export type UserStatus = {
+  user: User | null;
+  isLoading: boolean;
+};

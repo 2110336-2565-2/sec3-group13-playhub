@@ -5,6 +5,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { UserStatusWrapper } from "supabase/user_context";
 
 const mainTheme = createTheme({
   palette: {
@@ -67,9 +68,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
-      <ThemeProvider theme={mainTheme}>
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <UserStatusWrapper>
+        <ThemeProvider theme={mainTheme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </UserStatusWrapper>
     </SessionContextProvider>
   );
 }
