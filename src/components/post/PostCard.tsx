@@ -42,20 +42,20 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 // mock data
-const tmpPost: Post = {
-  title: "ชวนไปดูแงว",
-  ownerName: "น้องออม",
-  ownerProfilePic: "/images/aom.jpg",
-  tags: ["A", "B"],
-  description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
-  image: ["/images/avatar.png", "/images/avatar.png", "/images/aom.jpg"],
-  location: "หอใน",
-  time: "2/4/2023",
-  // there are more data but omitted for now
-};
+// const tmpPost: Post = {
+//   title: "ชวนไปดูแงว",
+//   ownerName: "น้องออม",
+//   ownerProfilePic: "/images/aom.jpg",
+//   tags: ["A", "B"],
+//   description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
+//   image: ["/images/avatar.png", "/images/avatar.png", "/images/aom.jpg"],
+//   location: "หอใน",
+//   time: "2/4/2023",
+//   // there are more data but omitted for now
+// };
 const owner: boolean = true;
 
-export default function PostCard() {
+export default function PostCard(props: Post) {
   const [hiddenPostDetail, setHiddenPostDetail] = React.useState(true);
   const [openDeletePostModal, setOpenDeletePostModal] = React.useState(false);
 
@@ -81,12 +81,14 @@ export default function PostCard() {
           border: "solid 4px",
           borderRadius: "16px",
           minWidth: "260px",
+          maxWidth: "1200px",
+          margin: "40px",
         }}
       >
         <CardHeader
-          avatar={<Avatar alt="Profile picture" src={tmpPost.ownerProfilePic} />}
-          title={tmpPost.title}
-          subheader={tmpPost.ownerName}
+          avatar={<Avatar alt="Profile picture" src={props.ownerProfilePic} />}
+          title={props.title}
+          subheader={props.ownerName}
           action={
             <>
               {owner && (
@@ -107,15 +109,15 @@ export default function PostCard() {
           <Stack spacing={1} marginBottom={1}>
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>{tmpPost.location}</span>
+              <span style={{ marginLeft: 8 }}>{props.location}</span>
             </Typography>
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>{tmpPost.time}</span>
+              <span style={{ marginLeft: 8 }}>{props.time}</span>
             </Typography>
 
             <Grid container spacing={1}>
-              {tmpPost.tags.map((e) => (
+              {props.tags.map((e) => (
                 <Grid item>
                   <Chip
                     label={e}
@@ -129,11 +131,11 @@ export default function PostCard() {
           {/* post preview details end here */}
           <Collapse in={!hiddenPostDetail}>
             {/* post hidden details start here */}
-            {tmpPost.description.split("\n").map((row) => (
+            {props.description.split("\n").map((row) => (
               <Typography key={row}>{row}</Typography>
             ))}
             <Grid container spacing={2}>
-              {tmpPost.image.map((e) => (
+              {props.image.map((e) => (
                 <Grid item>
                   <Image src={e} alt="location" width={300} height={350} />
                 </Grid>
