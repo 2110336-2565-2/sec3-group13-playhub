@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Navbar from "@/components/public/Navbar";
 import {
   Typography,
@@ -32,17 +32,14 @@ import { validateImage, validateTextField } from "@/utilities/validation";
 import { useRouter } from "next/router";
 import React from "react";
 import { useSessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+import { userContext } from "supabase/user_context";
+import { randomInt } from "crypto";
 
 export default function Home() {
-  const tmpUser: User = {
-    username: "aomkung",
-    name: "Chanathip sombuthong",
-    sex: "Male",
-    birthdate: "26/4/2002",
-    description: "ชอบเล่นแนวบลัฟครับ หรือจะไปเล่นห้องผมก็ได้นะ",
-    image: "/images/aom.jpg",
-    email: "aom@gmail.com",
-  };
+  const supabaseClient = useSupabaseClient<Database>();
+  const userStatus = useContext(userContext);
 
   const avatar = { width: 200, height: 200 };
   const overlayIcon = {
@@ -73,7 +70,7 @@ export default function Home() {
   const [image, setImage] = useState("");
 
   const [isPressSubmit, setIsPressSubmit] = useState(false);
-  const [fileImage, setFileImage] = useState({});
+  const [fileImage, setFileImage] = useState("");
   const [isImageUpload, setIsImageUpload] = useState(true);
   const [showImageUploadError, setShowImageUploadError] = useState({
     msg: "",
@@ -91,18 +88,35 @@ export default function Home() {
   };
 
   const editProfileBtnOnClick = async () => {
+    if(userStatus.user == null) return;
     setIsPressSubmit(true);
     const readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err || !isImageUpload);
     if (readyToSubmit) {
       //send to API
-      console.log("Edit success");
+
+      const uploadImageResult = await supabaseClient.storage.from("profileimage").update('profileImage_'+userStatus.user.user_id,fileImage);
+      if(uploadImageResult.error != null){
+        console.log(uploadImageResult.error);
+        return;
+      }
+
+      const getImageURLResult = await supabaseClient.storage.from("profileimage").getPublicUrl('profileImage_'+userStatus.user.user_id);
+
       const sendData = {
         name: displayName,
         sex: gender,
         description: description,
-        image: fileImage,
+        image: getImageURLResult.data.publicUrl,
       };
-      console.log(sendData);
+      const updateResult = await supabaseClient.from('User')
+      .update(sendData)
+      .eq('user_id', userStatus.user.user_id);
+
+      if (updateResult.error) {
+        console.log(updateResult.error);
+        return;
+      }
+      console.log("Edit success");
     } else {
       console.log("Something went wrong");
     }
@@ -111,9 +125,9 @@ export default function Home() {
   React.useEffect(() => {
     async function getUserData() {
       if (!router.query.username || !sessionContext.session || userData) return;
-      const fetchResult = await sessionContext.supabaseClient
+      const fetchResult = await supabaseClient
         .from("User")
-        .select("username,name,sex,birthdate,description,image,email")
+        .select("username,name,sex,birthdate,description,image,email, user_id")
         .eq("username", router.query.username);
       if (fetchResult.error) {
         // having query error
@@ -121,7 +135,7 @@ export default function Home() {
         return;
       }
       if (fetchResult.count == 0) {
-        // no data entry with matching username
+        // no data etry with matching username
         console.log("cant find the user");
         router.push(PagePaths.login);
         return;

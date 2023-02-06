@@ -19,7 +19,7 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
             if(sessionContext.isLoading) return;
             if(sessionContext.session == null) return ;
             const userData = await supabaseClient.from('User')
-            .select("username,name,sex,birthdate,description,image,email")
+            .select("username,name,sex,birthdate,description,image,email, user_id")
             .eq('user_id', sessionContext.session.user.id);
             if(userData.error != null || userData.count == 0 || userData.data == null){
                 setUserStatus({user: null, isLoading: false});

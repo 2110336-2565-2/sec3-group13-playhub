@@ -38,7 +38,7 @@ export default function Home() {
       // retrieve user data from supabase
       const fetchResult = await sessionContext.supabaseClient
         .from("User")
-        .select("username,name,sex,birthdate,description,image,email")
+        .select("username,name,sex,birthdate,description,image,email,user_id")
         .eq("username", router.query.username);
 
       // in case : quering is error
@@ -72,7 +72,7 @@ export default function Home() {
 
   return (
     <>
-      <Suspense fallback={<Loading />}>
+      <Suspense fallback={<Loading isLoading={sessionContext.isLoading}/>}>
         <Navbar />
         <Stack
           spacing={2}
