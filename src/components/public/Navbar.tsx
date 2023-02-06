@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useRouter } from "next/router";
 import {
   AppBar,
@@ -20,7 +20,9 @@ import { page } from "@/types/Page";
 import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
 
-import { SessionContext } from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { Database } from "supabase/db_types";
+import { userContext } from "supabase/user_context";
 
 const menuItems: page[] = [
   {
@@ -33,16 +35,14 @@ const menuItems: page[] = [
   },
 ];
 
-type props = {
-  user: User;
-  session: SessionContext;
-};
-
-export default function Navbar(props: props) {
+export default function Navbar() {
   const router = useRouter();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+  const supabaseClient = useSupabaseClient<Database>();
+  
+  const userStatus = useContext(userContext)
   const handleClose = () => setAnchorEl(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -54,7 +54,7 @@ export default function Navbar(props: props) {
   }
 
   async function handleSignOut() {
-    const signOutResult = await props.session.supabaseClient.auth.signOut();
+    const signOutResult = await supabaseClient.auth.signOut();
     if (signOutResult.error) {
       console.log(signOutResult.error);
       return;
@@ -76,7 +76,7 @@ export default function Navbar(props: props) {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            <Avatar alt="Profile picture" src={props.user.image} />
+            {userStatus.user ? <Avatar alt="Profile picture" src={userStatus.user.image} /> : null}
           </IconButton>
           <Menu
             sx={{ mt: "40px" }}
@@ -98,7 +98,7 @@ export default function Navbar(props: props) {
                   textAlign="center"
                   color="inherit"
                   underline="none"
-                  href={item.path + "/" + props.user.username}
+                  href={userStatus.user ? item.path + "/" + userStatus.user.username : "/"}
                 >
                   <Typography variant="body1">{item.name}</Typography>
                 </Link>
