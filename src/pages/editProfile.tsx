@@ -70,7 +70,7 @@ export default function Home() {
   const [image, setImage] = useState("");
 
   const [isPressSubmit, setIsPressSubmit] = useState(false);
-  const [fileImage,setFileImage] = useState();
+  const [fileImage,setFileImage] = useState({});
   const [isImageUpload, setIsImageUpload] = useState(true);
   const [showImageUploadError, setShowImageUploadError] = useState({
     msg: "",
@@ -101,7 +101,13 @@ export default function Home() {
     if (readyToSubmit) {
       //send to API
       console.log("Edit success");
-      console.log(image)
+      const sendData = {
+        name: displayName,
+        sex: gender,
+        description: description,
+        image: fileImage,
+      }
+      console.log(sendData)
     } else {
       console.log("Something went wrong");
     }
