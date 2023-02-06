@@ -170,7 +170,7 @@ export default function Home() {
 
   return (
     <>
-      <Navbar user={userData || tmpUser} session={sessionContext} />
+      <Navbar />
       <Link onClick={handleGoBack}>
         <ArrowBackIcon fontSize="large" sx={{ margin: "3vh 0 0 3vh", color: "black" }} />
       </Link>

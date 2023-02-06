@@ -1,18 +1,20 @@
 import React from "react";
+import { NextRouter, useRouter } from "next/router";
 import { Link, Box, Typography, TextField, Stack, FormHelperText, Button } from "@mui/material";
+import { SessionContext, useSessionContext } from "@supabase/auth-helpers-react";
 
-import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Logo from "@/components/public/Logo";
-import { validateEmail, validateTextField } from "@/utilities/validation";
-import { PagePaths } from "enum/pages";
+import PasswordTextFeild from "@/components/public/PasswordTextField";
 
-import { useSessionContext } from "@supabase/auth-helpers-react";
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
 } from "@/constants/authentication";
-import { useRouter } from "next/router";
-import Loading from "@/components/public/Loading";
+import { validation } from "@/types/Validation";
+import { PagePaths } from "enum/pages";
+
+import { validateEmail, validateTextField } from "@/utilities/validation";
+import { AuthResponse } from "@supabase/supabase-js";
 
 // style
 const login_layout = {
@@ -21,61 +23,77 @@ const login_layout = {
 };
 
 export default function Home() {
-  const router = useRouter();
+  const router: NextRouter = useRouter();
+  const sessionContext: SessionContext = useSessionContext();
+  const controller = new AbortController();
 
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [isSubmit, setIsSubmit] = React.useState(false);
-  const [isLoginCredErr, setIsLoginCredErr] = React.useState(false);
-  const [isValidateErr, setIsValidateErr] = React.useState(false);
+  // state about variables
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
+  const [isLoginCredErr, setIsLoginCredErr] = React.useState<boolean>(false);
+  const [isValidateErr, setIsValidateErr] = React.useState<boolean>(false);
 
-  const emailErr = validateEmail(email);
-  const passwordErr = validateTextField(password, 1);
+  // error about variables
+  const emailErr: validation = validateEmail(email);
+  const passwordErr: validation = validateTextField(password, 1);
+  const isSupabaseErr: boolean =
+    (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
+  const supabaseErrMsg: string = isLoginCredErr
+    ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
+    : "โปรดทำการยืนยันอีเมล";
 
-  const isSupabaseErr = (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
-  const supabaseErrMsg = isLoginCredErr ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง" : "โปรดทำการยืนยันอีเมล";
-
-  const sessionContext = useSessionContext();
+  React.useEffect(() => {
+    return () => controller.abort();
+  });
 
   async function handleSubmit() {
     setIsSubmit(true);
-    const signInResult = await sessionContext.supabaseClient.auth.signInWithPassword({
+
+    // sign in via supabase
+    const signInResult: AuthResponse = await sessionContext.supabaseClient.auth.signInWithPassword({
       email,
       password,
     });
-    if (signInResult.error && signInResult.error.message == SUPABASE_LOGIN_CREDENTIALS_ERROR) {
-      // wrong email or password
-      setIsLoginCredErr(true);
-      console.log("wrong email or password");
-      return;
+
+    if (signInResult.error) {
+      // in case : cannot find user using inputed email and password
+      if (signInResult.error.message == SUPABASE_LOGIN_CREDENTIALS_ERROR) {
+        setIsLoginCredErr(true);
+        console.log("wrong email or password");
+        return;
+      }
+
+      // in case : user has not validate email yet
+      if (signInResult.error.message == SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR) {
+        setIsValidateErr(true);
+        console.log("You have not validate your email yet");
+        return;
+      }
     }
-    if (
-      signInResult.error &&
-      signInResult.error.message == SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR
-    ) {
-      // user have not validate email yet
-      setIsValidateErr(true);
-      console.log("You have not validate your email yet");
-      return;
-    }
+
+    // retrieve user data from supabase
     const fetchResult = await sessionContext.supabaseClient
       .from("User")
       .select("username")
       .eq("email", email);
+
+    // in case : quering is error
     if (fetchResult.error) {
-      // having query error
       console.log(fetchResult.error);
       return;
     }
+
+    // in case :no data entry with matching username
     if (fetchResult.count == 0) {
-      // no data entry with matching username
       console.log("cant find the user");
       router.push(PagePaths.login);
       return;
     }
-    const usernamePath = "/" + fetchResult.data[0].username;
+
+    // route to profile page(homepage when available)
+    const usernamePath: string = "/" + fetchResult.data[0].username;
     router.push(PagePaths.profile + usernamePath);
-    return;
   }
 
   function handleEmailChange(
@@ -97,13 +115,14 @@ export default function Home() {
     setIsLoginCredErr(false);
     setIsValidateErr(false);
   }
-  // in case logged in, the page should go back the page user have been
-  if (sessionContext.session) {
-    router.back();
-  }
+
+  // in case : logged in, the page should go back the page user have been
+  // if (sessionContext.session) {
+  //   router.back();
+  // }
+
   return (
     <>
-      <Loading isLoading={sessionContext.isLoading} />
       <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
         <Logo width={119} height={119} />
 
@@ -146,6 +165,7 @@ export default function Home() {
         <Button variant="contained" onClick={handleSubmit}>
           Login
         </Button>
+
         <Box sx={login_layout} display="flex">
           <Typography variant="body1">Create account{"\u00A0"}</Typography>
           <Link color="primary" underline="hover" href={PagePaths.register}>
