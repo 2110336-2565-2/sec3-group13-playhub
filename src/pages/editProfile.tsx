@@ -50,17 +50,10 @@ export default function Home() {
     width: "50vw",
     margin: "3vh 0 0 0",
   };
-  const helperTextBox = {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-  };
-  const helperTextError = {
-    textAlign: "start",
-    gridColumn: 1,
-  };
   const helperText = {
-    textAlign: "end",
-    gridColumn: 2,
+    display: "flex",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
   };
 
   const controller = new AbortController();
@@ -70,7 +63,7 @@ export default function Home() {
   const [image, setImage] = useState("");
 
   const [isPressSubmit, setIsPressSubmit] = useState(false);
-  const [fileImage,setFileImage] = useState({});
+  const [fileImage, setFileImage] = useState({});
   const [isImageUpload, setIsImageUpload] = useState(true);
   const [showImageUploadError, setShowImageUploadError] = useState({
     msg: "",
@@ -97,7 +90,11 @@ export default function Home() {
 
   const editProfileBtnOnClick = async () => {
     setIsPressSubmit(true);
-    const readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err || !isImageUpload);
+    const readyToSubmit: boolean = !(
+      displayNameErr.err ||
+      descriptionErr.err ||
+      !isImageUpload
+    );
     if (readyToSubmit) {
       //send to API
       console.log("Edit success");
@@ -106,8 +103,8 @@ export default function Home() {
         sex: gender,
         description: description,
         image: fileImage,
-      }
-      console.log(sendData)
+      };
+      console.log(sendData);
     } else {
       console.log("Something went wrong");
     }
@@ -120,14 +117,14 @@ export default function Home() {
   }, []);
 
   const handleImageChange = (event: any) => {
-    const tempFile = event.target.files[0]
-    setImage(URL.createObjectURL(tempFile))
-    const imgErrMsg = validateImage(tempFile.type, tempFile.size)
-    setShowImageUploadError(imgErrMsg)
+    const tempFile = event.target.files[0];
+    setImage(URL.createObjectURL(tempFile));
+    const imgErrMsg = validateImage(tempFile.type, tempFile.size);
+    setShowImageUploadError(imgErrMsg);
     if (imgErrMsg.err) {
       setIsImageUpload(false);
-    }else{
-      setFileImage(event.target.files[0])
+    } else {
+      setFileImage(event.target.files[0]);
       setIsImageUpload(true);
     }
   };
@@ -202,15 +199,13 @@ export default function Home() {
             fullWidth
             size="small"
           />
-          <Box style={helperTextBox}>
-            {isPressSubmit && displayNameErr.err && (
-              <FormHelperText error={true} sx={helperTextError}>
-                {displayNameErr.msg}
-              </FormHelperText>
-            )}
-            <FormHelperText sx={helperText}>
+          <Box sx={helperText}>
+            <FormHelperText>
               {displayName.length}/{CHAR_LIMIT.DISPLAY_NAME_LIMIT}
             </FormHelperText>
+            {isPressSubmit && displayNameErr.err && (
+              <FormHelperText error={true}>{displayNameErr.msg}</FormHelperText>
+            )}
           </Box>
 
           <Typography variant="body1">
@@ -225,15 +220,13 @@ export default function Home() {
             fullWidth
             size="small"
           />
-          <Box style={helperTextBox}>
-            {isPressSubmit && descriptionErr.err && (
-              <FormHelperText error={true} sx={helperTextError}>
-                {descriptionErr.msg}
-              </FormHelperText>
-            )}
-            <FormHelperText sx={helperText}>
+          <Box sx={helperText}>
+            <FormHelperText>
               {description.length}/{CHAR_LIMIT.DESCRIPTION_LIMIT}
             </FormHelperText>
+            {isPressSubmit && descriptionErr.err && (
+              <FormHelperText error>{descriptionErr.msg}</FormHelperText>
+            )}
           </Box>
 
           <Typography variant="body1">{editProfileHeader.gender}</Typography>
