@@ -209,7 +209,7 @@ export interface Database {
           rating_score: number | null
           sex: string
           user_id: string
-          username: string | null
+          username: string
           verified_email: boolean | null
         }
         Insert: {
