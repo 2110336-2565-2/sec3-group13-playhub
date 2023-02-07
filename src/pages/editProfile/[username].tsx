@@ -102,26 +102,13 @@ export default function Home() {
     if (readyToSubmit && fileImage !== undefined) {
       //send to API
 
-<<<<<<< HEAD
       const uploadImageResult = await supabaseClient.storage.from("profileimage").upload(userStatus.user.user_id,fileImage,{upsert:true});
       if(uploadImageResult.error != null){
-=======
-      const uploadImageResult = await supabaseClient.storage
-        .from("profileimage")
-        .update("profileImage_" + userStatus.user.user_id, fileImage);
-      if (uploadImageResult.error != null) {
->>>>>>> 1aa6df14d641e8a20a3a57d93574ed2671d8ea8d
         console.log(uploadImageResult.error);
         return;
       }
 
-<<<<<<< HEAD
       const getImageURLResult = await supabaseClient.storage.from("profileimage").getPublicUrl(userStatus.user.user_id);
-=======
-      const getImageURLResult = await supabaseClient.storage
-        .from("profileimage")
-        .getPublicUrl("profileImage_" + userStatus.user.user_id);
->>>>>>> 1aa6df14d641e8a20a3a57d93574ed2671d8ea8d
 
       const sendData = {
         name: displayName,
