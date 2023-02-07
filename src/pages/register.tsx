@@ -7,46 +7,85 @@ import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import InputTextBox from "@/components/public/UserTextField";
 
 export default function Home() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [isSubmit, setIsSubmit] = React.useState(false);
+  const [confirmPassword, setConfirmPassword] = React.useState("");
+  // const [isSubmit, setIsSubmit] = React.useState(false);
   const [value, setValue] = React.useState<Dayjs | null>(null);
+  const [displayName, setDisplayName] = React.useState<string>("");
+  const handleDisplayNameChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void => {
+    setDisplayName(event.target.value);
+  };
+
+  function handleEmailChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void {
+    setEmail(event.target.value);
+  }
 
   function handlePasswordChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setPassword(event.target.value);
-    setIsSubmit(false);
+  }
+
+  function handleConfirmPasswordChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void {
+    setConfirmPassword(event.target.value);
   }
 
   return (
     <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
       <Logo width={119} height={119} />
 
-      <Typography>Username</Typography>
-      <Box>
-        <TextField fullWidth label="Username" />
+      <Box style={{ width: "50vw" }}>
+        <InputTextBox
+          header="Username"
+          placeholder="Displayname"
+          value={displayName}
+          handleValueChange={handleDisplayNameChange}
+          char_limit={100}
+          isErr={false}
+          errMsg=""
+        />
       </Box>
 
-      <Typography>Email</Typography>
-      <Box>
-        <TextField fullWidth label="Email" />
+      <Box style={{ width: "50vw" }}>
+        <InputTextBox
+          header="Email"
+          placeholder="Email"
+          value={email}
+          handleValueChange={handleEmailChange}
+          isErr={false}
+          errMsg=""
+        />
       </Box>
 
-      <Typography>Password</Typography>
-      <Box>
-        <PasswordTextFeild handleChange={handlePasswordChange} value={password} error={isSubmit} />
-      </Box>
-
-      <Typography>Confirm Password</Typography>
-      <Box>
+      <Box style={{ width: "50vw" }}>
         <PasswordTextFeild
-          label="Confirm Password"
-          handleChange={handlePasswordChange}
+          header="Password"
+          placeholder="Password"
           value={password}
-          error={isSubmit}
+          handleValueChange={handlePasswordChange}
+          isErr={false}
+          errMsg=""
+        />
+      </Box>
+
+      <Box style={{ width: "50vw" }}>
+        <PasswordTextFeild
+          header="Confirm Password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          handleValueChange={handleConfirmPasswordChange}
+          isErr={false}
+          errMsg=""
         />
       </Box>
 
