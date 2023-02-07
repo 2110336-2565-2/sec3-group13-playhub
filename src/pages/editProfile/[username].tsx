@@ -29,13 +29,15 @@ import Image from "next/image";
 
 import { PagePaths } from "enum/pages";
 import { validateImage, validateTextField } from "@/utilities/validation";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import React from "react";
-import { useSessionContext } from "@supabase/auth-helpers-react";
+import { SessionContext, useSessionContext } from "@supabase/auth-helpers-react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import { randomInt } from "crypto";
+import { validation } from "@/types/Validation";
+import InputTextBox from "@/components/public/InputTextBox";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -57,28 +59,34 @@ export default function Home() {
     justifyContent: "space-between",
   };
 
-  const router = useRouter();
-
-  const sessionContext = useSessionContext();
-
+  const router: NextRouter = useRouter();
+  const sessionContext: SessionContext = useSessionContext();
   const controller = new AbortController();
 
   const [userData, setUserData] = React.useState<User | null>(null);
-  const [displayName, setDisplayName] = useState("");
-  const [gender, setGender] = useState("");
-  const [description, setDescription] = useState("");
-  const [image, setImage] = useState("");
+  const [displayName, setDisplayName] = React.useState<string>("");
+  const [gender, setGender] = React.useState<string>("");
+  const [description, setDescription] = React.useState<string>("");
+  const [image, setImage] = React.useState<string>("");
 
-  const [isPressSubmit, setIsPressSubmit] = useState(false);
-  const [fileImage, setFileImage] = useState("");
-  const [isImageUpload, setIsImageUpload] = useState(true);
+  const [isPressSubmit, setIsPressSubmit] = React.useState<boolean>(false);
+  const [fileImage, setFileImage] = React.useState<File>();
+  const [isImageUpload, setIsImageUpload] = React.useState<boolean>(true);
   const [showImageUploadError, setShowImageUploadError] = useState({
     msg: "",
     err: false,
   });
 
-  const displayNameErr = validateTextField(displayName, 1, CHAR_LIMIT.DISPLAY_NAME_LIMIT);
-  const descriptionErr = validateTextField(description, 0, CHAR_LIMIT.DESCRIPTION_LIMIT);
+  const displayNameErr: validation = validateTextField(
+    displayName,
+    1,
+    CHAR_LIMIT.DISPLAY_NAME_LIMIT
+  );
+  const descriptionErr: validation = validateTextField(
+    description,
+    0,
+    CHAR_LIMIT.DESCRIPTION_LIMIT
+  );
 
   const getProfile = async (User: User) => {
     setDisplayName(User.name);
@@ -88,19 +96,32 @@ export default function Home() {
   };
 
   const editProfileBtnOnClick = async () => {
-    if(userStatus.user == null) return;
+    if (userStatus.user == null) return;
     setIsPressSubmit(true);
     const readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err || !isImageUpload);
-    if (readyToSubmit) {
+    if (readyToSubmit && fileImage !== undefined) {
       //send to API
 
+<<<<<<< HEAD
       const uploadImageResult = await supabaseClient.storage.from("profileimage").upload(userStatus.user.user_id,fileImage,{upsert:true});
       if(uploadImageResult.error != null){
+=======
+      const uploadImageResult = await supabaseClient.storage
+        .from("profileimage")
+        .update("profileImage_" + userStatus.user.user_id, fileImage);
+      if (uploadImageResult.error != null) {
+>>>>>>> 1aa6df14d641e8a20a3a57d93574ed2671d8ea8d
         console.log(uploadImageResult.error);
         return;
       }
 
+<<<<<<< HEAD
       const getImageURLResult = await supabaseClient.storage.from("profileimage").getPublicUrl(userStatus.user.user_id);
+=======
+      const getImageURLResult = await supabaseClient.storage
+        .from("profileimage")
+        .getPublicUrl("profileImage_" + userStatus.user.user_id);
+>>>>>>> 1aa6df14d641e8a20a3a57d93574ed2671d8ea8d
 
       const sendData = {
         name: displayName,
@@ -108,15 +129,17 @@ export default function Home() {
         description: description,
         image: getImageURLResult.data.publicUrl,
       };
-      const updateResult = await supabaseClient.from('User')
-      .update(sendData)
-      .eq('user_id', userStatus.user.user_id);
+      const updateResult = await supabaseClient
+        .from("User")
+        .update(sendData)
+        .eq("user_id", userStatus.user.user_id);
 
       if (updateResult.error) {
         console.log(updateResult.error);
         return;
       }
       console.log("Edit success");
+      router.push(PagePaths.profile + "/" + userStatus.user.username);
     } else {
       console.log("Something went wrong");
     }
@@ -150,7 +173,7 @@ export default function Home() {
     return () => controller.abort();
   }, [router, sessionContext, userData]);
 
-  const handleImageChange = (event: any) => {
+  const handleImageChange = (event: any): void => {
     const tempFile = event.target.files[0];
     setImage(URL.createObjectURL(tempFile));
     const imgErrMsg = validateImage(tempFile.type, tempFile.size);
@@ -165,19 +188,21 @@ export default function Home() {
 
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => {
+  ): void => {
     setDisplayName(event.target.value);
     setIsPressSubmit(false);
   };
-  const handleDescChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+  const handleDescChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void => {
     setDescription(event.target.value);
     setIsPressSubmit(false);
   };
-  const handleSelectChange = (event: SelectChangeEvent) => {
+  const handleSelectChange = (event: SelectChangeEvent): void => {
     setGender(event.target.value as string);
   };
 
-  function handleGoBack() {
+  function handleGoBack(): void {
     router.back();
     return;
   }
@@ -210,40 +235,24 @@ export default function Home() {
         )}
 
         <Box style={editInfoContainer}>
-          <Typography variant="body1">{editProfileHeader.displayName}</Typography>
-          <TextField
+          <InputTextBox
+            header={editProfileHeader.displayName}
             value={displayName}
-            onChange={handleDisplayNameChange}
-            fullWidth
-            size="small"
+            handleValueChange={handleDisplayNameChange}
+            char_limit={CHAR_LIMIT.DISPLAY_NAME_LIMIT}
+            isErr={isPressSubmit && displayNameErr.err}
+            errMsg={displayNameErr.msg}
           />
-          <Box sx={helperText}>
-            <FormHelperText>
-              {displayName.length}/{CHAR_LIMIT.DISPLAY_NAME_LIMIT}
-            </FormHelperText>
-            {isPressSubmit && displayNameErr.err && (
-              <FormHelperText error={true}>{displayNameErr.msg}</FormHelperText>
-            )}
-          </Box>
 
-          <Typography variant="body1">{editProfileHeader.description}</Typography>
-          <TextField
-            id="outlined-multiline-flexible"
+          <InputTextBox
+            header={editProfileHeader.description}
             value={description}
-            onChange={handleDescChange}
-            multiline
-            rows={4}
-            fullWidth
-            size="small"
+            handleValueChange={handleDescChange}
+            isMultiLine={true}
+            char_limit={CHAR_LIMIT.DESCRIPTION_LIMIT}
+            isErr={isPressSubmit && descriptionErr.err}
+            errMsg={descriptionErr.msg}
           />
-          <Box sx={helperText}>
-            <FormHelperText>
-              {description.length}/{CHAR_LIMIT.DESCRIPTION_LIMIT}
-            </FormHelperText>
-            {isPressSubmit && descriptionErr.err && (
-              <FormHelperText error>{descriptionErr.msg}</FormHelperText>
-            )}
-          </Box>
 
           <Typography variant="body1">{editProfileHeader.gender}</Typography>
           <FormControl size="small" sx={{ width: "18vw" }}>

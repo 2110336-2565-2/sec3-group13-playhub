@@ -72,7 +72,7 @@ export default function Home() {
 
   return (
     <>
-      <Suspense fallback={<Loading isLoading={sessionContext.isLoading}/>}>
+      <Suspense fallback={<Loading isLoading={sessionContext.isLoading} />}>
         <Navbar />
         <Stack
           spacing={2}
@@ -90,8 +90,10 @@ export default function Home() {
                   <MaleIcon />
                 ) : userData.sex === Gender.female ? (
                   <FemaleIcon />
-                ) : (
+                ) : userData.sex === Gender.others ? (
                   <TransgenderIcon />
+                ) : (
+                  <div></div>
                 )
               }
               label={userData.sex}
