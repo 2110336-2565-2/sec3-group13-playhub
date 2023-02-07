@@ -86,9 +86,17 @@ export default function PostCard(props: Post) {
         }}
       >
         <CardHeader
-          avatar={<Avatar alt="Profile picture" src={props.ownerProfilePic} />}
+          avatar={
+            <Avatar
+              sx={{ width: 50, height: 50 }}
+              alt="Profile picture"
+              src={props.ownerProfilePic}
+            />
+          }
           title={props.title}
           subheader={props.ownerName}
+          titleTypographyProps={{ variant: "h5" }}
+          subheaderTypographyProps={{ variant: "h6" }}
           action={
             <>
               {owner && (
@@ -104,9 +112,9 @@ export default function PostCard(props: Post) {
             </>
           }
         />
-        <CardContent>
+        <CardContent style={{ padding: "0px 16px", marginLeft: 50 }}>
           {/* post preview details start here */}
-          <Stack spacing={1} marginBottom={1}>
+          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.location}</span>
@@ -115,21 +123,21 @@ export default function PostCard(props: Post) {
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.time}</span>
             </Typography>
-
-            <Grid container spacing={1}>
-              {props.tags.map((e) => (
-                <Grid item>
-                  <Chip
-                    label={e}
-                    variant="outlined"
-                    style={{ minWidth: 100, height: 40, border: "1px solid gray", fontSize: 18 }}
-                  />
-                </Grid>
-              ))}
-            </Grid>
           </Stack>
+          <Grid container spacing={1}>
+            {props.tags.map((e) => (
+              <Grid item>
+                <Chip
+                  label={e}
+                  variant="outlined"
+                  style={{ minWidth: 100, height: 40, border: "1px solid gray", fontSize: 18 }}
+                />
+              </Grid>
+            ))}
+          </Grid>
+
           {/* post preview details end here */}
-          <Collapse in={!hiddenPostDetail}>
+          <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2 }}>
             {/* post hidden details start here */}
             {props.description.split("\n").map((row) => (
               <Typography key={row}>{row}</Typography>
@@ -144,7 +152,7 @@ export default function PostCard(props: Post) {
             {/* post hidden details end here */}
           </Collapse>
         </CardContent>
-        <CardActions>
+        <CardActions style={{ padding: "4px 8px" }}>
           <Box sx={{ flexGrow: 1 }}></Box>
 
           <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
