@@ -3,6 +3,7 @@ import { ScriptProps } from "next/script";
 import { createContext, useState, useEffect } from "react";
 import { useSessionContext, useSupabaseClient } from '@supabase/auth-helpers-react';
 import { Database } from "./db_types";
+import { useRouter } from "next/router";
 
 export const userContext = createContext<UserStatus>({
     user: null,
@@ -13,6 +14,7 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
     const [userStatus, setUserStatus] = useState<UserStatus>({user:null, isLoading:true}) ;
     const sessionContext = useSessionContext();
     const supabaseClient = useSupabaseClient<Database>();
+    const router = useRouter();
 
     useEffect(() => {
         async function getUserData(){
@@ -28,6 +30,8 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
             setUserStatus({user: userData.data[0], isLoading: false});
         } 
         getUserData()
-    },[sessionContext])
+    },[sessionContext, supabaseClient, router.pathname])
+
+
     return (<userContext.Provider value={userStatus}>{prop.children}</userContext.Provider>)
 }
