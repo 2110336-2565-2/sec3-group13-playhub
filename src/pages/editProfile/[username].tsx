@@ -92,26 +92,38 @@ export default function Home() {
   };
 
   const editProfileBtnOnClick = async () => {
-    if (userStatus.user == null) return;
+    if (!userStatus.user) return;
     setIsPressSubmit(true);
     const readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err || !isImageUpload);
-    if (readyToSubmit && fileImage !== undefined) {
+    if (readyToSubmit) {
       //send to API
+      const timeStamp = Date.now() ;
+      if (fileImage) {
+        const deleteImageResult = await supabaseClient.storage.from("profileimage").remove([userStatus.user.image.split("/").at(-1) as string]);
+        if(deleteImageResult.error != null){
+          console.log(deleteImageResult.error);
+          return;
+        }
 
-      const uploadImageResult = await supabaseClient.storage.from("profileimage").upload(userStatus.user.user_id,fileImage,{upsert:true});
-      if(uploadImageResult.error != null){
-        console.log(uploadImageResult.error);
-        return;
+        const uploadImageResult = await supabaseClient.storage.from("profileimage").upload(userStatus.user.user_id+timeStamp,fileImage);
+        if(uploadImageResult.error != null){
+          console.log(uploadImageResult.error);
+          return;
+        }
       }
+      const getImageURLResult = await supabaseClient.storage.from("profileimage").getPublicUrl(userStatus.user.user_id+timeStamp);
 
-      const getImageURLResult = await supabaseClient.storage.from("profileimage").getPublicUrl(userStatus.user.user_id);
-
-      const sendData = {
+      const sendData = fileImage != null? {
         name: displayName,
         sex: gender,
         description: description,
         image: getImageURLResult.data.publicUrl,
-      };
+      } : {
+        name: displayName,
+        sex: gender,
+        description: description,
+      }
+
       const updateResult = await supabaseClient
         .from("User")
         .update(sendData)
@@ -167,6 +179,7 @@ export default function Home() {
     getProfile(userStatus.user);
   }, [userStatus])
 
+  if (userStatus.isLoading || image == "") return <p>getting session...</p>
   return (
     <>
       <Navbar />
