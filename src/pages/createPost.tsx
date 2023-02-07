@@ -1,23 +1,14 @@
 import React from 'react'
-import {useState} from 'react'
 import Navbar from "@/components/public/Navbar";
-import { editProfileHeader } from "public/locales/editProfileHeader";
 import {
-  Avatar,
   Grid,
   Typography,
   TextField,
-  FormControl,
-  Select,
-  MenuItem,
   Button,
   FormHelperText,
   Stack,
   Autocomplete,
-  Chip,
-  
 } from "@mui/material"
-import Icon from '@mui/material/Icon';
 import dayjs, { Dayjs } from 'dayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
@@ -70,16 +61,7 @@ const createPost = () => {
     {Tag:"Car"},
     {Tag:"CO-OP"},
   ]
-  const ListItem = styled('li')(({ theme }) => ({
-    margin: theme.spacing(0.5),
-  }));
-  const [chipData, setChipData] = React.useState<readonly ChipData[]>([
-    { key: 0, label: 'Angular' },
-    { key: 1, label: 'jQuery' },
-    { key: 2, label: 'Polymer' },
-    { key: 3, label: 'React' },
-    { key: 4, label: 'Vue.js' }
-  ]);
+
 
 
 

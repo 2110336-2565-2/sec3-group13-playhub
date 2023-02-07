@@ -17,17 +17,32 @@ const itemPics = [
     }
   ];
 
+  function Image({item}) {
+    console.log(source);
+    return {
+      src: source,
+      style: {
+        width: "200px",
+        height: "200px",
+      },
+      alt:title,
+      loading:"lazy"
+    };
+  }
+
 const PictureList = () => {
   return (
     <ImageList  cols={4} rowHeight={200}>
       {itemPics.map((item) => (
         <ImageListItem key={item.img}>
-          <img
+            <img
             src={`${item.src}?w=200&h=200&fit=crop&auto=format`}
             srcSet={`${item.src}?w=200&h=200&fit=crop&auto=format&dpr=2 2x`}
             alt={item.title}
             loading="lazy"
           />
+           {/* <img {...Image(item.src,item.title)} 
+             />  */}
         </ImageListItem>
       ))}
     </ImageList>
