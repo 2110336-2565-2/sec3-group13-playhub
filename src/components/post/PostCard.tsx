@@ -14,6 +14,7 @@ import {
   Grid,
   Stack,
   Chip,
+  Snackbar,
 } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
@@ -58,6 +59,7 @@ const owner: boolean = true;
 export default function PostCard(props: Post) {
   const [hiddenPostDetail, setHiddenPostDetail] = React.useState(true);
   const [openDeletePostModal, setOpenDeletePostModal] = React.useState(false);
+  const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
   const handleOpenModal = () => setOpenDeletePostModal(true);
   const handleCloseModal = () => setOpenDeletePostModal(false);
@@ -104,7 +106,11 @@ export default function PostCard(props: Post) {
                   <IconButton size="large" onClick={handleEditPost}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton size="large" color="error" onClick={handleOpenModal}>
+                  <IconButton
+                    size="large"
+                    color="error"
+                    onClick={handleOpenModal}
+                  >
                     <DeleteOutlineIcon />
                   </IconButton>
                 </>
@@ -114,7 +120,11 @@ export default function PostCard(props: Post) {
         />
         <CardContent style={{ padding: "0px 16px", marginLeft: 50 }}>
           {/* post preview details start here */}
-          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
+          <Stack
+            direction={!hiddenPostDetail ? "row" : "column"}
+            spacing={2}
+            marginBottom={2}
+          >
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.location}</span>
@@ -130,7 +140,12 @@ export default function PostCard(props: Post) {
                 <Chip
                   label={e}
                   variant="outlined"
-                  style={{ minWidth: 100, height: 40, border: "1px solid gray", fontSize: 18 }}
+                  style={{
+                    minWidth: 100,
+                    height: 40,
+                    border: "1px solid gray",
+                    fontSize: 18,
+                  }}
                 />
               </Grid>
             ))}
@@ -156,7 +171,9 @@ export default function PostCard(props: Post) {
           <Box sx={{ flexGrow: 1 }}></Box>
 
           <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
-            <Button variant="contained">Join</Button>
+            <Button onClick={() => setOpenSnackBar(true)} variant="contained">
+              Join
+            </Button>
           </Grow>
 
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
@@ -169,6 +186,12 @@ export default function PostCard(props: Post) {
         openModal={openDeletePostModal}
         handleCloseModal={handleCloseModal}
         deletePost={handleDeletePost}
+      />
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={5000}
+        message="ได้เวลาสนุกแล้วสิ"
+        onClose={() => setOpenSnackBar(false)}
       />
     </>
   );
