@@ -31,7 +31,6 @@ import { PagePaths } from "enum/pages";
 import { validateImage, validateTextField } from "@/utilities/validation";
 import { NextRouter, useRouter } from "next/router";
 import React from "react";
-import { SessionContext, useSessionContext } from "@supabase/auth-helpers-react";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
@@ -60,10 +59,7 @@ export default function Home() {
   };
 
   const router: NextRouter = useRouter();
-  const sessionContext: SessionContext = useSessionContext();
-  const controller = new AbortController();
 
-  const [userData, setUserData] = React.useState<User | null>(null);
   const [displayName, setDisplayName] = React.useState<string>("");
   const [gender, setGender] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
@@ -132,34 +128,6 @@ export default function Home() {
     }
   };
 
-  React.useEffect(() => {
-    async function getUserData() {
-      if (!router.query.username || !sessionContext.session || userData) return;
-      const fetchResult = await supabaseClient
-        .from("User")
-        .select("username,name,sex,birthdate,description,image,email, user_id")
-        .eq("username", router.query.username);
-      if (fetchResult.error) {
-        // having query error
-        console.log(fetchResult.error);
-        return;
-      }
-      if (fetchResult.count == 0) {
-        // no data etry with matching username
-        console.log("cant find the user");
-        router.push(PagePaths.login);
-        return;
-      }
-      setUserData(fetchResult.data[0]);
-    }
-
-    getUserData();
-    if (userData) {
-      getProfile(userData);
-    }
-    return () => controller.abort();
-  }, [router, sessionContext, userData]);
-
   const handleImageChange = (event: any): void => {
     const tempFile = event.target.files[0];
     setImage(URL.createObjectURL(tempFile));
@@ -193,6 +161,11 @@ export default function Home() {
     router.back();
     return;
   }
+
+  React.useEffect(() => {
+    if (userStatus.isLoading || !userStatus.user) return;
+    getProfile(userStatus.user);
+  }, [userStatus])
 
   return (
     <>
