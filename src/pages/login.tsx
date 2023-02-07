@@ -15,6 +15,7 @@ import { PagePaths } from "enum/pages";
 
 import { validateEmail, validateTextField } from "@/utilities/validation";
 import { AuthResponse } from "@supabase/supabase-js";
+import InputTextBox from "@/components/public/InputTextBox";
 
 // style
 const login_layout = {
@@ -127,31 +128,25 @@ export default function Home() {
         <Logo width={119} height={119} />
 
         <Box sx={login_layout}>
-          <TextField
-            fullWidth
+          <InputTextBox
             label="Email"
-            onChange={handleEmailChange}
             value={email}
-            error={isSubmit && (emailErr.err || isSupabaseErr)}
+            handleValueChange={handleEmailChange}
+            isErr={isSubmit && (emailErr.err || isSupabaseErr)}
+            errMsg={emailErr.msg}
+            mediumSize={true}
           />
-          {isSubmit && emailErr.err && (
-            <Box display="flex">
-              <FormHelperText error>{emailErr.msg}</FormHelperText>
-            </Box>
-          )}
         </Box>
 
         <Box sx={login_layout}>
           <PasswordTextFeild
-            handleChange={handlePasswordChange}
+            label="Password"
             value={password}
-            error={isSubmit && (passwordErr.err || isSupabaseErr)}
+            handleValueChange={handlePasswordChange}
+            isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
+            errMsg={passwordErr.msg}
+            mediumSize={true}
           />
-          {isSubmit && passwordErr.err && (
-            <Box display="flex">
-              <FormHelperText error>{passwordErr.msg}</FormHelperText>
-            </Box>
-          )}
         </Box>
 
         {isSubmit && isSupabaseErr && (

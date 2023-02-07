@@ -1,27 +1,46 @@
 import React from "react";
-import { TextField, InputAdornment, IconButton } from "@mui/material";
+import {
+  TextField,
+  InputAdornment,
+  IconButton,
+  Box,
+  FormHelperText,
+  Typography,
+} from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 type props = {
+  header?: string;
   label?: string;
+  placeholder?: string;
   value: string;
-  handleChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  error: boolean;
-  errorMsg?: string | boolean;
+  handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  isErr: boolean;
+  errMsg: string;
+  mediumSize?: boolean;
+};
+
+const helperText = {
+  display: "flex",
+  flexDirection: "row-reverse",
+  justifyContent: "space-between",
 };
 
 export default function PasswordTextFeild(props: props) {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
+  const [showPassword, setShowPassword] = React.useState<boolean>(false);
+  const handleClickShowPassword = (): void => setShowPassword((show) => !show);
 
   return (
     <>
+      <Typography variant="body1">{props?.header}</Typography>
       <TextField
-        fullWidth
-        label={props.label || "Password"}
+        label={props?.label}
+        placeholder={props?.placeholder}
         value={props.value}
-        onChange={(e) => props.handleChange(e)}
-        error={props.error}
+        onChange={props.handleValueChange}
+        error={props.isErr}
+        fullWidth
+        size={props.mediumSize ? "medium" : "small"}
         type={showPassword ? "text" : "password"}
         InputProps={{
           endAdornment: (
@@ -33,6 +52,9 @@ export default function PasswordTextFeild(props: props) {
           ),
         }}
       />
+      <Box sx={helperText}>
+        {props.isErr && <FormHelperText error>{props.errMsg}</FormHelperText>}
+      </Box>
     </>
   );
 }
