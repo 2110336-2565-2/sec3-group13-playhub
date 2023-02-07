@@ -94,13 +94,13 @@ export default function Home() {
     if (readyToSubmit) {
       //send to API
 
-      const uploadImageResult = await supabaseClient.storage.from("profileimage").update('profileImage_'+userStatus.user.user_id,fileImage);
+      const uploadImageResult = await supabaseClient.storage.from("profileimage").upload(userStatus.user.user_id,fileImage,{upsert:true});
       if(uploadImageResult.error != null){
         console.log(uploadImageResult.error);
         return;
       }
 
-      const getImageURLResult = await supabaseClient.storage.from("profileimage").getPublicUrl('profileImage_'+userStatus.user.user_id);
+      const getImageURLResult = await supabaseClient.storage.from("profileimage").getPublicUrl(userStatus.user.user_id);
 
       const sendData = {
         name: displayName,
