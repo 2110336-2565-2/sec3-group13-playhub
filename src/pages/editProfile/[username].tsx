@@ -1,12 +1,10 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useContext } from "react";
 import Navbar from "@/components/public/Navbar";
 import {
   Typography,
-  TextField,
   FormControl,
   Select,
   MenuItem,
-  FormHelperText,
   Button,
   SelectChangeEvent,
   Avatar,
@@ -51,11 +49,6 @@ export default function Home() {
   const editInfoContainer = {
     width: "50vw",
     margin: "3vh 0 0 0",
-  };
-  const helperText = {
-    display: "flex",
-    flexDirection: "row-reverse",
-    justifyContent: "space-between",
   };
 
   const router: NextRouter = useRouter();
@@ -186,7 +179,7 @@ export default function Home() {
       <Link onClick={handleGoBack}>
         <ArrowBackIcon fontSize="large" sx={{ margin: "3vh 0 0 3vh", color: "black" }} />
       </Link>
-      <Stack spacing={2} alignItems="center" justifyContent="center" style={{ minHeight: "80vh" }}>
+      <Stack spacing={2} alignItems="center" justifyContent="center" style={{ minHeight: "80vh",marginBottom:"10vh" }}>
         <Avatar alt="Anya" sx={avatar}>
           <Image
             src={image}
