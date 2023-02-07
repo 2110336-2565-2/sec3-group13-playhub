@@ -37,6 +37,7 @@ import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import { randomInt } from "crypto";
 import { validation } from "@/types/Validation";
+import InputTextBox from "@/components/public/InputTextBox";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -225,40 +226,24 @@ export default function Home() {
         )}
 
         <Box style={editInfoContainer}>
-          <Typography variant="body1">{editProfileHeader.displayName}</Typography>
-          <TextField
+          <InputTextBox
+            header={editProfileHeader.displayName}
             value={displayName}
-            onChange={handleDisplayNameChange}
-            fullWidth
-            size="small"
+            handleValueChange={handleDisplayNameChange}
+            char_limit={CHAR_LIMIT.DISPLAY_NAME_LIMIT}
+            isErr={isPressSubmit && displayNameErr.err}
+            errMsg={displayNameErr.msg}
           />
-          <Box sx={helperText}>
-            <FormHelperText>
-              {displayName.length}/{CHAR_LIMIT.DISPLAY_NAME_LIMIT}
-            </FormHelperText>
-            {isPressSubmit && displayNameErr.err && (
-              <FormHelperText error={true}>{displayNameErr.msg}</FormHelperText>
-            )}
-          </Box>
 
-          <Typography variant="body1">{editProfileHeader.description}</Typography>
-          <TextField
-            id="outlined-multiline-flexible"
+          <InputTextBox
+            header={editProfileHeader.description}
             value={description}
-            onChange={handleDescChange}
-            multiline
-            rows={4}
-            fullWidth
-            size="small"
+            handleValueChange={handleDescChange}
+            isMultiLine={true}
+            char_limit={CHAR_LIMIT.DESCRIPTION_LIMIT}
+            isErr={isPressSubmit && descriptionErr.err}
+            errMsg={descriptionErr.msg}
           />
-          <Box sx={helperText}>
-            <FormHelperText>
-              {description.length}/{CHAR_LIMIT.DESCRIPTION_LIMIT}
-            </FormHelperText>
-            {isPressSubmit && descriptionErr.err && (
-              <FormHelperText error>{descriptionErr.msg}</FormHelperText>
-            )}
-          </Box>
 
           <Typography variant="body1">{editProfileHeader.gender}</Typography>
           <FormControl size="small" sx={{ width: "18vw" }}>
