@@ -20,9 +20,10 @@ import { page } from "@/types/Page";
 import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
 
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
+import { grey } from "@mui/material/colors";
 
 const menuItems: page[] = [
   {
@@ -41,8 +42,8 @@ export default function Navbar() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const supabaseClient = useSupabaseClient<Database>();
-  
-  const userStatus = useContext(userContext)
+
+  const userStatus = useContext(userContext);
   const handleClose = () => setAnchorEl(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -76,7 +77,13 @@ export default function Navbar() {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            {userStatus.user ? <Avatar alt="Profile picture" src={userStatus.user.image} /> : null}
+            {userStatus.user ? (
+              <Avatar
+                alt="Profile picture"
+                src={userStatus.user.image}
+                sx={{ bgcolor: grey[50] }}
+              />
+            ) : null}
           </IconButton>
           <Menu
             sx={{ mt: "40px" }}
