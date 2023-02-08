@@ -22,7 +22,7 @@ type props = {
 
 const helperText = {
   display: "flex",
-  flexDirection: "row-reverse",
+  flexDirection: "row",
   justifyContent: "space-between",
 };
 
