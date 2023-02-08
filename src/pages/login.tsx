@@ -15,6 +15,7 @@ import { PagePaths } from "enum/pages";
 
 import { validateEmail, validateTextField } from "@/utilities/validation";
 import { AuthResponse } from "@supabase/supabase-js";
+import CommonTextField from "@/components/public/CommonTextField";
 
 // style
 const login_layout = {
@@ -126,34 +127,31 @@ export default function Home() {
       <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
         <Logo width={119} height={119} />
 
+        {/* Email TextField */}
         <Box sx={login_layout}>
-          <TextField
-            fullWidth
+          <CommonTextField
             label="Email"
-            onChange={handleEmailChange}
             value={email}
-            error={isSubmit && (emailErr.err || isSupabaseErr)}
+            handleValueChange={handleEmailChange}
+            isErr={isSubmit && (emailErr.err || isSupabaseErr)}
+            errMsg={emailErr.msg}
+            mediumSize={true}
           />
-          {isSubmit && emailErr.err && (
-            <Box display="flex">
-              <FormHelperText error>{emailErr.msg}</FormHelperText>
-            </Box>
-          )}
         </Box>
 
+        {/* Password TextField */}
         <Box sx={login_layout}>
           <PasswordTextFeild
-            handleChange={handlePasswordChange}
+            label="Password"
             value={password}
-            error={isSubmit && (passwordErr.err || isSupabaseErr)}
+            handleValueChange={handlePasswordChange}
+            isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
+            errMsg={passwordErr.msg}
+            mediumSize={true}
           />
-          {isSubmit && passwordErr.err && (
-            <Box display="flex">
-              <FormHelperText error>{passwordErr.msg}</FormHelperText>
-            </Box>
-          )}
         </Box>
 
+        {/* Login Error Message */}
         {isSubmit && isSupabaseErr && (
           <Box sx={login_layout} display="flex">
             <FormHelperText error>
@@ -162,10 +160,12 @@ export default function Home() {
           </Box>
         )}
 
+        {/* Login Button */}
         <Button variant="contained" onClick={handleSubmit}>
           Login
         </Button>
 
+        {/* Link go to register page */}
         <Box sx={login_layout} display="flex">
           <Typography variant="body1">Create account{"\u00A0"}</Typography>
           <Link color="primary" underline="hover" href={PagePaths.register}>

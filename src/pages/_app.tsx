@@ -60,6 +60,16 @@ const mainTheme = createTheme({
         },
       },
     },
+    MuiSnackbarContent: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#ffa31a",
+        },
+        message: {
+          color: "black"
+        }
+      }
+    }
   },
 });
 

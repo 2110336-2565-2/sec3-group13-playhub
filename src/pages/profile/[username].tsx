@@ -1,4 +1,4 @@
-import React, { Suspense, useContext } from "react";
+import React, { Suspense, useContext, useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
 
@@ -14,6 +14,15 @@ import Loading from "@/components/public/Loading";
 import { PagePaths } from "enum/pages";
 import { Gender } from "enum/gender";
 import { userContext } from "supabase/user_context";
+import { User } from "@/types/User";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+
+// style
+const profile_layout = {
+  width: "30vw",
+  minWidth: "200px",
+};
 
 const owner: boolean = true;
 const avatar = { width: 200, height: 200 };
@@ -21,15 +30,37 @@ const avatar = { width: 200, height: 200 };
 export default function Home() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
+  const [targetUserData, setTargetUserData] = useState<User | null>(null);
+  const supabaseClient = useSupabaseClient<Database>();
+
+  useEffect(() => {
+    async function getTargetUserData () {
+      if (!userStatus.user || !router.query.username) return;
+      const getUserDataResult = await supabaseClient.from("User")
+      .select("username,name,sex,birthdate,description,image,email, user_id")
+      .eq('username', router.query.username);
+      if (getUserDataResult.error) {
+        console.log(getUserDataResult.error)
+        return
+      }
+      if (getUserDataResult.count == 0) {
+        console.log("no user with the id")
+        return
+      }
+      setTargetUserData(getUserDataResult.data[0])
+    }
+
+    getTargetUserData();
+  }, [router.query.username, supabaseClient, userStatus.user])
 
   function handleEditProfile(): void {
     router.push(PagePaths.editProfile + "/" + userStatus.user?.username);
     return;
   }
 
-  if (userStatus.isLoading) return <p>getting session...</p>; //temporary display
+  if (userStatus.isLoading) return <Loading isLoading={true} />; //temporary display
   if (!userStatus.user) return <p>log in first</p>; // temporary display
-
+  if (!targetUserData) return <p>getting user data...</p> // temporary display
   return (
     <>
       <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
@@ -40,27 +71,39 @@ export default function Home() {
           justifyContent="center"
           style={{ minHeight: "90vh" }}
         >
-          <Typography variant="h1">{userStatus.user.name}</Typography>
-          {owner && <Typography variant="body1">{userStatus.user.email}</Typography>}
-          <Avatar sx={avatar} alt="Profile picture" src={userStatus.user.image} />
+          <Typography variant="h1" align="center" sx={profile_layout}>
+            {targetUserData.name}
+          </Typography>
+          {owner && (
+            <Typography variant="body1" align="center" sx={profile_layout}>
+              {targetUserData.email}
+            </Typography>
+          )}
+          <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image} />
           <Stack direction="row" spacing={1}>
             <Chip
               icon={
-                userStatus.user.sex === Gender.male ? (
+                targetUserData.sex === Gender.male ? (
                   <MaleIcon />
-                ) : userStatus.user.sex === Gender.female ? (
+                ) : targetUserData.sex === Gender.female ? (
                   <FemaleIcon />
-                ) : userStatus.user.sex === Gender.others ? (
+                ) : targetUserData.sex === Gender.others ? (
                   <TransgenderIcon />
                 ) : (
                   <div></div>
                 )
               }
-              label={userStatus.user.sex}
+              label={targetUserData.sex}
             />
-            <Chip icon={<CakeIcon />} label={userStatus.user.birthdate} />
+            <Chip icon={<CakeIcon />} label={targetUserData.birthdate} />
           </Stack>
-          <Typography variant="body1">{userStatus.user.description}</Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            sx={{ ...profile_layout, wordBreak: "break-all" }}
+          >
+            {targetUserData.description}
+          </Typography>
           {owner && (
             <IconButton onClick={handleEditProfile}>
               <EditIcon />
