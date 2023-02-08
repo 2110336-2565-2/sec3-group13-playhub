@@ -7,7 +7,7 @@ import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import InputTextBox from "@/components/public/UserTextField";
+import CommonTextField from "@/components/public/CommonTextField";
 
 export default function Home() {
   const [email, setEmail] = React.useState("");
@@ -16,6 +16,7 @@ export default function Home() {
   // const [isSubmit, setIsSubmit] = React.useState(false);
   const [value, setValue] = React.useState<Dayjs | null>(null);
   const [displayName, setDisplayName] = React.useState<string>("");
+
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
@@ -45,9 +46,9 @@ export default function Home() {
       <Logo width={119} height={119} />
 
       <Box style={{ width: "50vw" }}>
-        <InputTextBox
+        <CommonTextField
           header="Username"
-          placeholder="Displayname"
+          placeholder="Display Name"
           value={displayName}
           handleValueChange={handleDisplayNameChange}
           char_limit={100}
@@ -56,8 +57,8 @@ export default function Home() {
         />
       </Box>
 
-      <Box style={{ width: "50vw" }}>
-        <InputTextBox
+      <Box style={{ width: "50vw", marginTop: 0 }}>
+        <CommonTextField
           header="Email"
           placeholder="Email"
           value={email}
