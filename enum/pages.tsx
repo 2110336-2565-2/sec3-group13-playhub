@@ -4,5 +4,6 @@ export enum PagePaths {
   register = "/register",
   post = "/post",
   profile = "/profile",
+  editProfile = "/editProfile",
   authErr = "/authenticationError",
 }

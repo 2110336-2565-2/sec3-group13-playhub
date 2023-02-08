@@ -2,6 +2,11 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
+import { useState } from "react";
+import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { UserStatusWrapper } from "supabase/user_context";
+
 const mainTheme = createTheme({
   palette: {
     primary: {
@@ -55,13 +60,29 @@ const mainTheme = createTheme({
         },
       },
     },
+    MuiSnackbarContent: {
+      styleOverrides: {
+        root: {
+          backgroundColor: "#ffa31a",
+        },
+        message: {
+          color: "black"
+        }
+      }
+    }
   },
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const [supabase] = useState(() => createBrowserSupabaseClient());
+
   return (
-    <ThemeProvider theme={mainTheme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
+    <SessionContextProvider supabaseClient={supabase} initialSession={pageProps.initialSession}>
+      <UserStatusWrapper>
+        <ThemeProvider theme={mainTheme}>
+          <Component {...pageProps} />
+        </ThemeProvider>
+      </UserStatusWrapper>
+    </SessionContextProvider>
   );
 }

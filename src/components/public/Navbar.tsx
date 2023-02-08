@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useContext } from "react";
+import { useRouter } from "next/router";
 import {
   AppBar,
   Avatar,
@@ -8,26 +9,21 @@ import {
   Menu,
   MenuItem,
   Toolbar,
-  Button,
   Typography,
 } from "@mui/material";
-import Logo from "./Logo";
-import { User } from "@/types/User";
-import { useRouter } from "next/router";
-import { PagePaths } from "enum/pages";
 
+import Logo from "./Logo";
+
+import { User } from "@/types/User";
 import { page } from "@/types/Page";
+
+import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
 
-// mocked user information
-const tmpUser: User = {
-  name: "Chanathip sombuthong",
-  sex: "Male",
-  birthdate: "26/4/2002",
-  description: "ชอบเล่นแนวบลัฟครับ หรือจะไปเล่นห้องผมก็ได้นะ",
-  image: "/images/aom.jpg",
-  email: "aom@gmail.com",
-};
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+import { userContext } from "supabase/user_context";
+import { grey } from "@mui/material/colors";
 
 const menuItems: page[] = [
   {
@@ -38,10 +34,6 @@ const menuItems: page[] = [
     name: NavbarPages.myPost,
     path: PagePaths.post,
   },
-  {
-    name: NavbarPages.logout,
-    path: PagePaths.login,
-  },
 ];
 
 export default function Navbar() {
@@ -49,6 +41,9 @@ export default function Navbar() {
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
+  const supabaseClient = useSupabaseClient<Database>();
+
+  const userStatus = useContext(userContext);
   const handleClose = () => setAnchorEl(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -56,6 +51,16 @@ export default function Navbar() {
 
   function routeToHome(): void {
     router.push(PagePaths.home);
+    return;
+  }
+
+  async function handleSignOut() {
+    const signOutResult = await supabaseClient.auth.signOut();
+    if (signOutResult.error) {
+      console.log(signOutResult.error);
+      return;
+    }
+    router.push(PagePaths.login);
     return;
   }
 
@@ -72,7 +77,13 @@ export default function Navbar() {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            <Avatar alt="Profile picture" src={tmpUser.image} />
+            {userStatus.user ? (
+              <Avatar
+                alt="Profile picture"
+                src={userStatus.user.image}
+                sx={{ bgcolor: grey[50] }}
+              />
+            ) : null}
           </IconButton>
           <Menu
             sx={{ mt: "40px" }}
@@ -92,14 +103,19 @@ export default function Navbar() {
               <MenuItem key={idx}>
                 <Link
                   textAlign="center"
-                  color={item.name === NavbarPages.logout ? "error" : "inherit"}
+                  color="inherit"
                   underline="none"
-                  href={item.path}
+                  href={userStatus.user ? item.path + "/" + userStatus.user.username : "/"}
                 >
                   <Typography variant="body1">{item.name}</Typography>
                 </Link>
               </MenuItem>
             ))}
+            <MenuItem>
+              <Link textAlign="center" color="error" underline="none" onClick={handleSignOut}>
+                <Typography variant="body1">{NavbarPages.logout}</Typography>
+              </Link>
+            </MenuItem>
           </Menu>
         </Toolbar>
       </AppBar>

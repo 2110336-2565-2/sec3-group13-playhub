@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import Navbar from "@/components/public/Navbar";
 import { editProfileHeader } from "public/locales/editProfileHeader";
@@ -25,9 +25,28 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { styled } from "@mui/material/styles";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
+import { Database } from "supabase/db_types";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Tag } from "@/types/Tag";
 
 const createPost = () => {
   const error = "#ff0000";
+
+  const supabaseClient = useSupabaseClient<Database>();
+  const [tags, setTags] = useState<Tag[] | null>(null);
+  useEffect(() => {
+    async function loadTag() {
+      const loadTagResult = await supabaseClient.from("Tag").select("id, name");
+      console.log(loadTagResult);
+      if (loadTagResult.error != null) {
+        console.log(loadTagResult.error);
+        return;
+      }
+      setTags(loadTagResult.data);
+    }
+
+    loadTag();
+  }, []);
 
   const editInfoContainer = {
     width: "50vw",
@@ -104,12 +123,7 @@ const createPost = () => {
 
   const [value, setValue] = React.useState<Dayjs | null>(dayjs("2014-08-18T21:11:54"));
 
-  const handleChange = (newValue: Dayjs | null) => {
-    setValue(newValue);
-  };
-
   const Location = [{ title: "Poseidon entertainment complex" }, { title: "Jod Fair" }];
-  const Tags = [{ Tag: "RPG" }, { Tag: "Car" }, { Tag: "CO-OP" }];
   const ListItem = styled("li")(({ theme }) => ({
     margin: theme.spacing(0.5),
   }));
@@ -130,6 +144,9 @@ const createPost = () => {
     //I don't know how to do, But When click it i want it to show selector(list of tag) then i can click it to add into chipData
   };
 
+  if (tags == null) {
+    return <p>loading tag...</p>;
+  }
   return (
     <>
       <Navbar />
@@ -220,8 +237,8 @@ const createPost = () => {
               multiple
               limitTags={5}
               id="multiple-limit-tags"
-              options={Tags}
-              getOptionLabel={(option) => option.Tag}
+              options={tags}
+              getOptionLabel={(option) => option.name}
               renderInput={(params) => (
                 <TextField {...params} placeholder="Click for add tag" fullWidth />
               )}

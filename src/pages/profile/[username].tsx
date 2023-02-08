@@ -1,92 +1,116 @@
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import Chip from "@mui/material/Chip";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
+import React, { Suspense, useContext, useEffect, useState } from "react";
+import { NextRouter, useRouter } from "next/router";
+import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 import MaleIcon from "@mui/icons-material/Male";
+import FemaleIcon from "@mui/icons-material/Female";
+import TransgenderIcon from "@mui/icons-material/Transgender";
 import CakeIcon from "@mui/icons-material/Cake";
 
-import { User } from "@/types/User";
 import Navbar from "@/components/public/Navbar";
+import Loading from "@/components/public/Loading";
 
-import { supabase } from "supabase/init";
-import { Session } from '@supabase/supabase-js'
-import React from "react";
-import { useRouter } from 'next/router'
+import { PagePaths } from "enum/pages";
+import { Gender } from "enum/gender";
+import { userContext } from "supabase/user_context";
+import { User } from "@/types/User";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+
+// style
+const profile_layout = {
+  width: "30vw",
+  minWidth: "200px",
+};
 
 const owner: boolean = true;
 const avatar = { width: 200, height: 200 };
 
-const email_txt = {
-  fontSize: "body1.fontSize",
-  fontWeight: "regular",
-  textAlign: "center",
-  m: 1,
-};
-
-const desc_txt = {
-  fontSize: "body1.fontSize",
-  fontWeight: "bold",
-  textAlign: "center",
-  m: 1,
-};
-
 export default function Home() {
-  const router = useRouter()
-  // supabase use a little time to get current session, so some stall display might be needed
-  const [isLoadingSession, setIsLoadingSession] = React.useState(true);
-  // current session will be null if no user is logged in or supabase is currently getting current session at the start
-  const [session, setSession] = React.useState<Session | null>(null);
-  const [userData, setUserData] = React.useState<User | null>(null);
+  const router: NextRouter = useRouter();
+  const userStatus = useContext(userContext);
+  const [targetUserData, setTargetUserData] = useState<User | null>(null);
+  const supabaseClient = useSupabaseClient<Database>();
 
-  React.useEffect(() => {
-    async function setup () {
-      console.log("render")
-      const getSessionResult = await supabase.auth.getSession()
-      setSession(getSessionResult.data.session);
-      setIsLoadingSession(false);
-      if (getSessionResult.data.session == null) return;
-
-      const fetchResult = await supabase.from("User").select("name,sex,birthdate,description,image,email").eq("username", router.query.username)
-      if (fetchResult.error) {
-        // having query error
-        console.log(fetchResult.error)
+  useEffect(() => {
+    async function getTargetUserData () {
+      if (!userStatus.user || !router.query.username) return;
+      const getUserDataResult = await supabaseClient.from("User")
+      .select("username,name,sex,birthdate,description,image,email, user_id")
+      .eq('username', router.query.username);
+      if (getUserDataResult.error) {
+        console.log(getUserDataResult.error)
         return
       }
-      if (fetchResult.count == 0) {
-        // no data entry with matching username
-        console.log("cant find the user")
+      if (getUserDataResult.count == 0) {
+        console.log("no user with the id")
         return
       }
-
-      setUserData(fetchResult.data[0])
+      setTargetUserData(getUserDataResult.data[0])
     }
-    setup()
-  }, [router])
 
-  if (isLoadingSession) return <p>getting session...</p> //temporary display
-  if (session == null) return <p>log in first</p> // temporary display
-  if (userData == null) return <p>getting the user data</p> // temporary display
+    getTargetUserData();
+  }, [router.query.username, supabaseClient, userStatus.user])
+
+  function handleEditProfile(): void {
+    router.push(PagePaths.editProfile + "/" + userStatus.user?.username);
+    return;
+  }
+
+  if (userStatus.isLoading) return <Loading isLoading={true} />; //temporary display
+  if (!userStatus.user) return <p>log in first</p>; // temporary display
+  if (!targetUserData) return <p>getting user data...</p> // temporary display
   return (
     <>
-      <Navbar />
-      <Stack spacing={2} alignItems="center" justifyContent="center" style={{ minHeight: "90vh" }}>
-        <Typography variant="h1">{userData.name}</Typography>
-        {owner && <Typography variant="body1">{userData.email}</Typography>}
-        <Avatar sx={avatar} alt="Profile picture" src={userData.image} />
-        <Stack direction="row" spacing={1}>
-          <Chip icon={<MaleIcon />} label={userData.sex} />
-          <Chip icon={<CakeIcon />} label={userData.birthdate} />
+      <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
+        <Navbar />
+        <Stack
+          spacing={2}
+          alignItems="center"
+          justifyContent="center"
+          style={{ minHeight: "90vh" }}
+        >
+          <Typography variant="h1" align="center" sx={profile_layout}>
+            {targetUserData.name}
+          </Typography>
+          {owner && (
+            <Typography variant="body1" align="center" sx={profile_layout}>
+              {targetUserData.email}
+            </Typography>
+          )}
+          <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image} />
+          <Stack direction="row" spacing={1}>
+            <Chip
+              icon={
+                targetUserData.sex === Gender.male ? (
+                  <MaleIcon />
+                ) : targetUserData.sex === Gender.female ? (
+                  <FemaleIcon />
+                ) : targetUserData.sex === Gender.others ? (
+                  <TransgenderIcon />
+                ) : (
+                  <div></div>
+                )
+              }
+              label={targetUserData.sex}
+            />
+            <Chip icon={<CakeIcon />} label={targetUserData.birthdate} />
+          </Stack>
+          <Typography
+            variant="body1"
+            align="center"
+            sx={{ ...profile_layout, wordBreak: "break-all" }}
+          >
+            {targetUserData.description}
+          </Typography>
+          {owner && (
+            <IconButton onClick={handleEditProfile}>
+              <EditIcon />
+            </IconButton>
+          )}
         </Stack>
-        <Typography variant="body1">{userData.description}</Typography>
-        {owner && (
-          <IconButton>
-            <EditIcon />
-          </IconButton>
-        )}
-      </Stack>
+      </Suspense>
     </>
   );
 }

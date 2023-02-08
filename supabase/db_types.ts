@@ -181,9 +181,9 @@ export interface Database {
       }
       Tag: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          name: string | null
+          name: string 
         }
         Insert: {
           created_at?: string | null
@@ -209,7 +209,7 @@ export interface Database {
           rating_score: number | null
           sex: string
           user_id: string
-          username: string | null
+          username: string
           verified_email: boolean | null
         }
         Insert: {
