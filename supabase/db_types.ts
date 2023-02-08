@@ -248,7 +248,21 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_all_user_post: {
+        Args: {
+          target_id: string
+        }
+        Returns: {
+          user_id: string
+          username: string
+          title: string
+          description: string
+          profile_image: string
+          start_time: string
+          end_time: string
+          location: string
+        }
+      }
     }
     Enums: {
       [_ in never]: never
