@@ -181,9 +181,9 @@ export interface Database {
       }
       Tag: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          name: string | null
+          name: string 
         }
         Insert: {
           created_at?: string | null
