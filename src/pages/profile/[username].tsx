@@ -15,6 +15,12 @@ import { PagePaths } from "enum/pages";
 import { Gender } from "enum/gender";
 import { userContext } from "supabase/user_context";
 
+// style
+const profile_layout = {
+  width: "30vw",
+  minWidth: "200px",
+};
+
 const owner: boolean = true;
 const avatar = { width: 200, height: 200 };
 
@@ -27,7 +33,7 @@ export default function Home() {
     return;
   }
 
-  if (userStatus.isLoading) return <p>getting session...</p>; //temporary display
+  if (userStatus.isLoading) return <Loading isLoading={true} />; //temporary display
   if (!userStatus.user) return <p>log in first</p>; // temporary display
 
   return (
@@ -40,8 +46,14 @@ export default function Home() {
           justifyContent="center"
           style={{ minHeight: "90vh" }}
         >
-          <Typography variant="h1">{userStatus.user.name}</Typography>
-          {owner && <Typography variant="body1">{userStatus.user.email}</Typography>}
+          <Typography variant="h1" align="center" sx={profile_layout}>
+            {userStatus.user.name}
+          </Typography>
+          {owner && (
+            <Typography variant="body1" align="center" sx={profile_layout}>
+              {userStatus.user.email}
+            </Typography>
+          )}
           <Avatar sx={avatar} alt="Profile picture" src={userStatus.user.image} />
           <Stack direction="row" spacing={1}>
             <Chip
@@ -60,7 +72,13 @@ export default function Home() {
             />
             <Chip icon={<CakeIcon />} label={userStatus.user.birthdate} />
           </Stack>
-          <Typography variant="body1">{userStatus.user.description}</Typography>
+          <Typography
+            variant="body1"
+            align="center"
+            sx={{ ...profile_layout, wordBreak: "break-all" }}
+          >
+            {userStatus.user.description}
+          </Typography>
           {owner && (
             <IconButton onClick={handleEditProfile}>
               <EditIcon />
