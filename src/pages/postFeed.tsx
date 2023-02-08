@@ -9,42 +9,6 @@ import { Database } from "supabase/db_types";
 import { useContext, useEffect, useState } from "react";
 import { userContext } from "supabase/user_context";
 
-const mockPosts: Post[] = [
-  {
-    title: "ชวนไปดูแงว",
-    ownerName: "น้องออม",
-    ownerProfilePic: "/images/aom.jpg",
-    tags: ["A", "B"],
-    description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
-    image: ["/images/avatar.png", "/images/avatar.png", "/images/aom.jpg"],
-    location: "หอใน",
-    time: "2/4/2023",
-    // there are more data but omitted for now
-  },
-  {
-    title: "ชวนไปดูแงว",
-    ownerName: "น้องออม",
-    ownerProfilePic: "/images/aom.jpg",
-    tags: ["A", "B"],
-    description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
-    image: ["/images/avatar.png", "/images/avatar.png", "/images/aom.jpg"],
-    location: "หอใน",
-    time: "2/4/2023",
-    // there are more data but omitted for now
-  },
-  {
-    title: "ชวนไปดูแงว",
-    ownerName: "น้องออม",
-    ownerProfilePic: "/images/aom.jpg",
-    tags: ["A", "B"],
-    description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
-    image: ["/images/avatar.png", "/images/avatar.png", "/images/aom.jpg"],
-    location: "หอใน",
-    time: "2/4/2023",
-    // there are more data but omitted for now
-  },
-];
-
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
@@ -85,7 +49,7 @@ export default function Home() {
     };
 
     getPostData();
-    
+
   }, [userStatus.user])
 
   if(posts == null) return <p>Loading All Post...</p>
