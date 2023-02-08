@@ -13,7 +13,6 @@ import dayjs, { Dayjs } from 'dayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker'
-import addPic from '@/components/createPost/addPic';
 import PictureList from '@/components/createPost/pictureList';
 
 const createPost = () => {
@@ -168,7 +167,7 @@ const createPost = () => {
 
           <Grid item>
           <Typography variant="h5">Description</Typography>
-          <TextField variant="outlined" fullWidth size="Big" placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา" />
+          <TextField variant="outlined" fullWidth size="medium" placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา" />
             <div style={helperTextBox}>
               <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
               <FormHelperText sx={helperText}>0/500</FormHelperText>
