@@ -19,7 +19,7 @@ const helperText = {
   justifyContent: "space-between",
 };
 
-export default function InputTextBox(props: props) {
+export default function CommonTextField(props: props) {
   const exceedChar: boolean = props.char_limit ? props.value.length > props.char_limit : false;
 
   return (

@@ -1,10 +1,9 @@
-import { useState, useContext } from "react";
+import React, { useState, useContext } from "react";
+import Image from "next/image";
+import { NextRouter, useRouter } from "next/router";
 import Navbar from "@/components/public/Navbar";
 import {
   Typography,
-  FormControl,
-  Select,
-  MenuItem,
   Button,
   SelectChangeEvent,
   Avatar,
@@ -20,21 +19,18 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
 import { CHAR_LIMIT } from "enum/inputLimit";
+import { PagePaths } from "enum/pages";
 
 import { User } from "@/types/User";
+import { validation } from "@/types/Validation";
 
-import Image from "next/image";
-
-import { PagePaths } from "enum/pages";
+import CommonTextField from "@/components/public/CommonTextField";
+import CommonDropdown from "@/components/public/CommonDropdown";
 import { validateImage, validateTextField } from "@/utilities/validation";
-import { NextRouter, useRouter } from "next/router";
-import React from "react";
+
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
-import { randomInt } from "crypto";
-import { validation } from "@/types/Validation";
-import InputTextBox from "@/components/public/InputTextBox";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -90,32 +86,41 @@ export default function Home() {
     const readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err || !isImageUpload);
     if (readyToSubmit) {
       //send to API
-      const timeStamp = Date.now() ;
+      const timeStamp = Date.now();
       if (fileImage) {
-        const deleteImageResult = await supabaseClient.storage.from("profileimage").remove([userStatus.user.image.split("/").at(-1) as string]);
-        if(deleteImageResult.error != null){
+        const deleteImageResult = await supabaseClient.storage
+          .from("profileimage")
+          .remove([userStatus.user.image.split("/").at(-1) as string]);
+        if (deleteImageResult.error != null) {
           console.log(deleteImageResult.error);
           return;
         }
 
-        const uploadImageResult = await supabaseClient.storage.from("profileimage").upload(userStatus.user.user_id+timeStamp,fileImage);
-        if(uploadImageResult.error != null){
+        const uploadImageResult = await supabaseClient.storage
+          .from("profileimage")
+          .upload(userStatus.user.user_id + timeStamp, fileImage);
+        if (uploadImageResult.error != null) {
           console.log(uploadImageResult.error);
           return;
         }
       }
-      const getImageURLResult = await supabaseClient.storage.from("profileimage").getPublicUrl(userStatus.user.user_id+timeStamp);
+      const getImageURLResult = await supabaseClient.storage
+        .from("profileimage")
+        .getPublicUrl(userStatus.user.user_id + timeStamp);
 
-      const sendData = fileImage != null? {
-        name: displayName,
-        sex: gender,
-        description: description,
-        image: getImageURLResult.data.publicUrl,
-      } : {
-        name: displayName,
-        sex: gender,
-        description: description,
-      }
+      const sendData =
+        fileImage != null
+          ? {
+              name: displayName,
+              sex: gender,
+              description: description,
+              image: getImageURLResult.data.publicUrl,
+            }
+          : {
+              name: displayName,
+              sex: gender,
+              description: description,
+            };
 
       const updateResult = await supabaseClient
         .from("User")
@@ -170,16 +175,21 @@ export default function Home() {
   React.useEffect(() => {
     if (userStatus.isLoading || !userStatus.user) return;
     getProfile(userStatus.user);
-  }, [userStatus])
+  }, [userStatus]);
 
-  if (userStatus.isLoading || image == "") return <p>getting session...</p>
+  if (userStatus.isLoading || image == "") return <p>getting session...</p>;
   return (
     <>
       <Navbar />
       <Link onClick={handleGoBack}>
         <ArrowBackIcon fontSize="large" sx={{ margin: "3vh 0 0 3vh", color: "black" }} />
       </Link>
-      <Stack spacing={2} alignItems="center" justifyContent="center" style={{ minHeight: "80vh",marginBottom:"10vh" }}>
+      <Stack
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+        style={{ minHeight: "80vh", marginBottom: "10vh" }}
+      >
         <Avatar alt="Anya" sx={avatar}>
           <Image
             src={image}
@@ -201,7 +211,7 @@ export default function Home() {
         )}
 
         <Box style={editInfoContainer}>
-          <InputTextBox
+          <CommonTextField
             header={editProfileHeader.displayName}
             value={displayName}
             handleValueChange={handleDisplayNameChange}
@@ -210,7 +220,7 @@ export default function Home() {
             errMsg={displayNameErr.msg}
           />
 
-          <InputTextBox
+          <CommonTextField
             header={editProfileHeader.description}
             value={description}
             handleValueChange={handleDescChange}
@@ -220,16 +230,14 @@ export default function Home() {
             errMsg={descriptionErr.msg}
           />
 
-          <Typography variant="body1">{editProfileHeader.gender}</Typography>
-          <FormControl size="small" sx={{ width: "18vw" }}>
-            <Select value={gender} onChange={handleSelectChange}>
-              {(Object.keys(Gender) as (keyof typeof Gender)[]).map((key) => (
-                <MenuItem key={Gender[key]} value={Gender[key]}>
-                  {Gender[key]}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <Box style={{ width: "18vw" }}>
+            <CommonDropdown
+              header={editProfileHeader.gender}
+              value={gender}
+              handleValueChange={handleSelectChange}
+              items={Object.values(Gender)}
+            />
+          </Box>
         </Box>
 
         <Button variant="contained" onClick={editProfileBtnOnClick}>
