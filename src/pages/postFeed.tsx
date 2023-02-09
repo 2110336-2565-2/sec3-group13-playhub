@@ -34,17 +34,27 @@ export default function Home() {
       }
       
       if(getPostTagResult.data == null) return ;
+
+      const getPostLocationImgResult = await supabaseClient.rpc('get_all_post_location_image')
+      if(getPostLocationImgResult.error != null){
+        console.log(getPostLocationImgResult.error);
+        return ;
+      }
+
       const postDataList = getAllUserPostResult.data.map((data) => {
         const postTagList = getPostTagResult.data.filter(post => post.post_id == data.post_id);
-        const tagName = postTagList.map(data => data.name)
+        const tagName = postTagList.map(data => data.name);
 
+        const postLocationImgList = getPostLocationImgResult.data.filter(post => post.post_id == data.post_id);
+        const imageURL = postLocationImgList.map(data => data.image);
+        
         return {
               title: data.title,
               ownerName: data.username,
               ownerProfilePic: data.profile_image,
               tags: tagName,
               description: data.description,
-              image: [""],
+              image: imageURL,
               location: data.location,
               time: data.start_time,
         }
