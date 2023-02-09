@@ -32,6 +32,11 @@ const PictureList = () => {
     const selectedFiles = e.target.files;
     const selfilesarr = Array.from(selectedFiles);
 
+    if (selfilesarr.length + dataPics.length > 3) {
+      alert("more than 3");
+      return;
+    }
+
     const imgArr = selfilesarr.map((file) => {
       return URL.createObjectURL(file);
     });
