@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, TextField, Stack, Button, Select, MenuItem } from "@mui/material";
+import { Box, Typography, TextField, Stack, Button, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Logo from "@/components/public/Logo";
 import { Gender } from "enum/gender";
@@ -16,6 +16,7 @@ export default function Home() {
   // const [isSubmit, setIsSubmit] = React.useState(false);
   const [value, setValue] = React.useState<Dayjs | null>(null);
   const [displayName, setDisplayName] = React.useState<string>("");
+  const [gender, setGender] = React.useState<string>("");
 
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -39,6 +40,12 @@ export default function Home() {
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setConfirmPassword(event.target.value);
+  }
+
+  function handleGenderChange(
+    event: SelectChangeEvent<string>
+  ): void {
+    setGender(event.target.value)
   }
 
   return (
@@ -91,9 +98,9 @@ export default function Home() {
       </Box>
 
       <Typography>Gender</Typography>
-      <Select sx={{ width: "100px" }}>
+      <Select sx={{ width: "100px" }} onChange={handleGenderChange} defaultValue="">
         {(Object.keys(Gender) as (keyof typeof Gender)[]).map((key, index) => (
-          <MenuItem key={index}>{Gender[key]}</MenuItem>
+          <MenuItem value={key} key={index}>{Gender[key]}</MenuItem>
         ))}
       </Select>
 
