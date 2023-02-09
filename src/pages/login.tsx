@@ -1,7 +1,6 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { Link, Box, Typography, TextField, Stack, FormHelperText, Button } from "@mui/material";
-import { SessionContext, useSessionContext } from "@supabase/auth-helpers-react";
 
 import Logo from "@/components/public/Logo";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
@@ -16,6 +15,9 @@ import { PagePaths } from "enum/pages";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 import { AuthResponse } from "@supabase/supabase-js";
 import CommonTextField from "@/components/public/CommonTextField";
+import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import Loading from "@/components/public/Loading";
 
 // style
 const login_layout = {
@@ -25,8 +27,8 @@ const login_layout = {
 
 export default function Home() {
   const router: NextRouter = useRouter();
-  const sessionContext: SessionContext = useSessionContext();
-  const controller = new AbortController();
+  const userStatus = React.useContext(userContext);
+  const supabaseClient = useSupabaseClient();
 
   // state about variables
   const [email, setEmail] = React.useState<string>("");
@@ -44,15 +46,11 @@ export default function Home() {
     ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
     : "โปรดทำการยืนยันอีเมล";
 
-  React.useEffect(() => {
-    return () => controller.abort();
-  });
-
   async function handleSubmit() {
     setIsSubmit(true);
 
     // sign in via supabase
-    const signInResult: AuthResponse = await sessionContext.supabaseClient.auth.signInWithPassword({
+    const signInResult: AuthResponse = await supabaseClient.auth.signInWithPassword({
       email,
       password,
     });
@@ -73,28 +71,8 @@ export default function Home() {
       }
     }
 
-    // retrieve user data from supabase
-    const fetchResult = await sessionContext.supabaseClient
-      .from("User")
-      .select("username")
-      .eq("email", email);
-
-    // in case : quering is error
-    if (fetchResult.error) {
-      console.log(fetchResult.error);
-      return;
-    }
-
-    // in case :no data entry with matching username
-    if (fetchResult.count == 0) {
-      console.log("cant find the user");
-      router.push(PagePaths.login);
-      return;
-    }
-
-    // route to profile page(homepage when available)
-    const usernamePath: string = "/" + fetchResult.data[0].username;
-    router.push(PagePaths.profile + usernamePath);
+    // route to post feed page
+    router.push(PagePaths.postFeed);
   }
 
   function handleEmailChange(
@@ -123,7 +101,7 @@ export default function Home() {
   // }
 
   return (
-    <>
+    <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
       <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
         <Logo width={119} height={119} />
 
@@ -173,6 +151,6 @@ export default function Home() {
           </Link>
         </Box>
       </Stack>
-    </>
+    </Suspense>
   );
 }

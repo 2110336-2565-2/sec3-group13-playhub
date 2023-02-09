@@ -6,4 +6,5 @@ export enum PagePaths {
   profile = "/profile",
   editProfile = "/editProfile",
   authErr = "/authenticationError",
+  postFeed = "/postFeed"
 }
