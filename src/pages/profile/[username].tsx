@@ -34,18 +34,20 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
 
   useEffect(() => {
-    async function getTargetUserData () {
+    async function getTargetUserData() {
       if (!userStatus.user || !router.query.username || targetUserData) return;
-      const getUserDataResult = await supabaseClient.rpc("get_user_data_from_username", {target_username: router.query.username as string});
+      const getUserDataResult = await supabaseClient.rpc("get_user_data_from_username", {
+        target_username: router.query.username as string,
+      });
       if (getUserDataResult.error || getUserDataResult.count == 0) {
-        console.log(getUserDataResult.error ? getUserDataResult.error : "no user")
-        return
+        console.log(getUserDataResult.error ? getUserDataResult.error : "no user");
+        return;
       }
-      setTargetUserData(getUserDataResult.data[0])
+      setTargetUserData(getUserDataResult.data[0]);
     }
 
     getTargetUserData();
-  }, [router.query.username, supabaseClient, userStatus.user, targetUserData])
+  }, [router.query.username, supabaseClient, userStatus.user, targetUserData]);
 
   function handleEditProfile(): void {
     router.push(PagePaths.editProfile + "/" + userStatus.user?.username);
@@ -54,7 +56,7 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading isLoading={true} />; //temporary display
   if (!userStatus.user) return <p>log in first</p>; // temporary display
-  if (!targetUserData) return <p>getting user data...</p> // temporary display
+  if (!targetUserData) return <p>getting user data...</p>; // temporary display
   return (
     <>
       <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
@@ -94,7 +96,7 @@ export default function Home() {
           <Typography
             variant="body1"
             align="center"
-            sx={{ ...profile_layout, wordBreak: "break-all" }}
+            sx={{ ...profile_layout, wordBreak: "break-word" }}
           >
             {targetUserData.description}
           </Typography>
