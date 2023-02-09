@@ -18,12 +18,6 @@ export default function Home() {
   useEffect(() => {
     async function getPostData(){
       if(userStatus.user == null) return;
-
-      const getPostDataResult = await supabaseClient.from("Post").select("id, title, description, owner_id, location, start_time, end_time");
-      if(getPostDataResult.error != null){
-        console.log(getPostDataResult.error);
-        return ;
-      }
       
       const getAllUserPostResult = await supabaseClient.rpc('get_all_user_post', {target_id:userStatus.user.user_id})
       if(getAllUserPostResult.error != null){
