@@ -254,7 +254,7 @@ const createPost = () => {
           </Grid>
         </div>
         <Grid item>
-          <Button variant="contained" sx={{ color: "primary" }}>
+          <Button variant="contained" color="primary">
             <Typography style={fontDesign}>Create Post</Typography>
           </Button>
         </Grid>
