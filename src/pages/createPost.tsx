@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "@/components/public/Navbar";
+import { useState } from "react";
 import {
   Grid,
   Typography,
@@ -9,6 +10,7 @@ import {
   Stack,
   Autocomplete,
   InputAdornment,
+  Chip,
 } from "@mui/material";
 import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -38,12 +40,11 @@ const createPost = () => {
     textAlign: "end",
     gridColumn: 2,
   };
-  const createPostBtn = {
+  /*const createPostBtn = {
     backgroundColor: "#ffa31a",
     color: "black",
-  };
+  };*/
   const fontDesign = {
-    fontfamily: "Roboto",
     fontstyle: "normal",
     fontweight: "700",
     fontsize: "20px",
@@ -54,6 +55,14 @@ const createPost = () => {
 
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs());
   const [endDate, setEndDate] = React.useState<Dayjs | null>();
+  const [selectedTags, setSelectedTags] = useState([]);
+
+  const handleAddTag = (event, tag) => {
+    if (tag.length <= 5) {
+      console.log(tag.length);
+      setSelectedTags(tag);
+    }
+  };
 
   const handleStartDate = (newValue: Dayjs | null) => {
     if (newValue && newValue.isBefore(dayjs())) {
@@ -70,8 +79,14 @@ const createPost = () => {
     }
   };
 
-  const Location = ["Poseidon entertainment complex", "Jod Fair"];
-  const Tags = ["RPG", "Car", "CO-OP"];
+  const Location = [
+    "Poseidon entertainment complex",
+    "Jod Fair",
+    "Fortune",
+    "The street",
+    "ศูนย์วัฒนธรรมแห่งประเทศไทย",
+  ];
+  const Tags = ["RPG", "Car", "CO-OP", "A", "B", "C", "D"];
 
   return (
     <>
@@ -197,10 +212,9 @@ const createPost = () => {
             <Typography variant="h5">Tag</Typography>
             <Autocomplete
               multiple
-              limitTags={5}
-              id="multiple-limit-tags"
               options={Tags}
-              getOptionLabel={(option) => option}
+              value={selectedTags}
+              onChange={handleAddTag}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -215,6 +229,8 @@ const createPost = () => {
             <TextField
               variant="outlined"
               fullWidth
+              multiline
+              rows={4}
               size="medium"
               placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
             />
@@ -238,7 +254,7 @@ const createPost = () => {
           </Grid>
         </div>
         <Grid item>
-          <Button variant="contained" sx={createPostBtn}>
+          <Button variant="contained" sx={{ color: "primary" }}>
             <Typography style={fontDesign}>Create Post</Typography>
           </Button>
         </Grid>
