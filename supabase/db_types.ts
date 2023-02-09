@@ -253,6 +253,7 @@ export interface Database {
           target_id: string
         }
         Returns: {
+          post_id: number
           user_id: string
           username: string
           title: string
@@ -261,6 +262,12 @@ export interface Database {
           start_time: string
           end_time: string
           location: string
+        }
+      }
+      get_all_post_tag: {
+        Returns: {
+          name: string
+          post_id: number
         }
       }
     }

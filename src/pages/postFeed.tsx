@@ -32,12 +32,23 @@ export default function Home() {
       }
       
       if(getAllUserPostResult.data == null) return ;
+      
+      const getPostTagResult = await supabaseClient.rpc('get_all_post_tag')
+      if(getPostTagResult.error != null){
+        console.log(getPostTagResult.error);
+        return ;
+      }
+      
+      if(getPostTagResult.data == null) return ;
       const postDataList = getAllUserPostResult.data.map((data) => {
+        const postTagList = getPostTagResult.data.filter(post => post.post_id == data.post_id);
+        const tagName = postTagList.map(data => data.name)
+
         return {
               title: data.title,
               ownerName: data.username,
               ownerProfilePic: data.profile_image,
-              tags: ["A","B"],
+              tags: tagName,
               description: data.description,
               image: [""],
               location: data.location,
