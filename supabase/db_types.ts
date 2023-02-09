@@ -277,6 +277,21 @@ export interface Database {
           image: string
           email: string
         }
+      },
+      get_user_data_from_username: {
+        Args: {
+          target_username: string
+        }
+        Returns: {
+          user_id: string
+          username: string
+          name: string
+          sex: string
+          birthdate: string
+          description: string
+          image: string
+          email: string
+        }
       }
     }
     Enums: {

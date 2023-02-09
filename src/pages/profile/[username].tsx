@@ -35,23 +35,17 @@ export default function Home() {
 
   useEffect(() => {
     async function getTargetUserData () {
-      if (!userStatus.user || !router.query.username) return;
-      const getUserDataResult = await supabaseClient.from("User")
-      .select("username,name,sex,birthdate,description,image,email, user_id")
-      .eq('username', router.query.username);
-      if (getUserDataResult.error) {
-        console.log(getUserDataResult.error)
-        return
-      }
-      if (getUserDataResult.count == 0) {
-        console.log("no user with the id")
+      if (!userStatus.user || !router.query.username || targetUserData) return;
+      const getUserDataResult = await supabaseClient.rpc("get_user_data_from_username", {target_username: router.query.username as string});
+      if (getUserDataResult.error || getUserDataResult.count == 0) {
+        console.log(getUserDataResult.error ? getUserDataResult.error : "no user")
         return
       }
       setTargetUserData(getUserDataResult.data[0])
     }
 
     getTargetUserData();
-  }, [router.query.username, supabaseClient, userStatus.user])
+  }, [router.query.username, supabaseClient, userStatus.user, targetUserData])
 
   function handleEditProfile(): void {
     router.push(PagePaths.editProfile + "/" + userStatus.user?.username);
