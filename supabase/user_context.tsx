@@ -31,7 +31,7 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
             setUserStatus({user: userData.data[0], isLoading: false});
         } 
         getUserData()
-    },[sessionContext, supabaseClient, router.pathname])
+    },[sessionContext.isLoading, supabaseClient, router.pathname])
 
 
     return (<userContext.Provider value={userStatus}>{prop.children}</userContext.Provider>)
