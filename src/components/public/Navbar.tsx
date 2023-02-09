@@ -69,7 +69,7 @@ export default function Navbar() {
       <AppBar position="static" color="secondary">
         <Toolbar>
           <IconButton disableRipple onClick={routeToHome}>
-            <Logo width={50} height={50} />
+            <Logo width={50} height={50} bgColor={"trans"} />
           </IconButton>
           <Box sx={{ flexGrow: 1 }}>
             <IconButton color="inherit" disableRipple onClick={routeToHome}>
