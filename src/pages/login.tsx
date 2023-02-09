@@ -100,6 +100,8 @@ export default function Home() {
   //   router.back();
   // }
 
+  if (userStatus.isLoading) return <Loading isLoading={true} />
+  if (userStatus.user) return <p>Logged in</p>
   return (
     <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
       <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
