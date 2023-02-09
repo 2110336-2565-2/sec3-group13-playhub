@@ -19,11 +19,12 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
     useEffect(() => {
         async function getUserData(){
             if(sessionContext.isLoading) return;
-            if(sessionContext.session == null) return ;
-            const userData = await supabaseClient.from('User')
-            .select("username,name,sex,birthdate,description,image,email, user_id")
-            .eq('user_id', sessionContext.session.user.id);
-            if(userData.error != null || userData.count == 0 || userData.data == null){
+            if(!sessionContext.session) {
+                setUserStatus({user: null, isLoading: false});
+                return;
+            }
+            const userData = await supabaseClient.rpc("get_user_data", {target_id: sessionContext.session.user.id})
+            if(userData.error || userData.count == 0 || userData.data == null){
                 setUserStatus({user: null, isLoading: false});
                 return;
             }

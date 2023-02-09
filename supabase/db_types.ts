@@ -262,6 +262,21 @@ export interface Database {
           end_time: string
           location: string
         }
+      },
+      get_user_data: {
+        Args: {
+          target_id: string
+        }
+        Returns: {
+          user_id: string
+          username: string
+          name: string
+          sex: string
+          birthdate: string
+          description: string
+          image: string
+          email: string
+        }
       }
     }
     Enums: {
