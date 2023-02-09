@@ -11,6 +11,7 @@ import {
   Box,
   Link,
   IconButton,
+  Chip,
 } from "@mui/material";
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
@@ -53,10 +54,11 @@ export default function Home() {
   const [gender, setGender] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
   const [image, setImage] = React.useState<string>("");
+  const [originalImage, setOriginalImage] = React.useState<string>("");
 
   const [isPressSubmit, setIsPressSubmit] = React.useState<boolean>(false);
-  const [fileImage, setFileImage] = React.useState<File>();
-  const [isImageUpload, setIsImageUpload] = React.useState<boolean>(true);
+  const [fileImage, setFileImage] = React.useState<File | null>();
+  const [isImageUpload, setIsImageUpload] = React.useState<boolean>(false);
   const [showImageUploadError, setShowImageUploadError] = useState({
     msg: "",
     err: false,
@@ -78,12 +80,17 @@ export default function Home() {
     setDescription(User.description);
     setGender(User.sex);
     setImage(User.image);
+    setOriginalImage(User.image);
   };
 
   const editProfileBtnOnClick = async () => {
     if (!userStatus.user) return;
     setIsPressSubmit(true);
-    const readyToSubmit: boolean = !(displayNameErr.err || descriptionErr.err || !isImageUpload);
+    const readyToSubmit: boolean = !(
+      displayNameErr.err ||
+      descriptionErr.err ||
+      showImageUploadError.err
+    );
     if (readyToSubmit) {
       //send to API
       const timeStamp = Date.now();
@@ -143,12 +150,17 @@ export default function Home() {
     setImage(URL.createObjectURL(tempFile));
     const imgErrMsg = validateImage(tempFile.type, tempFile.size);
     setShowImageUploadError(imgErrMsg);
-    if (imgErrMsg.err) {
-      setIsImageUpload(false);
-    } else {
+    setIsImageUpload(true); 
+    if (!imgErrMsg.err) {
       setFileImage(event.target.files[0]);
-      setIsImageUpload(true);
     }
+    event.target.value = null;
+  };
+  const handleCancelImageChip = (): void => {
+    setIsImageUpload(false);
+    setShowImageUploadError({ msg: "", err: false });
+    setImage(originalImage);
+    setFileImage(null);
   };
 
   const handleDisplayNameChange = (
@@ -182,7 +194,10 @@ export default function Home() {
     <>
       <Navbar />
       <Link onClick={handleGoBack}>
-        <ArrowBackIcon fontSize="large" sx={{ margin: "3vh 0 0 3vh", color: "black" }} />
+        <ArrowBackIcon
+          fontSize="large"
+          sx={{ margin: "3vh 0 0 3vh", color: "black" }}
+        />
       </Link>
       <Stack
         spacing={2}
@@ -198,18 +213,32 @@ export default function Home() {
             height={200}
             style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
           />
-          <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
-            <input onChange={handleImageChange} hidden accept="image/*" type="file" />
+          <IconButton
+            sx={overlayIcon}
+            aria-label="upload picture"
+            component="label"
+          >
+            <input
+              onChange={handleImageChange}
+              hidden
+              accept="image/*"
+              type="file"
+            />
             <CameraAltIcon sx={{ fontSize: "100px" }} />
           </IconButton>
         </Avatar>
-
         {showImageUploadError.err && (
           <Typography align="center" variant="body1" color="error">
             {showImageUploadError.msg}
           </Typography>
         )}
-
+        {(isImageUpload) && (
+          <Chip
+            label="Remove this picture"
+            onClick={handleCancelImageChip}
+            color={showImageUploadError.err ? "error" : "secondary"}
+          />
+        )}
         <Box style={editInfoContainer}>
           <CommonTextField
             header={editProfileHeader.displayName}
