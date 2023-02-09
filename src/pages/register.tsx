@@ -92,8 +92,8 @@ export default function Home() {
 
       <Typography>Gender</Typography>
       <Select sx={{ width: "100px" }}>
-        {(Object.keys(Gender) as (keyof typeof Gender)[]).map((key) => (
-          <MenuItem>{Gender[key]}</MenuItem>
+        {(Object.keys(Gender) as (keyof typeof Gender)[]).map((key, index) => (
+          <MenuItem key={index}>{Gender[key]}</MenuItem>
         ))}
       </Select>
 
