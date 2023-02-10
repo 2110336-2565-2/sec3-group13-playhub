@@ -29,6 +29,20 @@ export function validateTextField(
   return { msg: "", err: false };
 }
 
+export function validatePasswordTextField(
+  input: string,
+  minChar: number = 0,
+  maxChar: number = 2000
+): validation {
+  if (input.length < minChar) {
+    return { msg: "ช่องนี้ต้องมีตัวอักษรอย่างน้อย 6 ตัว", err: true };
+  }
+  if (input.length > maxChar) {
+    return { msg: `ช่องนี้มีตัวอักษรได้ไม่เกิน ${maxChar} ตัว`, err: true };
+  }
+  return { msg: "", err: false };
+}
+
 export function validateImage(fileType: string, fileSize: number): validation {
   if (["image/png", "image/jpg", "image/jpeg"].indexOf(fileType) === -1) {
     return {

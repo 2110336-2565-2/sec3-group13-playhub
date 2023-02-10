@@ -8,6 +8,7 @@ import {
   SelectChangeEvent,
   Grid,
   InputAdornment,
+  FormHelperText,
 } from "@mui/material";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Logo from "@/components/public/Logo";
@@ -21,7 +22,11 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CommonTextField from "@/components/public/CommonTextField";
 import CommonDropdown from "@/components/public/CommonDropdown";
 import { validation } from "@/types/Validation";
-import { validateEmail, validateTextField } from "@/utilities/validation";
+import {
+  validateEmail,
+  validateTextField,
+  validatePasswordTextField,
+} from "@/utilities/validation";
 import { CHAR_LIMIT } from "enum/inputLimit";
 
 export default function Home() {
@@ -29,6 +34,7 @@ export default function Home() {
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [isSubmit, setIsSubmit] = React.useState(false);
+  const [isConfirm, setIsConfirm] = React.useState(true);
   const [value, setValue] = React.useState<Dayjs | null>(null);
   const [displayName, setDisplayName] = React.useState<string>("");
   const [gender, setGender] = React.useState<string>("");
@@ -76,19 +82,35 @@ export default function Home() {
 
   const displayNameErr: validation = validateTextField(displayName, 1, 100);
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validateTextField(password, 1, 100);
-  const confirmPasswordErr: validation = validateTextField(confirmPassword, 1, 100);
+  const passwordErr: validation = validatePasswordTextField(password, 6, 100);
+  const confirmPasswordErr: validation = validatePasswordTextField(confirmPassword, 6, 100);
+  // const checkPasswordWithConfirmPassword: validation  {
+  //   if(password === confirmPassword){
+  //     return {msg:"",err:false}
+  //   }
+  //   else{
+  //     return
+  //   }
+  // }
 
   const createAccountBtnOnClick = async () => {
     setIsSubmit(true);
+    setIsConfirm(password === confirmPassword);
     const readyToCreate: boolean = !(
       displayNameErr.err ||
       emailErr.err ||
       passwordErr.err ||
-      confirmPasswordErr.err
+      confirmPasswordErr.err ||
+      !isConfirm
     );
     if (readyToCreate) {
     }
+  };
+
+  const helperText = {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
   };
 
   return (
@@ -124,8 +146,8 @@ export default function Home() {
           placeholder="Password"
           value={password}
           handleValueChange={handlePasswordChange}
-          isErr={false}
-          errMsg=""
+          isErr={isSubmit && passwordErr.err}
+          errMsg={passwordErr.msg}
         />
       </Box>
 
@@ -135,9 +157,14 @@ export default function Home() {
           placeholder="Confirm Password"
           value={confirmPassword}
           handleValueChange={handleConfirmPasswordChange}
-          isErr={false}
-          errMsg=""
+          isErr={isSubmit && confirmPasswordErr.err}
+          errMsg={confirmPasswordErr.msg}
         />
+        <Box sx={helperText} style={{ width: "50vw" }}>
+          {!isConfirm && (
+            <FormHelperText error>{"Password และ Confirm Password ต้องเหมือนกัน"}</FormHelperText>
+          )}
+        </Box>
       </Box>
 
       <Grid item>
