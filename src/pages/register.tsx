@@ -113,17 +113,15 @@ export default function Home() {
       </Box>
 
       <Grid item>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           <Grid item xs={6}>
-            <Box style={{ width: "12vw" }}>
-              <CommonDropdown
-                header="Gender"
-                placeHolder="Gender"
-                value={gender}
-                handleValueChange={handleSelectChange}
-                items={Object.values(Gender)}
-              />
-            </Box>
+            <CommonDropdown
+              header="Gender"
+              placeHolder="Gender"
+              value={gender}
+              handleValueChange={handleSelectChange}
+              items={Object.values(Gender)}
+            />
           </Grid>
 
           <Grid item xs={6}>
