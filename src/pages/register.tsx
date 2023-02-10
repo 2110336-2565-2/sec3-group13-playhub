@@ -16,9 +16,6 @@ import { Gender } from "enum/gender";
 import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CommonTextField from "@/components/public/CommonTextField";
 import CommonDropdown from "@/components/public/CommonDropdown";
 import { validation } from "@/types/Validation";
@@ -28,6 +25,8 @@ import {
   validatePasswordTextField,
 } from "@/utilities/validation";
 import { CHAR_LIMIT } from "enum/inputLimit";
+import { MobileDatePicker } from "@mui/x-date-pickers";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 export default function Home() {
   const [email, setEmail] = React.useState("");
@@ -184,13 +183,19 @@ export default function Home() {
           <Grid item xs={6}>
             <Typography>Birth Date</Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Birth Date"
+              <MobileDatePicker
                 value={value}
                 onChange={(newValue) => {
                   setValue(newValue);
                 }}
                 renderInput={(params) => <TextField {...params} />}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <CalendarTodayIcon />
+                    </InputAdornment>
+                  ),
+                }}
               />
             </LocalizationProvider>
           </Grid>
