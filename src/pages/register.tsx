@@ -28,14 +28,14 @@ import { MobileDatePicker } from "@mui/x-date-pickers";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 export default function Home() {
+  const [displayName, setDisplayName] = React.useState<string>("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [isSubmit, setIsSubmit] = React.useState(false);
-  const [isConfirm, setIsConfirm] = React.useState(true);
-  const [displayName, setDisplayName] = React.useState<string>("");
+  const [isValidConfirmPassword, setIsValidConfirmPassword] = React.useState(true);
   const [gender, setGender] = React.useState<string>("");
   const [birthDate, setBirthDate] = React.useState<Dayjs | null>(null);
+  const [isSubmit, setIsSubmit] = React.useState(false);
 
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -76,13 +76,13 @@ export default function Home() {
 
   const createAccountBtnOnClick = async () => {
     setIsSubmit(true);
-    setIsConfirm(password === confirmPassword);
+    setIsValidConfirmPassword(password === confirmPassword);
     const readyToCreate: boolean = !(
       displayNameErr.err ||
       emailErr.err ||
       passwordErr.err ||
       confirmPasswordErr.err ||
-      !isConfirm
+      !isValidConfirmPassword
     );
     if (readyToCreate) {
     }
@@ -142,7 +142,7 @@ export default function Home() {
           errMsg={confirmPasswordErr.msg}
         />
         <Box sx={helperText} style={{ width: "50vw" }}>
-          {!isConfirm && (
+          {!isValidConfirmPassword && (
             <FormHelperText error>{"Password และ Confirm Password ต้องเหมือนกัน"}</FormHelperText>
           )}
         </Box>
