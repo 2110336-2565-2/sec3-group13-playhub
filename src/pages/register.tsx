@@ -5,60 +5,90 @@ import {
   TextField,
   Stack,
   Button,
-  Select,
-  MenuItem,
   SelectChangeEvent,
   Grid,
+  InputAdornment,
 } from "@mui/material";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Logo from "@/components/public/Logo";
 import { Gender } from "enum/gender";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import CommonTextField from "@/components/public/CommonTextField";
 import CommonDropdown from "@/components/public/CommonDropdown";
+import { validation } from "@/types/Validation";
+import { validateEmail, validateTextField } from "@/utilities/validation";
+import { CHAR_LIMIT } from "enum/inputLimit";
 
 export default function Home() {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [confirmPassword, setConfirmPassword] = React.useState("");
-  // const [isSubmit, setIsSubmit] = React.useState(false);
+  const [isSubmit, setIsSubmit] = React.useState(false);
   const [value, setValue] = React.useState<Dayjs | null>(null);
   const [displayName, setDisplayName] = React.useState<string>("");
   const [gender, setGender] = React.useState<string>("");
+  const [birthDate, setBirthDate] = React.useState<Dayjs | null>(dayjs());
 
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
     setDisplayName(event.target.value);
+    setIsSubmit(false);
   };
 
   function handleEmailChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setEmail(event.target.value);
+    setIsSubmit(false);
   }
 
   function handlePasswordChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setPassword(event.target.value);
+    setIsSubmit(false);
   }
 
   function handleConfirmPasswordChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setConfirmPassword(event.target.value);
-  }
-
-  function handleGenderChange(event: SelectChangeEvent<string>): void {
-    setGender(event.target.value);
+    setIsSubmit(false);
   }
 
   const handleSelectChange = (event: SelectChangeEvent): void => {
     setGender(event.target.value as string);
+  };
+
+  const handleBirthDate = (newValue: Dayjs | null) => {
+    if (newValue && newValue.isAfter(dayjs())) {
+      console.error("Birth Date must be in the past.");
+    } else {
+      setBirthDate(newValue);
+    }
+  };
+
+  const displayNameErr: validation = validateTextField(displayName, 1, 100);
+  const emailErr: validation = validateEmail(email);
+  const passwordErr: validation = validateTextField(password, 1, 100);
+  const confirmPasswordErr: validation = validateTextField(confirmPassword, 1, 100);
+
+  const createAccountBtnOnClick = async () => {
+    setIsSubmit(true);
+    const readyToCreate: boolean = !(
+      displayNameErr.err ||
+      emailErr.err ||
+      passwordErr.err ||
+      confirmPasswordErr.err
+    );
+    if (readyToCreate) {
+    }
   };
 
   return (
@@ -72,8 +102,8 @@ export default function Home() {
           value={displayName}
           handleValueChange={handleDisplayNameChange}
           char_limit={100}
-          isErr={false}
-          errMsg=""
+          isErr={isSubmit && displayNameErr.err}
+          errMsg={displayNameErr.msg}
         />
       </Box>
 
@@ -111,9 +141,9 @@ export default function Home() {
       </Box>
 
       <Grid item>
-        <Grid container spacing={2}>
+        <Grid container spacing={3} justifyContent="left">
           <Grid item xs={6}>
-            <Box style={{ width: "12vw" }}>
+            <Box style={{ width: "18vw" }}>
               <CommonDropdown
                 header="Gender"
                 placeHolder="Gender"
@@ -140,7 +170,9 @@ export default function Home() {
         </Grid>
       </Grid>
 
-      <Button variant="contained">Create Account</Button>
+      <Button variant="contained" onClick={createAccountBtnOnClick}>
+        Create Account
+      </Button>
     </Stack>
   );
 }
