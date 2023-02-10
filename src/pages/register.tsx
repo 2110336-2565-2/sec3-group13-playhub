@@ -1,5 +1,15 @@
 import React from "react";
-import { Box, Typography, TextField, Stack, Button, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Stack,
+  Button,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  Grid,
+} from "@mui/material";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Logo from "@/components/public/Logo";
 import { Gender } from "enum/gender";
@@ -8,6 +18,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CommonTextField from "@/components/public/CommonTextField";
+import CommonDropdown from "@/components/public/CommonDropdown";
 
 export default function Home() {
   const [email, setEmail] = React.useState("");
@@ -42,11 +53,13 @@ export default function Home() {
     setConfirmPassword(event.target.value);
   }
 
-  function handleGenderChange(
-    event: SelectChangeEvent<string>
-  ): void {
-    setGender(event.target.value)
+  function handleGenderChange(event: SelectChangeEvent<string>): void {
+    setGender(event.target.value);
   }
+
+  const handleSelectChange = (event: SelectChangeEvent): void => {
+    setGender(event.target.value as string);
+  };
 
   return (
     <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
@@ -97,24 +110,35 @@ export default function Home() {
         />
       </Box>
 
-      <Typography>Gender</Typography>
-      <Select sx={{ width: "100px" }} onChange={handleGenderChange} defaultValue="">
-        {(Object.keys(Gender) as (keyof typeof Gender)[]).map((key, index) => (
-          <MenuItem value={key} key={index}>{Gender[key]}</MenuItem>
-        ))}
-      </Select>
+      <Grid item>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Box style={{ width: "12vw" }}>
+              <CommonDropdown
+                header="Gender"
+                placeHolder="Gender"
+                value={gender}
+                handleValueChange={handleSelectChange}
+                items={Object.values(Gender)}
+              />
+            </Box>
+          </Grid>
 
-      <Typography>Birth Date</Typography>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <DatePicker
-          label="Birth Date"
-          value={value}
-          onChange={(newValue) => {
-            setValue(newValue);
-          }}
-          renderInput={(params) => <TextField {...params} />}
-        />
-      </LocalizationProvider>
+          <Grid item xs={6}>
+            <Typography>Birth Date</Typography>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                label="Birth Date"
+                value={value}
+                onChange={(newValue) => {
+                  setValue(newValue);
+                }}
+                renderInput={(params) => <TextField {...params} />}
+              />
+            </LocalizationProvider>
+          </Grid>
+        </Grid>
+      </Grid>
 
       <Button variant="contained">Create Account</Button>
     </Stack>
