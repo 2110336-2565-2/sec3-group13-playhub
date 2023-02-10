@@ -113,8 +113,8 @@ export default function Home() {
           placeholder="Email"
           value={email}
           handleValueChange={handleEmailChange}
-          isErr={false}
-          errMsg=""
+          isErr={isSubmit && emailErr.err}
+          errMsg={emailErr.msg}
         />
       </Box>
 
