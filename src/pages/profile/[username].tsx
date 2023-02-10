@@ -93,13 +93,16 @@ export default function Home() {
             />
             <Chip icon={<CakeIcon />} label={targetUserData.birthdate} />
           </Stack>
-          <Typography
-            variant="body1"
-            align="center"
-            sx={{ ...profile_layout, wordBreak: "break-word" }}
-          >
-            {targetUserData.description}
-          </Typography>
+
+          {targetUserData.description.split("\n").map((row) => (
+            <Typography
+              variant="body1"
+              sx={{ ...profile_layout, wordBreak: "break-word" }}
+              key={row}
+            >
+              {row}
+            </Typography>
+          ))}
           {owner && (
             <IconButton onClick={handleEditProfile}>
               <EditIcon />
