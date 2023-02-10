@@ -26,7 +26,7 @@ export default function Home() {
       }
       
       if(getAllUserPostResult.data == null) return ;
-      
+
       const getPostTagResult = await supabaseClient.rpc('get_all_post_tag')
       if(getPostTagResult.error != null){
         console.log(getPostTagResult.error);
@@ -47,8 +47,9 @@ export default function Home() {
 
         const postLocationImgList = getPostLocationImgResult.data.filter(post => post.post_id == data.post_id);
         const imageURL = postLocationImgList.map(data => data.image);
-        
+
         return {
+              post_id: data.post_id,
               title: data.title,
               ownerName: data.username,
               ownerProfilePic: data.profile_image,
@@ -59,13 +60,13 @@ export default function Home() {
               time: data.start_time,
         }
       })
-
+      
       setPosts(postDataList);
     };
 
     getPostData();
 
-  }, [userStatus.user])
+  }, [userStatus.user, posts])
 
   if(posts == null) return <p>Loading All Post...</p>
   return (

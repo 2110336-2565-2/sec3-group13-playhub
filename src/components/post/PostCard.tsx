@@ -28,6 +28,9 @@ import { IconButtonProps } from "@mui/material/IconButton";
 import DeletePostDialog from "@/components/post/DeletePostDialog";
 
 import { Post } from "../../types/Post";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -42,18 +45,6 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-// mock data
-// const tmpPost: Post = {
-//   title: "ชวนไปดูแงว",
-//   ownerName: "น้องออม",
-//   ownerProfilePic: "/images/aom.jpg",
-//   tags: ["A", "B"],
-//   description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
-//   image: ["/images/avatar.png", "/images/avatar.png", "/images/aom.jpg"],
-//   location: "หอใน",
-//   time: "2/4/2023",
-//   // there are more data but omitted for now
-// };
 const owner: boolean = true;
 
 export default function PostCard(props: Post) {
@@ -61,14 +52,21 @@ export default function PostCard(props: Post) {
   const [openDeletePostModal, setOpenDeletePostModal] = React.useState(false);
   const [openSnackBar, setOpenSnackBar] = React.useState(false);
 
+  const supabaseClient = useSupabaseClient<Database>();
+
   const handleOpenModal = () => setOpenDeletePostModal(true);
   const handleCloseModal = () => setOpenDeletePostModal(false);
   const handleExpandDetail = () => setHiddenPostDetail(!hiddenPostDetail);
 
-  function handleDeletePost() {
-    console.log("The post is deleted");
+  async function handleDeletePost() {
     handleCloseModal();
-    // delete post end-point
+    const deletePostResult = await supabaseClient.rpc('delete_post_by_id', {target_id:props.post_id})
+
+    if (deletePostResult.error != null) {
+      console.error(deletePostResult.error);
+    }
+
+    if(deletePostResult.error == null) return;
   }
 
   function handleEditPost() {

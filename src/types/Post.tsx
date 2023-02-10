@@ -1,4 +1,5 @@
 export type Post = {
+  post_id: number,
   title: string;
   ownerName: string;
   ownerProfilePic: string;
