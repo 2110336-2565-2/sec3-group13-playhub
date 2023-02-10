@@ -293,7 +293,12 @@ export interface Database {
           image: string
           email: string
         }
-      }
+      },
+      delete_post_by_id: {
+        Args: {
+          target_id: number
+        }
+      },
       get_all_post_tag: {
         Returns: {
           name: string
