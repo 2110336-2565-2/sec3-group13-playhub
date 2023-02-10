@@ -64,9 +64,11 @@ const PictureList = () => {
           </ImageListItem>
         ))}
 
-        <div style={addBoxDesign} onClick={handleClick}>
-          <AddIcon style={{ width: "100px", height: "100px" }} />
-        </div>
+        {dataPics.length < 3 ? (
+          <div style={addBoxDesign} onClick={handleClick}>
+            <AddIcon style={{ width: "100px", height: "100px" }} />
+          </div>
+        ) : null}
       </ImageList>
 
       <input
