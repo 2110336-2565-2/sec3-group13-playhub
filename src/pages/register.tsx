@@ -13,7 +13,7 @@ import {
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Logo from "@/components/public/Logo";
 import { Gender } from "enum/gender";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import CommonTextField from "@/components/public/CommonTextField";
@@ -24,7 +24,6 @@ import {
   validateTextField,
   validatePasswordTextField,
 } from "@/utilities/validation";
-import { CHAR_LIMIT } from "enum/inputLimit";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
@@ -34,10 +33,9 @@ export default function Home() {
   const [confirmPassword, setConfirmPassword] = React.useState("");
   const [isSubmit, setIsSubmit] = React.useState(false);
   const [isConfirm, setIsConfirm] = React.useState(true);
-  const [value, setValue] = React.useState<Dayjs | null>(null);
   const [displayName, setDisplayName] = React.useState<string>("");
   const [gender, setGender] = React.useState<string>("");
-  const [birthDate, setBirthDate] = React.useState<Dayjs | null>(dayjs());
+  const [birthDate, setBirthDate] = React.useState<Dayjs | null>(null);
 
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -71,26 +69,10 @@ export default function Home() {
     setGender(event.target.value as string);
   };
 
-  const handleBirthDate = (newValue: Dayjs | null) => {
-    if (newValue && newValue.isAfter(dayjs())) {
-      console.error("Birth Date must be in the past.");
-    } else {
-      setBirthDate(newValue);
-    }
-  };
-
   const displayNameErr: validation = validateTextField(displayName, 1, 100);
   const emailErr: validation = validateEmail(email);
   const passwordErr: validation = validatePasswordTextField(password, 6, 100);
   const confirmPasswordErr: validation = validatePasswordTextField(confirmPassword, 6, 100);
-  // const checkPasswordWithConfirmPassword: validation  {
-  //   if(password === confirmPassword){
-  //     return {msg:"",err:false}
-  //   }
-  //   else{
-  //     return
-  //   }
-  // }
 
   const createAccountBtnOnClick = async () => {
     setIsSubmit(true);
@@ -169,24 +151,25 @@ export default function Home() {
       <Grid item>
         <Grid container spacing={3} justifyContent="left">
           <Grid item xs={6}>
-            <Box style={{ width: "18vw" }}>
-              <CommonDropdown
-                header="Gender"
-                placeHolder="Gender"
-                value={gender}
-                handleValueChange={handleSelectChange}
-                items={Object.values(Gender)}
-              />
-            </Box>
+            <CommonDropdown
+              header="Gender"
+              placeHolder="Gender"
+              value={gender}
+              handleValueChange={handleSelectChange}
+              items={Object.values(Gender)}
+            />
           </Grid>
 
           <Grid item xs={6}>
             <Typography>Birth Date</Typography>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <MobileDatePicker
-                value={value}
-                onChange={(newValue) => {
-                  setValue(newValue);
+                inputFormat="DD/MM/YYYY"
+                mask="__/__/____"
+                value={birthDate}
+                disableFuture={true}
+                onChange={(newBirthDate) => {
+                  setBirthDate(newBirthDate);
                 }}
                 renderInput={(params) => <TextField {...params} />}
                 InputProps={{
