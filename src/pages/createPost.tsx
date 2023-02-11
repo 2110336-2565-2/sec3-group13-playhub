@@ -22,8 +22,33 @@ import PictureList from "@/components/createPost/pictureList";
 
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import GoogleMaps from "@/components/createPost/searchMaps";
+import { emptyPost, Post } from "@/types/Post";
 
 const createPost = () => {
+  const Tags = [
+    "Poseidon entertainment complex",
+    "The Lord รัชดา",
+    "วิคตอเรียซีเครท",
+    "แคทเธอรีนเอ็นเตอร์เทนเม้นท์",
+    "เอ็มมานูเอล",
+    "โคปาคาบาน่า",
+    "ลาเดอ ฟรองซ์",
+    "โคลอนเซ่",
+    "ยูโธเปีย",
+    "อัมสเตอร์ดัม",
+  ];
+  const dummyEditFrom: Post = {
+    title: "this is title",
+    ownerName: "this is owner name",
+    ownerProfilePic: "",
+    tags: [Tags[0], Tags[1]],
+    description: "this is description",
+    image: [],
+    location: "this is location",
+    startDateTime: "2022-01-01",
+    endDateTime: "2022-01-02",
+  };
+  const initialValue: Post = true ? dummyEditFrom : emptyPost;
   const error = "#ff0000";
   const createPostLayout = {
     width: "35vw",
@@ -56,11 +81,15 @@ const createPost = () => {
     color: "#000000",
   };
 
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs());
-  const [endDate, setEndDate] = React.useState<Dayjs | null>();
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [startDate, setStartDate] = React.useState<Dayjs | null>(
+    dayjs(initialValue.startDateTime === "" ? null : initialValue.startDateTime)
+  );
+  const [endDate, setEndDate] = React.useState<Dayjs | null>(
+    initialValue.endDateTime === "" ? null : dayjs(initialValue.endDateTime)
+  );
+  const [selectedTags, setSelectedTags] = useState(initialValue.tags);
 
-  const handleAddTag = (event, tag) => {
+  const handleAddTag = (event: any, tag: any) => {
     if (tag.length <= 5) {
       console.log(tag.length);
       setSelectedTags(tag);
@@ -89,29 +118,11 @@ const createPost = () => {
     "The street",
     "ศูนย์วัฒนธรรมแห่งประเทศไทย",
   ];
-  const Tags = [
-    "Poseidon entertainment complex",
-    "The Lord รัชดา",
-    "วิคตอเรียซีเครท",
-    "แคทเธอรีนเอ็นเตอร์เทนเม้นท์",
-    "เอ็มมานูเอล",
-    "โคปาคาบาน่า",
-    "ลาเดอ ฟรองซ์",
-    "โคลอนเซ่",
-    "ยูโธเปีย",
-    "อัมสเตอร์ดัม",
-  ];
 
   return (
     <>
       <Navbar />
-      <Stack
-        spacing={2}
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: "100vh" }}
-        margin="0 0 2vh 0"
-      >
+      <Stack spacing={2} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }} margin="0 0 2vh 0">
         <Box sx={createPostLayout}>
           <Typography variant="h1" component="h2">
             Create post
@@ -122,14 +133,13 @@ const createPost = () => {
             Title
           </Typography>
           <TextField
+            defaultValue={initialValue.title}
             variant="outlined"
             fullWidth
             placeholder="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
           />
           <div style={helperTextBox}>
-            <FormHelperText sx={helperTextError}>
-              ช่องนี้ไม่สามารถเว้นว่างได้
-            </FormHelperText>
+            <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
             <FormHelperText sx={helperText}>0/100</FormHelperText>
           </div>
         </Box>
@@ -157,12 +167,10 @@ const createPost = () => {
                 />
               )}
                 />*/}
-            <GoogleMaps></GoogleMaps>
+            <GoogleMaps initialValue={initialValue.location} />
           </Stack>
           <div style={helperTextBox}>
-            <FormHelperText sx={helperTextError}>
-              ช่องนี้ไม่สามารถเว้นว่างได้
-            </FormHelperText>
+            <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
           </div>
         </Box>
         <Box sx={createPostLayout}>
@@ -189,9 +197,7 @@ const createPost = () => {
                 />
               </LocalizationProvider>
               <div style={helperTextBox}>
-                <FormHelperText sx={helperTextError}>
-                  ช่องนี้ไม่สามารถเว้นว่างได้
-                </FormHelperText>
+                <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
               </div>
             </Grid>
             <Grid item xs={6}>
@@ -213,9 +219,7 @@ const createPost = () => {
                 />
               </LocalizationProvider>
               <div style={helperTextBox}>
-                <FormHelperText sx={helperTextError}>
-                  ช่องนี้ไม่สามารถเว้นว่างได้
-                </FormHelperText>
+                <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
               </div>
             </Grid>
           </Grid>
@@ -250,11 +254,7 @@ const createPost = () => {
               ))
             }
             renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)"
-                fullWidth
-              />
+              <TextField {...params} placeholder="คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)" fullWidth />
             )}
           />
         </Box>
@@ -263,7 +263,9 @@ const createPost = () => {
             Description
           </Typography>
           <TextField
+          defaultValue={initialValue.description}
             variant="outlined"
+
             fullWidth
             multiline
             rows={4}
@@ -271,33 +273,21 @@ const createPost = () => {
             placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
           />
           <div style={helperTextBox}>
-            <FormHelperText sx={helperTextError}>
-              ช่องนี้ไม่สามารถเว้นว่างได้
-            </FormHelperText>
+            <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
             <FormHelperText sx={helperText}>0/500</FormHelperText>
           </div>
         </Box>
         <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
             <span>Image </span>
-            <span style={{ color: "grey" }}>
-              (Optional, เลือกได้สูงสุด 3 รูป )
-            </span>
+            <span style={{ color: "grey" }}>(Optional, เลือกได้สูงสุด 3 รูป )</span>
           </Typography>
 
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            spacing={1}
-          >
+          <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
             <PictureList />
           </Stack>
         </Box>
-        <Box
-          /*sx={createPostLayout} */ justifyContent="center"
-          alignItems="center"
-        >
+        <Box /*sx={createPostLayout} */ justifyContent="center" alignItems="center">
           <Button variant="contained" color="primary">
             <Typography style={fontDesign}>Create Post</Typography>
           </Button>

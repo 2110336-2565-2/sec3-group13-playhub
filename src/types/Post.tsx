@@ -6,5 +6,17 @@ export type Post = {
   description: string;
   image: string[];
   location: string;
-  time: string;
+  startDateTime: string;
+  endDateTime: string;
+};
+export const emptyPost: Post = {
+  title: "",
+  ownerName: "",
+  ownerProfilePic: "",
+  tags: [],
+  description: "",
+  image: [],
+  location: "",
+  startDateTime: "",
+  endDateTime: "",
 };

@@ -21,6 +21,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Post } from "@/types/Post";
 import ReactDOM from "react-dom";
+import GoogleMaps from "@/components/createPost/searchMaps";
 
 const dummyEditFrom: Post = {
   title: "this is title",
@@ -30,7 +31,8 @@ const dummyEditFrom: Post = {
   description: "this is description",
   image: [],
   location: "this is location",
-  time: "",
+  startDateTime: "2022-01-01",
+  endDateTime: "2022-01-02",
 };
 
 const createPost = () => {
@@ -139,27 +141,7 @@ const createPost = () => {
           <Grid item>
             <Typography variant="h5">Location</Typography>
             <Stack spacing={2}>
-              <Autocomplete
-                id="free-solo-demo"
-                freeSolo
-                defaultValue={editFrom.location}
-                options={Location.map((option) => option)}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder="เลือกสถานที่"
-
-                    // Below is for location icon but when i show icon, It can't select location.
-                    /*InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <LocationOnIcon />
-                        </InputAdornment>
-                      ),
-                    }}*/
-                  />
-                )}
-              />
+              <GoogleMaps/>
             </Stack>
             <div style={helperTextBox}>
               <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>

@@ -11,7 +11,7 @@ import { InputAdornment } from "@mui/material";
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = "AIzaSyC3aviU6KHXAjoSnxcw6qbOhjnFctbxPkE";
+const GOOGLE_MAPS_API_KEY = "";
 
 function loadScript(src: string, position: HTMLElement | null, id: string) {
   if (!position) {
@@ -41,16 +41,16 @@ interface PlaceType {
   structured_formatting: StructuredFormatting;
 }
 
-export default function GoogleMaps() {
+export default function GoogleMaps(props: { initialValue?: string }) {
   const [value, setValue] = React.useState<PlaceType | null>(null);
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = React.useState(props.initialValue ?? "");
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
   const loaded = React.useRef(false);
 
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
       loadScript(
-        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places`,
+        `https://maps.googleapis.com/maps/api/js?key=${GOOGLE_MAPS_API_KEY}&libraries=places&callback=Function.prototype`,
         document.querySelector("head"),
         "google-maps"
       );
@@ -61,18 +61,9 @@ export default function GoogleMaps() {
 
   const fetch = React.useMemo(
     () =>
-      debounce(
-        (
-          request: { input: string },
-          callback: (results?: readonly PlaceType[]) => void
-        ) => {
-          (autocompleteService.current as any).getPlacePredictions(
-            request,
-            callback
-          );
-        },
-        400
-      ),
+      debounce((request: { input: string }, callback: (results?: readonly PlaceType[]) => void) => {
+        (autocompleteService.current as any).getPlacePredictions(request, callback);
+      }, 400),
     []
   );
 
@@ -80,9 +71,7 @@ export default function GoogleMaps() {
     let active = true;
 
     if (!autocompleteService.current && (window as any).google) {
-      autocompleteService.current = new (
-        window as any
-      ).google.maps.places.AutocompleteService();
+      autocompleteService.current = new (window as any).google.maps.places.AutocompleteService();
     }
     if (!autocompleteService.current) {
       return undefined;
@@ -117,9 +106,7 @@ export default function GoogleMaps() {
   return (
     <Autocomplete
       id="google-map-demo"
-      getOptionLabel={(option) =>
-        typeof option === "string" ? option : option.description
-      }
+      getOptionLabel={(option) => (typeof option === "string" ? option : option.description)}
       filterOptions={(x) => x}
       options={options}
       autoComplete
@@ -134,19 +121,13 @@ export default function GoogleMaps() {
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
       }}
-      renderInput={(params) => (
-        <TextField {...params} label="กรอกสถานที่" fullWidth />
-      )}
+      renderInput={(params) => <TextField {...params} label="กรอกสถานที่" fullWidth />}
       renderOption={(props, option) => {
-        const matches =
-          option.structured_formatting.main_text_matched_substrings || [];
+        const matches = option.structured_formatting.main_text_matched_substrings || [];
 
         const parts = parse(
           option.structured_formatting.main_text,
-          matches.map((match: any) => [
-            match.offset,
-            match.offset + match.length,
-          ])
+          matches.map((match: any) => [match.offset, match.offset + match.length])
         );
 
         return (
@@ -155,16 +136,9 @@ export default function GoogleMaps() {
               <Grid item sx={{ display: "flex", width: 44 }}>
                 <LocationOnIcon sx={{ color: "text.secondary" }} />
               </Grid>
-              <Grid
-                item
-                sx={{ width: "calc(100% - 44px)", wordWrap: "break-word" }}
-              >
+              <Grid item sx={{ width: "calc(100% - 44px)", wordWrap: "break-word" }}>
                 {parts.map((part, index) => (
-                  <Box
-                    key={index}
-                    component="span"
-                    sx={{ fontWeight: part.highlight ? "bold" : "regular" }}
-                  >
+                  <Box key={index} component="span" sx={{ fontWeight: part.highlight ? "bold" : "regular" }}>
                     {part.text}
                   </Box>
                 ))}
