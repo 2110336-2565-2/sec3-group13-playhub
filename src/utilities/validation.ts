@@ -21,7 +21,7 @@ export function validateTextField(
   maxChar: number = 2000
 ): validation {
   if (input.length < minChar) {
-    return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+    return { msg: `ช่องนี้ต้องมีตัวอักษรอย่างน้อย ${minChar} ตัว`, err: true };
   }
   if (input.length > maxChar) {
     return { msg: `ช่องนี้มีตัวอักษรได้ไม่เกิน ${maxChar} ตัว`, err: true };
