@@ -8,6 +8,7 @@ import {
   SelectChangeEvent,
   Grid,
   InputAdornment,
+  FormHelperText,
 } from "@mui/material";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Logo from "@/components/public/Logo";
@@ -34,7 +35,9 @@ export default function Home() {
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
   const [isValidConfirmPassword, setIsValidConfirmPassword] = React.useState<boolean>(true);
   const [gender, setGender] = React.useState<string>("");
+  const [isValidGender, setIsValidGender] = React.useState<boolean>(true);
   const [birthDate, setBirthDate] = React.useState<Dayjs | null>(null);
+  const [isValidBirthDate, setIsValidBirthDate] = React.useState<boolean>(true);
   const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
 
   const handleDisplayNameChange = (
@@ -86,6 +89,8 @@ export default function Home() {
 
   const createAccountBtnOnClick = async () => {
     setIsSubmit(true);
+    setIsValidGender(!(gender === ""));
+    setIsValidBirthDate(!(birthDate === null));
     setIsValidConfirmPassword(true);
     if (password.length > 5 && confirmPassword.length > 5) {
       setIsValidConfirmPassword(password === confirmPassword);
@@ -166,6 +171,11 @@ export default function Home() {
               handleValueChange={handleSelectChange}
               items={Object.values(Gender)}
             />
+            <Box sx={helperText}>
+              {!isValidGender && (
+                <FormHelperText error>{"ช่องนี้ไม่สามารถเว้นว่างได้"}</FormHelperText>
+              )}
+            </Box>
           </Grid>
 
           <Grid item xs={6}>
@@ -189,6 +199,11 @@ export default function Home() {
                 }}
               />
             </LocalizationProvider>
+            <Box sx={helperText}>
+              {!isValidBirthDate && (
+                <FormHelperText error>{"ช่องนี้ไม่สามารถเว้นว่างได้"}</FormHelperText>
+              )}
+            </Box>
           </Grid>
         </Grid>
       </Grid>
