@@ -88,6 +88,9 @@ export default function PostCard(props: props) {
         sx={{
           border: "solid 4px",
           borderRadius: "16px",
+          minWidth: "260px",
+          maxWidth: "1200px",
+          margin: "40px",
         }}
       >
         {/* Post Card Header */}
@@ -185,6 +188,12 @@ export default function PostCard(props: props) {
         openModal={openDeletePostModal}
         handleCloseModal={handleCloseDeletePostModal}
         deletePost={handleDelete}
+      />
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={5000}
+        message="ได้เวลาสนุกแล้วสิ"
+        onClose={() => setOpenSnackBar(false)}
       />
       <Snackbar
         open={openSnackBar}

@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { Link, Box, Typography, TextField, Stack, FormHelperText, Button } from "@mui/material";
+import { SessionContext, useSessionContext } from "@supabase/auth-helpers-react";
 
 import Logo from "@/components/public/Logo";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
@@ -100,8 +101,8 @@ export default function Home() {
   //   router.back();
   // }
 
-  if (userStatus.isLoading) return <Loading isLoading={true} />
-  if (userStatus.user) return <p>Logged in</p>
+  if (userStatus.isLoading) return <Loading isLoading={true} />;
+  if (userStatus.user) return <p>Logged in</p>;
   return (
     <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
       <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>

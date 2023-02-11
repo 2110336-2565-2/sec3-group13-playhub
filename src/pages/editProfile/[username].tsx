@@ -150,7 +150,7 @@ export default function Home() {
     setImage(URL.createObjectURL(tempFile));
     const imgErrMsg = validateImage(tempFile.type, tempFile.size);
     setShowImageUploadError(imgErrMsg);
-    setIsImageUpload(true); 
+    setIsImageUpload(true);
     if (!imgErrMsg.err) {
       setFileImage(event.target.files[0]);
     }
@@ -194,10 +194,7 @@ export default function Home() {
     <>
       <Navbar />
       <Link onClick={handleGoBack}>
-        <ArrowBackIcon
-          fontSize="large"
-          sx={{ margin: "3vh 0 0 3vh", color: "black" }}
-        />
+        <ArrowBackIcon fontSize="large" sx={{ margin: "3vh 0 0 3vh", color: "black" }} />
       </Link>
       <Stack
         spacing={2}
@@ -213,17 +210,8 @@ export default function Home() {
             height={200}
             style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
           />
-          <IconButton
-            sx={overlayIcon}
-            aria-label="upload picture"
-            component="label"
-          >
-            <input
-              onChange={handleImageChange}
-              hidden
-              accept="image/*"
-              type="file"
-            />
+          <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
+            <input onChange={handleImageChange} hidden accept="image/*" type="file" />
             <CameraAltIcon sx={{ fontSize: "100px" }} />
           </IconButton>
         </Avatar>
@@ -232,7 +220,7 @@ export default function Home() {
             {showImageUploadError.msg}
           </Typography>
         )}
-        {(isImageUpload) && (
+        {isImageUpload && (
           <Chip
             label="Remove this picture"
             onClick={handleCancelImageChip}

@@ -51,7 +51,9 @@ export default function Home() {
         const tagName = postTagList.map((data) => data.name);
 
         // extract image from post data
-        const postLocationImgList = getPostLocationImgResult.data.filter((post) => post.post_id == data.post_id);
+        const postLocationImgList = getPostLocationImgResult.data.filter(
+          (post) => post.post_id == data.post_id
+        );
         const imageURL = postLocationImgList.map((data) => data.image);
 
         return {
@@ -79,7 +81,13 @@ export default function Home() {
       <Navbar />
       <Stack
         spacing="40px"
-        sx={{ display: "flex", alignItems: "center", width: "100%", flexDirection: "column", padding: "30px" }}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          width: "100%",
+          flexDirection: "column",
+          padding: "30px",
+        }}
       >
         <Typography variant="h1">My post</Typography>
 
