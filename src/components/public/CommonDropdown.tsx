@@ -20,8 +20,8 @@ export default function CommonDropdown(props: props) {
           displayEmpty
           renderValue={
             props.value !== ""
-              ? () => <Typography>{props.value}</Typography>
-              : () => <Typography color={grey[400]}>{props.placeHolder}</Typography>
+              ? () => <Typography lineHeight={1.4}>{props.value}</Typography>
+              : () => <Typography lineHeight={1.4} color={grey[400]}>{props.placeHolder}</Typography>
           }
         >
           {props.items.map((item) => (
