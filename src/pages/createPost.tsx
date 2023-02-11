@@ -91,8 +91,8 @@ const createPost = () => {
   const [selectedTags, setSelectedTags] = useState(initialValue.tags);
   const [images, setImages] = useState<string[]>([]);
   useEffect(() => {
-    setImages(dummyEditFrom.image);
-  }, [dummyEditFrom.image]);
+    setImages(initialValue.image);
+  }, []);
 
   const handleAddTag = (event: any, tag: any) => {
     if (tag.length <= 5) {
@@ -127,7 +127,13 @@ const createPost = () => {
   return (
     <>
       <Navbar />
-      <Stack spacing={2} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }} margin="0 0 2vh 0">
+      <Stack
+        spacing={2}
+        alignItems="center"
+        justifyContent="center"
+        style={{ minHeight: "100vh" }}
+        margin="0 0 2vh 0"
+      >
         <Box sx={createPostLayout}>
           <Typography variant="h1" component="h2">
             Create post
@@ -259,7 +265,11 @@ const createPost = () => {
               ))
             }
             renderInput={(params) => (
-              <TextField {...params} placeholder="คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)" fullWidth />
+              <TextField
+                {...params}
+                placeholder="คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)"
+                fullWidth
+              />
             )}
           />
         </Box>
