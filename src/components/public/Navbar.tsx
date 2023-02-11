@@ -77,7 +77,7 @@ export default function Navbar() {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            {userStatus.user ? (
+            {userStatus.user && userStatus.user.image ? (
               <Avatar
                 alt="Profile picture"
                 src={userStatus.user.image}
