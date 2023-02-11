@@ -19,8 +19,7 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
   useEffect(() => {
     async function getUserData() {
       if (sessionContext.isLoading) return;
-      if (userStatus.user) return;
-      if (!sessionContext.session) {
+      if (!sessionContext.session?.user) {
         setUserStatus({ user: null, isLoading: false });
         return;
       }
@@ -36,10 +35,9 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
     getUserData();
   }, [
     sessionContext.isLoading,
-    sessionContext.session,
+    sessionContext.session?.user,
     supabaseClient,
     router.pathname,
-    userStatus.user,
   ]);
 
   return <userContext.Provider value={userStatus}>{prop.children}</userContext.Provider>;
