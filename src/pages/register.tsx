@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import {
   Box,
   Typography,
@@ -22,8 +22,14 @@ import { validation } from "@/types/Validation";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+import { userContext } from "supabase/user_context";
+import Loading from "@/components/public/Loading";
 
 export default function Home() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const userStatus = useContext(userContext);
   const [displayName, setDisplayName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
@@ -88,6 +94,14 @@ export default function Home() {
       !isValidConfirmPassword
     );
     if (readyToCreate) {
+      const signUpResult = await supabaseClient.auth.signUp({email, password});
+      if (signUpResult.error) {
+        // one possible error is request sign up repeatedly too fast
+        console.log(signUpResult.error);
+        return;
+      }
+      console.log("sign up done")
+      // route to somewhere
     }
   };
 
@@ -97,6 +111,8 @@ export default function Home() {
     justifyContent: "space-between",
   };
 
+  if (userStatus.isLoading) return <Loading isLoading/> //temporary
+  if (userStatus.user) return <p>logged in</p> //temporary
   return (
     <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
       <Logo width={119} height={119} />
