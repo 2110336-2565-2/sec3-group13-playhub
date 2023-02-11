@@ -19,12 +19,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import CommonTextField from "@/components/public/CommonTextField";
 import CommonDropdown from "@/components/public/CommonDropdown";
 import { validation } from "@/types/Validation";
-import {
-  validateEmail,
-  validateTextField,
-  validatePasswordTextField,
-  validateConfirmPasswordTextField,
-} from "@/utilities/validation";
+import { validateEmail, validateTextField } from "@/utilities/validation";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
@@ -74,18 +69,8 @@ export default function Home() {
 
   const displayNameErr: validation = validateTextField(displayName, 1, 100);
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validatePasswordTextField(
-    password,
-    6,
-    100,
-    isValidConfirmPassword
-  );
-  const confirmPasswordErr: validation = validateConfirmPasswordTextField(
-    confirmPassword,
-    6,
-    100,
-    isValidConfirmPassword
-  );
+  const passwordErr: validation = validateTextField(password, 6, 100);
+  const confirmPasswordErr: validation = validateTextField(confirmPassword, 6, 100);
 
   const createAccountBtnOnClick = async () => {
     setIsSubmit(true);
@@ -145,7 +130,7 @@ export default function Home() {
           placeholder="Password"
           value={password}
           handleValueChange={handlePasswordChange}
-          isErr={isSubmit && passwordErr.err}
+          isErr={isSubmit && (passwordErr.err || !isValidConfirmPassword)}
           errMsg={passwordErr.msg}
         />
       </Box>
@@ -156,8 +141,12 @@ export default function Home() {
           placeholder="Confirm Password"
           value={confirmPassword}
           handleValueChange={handleConfirmPasswordChange}
-          isErr={isSubmit && confirmPasswordErr.err}
-          errMsg={confirmPasswordErr.msg}
+          isErr={isSubmit && (confirmPasswordErr.err || !isValidConfirmPassword)}
+          errMsg={
+            isValidConfirmPassword
+              ? confirmPasswordErr.msg
+              : "Password และ Confirm Password ต้องเหมือนกัน"
+          }
         />
       </Box>
 
@@ -189,7 +178,7 @@ export default function Home() {
                 onChange={(newBirthDate) => {
                   setBirthDate(newBirthDate);
                 }}
-                renderInput={(params) => <TextField {...params} fullWidth size="small"/>}
+                renderInput={(params) => <TextField {...params} fullWidth size="small" />}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
