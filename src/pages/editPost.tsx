@@ -1,6 +1,5 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "@/components/public/Navbar";
-import { useState } from "react";
 import {
   Grid,
   Typography,
@@ -28,7 +27,7 @@ const dummyEditFrom: Post = {
   ownerProfilePic: "",
   tags: ["A", "B"],
   description: "this is description",
-  image: [],
+  image: ["https://picsum.photos/id/12/200", "https://picsum.photos/id/13/200"],
   location: "this is location",
   time: "",
 };
@@ -72,6 +71,10 @@ const createPost = () => {
   const [startDate, setStartDate] = React.useState<Dayjs | null>(dayjs("2023-01-01"));
   const [endDate, setEndDate] = React.useState<Dayjs | null>(dayjs("2023-01-02"));
   const [selectedTags, setSelectedTags] = useState(editFrom.tags ?? []);
+  const [images, setImages] = useState<string[]>([]);
+  useEffect(() => {
+    setImages(dummyEditFrom.image);
+  }, [dummyEditFrom.image]);
 
   const handleAddTag = (event: any, tag: any) => {
     if (tag.length <= 5) {
@@ -222,7 +225,9 @@ const createPost = () => {
               options={Tags}
               value={selectedTags}
               onChange={handleAddTag}
-              renderInput={(params) => <TextField {...params} placeholder="Click for add tag" fullWidth />}
+              renderInput={(params) => (
+                <TextField {...params} placeholder="Click for add tag" fullWidth />
+              )}
             />
           </Grid>
           <Grid item>
@@ -244,7 +249,7 @@ const createPost = () => {
           <Grid item>
             <Typography variant="h5">Image(Optional)</Typography>
             <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-              <PictureList />
+              <PictureList imgs={images} />
             </Stack>
           </Grid>
         </div>

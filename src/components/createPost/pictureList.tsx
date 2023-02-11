@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import { useState, useRef } from "react";
+import Image from "next/image";
 import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
 const cancleDesign = {
@@ -21,9 +21,11 @@ const addBoxDesign = {
   boxshadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
 };
 
-const PictureList = () => {
+const PictureList = (props: { imgs: string[] }) => {
   const [dataPics, setDataPics] = useState<string[]>([]);
-
+  useEffect(() => {
+    setDataPics(props.imgs);
+  }, [props.imgs]);
   const deletePicture = (index: number) => {
     setDataPics((prevPics) => prevPics.filter((pic, i) => i !== index));
   };
@@ -31,6 +33,7 @@ const PictureList = () => {
   const handleAddPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFiles = e.target.files;
+      console.log(URL.createObjectURL(selectedFiles[0]));
       const selfilesarr = Array.from(selectedFiles).filter((file) =>
         file.type.startsWith("image/")
       );
