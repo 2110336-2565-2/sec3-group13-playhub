@@ -5,7 +5,7 @@ export type User = {
   sex: string;
   birthdate: string;
   description: string;
-  image: string;
+  image: string | null;
   email: string;
 };
 
