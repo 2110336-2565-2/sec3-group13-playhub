@@ -1,9 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import Image from "next/image";
 import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
+
+type props = {
+  imgs: string[];
+  stateChanger: React.Dispatch<React.SetStateAction<string[]>>;
+};
 const cancleDesign = {
   position: "absolute",
   top: 0,
@@ -21,13 +25,14 @@ const addBoxDesign = {
   boxshadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
 };
 
-const PictureList = (props: { imgs: string[] }) => {
+const PictureList = (props: props) => {
   const [dataPics, setDataPics] = useState<string[]>([]);
   useEffect(() => {
     setDataPics(props.imgs);
   }, [props.imgs]);
   const deletePicture = (index: number) => {
     setDataPics((prevPics) => prevPics.filter((pic, i) => i !== index));
+    props.stateChanger(dataPics.filter((pic, i) => i !== index));
   };
 
   const handleAddPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +52,7 @@ const PictureList = (props: { imgs: string[] }) => {
         return URL.createObjectURL(file);
       });
       setDataPics((prevImg) => prevImg.concat(imgArr));
+      props.stateChanger(dataPics.concat(imgArr));
     }
   };
   const fileInputRef = useRef<HTMLInputElement>(null);

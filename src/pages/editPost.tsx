@@ -249,7 +249,7 @@ const createPost = () => {
           <Grid item>
             <Typography variant="h5">Image(Optional)</Typography>
             <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-              <PictureList imgs={images} />
+              <PictureList imgs={images} stateChanger={setImages} />
             </Stack>
           </Grid>
         </div>
