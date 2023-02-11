@@ -73,7 +73,7 @@ export default function Home() {
     }
 
     getPostData();
-  }, [userStatus.user]);
+  }, [userStatus.user, supabaseClient]);
 
   if (posts == null) return <p>Loading All Post...</p>;
   return (
@@ -92,8 +92,8 @@ export default function Home() {
         <Typography variant="h1">My post</Typography>
 
         {posts.map((item, index) => (
-          <Box width="80vw">
-            <PostCard key={index} post={item} handleDeletePost={handleDeletePost} />
+          <Box width="80vw" key={index}>
+            <PostCard post={item} handleDeletePost={handleDeletePost} />
           </Box>
         ))}
       </Stack>
