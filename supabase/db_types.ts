@@ -304,6 +304,16 @@ export interface Database {
           name: string
           post_id: number
         }
+      },
+      add_user: {
+        Args: {
+          user_id: string,
+          username: string,
+          password: string,
+          email: string,
+          birthdate: string,
+          sex: string
+        }
       }
     }
     Enums: {
