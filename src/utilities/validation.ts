@@ -32,14 +32,40 @@ export function validateTextField(
 export function validatePasswordTextField(
   input: string,
   minChar: number = 0,
-  maxChar: number = 2000
+  maxChar: number = 2000,
+  isValid: boolean = true
 ): validation {
-  if (input.length < minChar) {
-    return { msg: "ช่องนี้ต้องมีตัวอักษรอย่างน้อย 6 ตัว", err: true };
+  if (isValid) {
+    if (input.length < minChar) {
+      return { msg: "ช่องนี้ต้องมีตัวอักษรอย่างน้อย 6 ตัว", err: true };
+    }
+    if (input.length > maxChar) {
+      return { msg: `ช่องนี้มีตัวอักษรได้ไม่เกิน ${maxChar} ตัว`, err: true };
+    }
+  } else {
+    return { msg: "", err: true };
   }
-  if (input.length > maxChar) {
-    return { msg: `ช่องนี้มีตัวอักษรได้ไม่เกิน ${maxChar} ตัว`, err: true };
+
+  return { msg: "", err: false };
+}
+
+export function validateConfirmPasswordTextField(
+  input: string,
+  minChar: number = 0,
+  maxChar: number = 2000,
+  isValid: boolean = true
+): validation {
+  if (isValid) {
+    if (input.length < minChar) {
+      return { msg: "ช่องนี้ต้องมีตัวอักษรอย่างน้อย 6 ตัว", err: true };
+    }
+    if (input.length > maxChar) {
+      return { msg: `ช่องนี้มีตัวอักษรได้ไม่เกิน ${maxChar} ตัว`, err: true };
+    }
+  } else {
+    return { msg: "Password และ Confirm Password ต้องเหมือนกัน", err: true };
   }
+
   return { msg: "", err: false };
 }
 

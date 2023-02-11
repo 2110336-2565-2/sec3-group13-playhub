@@ -8,7 +8,6 @@ import {
   SelectChangeEvent,
   Grid,
   InputAdornment,
-  FormHelperText,
 } from "@mui/material";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Logo from "@/components/public/Logo";
@@ -23,19 +22,20 @@ import {
   validateEmail,
   validateTextField,
   validatePasswordTextField,
+  validateConfirmPasswordTextField,
 } from "@/utilities/validation";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 export default function Home() {
   const [displayName, setDisplayName] = React.useState<string>("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [confirmPassword, setConfirmPassword] = React.useState("");
-  const [isValidConfirmPassword, setIsValidConfirmPassword] = React.useState(true);
+  const [email, setEmail] = React.useState<string>("");
+  const [password, setPassword] = React.useState<string>("");
+  const [confirmPassword, setConfirmPassword] = React.useState<string>("");
+  const [isValidConfirmPassword, setIsValidConfirmPassword] = React.useState<boolean>(true);
   const [gender, setGender] = React.useState<string>("");
   const [birthDate, setBirthDate] = React.useState<Dayjs | null>(null);
-  const [isSubmit, setIsSubmit] = React.useState(false);
+  const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
 
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -71,12 +71,25 @@ export default function Home() {
 
   const displayNameErr: validation = validateTextField(displayName, 1, 100);
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validatePasswordTextField(password, 6, 100);
-  const confirmPasswordErr: validation = validatePasswordTextField(confirmPassword, 6, 100);
+  const passwordErr: validation = validatePasswordTextField(
+    password,
+    6,
+    100,
+    isValidConfirmPassword
+  );
+  const confirmPasswordErr: validation = validateConfirmPasswordTextField(
+    confirmPassword,
+    6,
+    100,
+    isValidConfirmPassword
+  );
 
   const createAccountBtnOnClick = async () => {
     setIsSubmit(true);
-    setIsValidConfirmPassword(password === confirmPassword);
+    setIsValidConfirmPassword(true);
+    if (password.length > 5 && confirmPassword.length > 5) {
+      setIsValidConfirmPassword(password === confirmPassword);
+    }
     const readyToCreate: boolean = !(
       displayNameErr.err ||
       emailErr.err ||
@@ -141,11 +154,6 @@ export default function Home() {
           isErr={isSubmit && confirmPasswordErr.err}
           errMsg={confirmPasswordErr.msg}
         />
-        <Box sx={helperText} style={{ width: "50vw" }}>
-          {!isValidConfirmPassword && (
-            <FormHelperText error>{"Password และ Confirm Password ต้องเหมือนกัน"}</FormHelperText>
-          )}
-        </Box>
       </Box>
 
       <Grid item>
