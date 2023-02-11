@@ -36,7 +36,7 @@ import { userContext } from "supabase/user_context";
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
-  
+
   const avatar = { width: 200, height: 200 };
   const overlayIcon = {
     position: "absolute",
@@ -66,13 +66,13 @@ export default function Home() {
 
   const displayNameErr: validation = validateTextField(
     displayName,
-    1,
-    CHAR_LIMIT.DISPLAY_NAME_LIMIT
+    CHAR_LIMIT.MIN_DISPLAY_NAME,
+    CHAR_LIMIT.MAX_DISPLAY_NAME
   );
   const descriptionErr: validation = validateTextField(
     description,
-    0,
-    CHAR_LIMIT.DESCRIPTION_LIMIT
+    CHAR_LIMIT.MIN_DESCRIPTION,
+    CHAR_LIMIT.MAX_DESCRIPTION
   );
 
   const getProfile = async (User: User) => {
@@ -95,7 +95,6 @@ export default function Home() {
       //send to API
       const timeStamp = Date.now();
       if (fileImage) {
-
         if (userStatus.user.image) {
           const deleteImageResult = await supabaseClient.storage
             .from("profileimage")
@@ -206,7 +205,7 @@ export default function Home() {
         style={{ minHeight: "80vh", marginBottom: "10vh" }}
       >
         <Avatar alt="Anya" sx={avatar}>
-          { image &&
+          {image && (
             <Image
               src={image}
               alt="Upload avatar"
@@ -214,7 +213,7 @@ export default function Home() {
               height={200}
               style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
             />
-          }
+          )}
           <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
             <input onChange={handleImageChange} hidden accept="image/*" type="file" />
             <CameraAltIcon sx={{ fontSize: "100px" }} />

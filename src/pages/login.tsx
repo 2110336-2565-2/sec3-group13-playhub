@@ -19,6 +19,7 @@ import CommonTextField from "@/components/public/CommonTextField";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Loading from "@/components/public/Loading";
+import { CHAR_LIMIT } from "enum/inputLimit";
 
 // style
 const login_layout = {
@@ -40,7 +41,7 @@ export default function Home() {
 
   // error about variables
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validateTextField(password, 1);
+  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
   const isSupabaseErr: boolean =
     (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg: string = isLoginCredErr

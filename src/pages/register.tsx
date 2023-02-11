@@ -1,19 +1,23 @@
 import React, { useContext } from "react";
-import { Box, Stack, Button, SelectChangeEvent, Grid } from "@mui/material";
-import PasswordTextFeild from "@/components/public/PasswordTextField";
-import Logo from "@/components/public/Logo";
-import { Gender } from "enum/gender";
+import { useRouter } from "next/router";
 import { Dayjs } from "dayjs";
-import CommonTextField from "@/components/public/CommonTextField";
-import CommonDropdown from "@/components/public/CommonDropdown";
-import { validation } from "@/types/Validation";
-import { validateEmail, validateTextField } from "@/utilities/validation";
-import CommonDatePicker from "@/components/public/CommonDatePicker";
+import { Box, Stack, Button, SelectChangeEvent, Grid } from "@mui/material";
+
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
+
 import Loading from "@/components/public/Loading";
-import { useRouter } from "next/router";
+import Logo from "@/components/public/Logo";
+import CommonTextField from "@/components/public/CommonTextField";
+import PasswordTextFeild from "@/components/public/PasswordTextField";
+import CommonDropdown from "@/components/public/CommonDropdown";
+import CommonDatePicker from "@/components/public/CommonDatePicker";
+import { validateEmail, validateTextField } from "@/utilities/validation";
+
+import { Gender } from "enum/gender";
+import { CHAR_LIMIT } from "enum/inputLimit";
+import { validation } from "@/types/Validation";
 
 // style
 const register_layout = {
@@ -34,10 +38,17 @@ export default function Home() {
   const [birthDate, setBirthDate] = React.useState<Dayjs | null>(null);
 
   // error about variables
-  const displayNameErr: validation = validateTextField(displayName, 1, 100);
+  const displayNameErr: validation = validateTextField(
+    displayName,
+    CHAR_LIMIT.MIN_DISPLAY_NAME,
+    CHAR_LIMIT.MAX_DISPLAY_NAME
+  );
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validateTextField(password, 6, 100);
-  const confirmPasswordErr: validation = validateTextField(confirmPassword, 6, 100);
+  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
+  const confirmPasswordErr: validation = validateTextField(
+    confirmPassword,
+    CHAR_LIMIT.MIN_PASSWORD
+  );
   const isValidConfirmPassword: boolean =
     !(passwordErr.err || confirmPasswordErr.err) && password === confirmPassword;
   const [isEmptyGender, setIsEmptyGender] = React.useState<boolean>(true);
@@ -117,8 +128,8 @@ export default function Home() {
     }
   };
 
-  // if (userStatus.isLoading) return <Loading isLoading />; //temporary
-  // if (userStatus.user) return <p>logged in</p>; //temporary
+  if (userStatus.isLoading) return <Loading isLoading />; //temporary
+  if (userStatus.user) return <p>logged in</p>; //temporary
 
   return (
     <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
