@@ -26,10 +26,12 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import Loading from "@/components/public/Loading";
+import { useRouter } from "next/router";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
+  const router = useRouter();
   const [displayName, setDisplayName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
   const [password, setPassword] = React.useState<string>("");
@@ -112,8 +114,7 @@ export default function Home() {
         console.log(addUserData.error)
         return
       }
-      console.log("sign up done")
-      // route to somewhere
+      router.push("/login");
     }
   };
 
