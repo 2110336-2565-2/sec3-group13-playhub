@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import { useState, useRef } from "react";
 import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
+
+type props = {
+  imgs: string[];
+  stateChanger: React.Dispatch<React.SetStateAction<string[]>>;
+};
 const cancleDesign = {
   position: "absolute",
   top: 0,
@@ -21,30 +25,40 @@ const addBoxDesign = {
   boxshadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
 };
 
-const PictureList = () => {
-  const [dataPics, setDataPics] = useState([]);
-
-  const deletePicture = (index) => {
+const PictureList = (props: props) => {
+  const [dataPics, setDataPics] = useState<string[]>([]);
+  useEffect(() => {
+    setDataPics(props.imgs);
+  }, [props.imgs]);
+  const deletePicture = (index: number) => {
     setDataPics((prevPics) => prevPics.filter((pic, i) => i !== index));
+    props.stateChanger(dataPics.filter((pic, i) => i !== index));
   };
 
-  const handleAddPicture = (e) => {
-    const selectedFiles = e.target.files;
-    const selfilesarr = Array.from(selectedFiles);
+  const handleAddPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const selectedFiles = e.target.files;
+      console.log(URL.createObjectURL(selectedFiles[0]));
+      const selfilesarr = Array.from(selectedFiles).filter((file) =>
+        file.type.startsWith("image/")
+      );
 
-    if (selfilesarr.length + dataPics.length > 3) {
-      alert("more than 3");
-      return;
+      if (selfilesarr.length + dataPics.length > 3) {
+        alert("more than 3");
+        return;
+      }
+
+      const imgArr = selfilesarr.map((file) => {
+        return URL.createObjectURL(file);
+      });
+      setDataPics((prevImg) => prevImg.concat(imgArr));
+      props.stateChanger(dataPics.concat(imgArr));
     }
-
-    const imgArr = selfilesarr.map((file) => {
-      return URL.createObjectURL(file);
-    });
-    setDataPics((prevImg) => prevImg.concat(imgArr));
   };
-  const fileInputRef = useRef(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleClick = () => {
+    if (!fileInputRef || !fileInputRef.current) return;
     fileInputRef.current.click();
   };
 
