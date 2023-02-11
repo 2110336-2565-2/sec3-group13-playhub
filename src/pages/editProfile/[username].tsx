@@ -236,7 +236,7 @@ export default function Home() {
             header={editProfileHeader.displayName}
             value={displayName}
             handleValueChange={handleDisplayNameChange}
-            char_limit={CHAR_LIMIT.DISPLAY_NAME_LIMIT}
+            char_limit={CHAR_LIMIT.MAX_DISPLAY_NAME}
             isErr={isPressSubmit && displayNameErr.err}
             errMsg={displayNameErr.msg}
           />
@@ -246,7 +246,7 @@ export default function Home() {
             value={description}
             handleValueChange={handleDescChange}
             isMultiLine={true}
-            char_limit={CHAR_LIMIT.DESCRIPTION_LIMIT}
+            char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
             isErr={isPressSubmit && descriptionErr.err}
             errMsg={descriptionErr.msg}
           />
