@@ -36,7 +36,7 @@ import { userContext } from "supabase/user_context";
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
-
+  
   const avatar = { width: 200, height: 200 };
   const overlayIcon = {
     position: "absolute",
@@ -53,8 +53,8 @@ export default function Home() {
   const [displayName, setDisplayName] = React.useState<string>("");
   const [gender, setGender] = React.useState<string>("");
   const [description, setDescription] = React.useState<string>("");
-  const [image, setImage] = React.useState<string>("");
-  const [originalImage, setOriginalImage] = React.useState<string>("");
+  const [image, setImage] = React.useState<string | null>(null);
+  const [originalImage, setOriginalImage] = React.useState<string | null>(null);
 
   const [isPressSubmit, setIsPressSubmit] = React.useState<boolean>(false);
   const [fileImage, setFileImage] = React.useState<File | null>();
@@ -95,12 +95,15 @@ export default function Home() {
       //send to API
       const timeStamp = Date.now();
       if (fileImage) {
-        const deleteImageResult = await supabaseClient.storage
-          .from("profileimage")
-          .remove([userStatus.user.image.split("/").at(-1) as string]);
-        if (deleteImageResult.error != null) {
-          console.log(deleteImageResult.error);
-          return;
+
+        if (userStatus.user.image) {
+          const deleteImageResult = await supabaseClient.storage
+            .from("profileimage")
+            .remove([userStatus.user.image.split("/").at(-1) as string]);
+          if (deleteImageResult.error != null) {
+            console.log(deleteImageResult.error);
+            return;
+          }
         }
 
         const uploadImageResult = await supabaseClient.storage
@@ -203,13 +206,15 @@ export default function Home() {
         style={{ minHeight: "80vh", marginBottom: "10vh" }}
       >
         <Avatar alt="Anya" sx={avatar}>
-          <Image
-            src={image}
-            alt="Upload avatar"
-            width={200}
-            height={200}
-            style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
-          />
+          { image &&
+            <Image
+              src={image}
+              alt="Upload avatar"
+              width={200}
+              height={200}
+              style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
+            />
+          }
           <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
             <input onChange={handleImageChange} hidden accept="image/*" type="file" />
             <CameraAltIcon sx={{ fontSize: "100px" }} />
