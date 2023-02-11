@@ -100,6 +100,18 @@ export default function Home() {
         console.log(signUpResult.error);
         return;
       }
+      const addUserData = await supabaseClient.rpc("add_user", {
+        user_id: signUpResult.data.user?.id,
+        username: displayName,
+        password: password,
+        email: email,
+        birthdate: birthDate,
+        sex: gender
+      })
+      if (addUserData.error) {
+        console.log(addUserData.error)
+        return
+      }
       console.log("sign up done")
       // route to somewhere
     }
