@@ -189,7 +189,7 @@ export default function Home() {
                 onChange={(newBirthDate) => {
                   setBirthDate(newBirthDate);
                 }}
-                renderInput={(params) => <TextField {...params} fullWidth/>}
+                renderInput={(params) => <TextField {...params} fullWidth size="small"/>}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
