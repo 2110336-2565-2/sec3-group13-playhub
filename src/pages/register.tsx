@@ -161,7 +161,7 @@ export default function Home() {
         />
       </Box>
 
-      <Grid item>
+      <Grid item width={"50vw"}>
         <Grid container spacing={3} justifyContent="left">
           <Grid item xs={6}>
             <CommonDropdown
@@ -189,7 +189,7 @@ export default function Home() {
                 onChange={(newBirthDate) => {
                   setBirthDate(newBirthDate);
                 }}
-                renderInput={(params) => <TextField {...params} />}
+                renderInput={(params) => <TextField {...params} fullWidth/>}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
