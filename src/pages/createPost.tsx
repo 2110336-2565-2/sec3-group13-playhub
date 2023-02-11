@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "@/components/public/Navbar";
 import { useState } from "react";
 import {
@@ -43,7 +43,8 @@ const createPost = () => {
     ownerProfilePic: "",
     tags: [Tags[0], Tags[1]],
     description: "this is description",
-    image: [],
+    image: ["https://picsum.photos/id/12/200", "https://picsum.photos/id/13/200"],
+
     location: "this is location",
     startDateTime: "2022-01-01",
     endDateTime: "2022-01-02",
@@ -88,6 +89,10 @@ const createPost = () => {
     initialValue.endDateTime === "" ? null : dayjs(initialValue.endDateTime)
   );
   const [selectedTags, setSelectedTags] = useState(initialValue.tags);
+  const [images, setImages] = useState<string[]>([]);
+  useEffect(() => {
+    setImages(dummyEditFrom.image);
+  }, [dummyEditFrom.image]);
 
   const handleAddTag = (event: any, tag: any) => {
     if (tag.length <= 5) {
@@ -263,9 +268,8 @@ const createPost = () => {
             Description
           </Typography>
           <TextField
-          defaultValue={initialValue.description}
+            defaultValue={initialValue.description}
             variant="outlined"
-
             fullWidth
             multiline
             rows={4}
@@ -284,7 +288,7 @@ const createPost = () => {
           </Typography>
 
           <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-            <PictureList />
+            <PictureList imgs={images} stateChanger={setImages} />
           </Stack>
         </Box>
         <Box /*sx={createPostLayout} */ justifyContent="center" alignItems="center">
