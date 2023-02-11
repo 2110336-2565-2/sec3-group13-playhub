@@ -248,7 +248,63 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_all_user_post: {
+        Args: {
+          target_id: string
+        }
+        Returns: {
+          post_id: number
+          user_id: string
+          username: string
+          title: string
+          description: string
+          profile_image: string
+          start_time: string
+          end_time: string
+          location: string
+        }
+      },
+      get_user_data: {
+        Args: {
+          target_id: string
+        }
+        Returns: {
+          user_id: string
+          username: string
+          name: string
+          sex: string
+          birthdate: string
+          description: string
+          image: string
+          email: string
+        }
+      },
+      get_user_data_from_username: {
+        Args: {
+          target_username: string
+        }
+        Returns: {
+          user_id: string
+          username: string
+          name: string
+          sex: string
+          birthdate: string
+          description: string
+          image: string
+          email: string
+        }
+      },
+      delete_post_by_id: {
+        Args: {
+          target_id: number
+        }
+      },
+      get_all_post_tag: {
+        Returns: {
+          name: string
+          post_id: number
+        }
+      }
     }
     Enums: {
       [_ in never]: never

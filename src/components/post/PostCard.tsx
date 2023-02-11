@@ -28,6 +28,9 @@ import { IconButtonProps } from "@mui/material/IconButton";
 import DeletePostDialog from "@/components/post/DeletePostDialog";
 
 import { Post } from "../../types/Post";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
 }
@@ -42,33 +45,36 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-// mock data
-// const tmpPost: Post = {
-//   title: "ชวนไปดูแงว",
-//   ownerName: "น้องออม",
-//   ownerProfilePic: "/images/aom.jpg",
-//   tags: ["A", "B"],
-//   description: "ฟกกฟหกฟหกฟกฟกฟกหปฉผกอหก\nฟหกฟก่ฟสรกฟสกร่ฟก\nadadad",
-//   image: ["/images/avatar.png", "/images/avatar.png", "/images/aom.jpg"],
-//   location: "หอใน",
-//   time: "2/4/2023",
-//   // there are more data but omitted for now
-// };
 const owner: boolean = true;
 
-export default function PostCard(props: Post) {
-  const [hiddenPostDetail, setHiddenPostDetail] = React.useState(true);
-  const [openDeletePostModal, setOpenDeletePostModal] = React.useState(false);
-  const [openSnackBar, setOpenSnackBar] = React.useState(false);
+type props = {
+  post: Post;
+  handleDeletePost: (toDeletePost: Post) => void;
+};
 
-  const handleOpenModal = () => setOpenDeletePostModal(true);
-  const handleCloseModal = () => setOpenDeletePostModal(false);
-  const handleExpandDetail = () => setHiddenPostDetail(!hiddenPostDetail);
+export default function PostCard(props: props) {
+  const [openDeletePostModal, setOpenDeletePostModal] = React.useState<boolean>(false);
+  const [hiddenPostDetail, setHiddenPostDetail] = React.useState<boolean>(true);
+  const [openSnackBar, setOpenSnackBar] = React.useState<boolean>(false);
 
-  function handleDeletePost() {
-    console.log("The post is deleted");
-    handleCloseModal();
-    // delete post end-point
+  const supabaseClient = useSupabaseClient<Database>();
+
+  const handleOpenDeletePostModal = (): void => setOpenDeletePostModal(true);
+  const handleCloseDeletePostModal = (): void => setOpenDeletePostModal(false);
+  const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
+
+  async function handleDelete() {
+    const deletePostResult = await supabaseClient.rpc("delete_post_by_id", {
+      target_id: props.post.post_id,
+    });
+
+    if (deletePostResult.error) {
+      console.error(deletePostResult.error);
+    } else {
+      props.handleDeletePost(props.post);
+    }
+
+    handleCloseDeletePostModal();
   }
 
   function handleEditPost() {
@@ -87,16 +93,17 @@ export default function PostCard(props: Post) {
           margin: "40px",
         }}
       >
+        {/* Post Card Header */}
         <CardHeader
           avatar={
             <Avatar
               sx={{ width: 50, height: 50 }}
               alt="Profile picture"
-              src={props.ownerProfilePic}
+              src={props.post.ownerProfilePic}
             />
           }
-          title={props.title}
-          subheader={props.ownerName}
+          title={props.post.title}
+          subheader={props.post.ownerName}
           titleTypographyProps={{ variant: "h5" }}
           subheaderTypographyProps={{ variant: "h6" }}
           action={
@@ -106,11 +113,7 @@ export default function PostCard(props: Post) {
                   <IconButton size="large" onClick={handleEditPost}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton
-                    size="large"
-                    color="error"
-                    onClick={handleOpenModal}
-                  >
+                  <IconButton size="large" color="error" onClick={handleOpenDeletePostModal}>
                     <DeleteOutlineIcon />
                   </IconButton>
                 </>
@@ -118,24 +121,20 @@ export default function PostCard(props: Post) {
             </>
           }
         />
-        <CardContent style={{ padding: "0px 16px", marginLeft: 50 }}>
+        <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
           {/* post preview details start here */}
-          <Stack
-            direction={!hiddenPostDetail ? "row" : "column"}
-            spacing={2}
-            marginBottom={2}
-          >
+          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>{props.location}</span>
+              <span style={{ marginLeft: 8 }}>{props.post.location}</span>
             </Typography>
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>{props.time}</span>
+              <span style={{ marginLeft: 8 }}>{props.post.time}</span>
             </Typography>
           </Stack>
           <Grid container spacing={1}>
-            {props.tags.map((e) => (
+            {props.post.tags.map((e) => (
               <Grid item>
                 <Chip
                   label={e}
@@ -152,13 +151,13 @@ export default function PostCard(props: Post) {
           </Grid>
 
           {/* post preview details end here */}
-          <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2 }}>
+          <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2, marginBottom: 1 }}>
             {/* post hidden details start here */}
-            {props.description.split("\n").map((row) => (
+            {props.post.description.split("\n").map((row) => (
               <Typography key={row}>{row}</Typography>
             ))}
             <Grid container spacing={2}>
-              {props.image.map((e) => (
+              {props.post.image.map((e) => (
                 <Grid item>
                   <Image src={e} alt="location" width={300} height={350} />
                 </Grid>
@@ -167,6 +166,8 @@ export default function PostCard(props: Post) {
             {/* post hidden details end here */}
           </Collapse>
         </CardContent>
+
+        {/* Post Card Footer */}
         <CardActions style={{ padding: "4px 8px" }}>
           <Box sx={{ flexGrow: 1 }}></Box>
 
@@ -182,10 +183,17 @@ export default function PostCard(props: Post) {
         </CardActions>
       </Card>
 
+      {/* Comfirm Delete Dialog */}
       <DeletePostDialog
         openModal={openDeletePostModal}
-        handleCloseModal={handleCloseModal}
-        deletePost={handleDeletePost}
+        handleCloseModal={handleCloseDeletePostModal}
+        deletePost={handleDelete}
+      />
+      <Snackbar
+        open={openSnackBar}
+        autoHideDuration={5000}
+        message="ได้เวลาสนุกแล้วสิ"
+        onClose={() => setOpenSnackBar(false)}
       />
       <Snackbar
         open={openSnackBar}

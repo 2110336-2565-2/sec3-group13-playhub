@@ -34,24 +34,20 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
 
   useEffect(() => {
-    async function getTargetUserData () {
-      if (!userStatus.user || !router.query.username) return;
-      const getUserDataResult = await supabaseClient.from("User")
-      .select("username,name,sex,birthdate,description,image,email, user_id")
-      .eq('username', router.query.username);
-      if (getUserDataResult.error) {
-        console.log(getUserDataResult.error)
-        return
+    async function getTargetUserData() {
+      if (!userStatus.user || !router.query.username || targetUserData) return;
+      const getUserDataResult = await supabaseClient.rpc("get_user_data_from_username", {
+        target_username: router.query.username as string,
+      });
+      if (getUserDataResult.error || getUserDataResult.count == 0) {
+        console.log(getUserDataResult.error ? getUserDataResult.error : "no user");
+        return;
       }
-      if (getUserDataResult.count == 0) {
-        console.log("no user with the id")
-        return
-      }
-      setTargetUserData(getUserDataResult.data[0])
+      setTargetUserData(getUserDataResult.data[0]);
     }
 
     getTargetUserData();
-  }, [router.query.username, supabaseClient, userStatus.user])
+  }, [router.query.username, supabaseClient, userStatus.user, targetUserData]);
 
   function handleEditProfile(): void {
     router.push(PagePaths.editProfile + "/" + userStatus.user?.username);
@@ -60,7 +56,7 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading isLoading={true} />; //temporary display
   if (!userStatus.user) return <p>log in first</p>; // temporary display
-  if (!targetUserData) return <p>getting user data...</p> // temporary display
+  if (!targetUserData) return <p>getting user data...</p>; // temporary display
   return (
     <>
       <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
@@ -97,13 +93,16 @@ export default function Home() {
             />
             <Chip icon={<CakeIcon />} label={targetUserData.birthdate} />
           </Stack>
-          <Typography
-            variant="body1"
-            align="center"
-            sx={{ ...profile_layout, wordBreak: "break-all" }}
-          >
-            {targetUserData.description}
-          </Typography>
+
+          {targetUserData.description.split("\n").map((row) => (
+            <Typography
+              variant="body1"
+              sx={{ ...profile_layout, wordBreak: "break-word" }}
+              key={row}
+            >
+              {row}
+            </Typography>
+          ))}
           {owner && (
             <IconButton onClick={handleEditProfile}>
               <EditIcon />

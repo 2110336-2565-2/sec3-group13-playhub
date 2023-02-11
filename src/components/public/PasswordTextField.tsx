@@ -7,7 +7,8 @@ import {
   FormHelperText,
   Typography,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 type props = {
   header?: string;
@@ -46,7 +47,7 @@ export default function PasswordTextFeild(props: props) {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton onClick={handleClickShowPassword} edge="end">
-                {showPassword ? <VisibilityOff /> : <Visibility />}
+                {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
               </IconButton>
             </InputAdornment>
           ),
