@@ -88,7 +88,6 @@ export default function PostCard(props: props) {
         sx={{
           border: "solid 4px",
           borderRadius: "16px",
-          margin: "40px",
         }}
       >
         {/* Post Card Header */}

@@ -5,7 +5,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { useContext, useEffect, useState } from "react";
 import { userContext } from "supabase/user_context";
-import { Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -51,9 +51,7 @@ export default function Home() {
         const tagName = postTagList.map((data) => data.name);
 
         // extract image from post data
-        const postLocationImgList = getPostLocationImgResult.data.filter(
-          (post) => post.post_id == data.post_id
-        );
+        const postLocationImgList = getPostLocationImgResult.data.filter((post) => post.post_id == data.post_id);
         const imageURL = postLocationImgList.map((data) => data.image);
 
         return {
@@ -79,18 +77,18 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <div
-        style={{ display: "flex", alignItems: "center", width: "100%", flexDirection: "column" }}
+      <Stack
+        spacing="40px"
+        sx={{ display: "flex", alignItems: "center", width: "100%", flexDirection: "column", padding: "30px" }}
       >
-        <Typography variant="h1" sx={{ marginTop: "30px" }}>
-          My post
-        </Typography>
-        <Box sx={{ width: "80vw" }}>
-          {posts.map((item, index) => (
+        <Typography variant="h1">My post</Typography>
+
+        {posts.map((item, index) => (
+          <Box width="80vw">
             <PostCard key={index} post={item} handleDeletePost={handleDeletePost} />
-          ))}
-        </Box>
-      </div>
+          </Box>
+        ))}
+      </Stack>
     </>
   );
 }
