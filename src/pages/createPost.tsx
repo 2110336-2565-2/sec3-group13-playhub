@@ -102,12 +102,24 @@ const createPost = () => {
   const [isLocationErr, setIsLocationErr] = React.useState(false);
   const [isStartDateErr, setIsStartDateErr] = React.useState(false);
   const [isEndDateErr, setIsEndDateErr] = React.useState(false);
-  const [isTagErr, setIsTagErr] = React.useState(false);
+  
   const [isDescErr, setIsDescErr] = React.useState(false);
   const [isImgErrsetis, setIsImgErrsetis] = React.useState(false);*/
 
   const titleErrMsg = message.checkTitle(title, 1);
   const isTitleErr = titleErrMsg !== "";
+
+  const descErrMsg = message.checkDesc(desc, 1);
+  const isDescErrMsg = descErrMsg !== "";
+
+  const tagErrMsg = message.checkTag(selectedTags, 1, 5);
+  const isTagErr = tagErrMsg !== "";
+
+  const startDateErrMsg = message.checkStartDate(startDate);
+  const isStartDateErr = startDateErrMsg !== "";
+
+  const endDateErrMsg = message.checkEndDate(startDate, endDate);
+  const isEndDateErr = endDateErrMsg !== "";
 
   /*const locationErrMsg = message.checkLocation(location, 1);
   const isLocationErr = locationErrMsg.length < 1;
@@ -125,26 +137,35 @@ const createPost = () => {
     setIsSubmit(false);
   }
 
+  function handleDescChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void {
+    setDesc(event.target.value);
+    setIsSubmit(false);
+  }
+
   const handleAddTag = (event: any, tag: any) => {
     if (tag.length <= 5) {
-      console.log(tag.length);
       setSelectedTags(tag);
     }
   };
 
   const handleStartDate = (newValue: Dayjs | null) => {
-    if (newValue && newValue.isBefore(dayjs())) {
-      alert("Start date must be in the future.");
-    } else {
+    if (!isStartDateErr) {
       setStartDate(newValue);
       setIsSubmit(false);
     }
   };
   const handleEndDate = (newValue: Dayjs | null) => {
-    if (newValue && newValue.isBefore(startDate)) {
+    /*if (newValue && newValue.isBefore(startDate)) {
       console.error("End date cannot be before Start Date.");
     } else {
       setEndDate(newValue);
+    }*/
+
+    if (!isEndDateErr) {
+      setStartDate(newValue);
+      setIsSubmit(false);
     }
   };
   async function handleSubmit() {
@@ -228,9 +249,9 @@ const createPost = () => {
                   }}
                 />
               </LocalizationProvider>
-              {/*isSubmit && isStartDateErr && (
+              {isStartDateErr && (
                 <p style={{ color: "red" }}>{startDateErrMsg}</p>
-              )*/}
+              )}
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body1">End</Typography>
@@ -250,9 +271,7 @@ const createPost = () => {
                   }}
                 />
               </LocalizationProvider>
-              {/*isSubmit && isEndDateErr && (
-                <p style={{ color: "red" }}>{endDateErrMsg}</p>
-              )*/}
+              {isEndDateErr && <p style={{ color: "red" }}>{endDateErrMsg}</p>}
               <div style={helperTextBox}>
                 <FormHelperText sx={helperTextError}>
                   ช่องนี้ไม่สามารถเว้นว่างได้
@@ -298,6 +317,7 @@ const createPost = () => {
               />
             )}
           />
+          {isSubmit && isTagErr && <p style={{ color: "red" }}>{tagErrMsg}</p>}
         </Box>
         <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
@@ -311,12 +331,17 @@ const createPost = () => {
             rows={4}
             size="medium"
             placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
+            value={desc}
+            onChange={handleDescChange}
+            inputProps={{ maxLength: 100 }}
           />
+          {isSubmit && isDescErrMsg && (
+            <Box display="flex">
+              <FormHelperText error>{descErrMsg}</FormHelperText>
+            </Box>
+          )}
           <div style={helperTextBox}>
-            <FormHelperText sx={helperTextError}>
-              ช่องนี้ไม่สามารถเว้นว่างได้
-            </FormHelperText>
-            <FormHelperText sx={helperText}>0/500</FormHelperText>
+            <FormHelperText sx={helperText}>{desc.length}/500</FormHelperText>
           </div>
         </Box>
         <Box sx={createPostLayout}>
