@@ -23,7 +23,9 @@ import PictureList from "@/components/createPost/pictureList";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import GoogleMaps from "@/components/createPost/searchMaps";
 import { emptyPost, Post } from "@/types/Post";
-import * as design from "@/components/createPost/createPostDesign";
+import * as message from "@/utilities/createPostVal";
+
+//start function
 const createPost = () => {
   const Tags = [
     "Poseidon entertainment complex",
@@ -49,11 +51,42 @@ const createPost = () => {
     ],
 
     location: "this is location",
-    startDateTime: "2022-01-01",
-    endDateTime: "2022-01-02",
+    startDateTime: "2023-03-01",
+    endDateTime: "2023-04-02",
   };
-  const initialValue: Post = true ? dummyEditFrom : emptyPost;
 
+  const initialValue: Post = true ? dummyEditFrom : emptyPost;
+  const error = "#ff0000";
+  const createPostLayout = {
+    width: "35vw",
+    margin: "2vh 0 0 0",
+  };
+  const helperTextBox = {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+  };
+  const helperTextError = {
+    textAlign: "start",
+    gridColumn: 1,
+    color: error,
+    display: "none",
+  };
+  const helperText = {
+    textAlign: "end",
+    gridColumn: 2,
+  };
+  const fontDesign = {
+    fontstyle: "normal",
+    fontweight: "700",
+    fontsize: "20px",
+    lineheight: "24px",
+    letterspacing: "0.15px",
+    color: "#000000",
+  };
+  const [isSubmit, setIsSubmit] = React.useState(false);
+
+  const [title, setTitle] = React.useState("");
+  const [location, setLocation] = React.useState("");
   const [startDate, setStartDate] = React.useState<Dayjs | null>(
     dayjs(initialValue.startDateTime === "" ? null : initialValue.startDateTime)
   );
@@ -61,19 +94,36 @@ const createPost = () => {
     initialValue.endDateTime === "" ? null : dayjs(initialValue.endDateTime)
   );
   const [selectedTags, setSelectedTags] = useState(initialValue.tags);
+  const [desc, setDesc] = React.useState("");
   const [images, setImages] = useState<string[]>([]);
 
-  const [isTitleErr, setIsTitleErr] = React.useState(false);
+  //const [isTitleErr, setIsTitleErr] = React.useState(false);
+  /*
   const [isLocationErr, setIsLocationErr] = React.useState(false);
   const [isStartDateErr, setIsStartDateErr] = React.useState(false);
   const [isEndDateErr, setIsEndDateErr] = React.useState(false);
   const [isTagErr, setIsTagErr] = React.useState(false);
   const [isDescErr, setIsDescErr] = React.useState(false);
-  const [isImgErrsetis, setIsImgErrsetis] = React.useState(false);
+  const [isImgErrsetis, setIsImgErrsetis] = React.useState(false);*/
+
+  const titleErrMsg = message.checkTitle(title, 1);
+  const isTitleErr = titleErrMsg !== "";
+
+  /*const locationErrMsg = message.checkLocation(location, 1);
+  const isLocationErr = locationErrMsg.length < 1;
+
+  const startDateErrMsg = message.checkStartDate(startDate);
+  const isStartDateErr = startDateErrMsg !== "";*/
 
   useEffect(() => {
     setImages(initialValue.image);
   }, []);
+  function handleTitleChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void {
+    setTitle(event.target.value);
+    setIsSubmit(false);
+  }
 
   const handleAddTag = (event: any, tag: any) => {
     if (tag.length <= 5) {
@@ -84,9 +134,10 @@ const createPost = () => {
 
   const handleStartDate = (newValue: Dayjs | null) => {
     if (newValue && newValue.isBefore(dayjs())) {
-      console.error("Start date must be in the future.");
+      alert("Start date must be in the future.");
     } else {
       setStartDate(newValue);
+      setIsSubmit(false);
     }
   };
   const handleEndDate = (newValue: Dayjs | null) => {
@@ -96,6 +147,9 @@ const createPost = () => {
       setEndDate(newValue);
     }
   };
+  async function handleSubmit() {
+    setIsSubmit(true);
+  }
 
   const Location = [
     "Poseidon entertainment complex",
@@ -115,46 +169,43 @@ const createPost = () => {
         style={{ minHeight: "100vh" }}
         margin="0 0 2vh 0"
       >
-        <Box sx={design.createPostLayout}>
+        <Box sx={createPostLayout}>
           <Typography variant="h1" component="h2">
             Create post
           </Typography>
         </Box>
-        <title></title>
+        <Box sx={createPostLayout}>
+          <Typography variant="h5" margin="0 0 1vh 0">
+            Title
+          </Typography>
+          <TextField
+            //defaultValue={initialValue.title}
+            variant="outlined"
+            fullWidth
+            placeholder="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
+            value={title}
+            onChange={handleTitleChange}
+            inputProps={{ maxLength: 100 }}
+          />
+          {isSubmit && isTitleErr && (
+            <Box display="flex">
+              <FormHelperText error>{titleErrMsg}</FormHelperText>
+            </Box>
+          )}
+          <div style={helperTextBox}>
+            <FormHelperText sx={helperText}>{title.length}/100</FormHelperText>
+          </div>
+        </Box>
 
-        <Box sx={design.createPostLayout}>
+        <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
             Location
           </Typography>
           <Stack spacing={2}>
-            {/*<Autocomplete
-              id="free-solo-demo"
-              freeSolo
-              options={Location.map((option) => option)}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  placeholder="พิมพ์เลือกสถานที่"
-                  // Below is for location icon but when i show icon, It can't select location.
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <LocationOnIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              )}
-                />*/}
             <GoogleMaps initialValue={initialValue.location} />
           </Stack>
-          <div style={design.helperTextBox}>
-            <FormHelperText sx={design.helperTextError}>
-              ช่องนี้ไม่สามารถเว้นว่างได้
-            </FormHelperText>
-          </div>
         </Box>
-        <Box sx={design.createPostLayout}>
+        <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
             Date time
           </Typography>
@@ -177,11 +228,9 @@ const createPost = () => {
                   }}
                 />
               </LocalizationProvider>
-              <div style={design.helperTextBox}>
-                <FormHelperText sx={design.helperTextError}>
-                  ช่องนี้ไม่สามารถเว้นว่างได้
-                </FormHelperText>
-              </div>
+              {/*isSubmit && isStartDateErr && (
+                <p style={{ color: "red" }}>{startDateErrMsg}</p>
+              )*/}
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body1">End</Typography>
@@ -201,15 +250,18 @@ const createPost = () => {
                   }}
                 />
               </LocalizationProvider>
-              <div style={design.helperTextBox}>
-                <FormHelperText sx={design.helperTextError}>
+              {/*isSubmit && isEndDateErr && (
+                <p style={{ color: "red" }}>{endDateErrMsg}</p>
+              )*/}
+              <div style={helperTextBox}>
+                <FormHelperText sx={helperTextError}>
                   ช่องนี้ไม่สามารถเว้นว่างได้
                 </FormHelperText>
               </div>
             </Grid>
           </Grid>
         </Box>
-        <Box sx={design.createPostLayout}>
+        <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
             Tag
           </Typography>
@@ -247,7 +299,7 @@ const createPost = () => {
             )}
           />
         </Box>
-        <Box sx={design.createPostLayout}>
+        <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
             Description
           </Typography>
@@ -260,14 +312,14 @@ const createPost = () => {
             size="medium"
             placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
           />
-          <div style={design.helperTextBox}>
-            <FormHelperText sx={design.helperTextError}>
+          <div style={helperTextBox}>
+            <FormHelperText sx={helperTextError}>
               ช่องนี้ไม่สามารถเว้นว่างได้
             </FormHelperText>
-            <FormHelperText sx={design.helperText}>0/500</FormHelperText>
+            <FormHelperText sx={helperText}>0/500</FormHelperText>
           </div>
         </Box>
-        <Box sx={design.createPostLayout}>
+        <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
             <span>Image </span>
             <span style={{ color: "grey" }}>
@@ -289,7 +341,9 @@ const createPost = () => {
           alignItems="center"
         >
           <Button variant="contained" color="primary">
-            <Typography style={design.fontDesign}>Create Post</Typography>
+            <Typography style={fontDesign} onClick={handleSubmit}>
+              Create Post
+            </Typography>
           </Button>
         </Box>
       </Stack>

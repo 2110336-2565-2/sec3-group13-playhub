@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import React from 'react'
+
 export function checkTitle(
     input: string,
     minChar: number = 0,
@@ -37,7 +39,7 @@ export function checkTag(
 export function checkStartDate(
     startDate: dayjs)
     : string {
-    const isBeforeNow = startDate:.isBefore(dayjs());
+    const isBeforeNow = startDate.isBefore(dayjs());
 
     if (isBeforeNow) {
         return "ไม่สามารถเลือกวันที่และเวลาก่อนปัจจุบันได้";
