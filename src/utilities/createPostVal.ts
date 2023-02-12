@@ -24,8 +24,8 @@ export function checkLocation(
     return "";
 }
 export function checkTag(
-    input: string,
-    minChar: number = 0,
+    input: any,
+    minChar: number = 1,
     maxChar: number = 5)
     : string {
     if (input.length < minChar) {
