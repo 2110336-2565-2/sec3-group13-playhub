@@ -61,9 +61,18 @@ export default function GoogleMaps(props: { initialValue?: string }) {
 
   const fetch = React.useMemo(
     () =>
-      debounce((request: { input: string }, callback: (results?: readonly PlaceType[]) => void) => {
-        (autocompleteService.current as any).getPlacePredictions(request, callback);
-      }, 400),
+      debounce(
+        (
+          request: { input: string },
+          callback: (results?: readonly PlaceType[]) => void
+        ) => {
+          (autocompleteService.current as any).getPlacePredictions(
+            request,
+            callback
+          );
+        },
+        400
+      ),
     []
   );
 
@@ -71,7 +80,9 @@ export default function GoogleMaps(props: { initialValue?: string }) {
     let active = true;
 
     if (!autocompleteService.current && (window as any).google) {
-      autocompleteService.current = new (window as any).google.maps.places.AutocompleteService();
+      autocompleteService.current = new (
+        window as any
+      ).google.maps.places.AutocompleteService();
     }
     if (!autocompleteService.current) {
       return undefined;
@@ -106,7 +117,9 @@ export default function GoogleMaps(props: { initialValue?: string }) {
   return (
     <Autocomplete
       id="google-map-demo"
-      getOptionLabel={(option) => (typeof option === "string" ? option : option.description)}
+      getOptionLabel={(option) =>
+        typeof option === "string" ? option : option.description
+      }
       filterOptions={(x) => x}
       options={options}
       autoComplete
@@ -121,13 +134,19 @@ export default function GoogleMaps(props: { initialValue?: string }) {
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
       }}
-      renderInput={(params) => <TextField {...params} label="กรอกสถานที่" fullWidth />}
+      renderInput={(params) => (
+        <TextField {...params} label="กรอกสถานที่" fullWidth />
+      )}
       renderOption={(props, option) => {
-        const matches = option.structured_formatting.main_text_matched_substrings || [];
+        const matches =
+          option.structured_formatting.main_text_matched_substrings || [];
 
         const parts = parse(
           option.structured_formatting.main_text,
-          matches.map((match: any) => [match.offset, match.offset + match.length])
+          matches.map((match: any) => [
+            match.offset,
+            match.offset + match.length,
+          ])
         );
 
         return (
@@ -136,9 +155,16 @@ export default function GoogleMaps(props: { initialValue?: string }) {
               <Grid item sx={{ display: "flex", width: 44 }}>
                 <LocationOnIcon sx={{ color: "text.secondary" }} />
               </Grid>
-              <Grid item sx={{ width: "calc(100% - 44px)", wordWrap: "break-word" }}>
+              <Grid
+                item
+                sx={{ width: "calc(100% - 44px)", wordWrap: "break-word" }}
+              >
                 {parts.map((part, index) => (
-                  <Box key={index} component="span" sx={{ fontWeight: part.highlight ? "bold" : "regular" }}>
+                  <Box
+                    key={index}
+                    component="span"
+                    sx={{ fontWeight: part.highlight ? "bold" : "regular" }}
+                  >
                     {part.text}
                   </Box>
                 ))}
