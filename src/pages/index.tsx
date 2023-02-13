@@ -3,9 +3,10 @@ import Navbar from "@/components/public/Navbar";
 import { Post } from "@/types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { userContext } from "supabase/user_context";
 import { Box, Stack, Typography } from "@mui/material";
+import Loading from "@/components/public/Loading";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -71,26 +72,28 @@ export default function Home() {
     getPostData();
   }, [userStatus.user, supabaseClient]);
 
-  if (posts == null) return <p>Loading All Post...</p>;
+  // if (posts == null) return <p>Loading All Post...</p>;
   return (
     <>
       <Navbar />
-      <Stack
-        spacing="40px"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-          flexDirection: "column",
-          padding: "30px",
-        }}
-      >
-        {posts.map((item, index) => (
-          <Box width="80vw" key={index}>
-            <CommonPostCard post={item} />
-          </Box>
-        ))}
-      </Stack>
+        <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
+          <Stack
+            spacing="40px"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              width: "100%",
+              flexDirection: "column",
+              padding: "30px",
+            }}
+          >
+            {posts?.map((item, index) => (
+              <Box width="80vw" key={index}>
+                <CommonPostCard post={item} />
+              </Box>
+            ))}
+          </Stack>
+        </Suspense>
     </>
   );
 }
