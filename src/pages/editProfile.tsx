@@ -191,7 +191,7 @@ export default function Home() {
     getProfile(userStatus.user);
   }, [userStatus]);
 
-  if (userStatus.isLoading || image == "") return <p>getting session...</p>;
+  if (userStatus.isLoading) return <p>getting session...</p>;
   return (
     <>
       <Navbar />
