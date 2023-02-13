@@ -176,12 +176,6 @@ export default function PostCard(props: props) {
         <CardActions style={{ padding: "4px 8px" }}>
           <Box sx={{ flexGrow: 1 }}></Box>
 
-          <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
-            <Button onClick={() => setOpenSnackBar(true)} variant="contained">
-              Join
-            </Button>
-          </Grow>
-
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
             <ArrowDownwardIcon />
           </ExpandMore>

@@ -1,4 +1,4 @@
-import PostCard from "@/components/post/PostCard";
+import CommonPostCard from "@/components/post/CommonPostCard";
 import Navbar from "@/components/public/Navbar";
 import { Post } from "@/types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -12,10 +12,6 @@ export default function Home() {
   const userStatus = useContext(userContext);
 
   const [posts, setPosts] = useState<Post[] | null>(null);
-
-  function handleDeletePost(toDeletePost: Post): void {
-    setPosts((posts) => posts && posts.filter((post) => post.post_id !== toDeletePost.post_id));
-  }
 
   useEffect(() => {
     async function getPostData() {
@@ -91,7 +87,7 @@ export default function Home() {
       >
         {posts.map((item, index) => (
           <Box width="80vw" key={index}>
-            <PostCard post={item} handleDeletePost={handleDeletePost} />
+            <CommonPostCard post={item} />
           </Box>
         ))}
       </Stack>

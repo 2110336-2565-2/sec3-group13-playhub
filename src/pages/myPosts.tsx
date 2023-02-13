@@ -1,4 +1,4 @@
-import PostCard from "@/components/post/PostCard";
+import MyPostCard from "@/components/post/MyPostCard";
 import Navbar from "@/components/public/Navbar";
 import { Post } from "@/types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -93,7 +93,7 @@ export default function Home() {
 
         {posts.map((item, index) => (
           <Box width="80vw" key={index}>
-            <PostCard post={item} handleDeletePost={handleDeletePost} />
+            <MyPostCard post={item} handleDeletePost={handleDeletePost} />
           </Box>
         ))}
       </Stack>
