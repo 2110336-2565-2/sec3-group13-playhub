@@ -1,13 +1,9 @@
 import { CircularProgress, Modal, Stack } from "@mui/material";
 
-type props = {
-  isLoading: boolean;
-};
-
-export default function Loading(props: props) {
+export default function Loading() {
   return (
     <>
-      <Modal open={props.isLoading}>
+      <Modal open={true}>
         <Stack alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
           <CircularProgress />
         </Stack>

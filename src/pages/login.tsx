@@ -1,7 +1,14 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { NextRouter, useRouter } from "next/router";
-import { Link, Box, Typography, TextField, Stack, FormHelperText, Button } from "@mui/material";
-import { SessionContext, useSessionContext } from "@supabase/auth-helpers-react";
+import {
+  Link,
+  Box,
+  Typography,
+  TextField,
+  Stack,
+  FormHelperText,
+  Button,
+} from "@mui/material";
 
 import Logo from "@/components/public/Logo";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
@@ -41,7 +48,10 @@ export default function Home() {
 
   // error about variables
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
+  const passwordErr: validation = validateTextField(
+    password,
+    CHAR_LIMIT.MIN_PASSWORD
+  );
   const isSupabaseErr: boolean =
     (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg: string = isLoginCredErr
@@ -52,10 +62,11 @@ export default function Home() {
     setIsSubmit(true);
 
     // sign in via supabase
-    const signInResult: AuthResponse = await supabaseClient.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const signInResult: AuthResponse =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
 
     if (signInResult.error) {
       // in case : cannot find user using inputed email and password
@@ -66,7 +77,9 @@ export default function Home() {
       }
 
       // in case : user has not validate email yet
-      if (signInResult.error.message == SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR) {
+      if (
+        signInResult.error.message == SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR
+      ) {
         setIsValidateErr(true);
         console.log("You have not validate your email yet");
         return;
@@ -97,64 +110,71 @@ export default function Home() {
     setIsValidateErr(false);
   }
 
-  // in case : logged in, the page should go back the page user have been
-  // if (sessionContext.session) {
-  //   router.back();
+  // This comment is for other pages!
+  // if (!userStatus.user){
+  //   router.push(PagePaths.login)
+  //   return;
   // }
-
-  if (userStatus.isLoading) return <Loading isLoading={true} />;
-  if (userStatus.user) return <p>Logged in</p>;
+  if (userStatus.isLoading) return <Loading />;
+  // in case : logged in, the page should go back the page user have been
+  if (userStatus.user) {
+    router.push(PagePaths.home);
+    return;
+  }
   return (
-    <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
-      <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
-        <Logo width={119} height={119} />
+    <Stack
+      spacing={3}
+      alignItems="center"
+      justifyContent="center"
+      style={{ minHeight: "100vh" }}
+    >
+      <Logo width={119} height={119} />
 
-        {/* Email TextField */}
-        <Box sx={login_layout}>
-          <CommonTextField
-            label="Email"
-            value={email}
-            handleValueChange={handleEmailChange}
-            isErr={isSubmit && (emailErr.err || isSupabaseErr)}
-            errMsg={emailErr.msg}
-            mediumSize={true}
-          />
-        </Box>
+      {/* Email TextField */}
+      <Box sx={login_layout}>
+        <CommonTextField
+          label="Email"
+          value={email}
+          handleValueChange={handleEmailChange}
+          isErr={isSubmit && (emailErr.err || isSupabaseErr)}
+          errMsg={emailErr.msg}
+          mediumSize={true}
+        />
+      </Box>
 
-        {/* Password TextField */}
-        <Box sx={login_layout}>
-          <PasswordTextFeild
-            label="Password"
-            value={password}
-            handleValueChange={handlePasswordChange}
-            isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
-            errMsg={passwordErr.msg}
-            mediumSize={true}
-          />
-        </Box>
+      {/* Password TextField */}
+      <Box sx={login_layout}>
+        <PasswordTextFeild
+          label="Password"
+          value={password}
+          handleValueChange={handlePasswordChange}
+          isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
+          errMsg={passwordErr.msg}
+          mediumSize={true}
+        />
+      </Box>
 
-        {/* Login Error Message */}
-        {isSubmit && isSupabaseErr && (
-          <Box sx={login_layout} display="flex">
-            <FormHelperText error>
-              <Typography variant="body1">{supabaseErrMsg}</Typography>
-            </FormHelperText>
-          </Box>
-        )}
-
-        {/* Login Button */}
-        <Button variant="contained" onClick={handleSubmit}>
-          Login
-        </Button>
-
-        {/* Link go to register page */}
+      {/* Login Error Message */}
+      {isSubmit && isSupabaseErr && (
         <Box sx={login_layout} display="flex">
-          <Typography variant="body1">Create account{"\u00A0"}</Typography>
-          <Link color="primary" underline="hover" href={PagePaths.register}>
-            <Typography variant="body1">here</Typography>
-          </Link>
+          <FormHelperText error>
+            <Typography variant="body1">{supabaseErrMsg}</Typography>
+          </FormHelperText>
         </Box>
-      </Stack>
-    </Suspense>
+      )}
+
+      {/* Login Button */}
+      <Button variant="contained" onClick={handleSubmit}>
+        Login
+      </Button>
+
+      {/* Link go to register page */}
+      <Box sx={login_layout} display="flex">
+        <Typography variant="body1">Create account{"\u00A0"}</Typography>
+        <Link color="primary" underline="hover" href={PagePaths.register}>
+          <Typography variant="body1">here</Typography>
+        </Link>
+      </Box>
+    </Stack>
   );
 }
