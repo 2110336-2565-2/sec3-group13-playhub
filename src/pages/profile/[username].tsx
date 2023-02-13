@@ -70,7 +70,7 @@ export default function Home() {
           <Typography variant="h1" align="center" sx={profile_layout}>
             {targetUserData.name}
           </Typography>
-          {owner && (
+          {router.query.username === userStatus.user.username && (
             <Typography variant="body1" align="center" sx={profile_layout}>
               {targetUserData.email}
             </Typography>
