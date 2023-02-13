@@ -143,9 +143,11 @@ export default function Home() {
     }
   };
 
-  if (userStatus.isLoading) return <Loading isLoading />; //temporary
-  if (userStatus.user) return <p>logged in</p>; //temporary
-
+  if (userStatus.isLoading) return <Loading />;
+  if (userStatus.user) {
+    router.push(PagePaths.home);
+    return;
+  }
   return (
     <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
       <Logo width={119} height={119} />
