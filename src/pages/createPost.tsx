@@ -84,7 +84,7 @@ const createPost = () => {
     color: "#000000",
   };
   const [isSubmit, setIsSubmit] = React.useState(false);
-
+  // value of every text field
   const [title, setTitle] = React.useState("");
   const [location, setLocation] = React.useState("");
   const [startDate, setStartDate] = React.useState<Dayjs | null>(
@@ -96,79 +96,96 @@ const createPost = () => {
   const [selectedTags, setSelectedTags] = useState(initialValue.tags);
   const [desc, setDesc] = React.useState("");
   const [images, setImages] = useState<string[]>([]);
+  // value of every text field
 
-  //const [isTitleErr, setIsTitleErr] = React.useState(false);
-  /*
-  const [isLocationErr, setIsLocationErr] = React.useState(false);
+  //----For Error----
+
+  const [titleErrMsg, setTitleErrMsg] = React.useState("");
+  const [isTitleErr, setIsTitleErr] = React.useState(false);
+
+  const [descErrMsg, setDescErrMsg] = React.useState("");
+  const [isDescErrMsg, setIsDescErrMsg] = React.useState(false);
+
+  const [tagErrMsg, setTagErrMsg] = React.useState("");
+  const [isTagErr, setIsTagErr] = React.useState(false);
+
+  const [startDateErrMsg, setStartDateErrMsg] = React.useState("");
   const [isStartDateErr, setIsStartDateErr] = React.useState(false);
+
+  const [endDateErrMsg, setEndDateErrMsg] = React.useState("");
   const [isEndDateErr, setIsEndDateErr] = React.useState(false);
-  
-  const [isDescErr, setIsDescErr] = React.useState(false);
-  const [isImgErrsetis, setIsImgErrsetis] = React.useState(false);*/
 
-  const titleErrMsg = message.checkTitle(title, 1);
-  const isTitleErr = titleErrMsg !== "";
+  const [isLocationSelected, setLocationSelected] = useState(false);
 
-  const descErrMsg = message.checkDesc(desc, 1);
-  const isDescErrMsg = descErrMsg !== "";
-
-  const tagErrMsg = message.checkTag(selectedTags, 1, 5);
-  const isTagErr = tagErrMsg !== "";
-
-  const startDateErrMsg = message.checkStartDate(startDate);
-  const isStartDateErr = startDateErrMsg !== "";
-
-  const endDateErrMsg = message.checkEndDate(startDate, endDate);
-  const isEndDateErr = endDateErrMsg !== "";
-
-  /*const locationErrMsg = message.checkLocation(location, 1);
-  const isLocationErr = locationErrMsg.length < 1;
-
-  const startDateErrMsg = message.checkStartDate(startDate);
-  const isStartDateErr = startDateErrMsg !== "";*/
+  const [imgErrState, setImgErrState] = useState(false);
 
   useEffect(() => {
     setImages(initialValue.image);
   }, []);
+
+  useEffect(() => {
+    setTitleErrMsg(message.checkTitle(title));
+    setIsTitleErr(titleErrMsg.length !== "");
+
+    setDescErrMsg(message.checkDesc(desc));
+    setIsDescErrMsg(descErrMsg.length !== "");
+
+    setTagErrMsg(message.checkTag(selectedTags));
+    setIsTagErr(tagErrMsg.length !== "");
+  }, [title, desc, selectedTags]);
+
+  /*useEffect(() => {
+    setImgErrState()
+  }, [images]);*/
+
+  useEffect(() => {
+    setLocationSelected(location !== "");
+    console.log(location);
+  }, [location]);
+
+  useEffect(() => {
+    setEndDateErrMsg(message.checkEndDate(startDate, endDate));
+    setIsEndDateErr(endDateErrMsg !== "");
+  }, [startDate, endDate]);
+
+  useEffect(() => {
+    setStartDateErrMsg(message.checkStartDate(startDate));
+    setIsStartDateErr(startDateErrMsg !== "");
+  }, [startDate]);
+
   function handleTitleChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setTitle(event.target.value);
-    setIsSubmit(false);
   }
 
   function handleDescChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setDesc(event.target.value);
-    setIsSubmit(false);
+  }
+  function handleLocationChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ): void {
+    if (location === "") {
+      setLocation(location.description);
+    }
   }
 
-  const handleAddTag = (event: any, tag: any) => {
+  function handleAddTag(event: any, tag: any): void {
     if (tag.length <= 5) {
       setSelectedTags(tag);
     }
-  };
+  }
 
-  const handleStartDate = (newValue: Dayjs | null) => {
-    if (!isStartDateErr) {
-      setStartDate(newValue);
-      setIsSubmit(false);
-    }
-  };
-  const handleEndDate = (newValue: Dayjs | null) => {
-    /*if (newValue && newValue.isBefore(startDate)) {
-      console.error("End date cannot be before Start Date.");
-    } else {
-      setEndDate(newValue);
-    }*/
-
-    if (!isEndDateErr) {
-      setStartDate(newValue);
-      setIsSubmit(false);
-    }
-  };
+  function handleStartDate(newValue: Dayjs | null): void {
+    setStartDate(newValue);
+  }
+  function handleEndDate(newValue: Dayjs | null): void {
+    setEndDate(newValue);
+  }
   async function handleSubmit() {
+    //DIY NA Backend
     setIsSubmit(true);
   }
 
@@ -223,7 +240,18 @@ const createPost = () => {
             Location
           </Typography>
           <Stack spacing={2}>
-            <GoogleMaps initialValue={initialValue.location} />
+            <GoogleMaps
+              initialValue={initialValue.location}
+              Location={setLocation}
+              onChange={handleLocationChange}
+            />
+            {isSubmit && isLocationSelected == false && (
+              <Box display="flex">
+                <FormHelperText error>
+                  ช่องนี้ไม่สามารถเว้นว่างได้
+                </FormHelperText>
+              </Box>
+            )}
           </Stack>
         </Box>
         <Box sx={createPostLayout}>
@@ -250,7 +278,7 @@ const createPost = () => {
                 />
               </LocalizationProvider>
               {isStartDateErr && (
-                <p style={{ color: "red" }}>{startDateErrMsg}</p>
+                <p style={{ color: error }}>{startDateErrMsg}</p>
               )}
             </Grid>
             <Grid item xs={6}>
@@ -271,7 +299,7 @@ const createPost = () => {
                   }}
                 />
               </LocalizationProvider>
-              {isEndDateErr && <p style={{ color: "red" }}>{endDateErrMsg}</p>}
+              {isEndDateErr && <p style={{ color: error }}>{endDateErrMsg}</p>}
               <div style={helperTextBox}>
                 <FormHelperText sx={helperTextError}>
                   ช่องนี้ไม่สามารถเว้นว่างได้
@@ -317,7 +345,9 @@ const createPost = () => {
               />
             )}
           />
-          {isSubmit && isTagErr && <p style={{ color: "red" }}>{tagErrMsg}</p>}
+          {isSubmit && isTagErr && (
+            <FormHelperText error>{tagErrMsg}</FormHelperText>
+          )}
         </Box>
         <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
@@ -333,7 +363,7 @@ const createPost = () => {
             placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
             value={desc}
             onChange={handleDescChange}
-            inputProps={{ maxLength: 100 }}
+            inputProps={{ maxLength: 500 }}
           />
           {isSubmit && isDescErrMsg && (
             <Box display="flex">
@@ -358,8 +388,15 @@ const createPost = () => {
             alignItems="flex-start"
             spacing={1}
           >
-            <PictureList imgs={images} stateChanger={setImages} />
+            <PictureList
+              imgs={images}
+              stateChanger={setImages}
+              st={setImgErrState}
+            />
           </Stack>
+          {imgErrState && (
+            <FormHelperText error>เลือกรูปภาพได้ไม่เกิน 3 รูป</FormHelperText>
+          )}
         </Box>
         <Box
           /*sx={createPostLayout} */ justifyContent="center"
