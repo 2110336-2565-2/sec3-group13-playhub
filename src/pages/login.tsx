@@ -74,7 +74,7 @@ export default function Home() {
     }
 
     // route to post feed page
-    router.push(PagePaths.postFeed);
+    router.push(PagePaths.home);
   }
 
   function handleEmailChange(

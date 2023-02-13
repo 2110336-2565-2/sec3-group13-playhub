@@ -30,6 +30,8 @@ import DeletePostDialog from "@/components/post/DeletePostDialog";
 import { Post } from "../../types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
+import { PagePaths } from "enum/pages";
+import { NextRouter, useRouter } from "next/router";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -53,6 +55,8 @@ type props = {
 };
 
 export default function PostCard(props: props) {
+  const router: NextRouter = useRouter();
+
   const [openDeletePostModal, setOpenDeletePostModal] = React.useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = React.useState<boolean>(true);
   const [openSnackBar, setOpenSnackBar] = React.useState<boolean>(false);
@@ -80,6 +84,7 @@ export default function PostCard(props: props) {
   function handleEditPost() {
     console.log("The post is edited");
     // edit post end-point
+    router.push(PagePaths.editPost + props.post.post_id);
   }
 
   return (

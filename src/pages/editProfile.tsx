@@ -1,7 +1,6 @@
 import React, { useState, useContext } from "react";
 import Image from "next/image";
 import { NextRouter, useRouter } from "next/router";
-import Navbar from "@/components/public/Navbar";
 import {
   Typography,
   Button,
@@ -25,6 +24,7 @@ import { PagePaths } from "enum/pages";
 import { User } from "@/types/User";
 import { validation } from "@/types/Validation";
 
+import Navbar from "@/components/public/Navbar";
 import CommonTextField from "@/components/public/CommonTextField";
 import CommonDropdown from "@/components/public/CommonDropdown";
 import { validateImage, validateTextField } from "@/utilities/validation";
@@ -182,7 +182,7 @@ export default function Home() {
   };
 
   function handleGoBack(): void {
-    router.back();
+    router.push(PagePaths.profile + "/" + userStatus.user?.username);
     return;
   }
 

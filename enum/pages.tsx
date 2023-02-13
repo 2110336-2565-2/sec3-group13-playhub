@@ -1,10 +1,13 @@
 export enum PagePaths {
-  home = "/",
+  // not require auth
   login = "/login",
   register = "/register",
-  post = "/post",
-  profile = "/profile",
+
+  // require auth <-> exist userStatus
+  home = "/",
+  myPosts = "/myPosts",
+  editPost = "/editPost/", // subfix : postId
+  createPost = "/createPost",
+  profile = "/profile/", // subfix : username
   editProfile = "/editProfile",
-  authErr = "/authenticationError",
-  postFeed = "/postFeed"
 }

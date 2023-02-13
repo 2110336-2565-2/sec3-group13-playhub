@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { useRouter } from "next/router";
+import { NextRouter, useRouter } from "next/router";
 import {
   AppBar,
   Avatar,
@@ -14,7 +14,6 @@ import {
 
 import Logo from "./Logo";
 
-import { User } from "@/types/User";
 import { page } from "@/types/Page";
 
 import { PagePaths } from "enum/pages";
@@ -25,19 +24,8 @@ import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import { grey } from "@mui/material/colors";
 
-const menuItems: page[] = [
-  {
-    name: NavbarPages.profile,
-    path: PagePaths.profile,
-  },
-  {
-    name: NavbarPages.myPost,
-    path: PagePaths.post,
-  },
-];
-
 export default function Navbar() {
-  const router = useRouter();
+  const router: NextRouter = useRouter();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
@@ -49,10 +37,10 @@ export default function Navbar() {
     setAnchorEl(event.currentTarget);
   };
 
-  function routeToHome(): void {
+  const routeToHome = (): void => {
     router.push(PagePaths.home);
     return;
-  }
+  };
 
   async function handleSignOut() {
     const signOutResult = await supabaseClient.auth.signOut();
@@ -99,19 +87,22 @@ export default function Navbar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            {menuItems.map((item: page, idx: number) => (
-              <MenuItem key={idx}>
-                <Link
-                  textAlign="center"
-                  color="inherit"
-                  underline="none"
-                  href={userStatus.user ? item.path + "/" + userStatus.user.username : "/"}
-                >
-                  <Typography variant="body1">{item.name}</Typography>
-                </Link>
-              </MenuItem>
-            ))}
-            <MenuItem>
+            <MenuItem key={1}>
+              <Link
+                textAlign="center"
+                color="inherit"
+                underline="none"
+                href={PagePaths.profile + userStatus.user?.username}
+              >
+                <Typography variant="body1">{NavbarPages.profile}</Typography>
+              </Link>
+            </MenuItem>
+            <MenuItem key={2}>
+              <Link textAlign="center" color="inherit" underline="none" href={PagePaths.myPosts}>
+                <Typography variant="body1">{NavbarPages.myPost}</Typography>
+              </Link>
+            </MenuItem>
+            <MenuItem key={3}>
               <Link textAlign="center" color="error" underline="none" onClick={handleSignOut}>
                 <Typography variant="body1">{NavbarPages.logout}</Typography>
               </Link>

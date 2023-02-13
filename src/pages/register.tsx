@@ -18,6 +18,7 @@ import { validateEmail, validateTextField } from "@/utilities/validation";
 import { Gender } from "enum/gender";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { validation } from "@/types/Validation";
+import { PagePaths } from "enum/pages";
 
 // style
 const register_layout = {
@@ -124,7 +125,7 @@ export default function Home() {
         console.log(addUserData.error);
         return;
       }
-      router.push("/login");
+      router.push(PagePaths.home);
     }
   };
 

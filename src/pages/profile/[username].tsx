@@ -50,7 +50,7 @@ export default function Home() {
   }, [router.query.username, supabaseClient, userStatus.user, targetUserData]);
 
   function handleEditProfile(): void {
-    router.push(PagePaths.editProfile + "/" + userStatus.user?.username);
+    router.push(PagePaths.editProfile);
     return;
   }
 
@@ -75,7 +75,7 @@ export default function Home() {
               {targetUserData.email}
             </Typography>
           )}
-          <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image} />
+          <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image as string} />
           <Stack direction="row" spacing={1}>
             <Chip
               icon={
