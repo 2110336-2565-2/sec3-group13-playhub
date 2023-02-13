@@ -30,6 +30,7 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
   const router = useRouter();
+
   // state about variables
   const [displayName, setDisplayName] = React.useState<string>("");
   const [email, setEmail] = React.useState<string>("");
@@ -37,6 +38,14 @@ export default function Home() {
   const [confirmPassword, setConfirmPassword] = React.useState<string>("");
   const [gender, setGender] = React.useState<string>("");
   const [birthDate, setBirthDate] = React.useState<Dayjs | null>(null);
+
+  // submit about variables
+  const [isSubmitDisplayName, setIsSubmitDisplayName] = React.useState<boolean>(false);
+  const [isSubmitEmail, setIsSubmitEmail] = React.useState<boolean>(false);
+  const [isSubmitPassword, setIsSubmitPassword] = React.useState<boolean>(false);
+  const [isSubmitConfirmPassword, setIsSubmitConfirmPassword] = React.useState<boolean>(false);
+  const [isSubmitGender, setIsSubmitGender] = React.useState<boolean>(false);
+  const [isSubmitBirthDate, setIsSubmitBirthDate] = React.useState<boolean>(false);
 
   // error about variables
   const displayNameErr: validation = validateTextField(
@@ -46,22 +55,14 @@ export default function Home() {
   );
   const emailErr: validation = validateEmail(email);
   const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
-  const confirmPasswordErr: validation = validateTextField(
-    confirmPassword,
-    CHAR_LIMIT.MIN_PASSWORD
-  );
-  const isValidConfirmPassword: boolean =
-    !(passwordErr.err || confirmPasswordErr.err) && password === confirmPassword;
+  const isValidConfirmPassword: boolean = password === confirmPassword;
   const [isEmptyGender, setIsEmptyGender] = React.useState<boolean>(true);
   const [isEmptyBirthDate, setIsEmptyBirthDate] = React.useState<boolean>(true);
-
-  const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
 
   const readyToCreate: boolean = !(
     displayNameErr.err ||
     emailErr.err ||
     passwordErr.err ||
-    confirmPasswordErr.err ||
     !isValidConfirmPassword ||
     isEmptyGender ||
     isEmptyBirthDate
@@ -72,40 +73,53 @@ export default function Home() {
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
     setDisplayName(event.target.value);
+    setIsSubmitDisplayName(false);
   };
 
   const handleEmailChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
     setEmail(event.target.value);
+    setIsSubmitEmail(false);
   };
 
   const handlePasswordChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
     setPassword(event.target.value);
+    setIsSubmitPassword(false);
   };
 
   const handleConfirmPasswordChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
     setConfirmPassword(event.target.value);
+    setIsSubmitConfirmPassword(false);
   };
 
   const handleGenderChange = (event: SelectChangeEvent): void => {
     setIsEmptyGender(event.target.value === "");
     setGender(event.target.value as string);
+    setIsSubmitGender(false);
   };
 
   const handleBirthDateChange = (event: Dayjs | null): void => {
     if (event) {
       setIsEmptyBirthDate(event === null);
       setBirthDate(event);
+      setIsSubmitBirthDate(false);
     }
   };
 
   const handleCreateAccount = async () => {
-    setIsSubmit(true);
+    // display all errors
+    setIsSubmitDisplayName(true);
+    setIsSubmitEmail(true);
+    setIsSubmitPassword(true);
+    setIsSubmitConfirmPassword(true);
+    setIsSubmitGender(true);
+    setIsSubmitBirthDate(true);
+
     if (readyToCreate) {
       const signUpResult = await supabaseClient.auth.signUp({ email, password });
       if (signUpResult.error) {
@@ -143,7 +157,7 @@ export default function Home() {
           value={displayName}
           handleValueChange={handleDisplayNameChange}
           char_limit={100}
-          isErr={isSubmit && displayNameErr.err}
+          isErr={isSubmitDisplayName && displayNameErr.err}
           errMsg={displayNameErr.msg}
         />
       </Box>
@@ -154,7 +168,7 @@ export default function Home() {
           placeholder="Email"
           value={email}
           handleValueChange={handleEmailChange}
-          isErr={isSubmit && emailErr.err}
+          isErr={isSubmitEmail && emailErr.err}
           errMsg={emailErr.msg}
         />
       </Box>
@@ -165,7 +179,7 @@ export default function Home() {
           placeholder="Password"
           value={password}
           handleValueChange={handlePasswordChange}
-          isErr={isSubmit && (passwordErr.err || !isValidConfirmPassword)}
+          isErr={isSubmitPassword && passwordErr.err}
           errMsg={passwordErr.msg}
         />
       </Box>
@@ -176,16 +190,12 @@ export default function Home() {
           placeholder="Confirm Password"
           value={confirmPassword}
           handleValueChange={handleConfirmPasswordChange}
-          isErr={isSubmit && (confirmPasswordErr.err || !isValidConfirmPassword)}
-          errMsg={
-            isValidConfirmPassword
-              ? confirmPasswordErr.msg
-              : "Password และ Confirm Password ต้องเหมือนกัน"
-          }
+          isErr={isSubmitPassword && isSubmitConfirmPassword && !isValidConfirmPassword}
+          errMsg="Password และ Confirm Password ต้องเหมือนกัน"
         />
       </Box>
 
-      <Grid item sx={register_layout}>
+      <Box style={register_layout}>
         <Grid container spacing={3} justifyContent="left">
           <Grid item xs={6}>
             <CommonDropdown
@@ -194,7 +204,7 @@ export default function Home() {
               value={gender}
               handleValueChange={handleGenderChange}
               items={Object.values(Gender)}
-              isErr={isSubmit && isEmptyGender}
+              isErr={isSubmitGender && isEmptyGender}
               errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
             />
           </Grid>
@@ -205,12 +215,12 @@ export default function Home() {
               placeHolder="xx / xx / xxxx"
               value={birthDate}
               handleValueChange={handleBirthDateChange}
-              isErr={isSubmit && isEmptyBirthDate}
+              isErr={isSubmitBirthDate && isEmptyBirthDate}
               errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
             />
           </Grid>
         </Grid>
-      </Grid>
+      </Box>
 
       <Button variant="contained" onClick={handleCreateAccount}>
         Create Account
