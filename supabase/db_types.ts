@@ -248,7 +248,7 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      get_all_user_post: {
+      get_posts_by_user_id: {
         Args: {
           target_id: string
         }

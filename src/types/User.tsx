@@ -7,6 +7,7 @@ export type User = {
   description: string;
   image: string | null;
   email: string;
+  isAdmin: boolean;
 };
 
 export type UserStatus = {

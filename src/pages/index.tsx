@@ -18,7 +18,7 @@ export default function Home() {
     async function getPostData() {
       if (!userStatus.user) return;
 
-      const getAllUserPostResult = await supabaseClient.rpc("get_all_user_post", {
+      const getAllUserPostResult = await supabaseClient.rpc("get_posts_by_user_id", {
         target_id: userStatus.user.user_id,
       });
       if (getAllUserPostResult.error) {
