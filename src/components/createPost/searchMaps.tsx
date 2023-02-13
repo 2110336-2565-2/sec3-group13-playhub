@@ -12,6 +12,11 @@ import { InputAdornment } from "@mui/material";
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
 const GOOGLE_MAPS_API_KEY = "";
+// You can try to using google api key using in your environment
+type props = {
+  initialValue?: string;
+  Location: React.Dispatch<React.SetStateAction<object>>;
+};
 
 function loadScript(src: string, position: HTMLElement | null, id: string) {
   if (!position) {
@@ -41,12 +46,12 @@ interface PlaceType {
   structured_formatting: StructuredFormatting;
 }
 
-export default function GoogleMaps(props: { initialValue?: string }) {
+export default function GoogleMaps(props: props) {
   const [value, setValue] = React.useState<PlaceType | null>(null);
   const [inputValue, setInputValue] = React.useState(props.initialValue ?? "");
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
   const loaded = React.useRef(false);
-
+  //console.log(value);
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
       loadScript(
@@ -130,12 +135,13 @@ export default function GoogleMaps(props: { initialValue?: string }) {
       onChange={(event: any, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
+        props.Location(newValue);
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
       }}
       renderInput={(params) => (
-        <TextField {...params} label="กรอกสถานที่" fullWidth />
+        <TextField {...params} placeholder="กรอกสถานที่" fullWidth />
       )}
       renderOption={(props, option) => {
         const matches =
