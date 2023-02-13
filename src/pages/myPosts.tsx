@@ -5,7 +5,9 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { useContext, useEffect, useState } from "react";
 import { userContext } from "supabase/user_context";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Fab, Stack, Typography } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
+import Link from "next/link";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -97,6 +99,15 @@ export default function Home() {
           </Box>
         ))}
       </Stack>
+      <Link href={"createPost"} color="inherit">
+        <Fab 
+          color="primary" 
+          aria-label="add"
+          sx={{position:"fixed",right:"20px",bottom:"20px"}}
+        >
+          <AddIcon />
+        </Fab>
+      </Link>
     </>
   );
 }
