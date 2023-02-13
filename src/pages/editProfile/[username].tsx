@@ -11,11 +11,11 @@ import {
   Box,
   Link,
   IconButton,
-  Chip,
 } from "@mui/material";
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
@@ -196,7 +196,7 @@ export default function Home() {
     <>
       <Navbar />
       <Link onClick={handleGoBack}>
-        <ArrowBackIcon fontSize="large" sx={{ margin: "3vh 0 0 3vh", color: "black" }} />
+        <ArrowBackIcon fontSize="large" sx={{position:"absolute",margin: "3vh 0 0 3vh", color: "black" }} />
       </Link>
       <Stack
         spacing={2}
@@ -204,6 +204,14 @@ export default function Home() {
         justifyContent="center"
         style={{ minHeight: "80vh", marginBottom: "10vh" }}
       >
+        <CancelIcon
+          onClick={handleCancelImageChip}
+          color={showImageUploadError.err ? "error" : "secondary"}
+          sx={{position:"relative",top:"70px",left:"80px",zIndex:"1"}}
+          fontSize="large"
+          cursor="pointer"
+        />
+
         <Avatar alt="Anya" sx={avatar}>
           {image && (
             <Image
@@ -224,13 +232,7 @@ export default function Home() {
             {showImageUploadError.msg}
           </Typography>
         )}
-        {isImageUpload && (
-          <Chip
-            label="Remove this picture"
-            onClick={handleCancelImageChip}
-            color={showImageUploadError.err ? "error" : "secondary"}
-          />
-        )}
+
         <Box style={editInfoContainer}>
           <CommonTextField
             header={editProfileHeader.displayName}
