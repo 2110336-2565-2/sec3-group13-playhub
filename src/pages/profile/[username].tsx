@@ -103,7 +103,7 @@ export default function Home() {
               {row}
             </Typography>
           ))}
-          {owner && (
+          {router.query.username === userStatus.user.username && (
             <IconButton onClick={handleEditProfile}>
               <EditIcon />
             </IconButton>
