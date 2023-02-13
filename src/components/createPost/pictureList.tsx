@@ -7,6 +7,7 @@ import AddIcon from "@mui/icons-material/Add";
 type props = {
   imgs: string[];
   stateChanger: React.Dispatch<React.SetStateAction<string[]>>;
+  st: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const cancleDesign = {
   position: "absolute",
@@ -27,12 +28,14 @@ const addBoxDesign = {
 
 const PictureList = (props: props) => {
   const [dataPics, setDataPics] = useState<string[]>([]);
+
   useEffect(() => {
     setDataPics(props.imgs);
   }, [props.imgs]);
   const deletePicture = (index: number) => {
     setDataPics((prevPics) => prevPics.filter((pic, i) => i !== index));
     props.stateChanger(dataPics.filter((pic, i) => i !== index));
+    props.st(false);
   };
 
   const handleAddPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,7 +47,8 @@ const PictureList = (props: props) => {
       );
 
       if (selfilesarr.length + dataPics.length > 3) {
-        alert("more than 3");
+        //alert("more than 3");
+        props.st(true);
         return;
       }
 
@@ -53,6 +57,7 @@ const PictureList = (props: props) => {
       });
       setDataPics((prevImg) => prevImg.concat(imgArr));
       props.stateChanger(dataPics.concat(imgArr));
+      props.st(false);
     }
   };
   const fileInputRef = useRef<HTMLInputElement>(null);
