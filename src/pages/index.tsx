@@ -76,7 +76,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-        <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
+        <Suspense fallback={<Loading />}>
           <Stack
             spacing="40px"
             sx={{

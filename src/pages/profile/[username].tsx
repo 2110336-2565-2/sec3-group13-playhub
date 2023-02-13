@@ -54,12 +54,12 @@ export default function Home() {
     return;
   }
 
-  if (userStatus.isLoading) return <Loading isLoading={true} />; //temporary display
+  if (userStatus.isLoading) return <Loading />; //temporary display
   if (!userStatus.user) return <p>log in first</p>; // temporary display
   if (!targetUserData) return <p>getting user data...</p>; // temporary display
   return (
     <>
-      <Suspense fallback={<Loading isLoading={userStatus.isLoading} />}>
+      <Suspense fallback={<Loading />}>
         <Navbar />
         <Stack
           spacing={2}
