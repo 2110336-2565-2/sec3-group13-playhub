@@ -1,9 +1,10 @@
+
 import dayjs from "dayjs";
-import React from 'react'
+
 
 export function checkTitle(
     input: string,
-    minChar: number = 0,
+    minChar: number = 1,
     maxChar: number = 100)
     : string {
     if (input.length < minChar) {
@@ -14,25 +15,17 @@ export function checkTitle(
     }
     return "";
 }
-export function checkLocation(
-    input: string,
-    minChar: number = 0)
-    : string {
-    if (input.length < minChar) {
-        return "ช่องนี้ไม่สามารถเว้นว่างได้";
-    }
-    return "";
-}
+
 export function checkTag(
     input: any,
-    minChar: number = 1,
-    maxChar: number = 5)
+    minTag: number = 1,
+    maxTag: number = 5)
     : string {
-    if (input.length < minChar) {
+    if (input.length < minTag) {
         return "กรุณาเลือกอย่างน้อย 1 Tag";
     }
-    if (input.length > maxChar) {
-        return `เลือกได้ไม่เกิน ${maxChar} Tag`;
+    if (input.length > maxTag) {
+        return `เลือกได้ไม่เกิน ${maxTag} Tag`;
     }
     return "";
 }
@@ -60,7 +53,7 @@ export function checkEndDate(
 }
 export function checkDesc(
     input: string,
-    minChar: number = 0,
+    minChar: number = 1,
     maxChar: number = 500)
     : string {
     if (input.length < minChar) {
@@ -71,12 +64,4 @@ export function checkDesc(
     }
     return "";
 }
-export function checkImg(
-    input: string,
-    max: number = 3)
-    : string {
-    if (input.length > maxChar) {
-        return `เลือกรูปภาพได้ไม่เกิน ${max} รูป`;
-    }
-    return "";
-}
+
