@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <h1>Create Post</h1>
+      <p>editPost page</p>
     </>
   );
 }

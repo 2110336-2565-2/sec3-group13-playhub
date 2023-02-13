@@ -94,7 +94,7 @@ export default function Home() {
         <Typography variant="h1">My post</Typography>
 
         {posts.map((item, index) => (
-          <Box width="80vw" key={index}>
+          <Box width="60vw" key={index}>
             <MyPostCard post={item} handleDeletePost={handleDeletePost} />
           </Box>
         ))}
