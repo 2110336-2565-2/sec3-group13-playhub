@@ -18,9 +18,7 @@ export default function Home() {
     async function getPostData() {
       if (!userStatus.user) return;
 
-      const getAllUserPostResult = await supabaseClient.rpc("get_posts_by_user_id", {
-        target_id: userStatus.user.user_id,
-      });
+      const getAllUserPostResult = await supabaseClient.rpc("get_all_posts");
       if (getAllUserPostResult.error) {
         console.log(getAllUserPostResult.error);
         return;
@@ -76,24 +74,24 @@ export default function Home() {
   return (
     <>
       <Navbar />
-        <Suspense fallback={<Loading />}>
-          <Stack
-            spacing="40px"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              width: "100%",
-              flexDirection: "column",
-              padding: "30px",
-            }}
-          >
-            {posts?.map((item, index) => (
-              <Box width="80vw" key={index}>
-                <CommonPostCard post={item} />
-              </Box>
-            ))}
-          </Stack>
-        </Suspense>
+      <Suspense fallback={<Loading />}>
+        <Stack
+          spacing="40px"
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            flexDirection: "column",
+            padding: "30px",
+          }}
+        >
+          {posts?.map((item, index) => (
+            <Box width="80vw" key={index}>
+              <CommonPostCard post={item} />
+            </Box>
+          ))}
+        </Stack>
+      </Suspense>
     </>
   );
 }

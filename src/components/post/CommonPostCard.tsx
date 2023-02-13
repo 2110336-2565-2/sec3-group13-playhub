@@ -25,6 +25,8 @@ import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
 
 import { Post } from "../../types/Post";
+import { NextRouter, useRouter } from "next/router";
+import { PagePaths } from "enum/pages";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -45,6 +47,7 @@ type props = {
 };
 
 export default function PostCard(props: props) {
+  const router: NextRouter = useRouter();
   const [hiddenPostDetail, setHiddenPostDetail] = React.useState<boolean>(true);
   const [openSnackBar, setOpenSnackBar] = React.useState<boolean>(false);
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
@@ -63,11 +66,17 @@ export default function PostCard(props: props) {
         {/* Post Card Header */}
         <CardHeader
           avatar={
-            <Avatar
-              sx={{ width: 50, height: 50 }}
-              alt="Profile picture"
-              src={props.post.ownerProfilePic}
-            />
+            <IconButton
+              onClick={() => {
+                router.push(PagePaths.profile + props.post.ownerName);
+              }}
+            >
+              <Avatar
+                sx={{ width: 50, height: 50 }}
+                alt="Profile picture"
+                src={props.post.ownerProfilePic}
+              />
+            </IconButton>
           }
           title={props.post.title}
           subheader={props.post.ownerName}
@@ -124,11 +133,11 @@ export default function PostCard(props: props) {
         <CardActions style={{ padding: "4px 8px" }}>
           <Box sx={{ flexGrow: 1 }}></Box>
 
-          <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
+          {/* <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
             <Button onClick={() => setOpenSnackBar(true)} variant="contained">
               Join
             </Button>
-          </Grow>
+          </Grow> */}
 
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
             <ArrowDownwardIcon />
