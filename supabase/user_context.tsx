@@ -29,7 +29,6 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
         setUserStatus({ user: null, isLoading: false });
         return;
       }
-      if (userStatus.user) return;
       const userData = await supabaseClient.rpc("get_user_data_by_id", {
         target_id: sessionContext.session.user.id,
       });
@@ -40,12 +39,11 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
       setUserStatus({ user: userData.data[0], isLoading: false });
     }
     getUserData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     sessionContext.isLoading,
-    sessionContext.session,
     supabaseClient,
     router.pathname,
-    userStatus.user,
   ]);
 
   return (
