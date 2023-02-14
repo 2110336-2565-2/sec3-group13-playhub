@@ -65,12 +65,16 @@ export default function Navbar() {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            {userStatus.user && userStatus.user.image ? (
-              <Avatar
-                alt="Profile picture"
-                src={userStatus.user.image}
-                sx={{ bgcolor: grey[50] }}
-              />
+            {userStatus.user ? (
+              userStatus.user.image ? (
+                <Avatar
+                  alt="Profile picture"
+                  src={userStatus.user.image}
+                  sx={{ bgcolor: grey[50] }}
+                />
+              ) : (
+                <Avatar>{userStatus.user.username[0]}</Avatar>
+              )
             ) : null}
           </IconButton>
           <Menu
@@ -98,12 +102,22 @@ export default function Navbar() {
               </Link>
             </MenuItem>
             <MenuItem key={2}>
-              <Link textAlign="center" color="inherit" underline="none" href={PagePaths.myPosts}>
+              <Link
+                textAlign="center"
+                color="inherit"
+                underline="none"
+                href={PagePaths.myPosts}
+              >
                 <Typography variant="body1">{NavbarPages.myPost}</Typography>
               </Link>
             </MenuItem>
             <MenuItem key={3}>
-              <Link textAlign="center" color="error" underline="none" onClick={handleSignOut}>
+              <Link
+                textAlign="center"
+                color="error"
+                underline="none"
+                onClick={handleSignOut}
+              >
                 <Typography variant="body1">{NavbarPages.logout}</Typography>
               </Link>
             </MenuItem>
