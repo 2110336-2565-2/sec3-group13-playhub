@@ -72,7 +72,7 @@ export default function Navbar() {
                   sx={{ bgcolor: grey[50] }}
                 />
               ) : (
-                <Avatar>{userStatus.user.username[0]}</Avatar>
+                <Avatar />
               )
             ) : null}
           </IconButton>
