@@ -45,10 +45,7 @@ const createPost = () => {
     ownerProfilePic: "",
     tags: [Tags[0], Tags[1]],
     description: "this is description",
-    image: [
-      "https://picsum.photos/id/12/200",
-      "https://picsum.photos/id/13/200",
-    ],
+    image: ["https://picsum.photos/id/12/200", "https://picsum.photos/id/13/200"],
 
     location: "this is location",
     startDateTime: "2023-03-01",
@@ -94,7 +91,7 @@ const createPost = () => {
     initialValue.endDateTime === "" ? null : dayjs(initialValue.endDateTime)
   );
   const [selectedTags, setSelectedTags] = useState(initialValue.tags);
-  const [desc, setDesc] = React.useState("");
+  const [desc, setDesc] = React.useState(initialValue.description);
   const [images, setImages] = useState<string[]>([]);
   // value of every text field
 
@@ -149,20 +146,14 @@ const createPost = () => {
     setIsStartDateErr(startDateErrMsg !== "");
   }, [startDate]);
 
-  function handleTitleChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
+  function handleTitleChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
     setTitle(event.target.value);
   }
 
-  function handleDescChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
+  function handleDescChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
     setDesc(event.target.value);
   }
-  function handleLocationChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
+  function handleLocationChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
     if (location === "") {
       setLocation(location.description);
     }
@@ -196,13 +187,7 @@ const createPost = () => {
   return (
     <>
       <Navbar />
-      <Stack
-        spacing={2}
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: "100vh" }}
-        margin="0 0 2vh 0"
-      >
+      <Stack spacing={2} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }} margin="0 0 2vh 0">
         <Box sx={createPostLayout}>
           <Typography variant="h1" component="h2">
             Create post
@@ -236,16 +221,10 @@ const createPost = () => {
             Location
           </Typography>
           <Stack spacing={2}>
-            <GoogleMaps
-              initialValue={initialValue.location}
-              Location={setLocation}
-              onChange={handleLocationChange}
-            />
+            <GoogleMaps initialValue={initialValue.location} Location={setLocation} onChange={handleLocationChange} />
             {isSubmit && isLocationSelected == false && (
               <Box display="flex">
-                <FormHelperText error>
-                  ช่องนี้ไม่สามารถเว้นว่างได้
-                </FormHelperText>
+                <FormHelperText error>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
               </Box>
             )}
           </Stack>
@@ -273,9 +252,7 @@ const createPost = () => {
                   }}
                 />
               </LocalizationProvider>
-              {isStartDateErr && (
-                <p style={{ color: error }}>{startDateErrMsg}</p>
-              )}
+              {isStartDateErr && <p style={{ color: error }}>{startDateErrMsg}</p>}
             </Grid>
             <Grid item xs={6}>
               <Typography variant="body1">End</Typography>
@@ -297,9 +274,7 @@ const createPost = () => {
               </LocalizationProvider>
               {isEndDateErr && <p style={{ color: error }}>{endDateErrMsg}</p>}
               <div style={helperTextBox}>
-                <FormHelperText sx={helperTextError}>
-                  ช่องนี้ไม่สามารถเว้นว่างได้
-                </FormHelperText>
+                <FormHelperText sx={helperTextError}>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
               </div>
             </Grid>
           </Grid>
@@ -316,6 +291,7 @@ const createPost = () => {
             renderTags={(value: readonly string[], getTagProps) =>
               value.map((option: string, index: number) => (
                 <Paper
+                  key={index}
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -334,23 +310,16 @@ const createPost = () => {
               ))
             }
             renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder="คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)"
-                fullWidth
-              />
+              <TextField {...params} placeholder="คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)" fullWidth />
             )}
           />
-          {isSubmit && isTagErr && (
-            <FormHelperText error>{tagErrMsg}</FormHelperText>
-          )}
+          {isSubmit && isTagErr && <FormHelperText error>{tagErrMsg}</FormHelperText>}
         </Box>
         <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
             Description
           </Typography>
           <TextField
-            defaultValue={initialValue.description}
             variant="outlined"
             fullWidth
             multiline
@@ -373,31 +342,15 @@ const createPost = () => {
         <Box sx={createPostLayout}>
           <Typography variant="h5" margin="0 0 1vh 0">
             <span>Image </span>
-            <span style={{ color: "grey" }}>
-              (Optional, เลือกได้สูงสุด 3 รูป )
-            </span>
+            <span style={{ color: "grey" }}>(Optional, เลือกได้สูงสุด 3 รูป )</span>
           </Typography>
 
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            spacing={1}
-          >
-            <PictureList
-              imgs={images}
-              stateChanger={setImages}
-              st={setImgErrState}
-            />
+          <Stack direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+            <PictureList imgs={images} stateChanger={setImages} st={setImgErrState} />
           </Stack>
-          {imgErrState && (
-            <FormHelperText error>เลือกรูปภาพได้ไม่เกิน 3 รูป</FormHelperText>
-          )}
+          {imgErrState && <FormHelperText error>เลือกรูปภาพได้ไม่เกิน 3 รูป</FormHelperText>}
         </Box>
-        <Box
-          /*sx={createPostLayout} */ justifyContent="center"
-          alignItems="center"
-        >
+        <Box /*sx={createPostLayout} */ justifyContent="center" alignItems="center">
           <Button variant="contained" color="primary">
             <Typography style={fontDesign} onClick={handleSubmit}>
               Create Post
