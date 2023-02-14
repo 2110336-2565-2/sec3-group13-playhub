@@ -77,7 +77,7 @@ export default function Home() {
   );
 
   const getProfile = async (User: User) => {
-    setDisplayName(User.name);
+    setDisplayName(User.username);
     setDescription(User.description);
     setGender(User.sex);
     setImage(User.image);

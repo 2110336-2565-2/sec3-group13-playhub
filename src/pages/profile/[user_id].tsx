@@ -35,24 +35,19 @@ export default function Home() {
 
   useEffect(() => {
     async function getTargetUserData() {
-      if (!userStatus.user || !router.query.username || targetUserData) return;
-      const getUserDataResult = await supabaseClient.rpc(
-        "get_user_data_from_username",
-        {
-          target_username: router.query.username as string,
-        }
-      );
+      if (!userStatus.user || !router.query.user_id || targetUserData) return;
+      const getUserDataResult = await supabaseClient.rpc("get_user_data_by_id", {
+        target_id: router.query.user_id as string,
+      });
       if (getUserDataResult.error || getUserDataResult.count == 0) {
-        console.log(
-          getUserDataResult.error ? getUserDataResult.error : "no user"
-        );
+        console.log(getUserDataResult.error ? getUserDataResult.error : "no user");
         return;
       }
       setTargetUserData(getUserDataResult.data[0]);
     }
 
     getTargetUserData();
-  }, [router.query.username, supabaseClient, userStatus.user, targetUserData]);
+  }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
 
   function handleEditProfile(): void {
     router.push(PagePaths.editProfile);
@@ -60,9 +55,9 @@ export default function Home() {
   }
 
   if (userStatus.isLoading) return <Loading />;
-  if (!userStatus.user) {
+  if (!userStatus.user){
     router.push(PagePaths.login);
-    return;
+    return ;
   }
   if (!targetUserData) return <Loading />;
   return (
@@ -78,16 +73,12 @@ export default function Home() {
           <Typography variant="h1" align="center" sx={profile_layout}>
             {targetUserData.username}
           </Typography>
-          {router.query.username === userStatus.user.username && (
+          {router.query.user_id === userStatus.user.user_id && (
             <Typography variant="body1" align="center" sx={profile_layout}>
               {targetUserData.email}
             </Typography>
           )}
-          <Avatar
-            sx={avatar}
-            alt="Profile picture"
-            src={targetUserData.image as string}
-          />
+          <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image as string} />
           <Stack direction="row" spacing={1}>
             <Chip
               icon={
@@ -115,7 +106,7 @@ export default function Home() {
               {row}
             </Typography>
           ))}
-          {router.query.username === userStatus.user.username && (
+          {router.query.user_id === userStatus.user.user_id && (
             <IconButton onClick={handleEditProfile}>
               <EditIcon />
             </IconButton>
