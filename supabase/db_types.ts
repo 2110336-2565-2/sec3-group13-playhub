@@ -204,7 +204,6 @@ export interface Database {
           email: string
           image: string
           is_enabled: boolean | null
-          name: string
           password: string | null
           rating_score: number | null
           sex: string
@@ -219,7 +218,6 @@ export interface Database {
           email?: string | null
           image?: string | null
           is_enabled?: boolean | null
-          name?: string | null
           password?: string | null
           rating_score?: number | null
           sex?: string | null
@@ -234,7 +232,6 @@ export interface Database {
           email?: string | null
           image?: string | null
           is_enabled?: boolean | null
-          name?: string | null
           password?: string | null
           rating_score?: number | null
           sex?: string | null
@@ -264,34 +261,19 @@ export interface Database {
           location: string
         }
       },
-      get_user_data: {
+      get_user_data_by_id: {
         Args: {
           target_id: string
         }
         Returns: {
           user_id: string
           username: string
-          name: string
           sex: string
           birthdate: string
           description: string
           image: string | null
           email: string
-        }
-      },
-      get_user_data_from_username: {
-        Args: {
-          target_username: string
-        }
-        Returns: {
-          user_id: string
-          username: string
-          name: string
-          sex: string
-          birthdate: string
-          description: string
-          image: string
-          email: string
+          is_admin: boolean
         }
       },
       delete_post_by_id: {
