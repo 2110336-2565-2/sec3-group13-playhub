@@ -139,7 +139,7 @@ export default function Home() {
         console.log(addUserData.error);
         return;
       }
-      router.push(PagePaths.home);
+      router.push(PagePaths.login);
     }
   };
 
