@@ -95,7 +95,7 @@ const createPost = () => {
     initialValue.endDateTime === "" ? null : dayjs(initialValue.endDateTime)
   );
   const [selectedTags, setSelectedTags] = useState(initialValue.tags);
-  const [desc, setDesc] = React.useState("");
+  const [desc, setDesc] = React.useState(initialValue.description);
   const [images, setImages] = useState<string[]>([]);
   // value of every text field
 
@@ -319,6 +319,7 @@ const createPost = () => {
             renderTags={(value: readonly string[], getTagProps) =>
               value.map((option: string, index: number) => (
                 <Paper
+                  key={index}
                   style={{
                     display: "flex",
                     justifyContent: "center",
@@ -353,7 +354,6 @@ const createPost = () => {
             Description
           </Typography>
           <TextField
-            defaultValue={initialValue.description}
             variant="outlined"
             fullWidth
             multiline
