@@ -96,7 +96,7 @@ export default function Navbar() {
                 textAlign="center"
                 color="inherit"
                 underline="none"
-                href={PagePaths.profile + userStatus.user?.username}
+                href={PagePaths.profile + userStatus.user?.user_id}
               >
                 <Typography variant="body1">{NavbarPages.profile}</Typography>
               </Link>
