@@ -11,7 +11,7 @@ import { InputAdornment } from "@mui/material";
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = "";
+const GOOGLE_MAPS_API_KEY = "AIzaSyD-IfhxRfTbJI1efstHM2H7Nnq3432wu5A";
 // You can try to using google api key using in your environment
 type props = {
   initialValue?: string;

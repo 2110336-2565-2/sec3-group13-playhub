@@ -125,18 +125,14 @@ const createPost = () => {
 
   useEffect(() => {
     setTitleErrMsg(message.checkTitle(title));
-    setIsTitleErr(titleErrMsg.length !== "");
+    setIsTitleErr(titleErrMsg !== "");
 
     setDescErrMsg(message.checkDesc(desc));
-    setIsDescErrMsg(descErrMsg.length !== "");
+    setIsDescErrMsg(descErrMsg !== "");
 
     setTagErrMsg(message.checkTag(selectedTags));
-    setIsTagErr(tagErrMsg.length !== "");
+    setIsTagErr(tagErrMsg !== "");
   }, [title, desc, selectedTags]);
-
-  /*useEffect(() => {
-    setImgErrState()
-  }, [images]);*/
 
   useEffect(() => {
     setLocationSelected(location !== "");
