@@ -5,7 +5,6 @@ import {
   Avatar,
   Box,
   IconButton,
-  Link,
   Menu,
   MenuItem,
   Toolbar,
@@ -14,7 +13,7 @@ import {
 
 import Logo from "./Logo";
 
-import { page } from "@/types/Page";
+import Link from 'next/link'
 
 import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
@@ -92,34 +91,21 @@ export default function Navbar() {
             onClose={handleClose}
           >
             <MenuItem key={1}>
-              <Link
-                textAlign="center"
-                color="inherit"
-                underline="none"
-                href={PagePaths.profile + userStatus.user?.user_id}
-              >
-                <Typography variant="body1">{NavbarPages.profile}</Typography>
+              <Link href={PagePaths.profile + userStatus.user?.user_id}>
+                <Box alignContent={"center"}>
+                  <Typography variant="body1">{NavbarPages.profile}</Typography>
+                </Box>
               </Link>
             </MenuItem>
             <MenuItem key={2}>
-              <Link
-                textAlign="center"
-                color="inherit"
-                underline="none"
-                href={PagePaths.myPosts}
-              >
+              <Link href={PagePaths.myPosts}>
                 <Typography variant="body1">{NavbarPages.myPost}</Typography>
               </Link>
             </MenuItem>
             <MenuItem key={3}>
-              <Link
-                textAlign="center"
-                color="error"
-                underline="none"
-                onClick={handleSignOut}
-              >
-                <Typography variant="body1">{NavbarPages.logout}</Typography>
-              </Link>
+              <Box onClick={handleSignOut}>
+                <Typography variant="body1" color="error">{NavbarPages.logout}</Typography>
+              </Box>
             </MenuItem>
           </Menu>
         </Toolbar>
