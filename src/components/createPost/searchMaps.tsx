@@ -11,7 +11,8 @@ import { InputAdornment } from "@mui/material";
 
 // This key was created specifically for the demo in mui.com.
 // You need to create a new one for your application.
-const GOOGLE_MAPS_API_KEY = "AIzaSyD-IfhxRfTbJI1efstHM2H7Nnq3432wu5A";
+const GOOGLE_MAPS_API_KEY: string =
+  process.env.NEXT_PUBLIC_GOOGLE_CLOUD_API_KEY!;
 // You can try to using google api key using in your environment
 type props = {
   initialValue?: string;
@@ -51,7 +52,7 @@ export default function GoogleMaps(props: props) {
   const [inputValue, setInputValue] = React.useState(props.initialValue ?? "");
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
   const loaded = React.useRef(false);
-  //console.log(value);
+
   if (typeof window !== "undefined" && !loaded.current) {
     if (!document.querySelector("#google-maps")) {
       loadScript(
