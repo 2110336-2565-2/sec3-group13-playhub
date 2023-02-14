@@ -19,11 +19,11 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
   useEffect(() => {
     async function getUserData() {
       if (sessionContext.isLoading) return;
-      if (!sessionContext.session?.user) {
+      if (!sessionContext.session) {
         setUserStatus({ user: null, isLoading: false });
         return;
       }
-      const userData = await supabaseClient.rpc("get_user_data", {
+      const userData = await supabaseClient.rpc("get_user_data_by_id", {
         target_id: sessionContext.session.user.id,
       });
       if (userData.error || userData.count == 0 || userData.data == null) {
@@ -35,7 +35,7 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
     getUserData();
   }, [
     sessionContext.isLoading,
-    sessionContext.session?.user,
+    sessionContext.session,
     supabaseClient,
     router.pathname,
   ]);
