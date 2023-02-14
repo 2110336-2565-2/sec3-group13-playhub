@@ -57,7 +57,8 @@ type props = {
 export default function PostCard(props: props) {
   const router: NextRouter = useRouter();
 
-  const [openDeletePostModal, setOpenDeletePostModal] = React.useState<boolean>(false);
+  const [openDeletePostModal, setOpenDeletePostModal] =
+    React.useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = React.useState<boolean>(true);
   const [openSnackBar, setOpenSnackBar] = React.useState<boolean>(false);
 
@@ -101,11 +102,18 @@ export default function PostCard(props: props) {
         {/* Post Card Header */}
         <CardHeader
           avatar={
-            <Avatar
-              sx={{ width: 50, height: 50 }}
-              alt="Profile picture"
-              src={props.post.ownerProfilePic}
-            />
+            <IconButton
+              onClick={() => {
+                router.push(PagePaths.profile + props.post.user_id);
+              }}
+              sx={{ padding: 0 }}
+            >
+              <Avatar
+                sx={{ width: 50, height: 50 }}
+                alt="Profile picture"
+                src={props.post.ownerProfilePic}
+              />
+            </IconButton>
           }
           title={props.post.title}
           subheader={props.post.ownerName}
@@ -118,7 +126,11 @@ export default function PostCard(props: props) {
                   <IconButton size="large" onClick={handleEditPost}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton size="large" color="error" onClick={handleOpenDeletePostModal}>
+                  <IconButton
+                    size="large"
+                    color="error"
+                    onClick={handleOpenDeletePostModal}
+                  >
                     <DeleteOutlineIcon />
                   </IconButton>
                 </>
@@ -126,9 +138,15 @@ export default function PostCard(props: props) {
             </>
           }
         />
-        <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
+        <CardContent
+          style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}
+        >
           {/* post preview details start here */}
-          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
+          <Stack
+            direction={!hiddenPostDetail ? "row" : "column"}
+            spacing={2}
+            marginBottom={2}
+          >
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.post.location}</span>
@@ -156,7 +174,10 @@ export default function PostCard(props: props) {
           </Grid>
 
           {/* post preview details end here */}
-          <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2, marginBottom: 1 }}>
+          <Collapse
+            in={!hiddenPostDetail}
+            sx={{ marginTop: 2, marginBottom: 1 }}
+          >
             {/* post hidden details start here */}
             {props.post.description.split("\n").map((row) => (
               <Typography key={row}>{row}</Typography>

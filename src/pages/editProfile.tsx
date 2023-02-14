@@ -14,7 +14,7 @@ import {
 
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import CancelIcon from '@mui/icons-material/Cancel';
+import CancelIcon from "@mui/icons-material/Cancel";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 import { Gender } from "enum/gender";
@@ -121,13 +121,13 @@ export default function Home() {
       const sendData =
         fileImage != null
           ? {
-              name: displayName,
+              username: displayName,
               sex: gender,
               description: description,
               image: getImageURLResult.data.publicUrl,
             }
           : {
-              name: displayName,
+              username: displayName,
               sex: gender,
               description: description,
             };
@@ -142,7 +142,8 @@ export default function Home() {
         return;
       }
       console.log("Edit success");
-      router.push(PagePaths.profile + "/" + userStatus.user.username);
+
+      router.push(PagePaths.profile + "/" + userStatus.user.user_id);
     } else {
       console.log("Something went wrong");
     }
@@ -192,17 +193,19 @@ export default function Home() {
     getProfile(userStatus.user);
   }, [userStatus]);
 
-  
   if (userStatus.isLoading) return <Loading />;
-  if (!userStatus.user){
+  if (!userStatus.user) {
     router.push(PagePaths.login);
-    return ;
+    return;
   }
   return (
     <>
       <Navbar />
       <Link onClick={handleGoBack}>
-        <ArrowBackIcon fontSize="large" sx={{position:"absolute",margin: "3vh 0 0 3vh", color: "black" }} />
+        <ArrowBackIcon
+          fontSize="large"
+          sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
+        />
       </Link>
       <Stack
         spacing={2}
@@ -213,7 +216,7 @@ export default function Home() {
         <CancelIcon
           onClick={handleCancelImageChip}
           color={showImageUploadError.err ? "error" : "secondary"}
-          sx={{position:"relative",top:"70px",left:"80px",zIndex:"1"}}
+          sx={{ position: "relative", top: "70px", left: "80px", zIndex: "1" }}
           fontSize="large"
           cursor="pointer"
         />
@@ -225,11 +228,22 @@ export default function Home() {
               alt="Upload avatar"
               width={200}
               height={200}
-              style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
+              style={
+                !isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }
+              }
             />
           )}
-          <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
-            <input onChange={handleImageChange} hidden accept="image/*" type="file" />
+          <IconButton
+            sx={overlayIcon}
+            aria-label="upload picture"
+            component="label"
+          >
+            <input
+              onChange={handleImageChange}
+              hidden
+              accept="image/*"
+              type="file"
+            />
             <CameraAltIcon sx={{ fontSize: "100px" }} />
           </IconButton>
         </Avatar>

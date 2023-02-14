@@ -85,7 +85,7 @@ export default function AdminNavbar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem key={1}>
+            <MenuItem>
               <Link
                 textAlign="center"
                 color="error"

@@ -6,7 +6,7 @@ import { Database } from "supabase/db_types";
 import { useContext, useEffect, useState } from "react";
 import { userContext } from "supabase/user_context";
 import { Box, Fab, Stack, Typography } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
+import AddIcon from "@mui/icons-material/Add";
 import Link from "next/link";
 import Loading from "@/components/public/Loading";
 import { NextRouter, useRouter } from "next/router";
@@ -20,16 +20,22 @@ export default function Home() {
   const [posts, setPosts] = useState<Post[] | null>(null);
 
   function handleDeletePost(toDeletePost: Post): void {
-    setPosts((posts) => posts && posts.filter((post) => post.post_id !== toDeletePost.post_id));
+    setPosts(
+      (posts) =>
+        posts && posts.filter((post) => post.post_id !== toDeletePost.post_id)
+    );
   }
 
   useEffect(() => {
     async function getPostData() {
       if (!userStatus.user) return;
 
-      const getAllUserPostResult = await supabaseClient.rpc("get_posts_by_user_id", {
-        target_id: userStatus.user.user_id,
-      });
+      const getAllUserPostResult = await supabaseClient.rpc(
+        "get_posts_by_user_id",
+        {
+          target_id: userStatus.user.user_id,
+        }
+      );
       if (getAllUserPostResult.error) {
         console.log(getAllUserPostResult.error);
         return;
@@ -45,7 +51,9 @@ export default function Home() {
 
       if (!getPostTagResult.data) return;
 
-      const getPostLocationImgResult = await supabaseClient.rpc("get_all_post_location_image");
+      const getPostLocationImgResult = await supabaseClient.rpc(
+        "get_all_post_location_image"
+      );
       if (getPostLocationImgResult.error) {
         console.log(getPostLocationImgResult.error);
         return;
@@ -53,7 +61,9 @@ export default function Home() {
 
       const postDataList = getAllUserPostResult.data.map((data) => {
         // extract tags from post data
-        const postTagList = getPostTagResult.data.filter((post) => post.post_id == data.post_id);
+        const postTagList = getPostTagResult.data.filter(
+          (post) => post.post_id == data.post_id
+        );
         const tagName = postTagList.map((data) => data.name);
 
         // extract image from post data
@@ -65,6 +75,7 @@ export default function Home() {
         return {
           post_id: data.post_id,
           title: data.title,
+          user_id: data.user_id,
           ownerName: data.username,
           ownerProfilePic: data.profile_image,
           tags: tagName,
@@ -82,9 +93,9 @@ export default function Home() {
   }, [userStatus.user, supabaseClient]);
 
   if (userStatus.isLoading) return <Loading />;
-  if (!userStatus.user){
+  if (!userStatus.user) {
     router.push(PagePaths.login);
-    return ;
+    return;
   }
   if (posts == null) return <Loading />;
   return (
@@ -109,10 +120,10 @@ export default function Home() {
         ))}
       </Stack>
       <Link href={"createPost"} color="inherit">
-        <Fab 
-          color="primary" 
+        <Fab
+          color="primary"
           aria-label="add"
-          sx={{position:"fixed",right:"20px",bottom:"20px"}}
+          sx={{ position: "fixed", right: "20px", bottom: "20px" }}
         >
           <AddIcon />
         </Fab>

@@ -68,6 +68,7 @@ export default function Home() {
         return {
           post_id: data.post_id,
           title: data.title,
+          user_id: data.owner_id,
           ownerName: data.username,
           ownerProfilePic: data.profile_image,
           tags: tagName,
