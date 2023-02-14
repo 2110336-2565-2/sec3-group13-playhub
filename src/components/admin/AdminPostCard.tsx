@@ -27,6 +27,7 @@ import { Post } from "../../types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { NextRouter, useRouter } from "next/router";
+import { PagePaths } from "enum/pages";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -90,11 +91,18 @@ export default function AdminPostCard(props: props) {
         {/* Post Card Header */}
         <CardHeader
           avatar={
-            <Avatar
-              sx={{ width: 50, height: 50 }}
-              alt="Profile picture"
-              src={props.post.ownerProfilePic}
-            />
+            <IconButton
+              onClick={() => {
+                router.push(PagePaths.profile + props.post.user_id);
+              }}
+              sx={{ padding: 0 }}
+            >
+              <Avatar
+                sx={{ width: 50, height: 50 }}
+                alt="Profile picture"
+                src={props.post.ownerProfilePic}
+              />
+            </IconButton>
           }
           title={props.post.title}
           subheader={props.post.ownerName}

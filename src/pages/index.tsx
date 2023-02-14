@@ -61,6 +61,7 @@ export default function Home() {
         return {
           post_id: data.post_id,
           title: data.title,
+          user_id: data.owner_id,
           ownerName: data.username,
           ownerProfilePic: data.profile_image,
           tags: tagName,
@@ -102,7 +103,7 @@ export default function Home() {
           }}
         >
           {posts?.map((item, index) => (
-            <Box width="80vw" key={index}>
+            <Box width="60vw" key={index}>
               <CommonPostCard post={item} />
             </Box>
           ))}

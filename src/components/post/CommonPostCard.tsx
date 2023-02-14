@@ -66,7 +66,7 @@ export default function PostCard(props: props) {
           avatar={
             <IconButton
               onClick={() => {
-                router.push(PagePaths.profile + props.post.ownerName);
+                router.push(PagePaths.profile + props.post.user_id);
               }}
               sx={{ padding: 0 }}
             >
@@ -82,9 +82,15 @@ export default function PostCard(props: props) {
           titleTypographyProps={{ variant: "h5" }}
           subheaderTypographyProps={{ variant: "h6" }}
         />
-        <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
+        <CardContent
+          style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}
+        >
           {/* post preview details start here */}
-          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
+          <Stack
+            direction={!hiddenPostDetail ? "row" : "column"}
+            spacing={2}
+            marginBottom={2}
+          >
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.post.location}</span>
@@ -112,7 +118,10 @@ export default function PostCard(props: props) {
           </Grid>
 
           {/* post preview details end here */}
-          <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2, marginBottom: 1 }}>
+          <Collapse
+            in={!hiddenPostDetail}
+            sx={{ marginTop: 2, marginBottom: 1 }}
+          >
             {/* post hidden details start here */}
             {props.post.description.split("\n").map((row) => (
               <Typography key={row}>{row}</Typography>
