@@ -1,6 +1,14 @@
 import React from "react";
 import { NextRouter, useRouter } from "next/router";
-import { Link, Box, Typography, TextField, Stack, FormHelperText, Button } from "@mui/material";
+import {
+  Link,
+  Box,
+  Typography,
+  TextField,
+  Stack,
+  FormHelperText,
+  Button,
+} from "@mui/material";
 
 import Logo from "@/components/public/Logo";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
@@ -40,7 +48,10 @@ export default function Home() {
 
   // error about variables
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
+  const passwordErr: validation = validateTextField(
+    password,
+    CHAR_LIMIT.MIN_PASSWORD
+  );
   const isSupabaseErr: boolean =
     (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg: string = isLoginCredErr
@@ -51,10 +62,11 @@ export default function Home() {
     setIsSubmit(true);
 
     // sign in via supabase
-    const signInResult: AuthResponse = await supabaseClient.auth.signInWithPassword({
-      email,
-      password,
-    });
+    const signInResult: AuthResponse =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
 
     if (signInResult.error) {
       // in case : cannot find user using inputed email and password
@@ -65,7 +77,9 @@ export default function Home() {
       }
 
       // in case : user has not validate email yet
-      if (signInResult.error.message == SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR) {
+      if (
+        signInResult.error.message == SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR
+      ) {
         setIsValidateErr(true);
         console.log("You have not validate your email yet");
         return;
@@ -73,7 +87,13 @@ export default function Home() {
     }
 
     // route to post feed page
-    router.push(PagePaths.home);
+    if (userStatus.user?.isAdmin) {
+      router.push(PagePaths.adminHome + userStatus.user.user_id);
+      return;
+    } else {
+      router.push(PagePaths.home);
+      return;
+    }
   }
 
   function handleEmailChange(
@@ -102,7 +122,12 @@ export default function Home() {
     return;
   }
   return (
-    <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
+    <Stack
+      spacing={3}
+      alignItems="center"
+      justifyContent="center"
+      style={{ minHeight: "100vh" }}
+    >
       <Logo width={119} height={119} />
 
       {/* Email TextField */}
