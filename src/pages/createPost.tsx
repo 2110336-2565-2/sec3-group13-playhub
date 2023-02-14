@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "@/components/public/Navbar";
-import { useState } from "react";
+
 import {
   Grid,
   Typography,
@@ -56,7 +56,7 @@ const createPost = () => {
   };
 
   const initialValue: Post = true ? dummyEditFrom : emptyPost;
-  const error = "#ff0000";
+
   const createPostLayout = {
     width: "35vw",
     margin: "2vh 0 0 0",
@@ -68,7 +68,7 @@ const createPost = () => {
   const helperTextError = {
     textAlign: "start",
     gridColumn: 1,
-    color: error,
+    color: "error",
     display: "none",
   };
   const helperText = {
@@ -81,12 +81,13 @@ const createPost = () => {
     fontsize: "20px",
     lineheight: "24px",
     letterspacing: "0.15px",
-    color: "#000000",
+    color: "secondary.main",
   };
   const [isSubmit, setIsSubmit] = React.useState(false);
   // value of every text field
+
   const [title, setTitle] = React.useState("");
-  const [location, setLocation] = React.useState("");
+  const [locationTitle, setLocationTitle] = React.useState<string>("");
   const [startDate, setStartDate] = React.useState<Dayjs | null>(
     dayjs(initialValue.startDateTime === "" ? null : initialValue.startDateTime)
   );
@@ -135,9 +136,9 @@ const createPost = () => {
   }, [title, desc, selectedTags]);
 
   useEffect(() => {
-    setLocationSelected(location !== "");
-    console.log(location);
-  }, [location]);
+    setLocationSelected(locationTitle !== "");
+    console.log(locationTitle);
+  }, [locationTitle]);
 
   useEffect(() => {
     setEndDateErrMsg(message.checkEndDate(startDate, endDate));
@@ -163,8 +164,8 @@ const createPost = () => {
   function handleLocationChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
-    if (location === "") {
-      setLocation(location.description);
+    if (locationTitle !== "") {
+      setLocationTitle(locationTitle);
     }
   }
 
@@ -238,7 +239,7 @@ const createPost = () => {
           <Stack spacing={2}>
             <GoogleMaps
               initialValue={initialValue.location}
-              Location={setLocation}
+              locationTitle={setLocationTitle}
               onChange={handleLocationChange}
             />
             {isSubmit && isLocationSelected == false && (
@@ -274,7 +275,7 @@ const createPost = () => {
                 />
               </LocalizationProvider>
               {isStartDateErr && (
-                <p style={{ color: error }}>{startDateErrMsg}</p>
+                <p style={{ color: "error" }}>{startDateErrMsg}</p>
               )}
             </Grid>
             <Grid item xs={6}>
@@ -295,7 +296,9 @@ const createPost = () => {
                   }}
                 />
               </LocalizationProvider>
-              {isEndDateErr && <p style={{ color: error }}>{endDateErrMsg}</p>}
+              {isEndDateErr && (
+                <p style={{ color: "error" }}>{endDateErrMsg}</p>
+              )}
               <div style={helperTextBox}>
                 <FormHelperText sx={helperTextError}>
                   ช่องนี้ไม่สามารถเว้นว่างได้
@@ -399,9 +402,7 @@ const createPost = () => {
           alignItems="center"
         >
           <Button variant="contained" color="primary">
-            <Typography style={fontDesign} onClick={handleSubmit}>
-              Create Post
-            </Typography>
+            <Typography onClick={handleSubmit}>Create Post</Typography>
           </Button>
         </Box>
       </Stack>

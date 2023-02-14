@@ -16,7 +16,10 @@ const GOOGLE_MAPS_API_KEY: string =
 // You can try to using google api key using in your environment
 type props = {
   initialValue?: string;
-  Location: React.Dispatch<React.SetStateAction<object>>;
+  locationTitle: React.Dispatch<React.SetStateAction<string>>;
+  onChange: (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
 };
 
 function loadScript(src: string, position: HTMLElement | null, id: string) {
@@ -136,7 +139,9 @@ export default function GoogleMaps(props: props) {
       onChange={(event: any, newValue: PlaceType | null) => {
         setOptions(newValue ? [newValue, ...options] : options);
         setValue(newValue);
-        props.Location(newValue);
+        3;
+
+        props.locationTitle(newValue?.description ?? "");
       }}
       onInputChange={(event, newInputValue) => {
         setInputValue(newInputValue);
