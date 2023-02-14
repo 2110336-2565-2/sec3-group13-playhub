@@ -87,13 +87,8 @@ export default function Home() {
     }
 
     // route to post feed page
-    if (userStatus.user?.isAdmin) {
-      router.push(PagePaths.adminHome + userStatus.user.user_id);
-      return;
-    } else {
-      router.push(PagePaths.home);
-      return;
-    }
+    router.push(PagePaths.home);
+    return;
   }
 
   function handleEmailChange(

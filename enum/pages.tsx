@@ -12,5 +12,5 @@ export enum PagePaths {
   editProfile = "/editProfile",
 
   // admin
-  adminHome = "/admin/", // subfix : userId
+  adminHome = "/admin/", // subfix : user_id
 }

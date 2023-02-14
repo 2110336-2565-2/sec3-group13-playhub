@@ -37,7 +37,9 @@ export default function Home() {
 
       if (!getPostTagResult.data) return;
 
-      const getPostLocationImgResult = await supabaseClient.rpc("get_all_post_location_image");
+      const getPostLocationImgResult = await supabaseClient.rpc(
+        "get_all_post_location_image"
+      );
       if (getPostLocationImgResult.error) {
         console.log(getPostLocationImgResult.error);
         return;
@@ -45,7 +47,9 @@ export default function Home() {
 
       const postDataList = getAllUserPostResult.data.map((data) => {
         // extract tags from post data
-        const postTagList = getPostTagResult.data.filter((post) => post.post_id == data.post_id);
+        const postTagList = getPostTagResult.data.filter(
+          (post) => post.post_id == data.post_id
+        );
         const tagName = postTagList.map((data) => data.name);
 
         // extract image from post data
@@ -74,9 +78,13 @@ export default function Home() {
   }, [userStatus.user, supabaseClient]);
 
   if (userStatus.isLoading) return <Loading />;
-  if (!userStatus.user){
+  if (!userStatus.user) {
     router.push(PagePaths.login);
-    return ;
+    return;
+  }
+  if (userStatus.user.is_admin) {
+    router.push(PagePaths.adminHome + userStatus.user.user_id);
+    return;
   }
   if (posts == null) return <Loading />;
   return (

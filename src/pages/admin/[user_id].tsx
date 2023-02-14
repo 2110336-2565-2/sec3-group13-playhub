@@ -28,12 +28,7 @@ export default function Home() {
     async function getPostData() {
       if (!userStatus.user) return;
 
-      const getAllUserPostResult = await supabaseClient.rpc(
-        "get_posts_by_user_id",
-        {
-          target_id: userStatus.user.user_id,
-        }
-      );
+      const getAllUserPostResult = await supabaseClient.rpc("get_all_posts");
       if (getAllUserPostResult.error) {
         console.log(getAllUserPostResult.error);
         return;
@@ -92,6 +87,13 @@ export default function Home() {
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
     router.push(PagePaths.login);
+    return;
+  }
+  if (
+    !userStatus.user.is_admin ||
+    userStatus.user.user_id !== router.query.user_id
+  ) {
+    router.push(PagePaths.home);
     return;
   }
   if (posts == null) return <Loading />;

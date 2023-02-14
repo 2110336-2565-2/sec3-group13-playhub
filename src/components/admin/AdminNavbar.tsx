@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import Logo from "../public/Logo";
-F;
+
 import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
 
