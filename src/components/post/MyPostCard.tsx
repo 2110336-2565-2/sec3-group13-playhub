@@ -96,7 +96,6 @@ export default function PostCard(props: props) {
           borderRadius: "16px",
           minWidth: "260px",
           maxWidth: "1200px",
-          margin: "40px",
         }}
       >
         {/* Post Card Header */}
