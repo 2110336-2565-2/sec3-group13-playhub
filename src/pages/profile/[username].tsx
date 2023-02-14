@@ -36,11 +36,16 @@ export default function Home() {
   useEffect(() => {
     async function getTargetUserData() {
       if (!userStatus.user || !router.query.username || targetUserData) return;
-      const getUserDataResult = await supabaseClient.rpc("get_user_data_from_username", {
-        target_username: router.query.username as string,
-      });
+      const getUserDataResult = await supabaseClient.rpc(
+        "get_user_data_from_username",
+        {
+          target_username: router.query.username as string,
+        }
+      );
       if (getUserDataResult.error || getUserDataResult.count == 0) {
-        console.log(getUserDataResult.error ? getUserDataResult.error : "no user");
+        console.log(
+          getUserDataResult.error ? getUserDataResult.error : "no user"
+        );
         return;
       }
       setTargetUserData(getUserDataResult.data[0]);
@@ -54,9 +59,12 @@ export default function Home() {
     return;
   }
 
-  if (userStatus.isLoading) return <Loading />; //temporary display
-  if (!userStatus.user) return <p>log in first</p>; // temporary display
-  if (!targetUserData) return <p>getting user data...</p>; // temporary display
+  if (userStatus.isLoading) return <Loading />;
+  if (!userStatus.user) {
+    router.push(PagePaths.login);
+    return;
+  }
+  if (!targetUserData) return <Loading />;
   return (
     <>
       <Suspense fallback={<Loading />}>
@@ -68,14 +76,18 @@ export default function Home() {
           style={{ minHeight: "90vh" }}
         >
           <Typography variant="h1" align="center" sx={profile_layout}>
-            {targetUserData.name}
+            {targetUserData.username}
           </Typography>
           {router.query.username === userStatus.user.username && (
             <Typography variant="body1" align="center" sx={profile_layout}>
               {targetUserData.email}
             </Typography>
           )}
-          <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image as string} />
+          <Avatar
+            sx={avatar}
+            alt="Profile picture"
+            src={targetUserData.image as string}
+          />
           <Stack direction="row" spacing={1}>
             <Chip
               icon={

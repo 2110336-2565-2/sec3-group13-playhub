@@ -8,8 +8,6 @@ import {
   CardHeader,
   CardContent,
   CardActions,
-  Grow,
-  Button,
   IconButton,
   Grid,
   Stack,
@@ -70,6 +68,7 @@ export default function PostCard(props: props) {
               onClick={() => {
                 router.push(PagePaths.profile + props.post.ownerName);
               }}
+              sx={{ padding: 0 }}
             >
               <Avatar
                 sx={{ width: 50, height: 50 }}

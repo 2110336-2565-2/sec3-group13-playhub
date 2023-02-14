@@ -32,6 +32,7 @@ import { validateImage, validateTextField } from "@/utilities/validation";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
+import Loading from "@/components/public/Loading";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -191,7 +192,12 @@ export default function Home() {
     getProfile(userStatus.user);
   }, [userStatus]);
 
-  if (userStatus.isLoading) return <p>getting session...</p>;
+  
+  if (userStatus.isLoading) return <Loading />;
+  if (!userStatus.user){
+    router.push(PagePaths.login);
+    return ;
+  }
   return (
     <>
       <Navbar />
