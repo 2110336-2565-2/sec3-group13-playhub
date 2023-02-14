@@ -8,8 +8,12 @@ import { userContext } from "supabase/user_context";
 import { Box, Fab, Stack, Typography } from "@mui/material";
 import AddIcon from '@mui/icons-material/Add';
 import Link from "next/link";
+import Loading from "@/components/public/Loading";
+import { NextRouter, useRouter } from "next/router";
+import { PagePaths } from "enum/pages";
 
 export default function Home() {
+  const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
 
@@ -77,7 +81,12 @@ export default function Home() {
     getPostData();
   }, [userStatus.user, supabaseClient]);
 
-  if (posts == null) return <p>Loading All Post...</p>;
+  if (userStatus.isLoading) return <Loading />;
+  if (!userStatus.user){
+    router.push(PagePaths.login);
+    return ;
+  }
+  if (posts == null) return <Loading />;
   return (
     <>
       <Navbar />

@@ -54,9 +54,12 @@ export default function Home() {
     return;
   }
 
-  if (userStatus.isLoading) return <Loading />; //temporary display
-  if (!userStatus.user) return <p>log in first</p>; // temporary display
-  if (!targetUserData) return <p>getting user data...</p>; // temporary display
+  if (userStatus.isLoading) return <Loading />;
+  if (!userStatus.user){
+    router.push(PagePaths.login);
+    return ;
+  }
+  if (!targetUserData) return <Loading />;
   return (
     <>
       <Suspense fallback={<Loading />}>
