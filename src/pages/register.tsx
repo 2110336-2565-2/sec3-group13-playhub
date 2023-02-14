@@ -53,7 +53,10 @@ export default function Home() {
     CHAR_LIMIT.MIN_DISPLAY_NAME,
     CHAR_LIMIT.MAX_DISPLAY_NAME
   );
-  const emailErr: validation = validateEmail(email);
+
+  // Must declare isEmailAlreadyUsed before emailErr ! 
+  const [isEmailAlreadyUsed,setIsEmailAlreadyUsed] = React.useState<validation>({msg:"",err:false})
+  const emailErr: validation = emailHandlerErr()
   const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
   const isValidConfirmPassword: boolean = password === confirmPassword;
   const [isEmptyGender, setIsEmptyGender] = React.useState<boolean>(true);
@@ -68,6 +71,16 @@ export default function Home() {
     isEmptyBirthDate
   );
 
+  function emailHandlerErr(){
+    if(validateEmail(email).err){
+      return validateEmail(email)
+    }else if(isEmailAlreadyUsed.err){
+      return isEmailAlreadyUsed
+    }else{
+      return { msg : "", err : false }
+    }
+  }
+
   // handle input change
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
@@ -81,6 +94,7 @@ export default function Home() {
   ): void => {
     setEmail(event.target.value);
     setIsSubmitEmail(false);
+    setIsEmailAlreadyUsed({msg:"",err:false})
   };
 
   const handlePasswordChange = (
@@ -125,6 +139,9 @@ export default function Home() {
       if (signUpResult.error) {
         // one possible error is request sign up repeatedly too fast
         console.log(signUpResult.error);
+        if(signUpResult.error.message === "User already registered"){
+          setIsEmailAlreadyUsed({msg:"ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",err:true})
+        }
         return;
       }
       const addUserData = await supabaseClient.rpc("add_user", {
