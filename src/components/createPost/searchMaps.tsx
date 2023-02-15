@@ -50,7 +50,7 @@ interface PlaceType {
 
 export default function GoogleMaps(props: props) {
   const [value, setValue] = React.useState<PlaceType | null>(
-    props.initialValue === null ? null : { description: props.initialValue! }
+    !props.initialValue ? null : { description: props.initialValue! }
   );
   const [inputValue, setInputValue] = React.useState(props.initialValue ?? "");
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);

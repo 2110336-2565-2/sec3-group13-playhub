@@ -286,7 +286,6 @@ const CreatePost = () => {
           <Stack spacing={2}>
             <GoogleMaps
               onChange={handleLocationChange}
-              initialValue={locationTitle}
             />
             {isSubmit && formErrors.location && (
               <Box display="flex">
