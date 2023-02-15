@@ -1,6 +1,5 @@
 import { validation } from "@/types/Validation";
-
-import { IMG_FILE_SIZE_LIMIT } from "enum/inputLimit";
+import { IMAGE_LIMIT } from "enum/inputLimit";
 
 const expression: RegExp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -24,7 +23,10 @@ export function validateTextField(
     if (minChar == 1) {
       return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
     } else {
-      return { msg: `ช่องนี้ต้องมีตัวอักษรอย่างน้อย ${minChar} ตัว`, err: true };
+      return {
+        msg: `ช่องนี้ต้องมีตัวอักษรอย่างน้อย ${minChar} ตัว`,
+        err: true,
+      };
     }
   }
   if (input.length > maxChar) {
@@ -40,8 +42,11 @@ export function validateImage(fileType: string, fileSize: number): validation {
       err: true,
     };
   }
-  if (fileSize > IMG_FILE_SIZE_LIMIT) {
-    return { msg: `ขนาดไฟล์จะต้องไม่เกิน ${IMG_FILE_SIZE_LIMIT / 1_000_000} MB`, err: true };
+  if (fileSize > IMAGE_LIMIT.MAX_IMAGE_SIZE) {
+    return {
+      msg: `ขนาดไฟล์จะต้องไม่เกิน ${IMAGE_LIMIT.MAX_IMAGE_SIZE / 1_000_000} MB`,
+      err: true,
+    };
   }
   return { msg: "", err: false };
 }
