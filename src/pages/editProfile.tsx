@@ -123,21 +123,22 @@ export default function Home() {
       const sendData =
         fileImage != null
           ? {
-              username: displayName,
-              sex: gender,
-              description: description,
-              image: getImageURLResult.data.publicUrl,
+              target_id: userStatus.user.user_id,
+              target_username: displayName,
+              target_sex: gender,
+              target_description: description,
+              target_image: getImageURLResult.data.publicUrl,
             }
           : {
-              username: displayName,
-              sex: gender,
-              description: description,
+              target_id: userStatus.user.user_id,
+              target_username: displayName,
+              target_sex: gender,
+              target_description: description,
+              target_image: null
             };
 
       const updateResult = await supabaseClient
-        .from("User")
-        .update(sendData)
-        .eq("user_id", userStatus.user.user_id);
+        .rpc('update_user_profile', sendData);
 
       if (updateResult.error) {
         console.log(updateResult.error);
