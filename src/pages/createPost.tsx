@@ -29,6 +29,7 @@ import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import Loading from "@/components/public/Loading";
 import { useRouter } from "next/router";
+import { PagePaths } from "enum/pages";
 
 const CreatePost = () => {
 
@@ -205,7 +206,7 @@ const CreatePost = () => {
         image: imageUrlResult.data.publicUrl
       })
     })
-    //router.push("/")
+    router.push(PagePaths.myPosts)
   };
 
   useEffect(() => {
