@@ -137,7 +137,9 @@ export default function AdminPostCard(props: props) {
             </Typography>
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>{props.post.time}</span>
+              <span style={{ marginLeft: 8 }}>
+                {props.post.startDateTime} - {props.post.endDateTime}
+              </span>
             </Typography>
           </Stack>
           <Grid container spacing={1}>
