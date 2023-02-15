@@ -50,3 +50,4 @@ export function validateImage(fileType: string, fileSize: number): validation {
   }
   return { msg: "", err: false };
 }
+

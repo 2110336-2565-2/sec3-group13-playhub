@@ -9,32 +9,6 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      Admin: {
-        Row: {
-          created_at: string | null
-          email: string | null
-          id: number
-          name: string | null
-          password: string | null
-          username: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          email?: string | null
-          id?: number
-          name?: string | null
-          password?: string | null
-          username?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          email?: string | null
-          id?: number
-          name?: string | null
-          password?: string | null
-          username?: string | null
-        }
-      }
       Advertisement: {
         Row: {
           created_at: string | null
@@ -287,6 +261,12 @@ export interface Database {
           post_id: number
         }
       },
+      get_all_possible_tags: {
+        Returns: {
+          name: string
+          id: number
+        }
+      },
       add_user: {
         Args: {
           user_id: string,
@@ -295,6 +275,19 @@ export interface Database {
           email: string,
           birthdate: string,
           sex: string
+        },
+        Returns: {
+          post_id: number
+        }
+      },
+      update_post_by_post_id: {
+        Args: {
+          post_id: number,
+          post_title: string,
+          post_location: string,
+          post_start_time: number,
+          post_end_time: number,
+          post_description: string
         }
       },
       update_user_profile: {
