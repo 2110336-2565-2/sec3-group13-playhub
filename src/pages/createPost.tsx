@@ -62,7 +62,8 @@ const CreatePost = () => {
   const [isSubmit, setIsSubmit] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
-  const [locationTitle, setLocationTitle] = useState<string>("");
+  const [locationTitle, setLocationTitle] =
+    useState<string>("initial location");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
@@ -289,7 +290,10 @@ const CreatePost = () => {
             Location
           </Typography>
           <Stack spacing={2}>
-            <GoogleMaps onChange={handleLocationChange} />
+            <GoogleMaps
+              onChange={handleLocationChange}
+              initialValue={locationTitle}
+            />
             {isSubmit && formErrors.location && (
               <Box display="flex">
                 <FormHelperText error>{formErrors.location}</FormHelperText>
