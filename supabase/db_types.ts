@@ -287,6 +287,12 @@ export interface Database {
           post_id: number
         }
       },
+      get_all_possible_tags: {
+        Returns: {
+          name: string
+          id: number
+        }
+      },
       add_user: {
         Args: {
           user_id: string,
