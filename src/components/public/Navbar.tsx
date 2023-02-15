@@ -63,7 +63,7 @@ export default function Navbar() {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            {userStatus.user ? (
+            {userStatus.user && (
               userStatus.user.image ? (
                 <Avatar
                   alt="Profile picture"
@@ -71,9 +71,11 @@ export default function Navbar() {
                   sx={{ bgcolor: grey[50] }}
                 />
               ) : (
-                <Avatar />
+                <Avatar 
+                  alt="Profile picture"
+                />
               )
-            ) : null}
+            )}
           </IconButton>
           <Menu
             sx={{ mt: "40px" }}
