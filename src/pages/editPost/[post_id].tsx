@@ -14,7 +14,7 @@ import {
   Box,
   Paper,
 } from "@mui/material";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
@@ -124,7 +124,7 @@ const EditPost = () => {
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     //DIY NA Backend
     setIsSubmit(true);
 
@@ -168,7 +168,32 @@ const EditPost = () => {
       return;
     }
 
-    console.log("Form submitted");
+    const sendData = {
+      post_id: postId ,
+      post_title: title ,
+      post_location: locationTitle ,
+      post_start_time: startDate ,
+      post_end_time: endDate ,
+      post_description: desc
+    }
+
+    const updatePostResult = await supabaseClient.rpc('update_post_by_post_id', sendData);
+    if(updatePostResult.error){
+      console.log(updatePostResult.error);
+      return;
+    }
+
+    console.log(sendData) ;
+
+    const deleteOldTagResult = await supabaseClient.rpc("delete_post_tag", {target_post_id: postId});
+
+    selectedTags.forEach(async (e) => {
+        await supabaseClient.rpc("add_post_tag", {
+          tag_id: e.id,
+          post_id: postId,
+      });
+      }
+    )
   };
 
   const postId = parseInt(router.query.post_id as string);
@@ -224,8 +249,8 @@ const EditPost = () => {
       setTitle(getPostDataResult.data[0].title);
       setDesc(getPostDataResult.data[0].description);
       setLocationTitle(getPostDataResult.data[0].location);
-      setStartDate(getPostDataResult.data[0].start_timestamp);
-      setEndDate(getPostDataResult.data[0].end_timestamp);
+      setStartDate(dayjs(getPostDataResult.data[0].start_timestamp));
+      setEndDate(dayjs(getPostDataResult.data[0].end_timestamp));
     }
 
     getPostData();
@@ -304,7 +329,11 @@ const EditPost = () => {
             Location
           </Typography>
           <Stack spacing={2}>
-            <GoogleMaps initialValue={locationTitle} onChange={handleLocationChange} />
+            <GoogleMaps
+              initialValue={locationTitle}
+              onChange={handleLocationChange}
+            />
+
             {isSubmit && formErrors.location && (
               <Box display="flex">
                 <FormHelperText error>{formErrors.location}</FormHelperText>
