@@ -296,6 +296,15 @@ export interface Database {
           birthdate: string,
           sex: string
         }
+      },
+      update_user_profile: {
+        Args: {
+          target_id: string,
+          target_username: string,
+          target_sex: string,
+          target_description: string,
+          target_image: string
+        }
       }
     }
     Enums: {
