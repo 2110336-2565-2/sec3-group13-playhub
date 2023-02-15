@@ -199,6 +199,42 @@ const EditPost = () => {
       });
       }
     )
+    originalImages.forEach(async (image) => {
+      if(!images.includes(image)){
+        const deleteImage = image.split("/").at(-1) as string;
+        const deleteImageResult = await supabaseClient.storage
+            .from("profileimage")
+            .remove([deleteImage]);
+        if (deleteImageResult.error != null) {
+          console.log(deleteImageResult.error);
+          return;
+        }
+
+        const deleteImageFromTableResult = await supabaseClient.rpc('delete_image_by_link', {target_image_link: image})
+        if(deleteImageFromTableResult.error){
+          console.log(deleteImageFromTableResult.error);
+          return ;
+        }
+      }
+    })
+
+    images.forEach(async (image, index) => {
+      const timeStamp = Date.now();
+
+      if(!originalImages.includes(image)){
+        const uploadImage = image.split("/").at(-1) as string
+        const uploadImageFile = await fetch(image).then(r => r.blob());
+        const uploadImageResult = await supabaseClient.storage
+        .from("profileimage")
+        .upload(postId.toString() + index + timeStamp, uploadImageFile);
+        if (uploadImageResult.error != null) {
+          console.log(uploadImageResult.error);
+          return;
+        }
+
+        const addImageToTable = await supabaseClient.rpc('add_location_image', {target_post_id: postId, target_image_link: image})
+      }
+    })
 
     router.push(PagePaths.myPosts);
   };
