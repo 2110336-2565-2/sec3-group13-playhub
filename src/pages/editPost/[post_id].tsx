@@ -64,6 +64,7 @@ const EditPost = () => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
+
   const [loadingData, setLoadingData] = useState(true);
   const [loadingImage, setLoadingImage] = useState(true);
   const [loadingTag, setLoadingTag] = useState(true);
@@ -281,7 +282,7 @@ const EditPost = () => {
     setLoadingImage(false);
   }, [supabaseClient, router.query.post_id]);
 
-  if (tags.length == 0 || userStatus.isLoading || locationTitle == "") return <Loading />;
+  if (tags.length == 0 || userStatus.isLoading || loadingTag || loadingData || loadingImage) return <Loading />;
   return (
     <>
       <Navbar />
