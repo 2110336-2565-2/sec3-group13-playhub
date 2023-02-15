@@ -32,7 +32,6 @@ import { useRouter } from "next/router";
 import { PagePaths } from "enum/pages";
 
 const CreatePost = () => {
-
   const createPostLayout = {
     width: "35vw",
     margin: "2vh 0 0 0",
@@ -172,56 +171,70 @@ const CreatePost = () => {
       return;
     }
 
-    console.log("sad")
+    console.log("sad");
     const addPostResult = await supabaseClient.rpc("add_post", {
       title: title,
       location: locationTitle,
       description: desc,
       owner_id: userStatus.user?.user_id,
       start_timestamp: startDate,
-      end_timestamp: endDate
-    })
+      end_timestamp: endDate,
+    });
     if (addPostResult.error) {
-      console.log(addPostResult.error)
-      return
+      console.log(addPostResult.error);
+      return;
     }
 
-    console.log(addPostResult.data)
-    
+    console.log(addPostResult.data);
+
     selectedTags.forEach(async (e) => {
       await supabaseClient.rpc("add_post_tag", {
         tag_id: e.id,
-        post_id: addPostResult.data
-      })
-    })
+        post_id: addPostResult.data,
+      });
+    });
 
     const now = Date.now();
     fileImages.forEach(async (e, index) => {
-      const filePath = addPostResult.data.toString() + index.toString() + now.toString()
-      const uploadResult = await supabaseClient.storage.from("locationimage").upload(filePath,e)
-      if (uploadResult.error) return
-      const imageUrlResult = await supabaseClient.storage.from("locationimage").getPublicUrl(filePath)
+      const filePath =
+        addPostResult.data.toString() + index.toString() + now.toString();
+      const uploadResult = await supabaseClient.storage
+        .from("locationimage")
+        .upload(filePath, e);
+      if (uploadResult.error) return;
+      const imageUrlResult = await supabaseClient.storage
+        .from("locationimage")
+        .getPublicUrl(filePath);
       await supabaseClient.rpc("add_post_image", {
         post_id: addPostResult.data,
-        image: imageUrlResult.data.publicUrl
-      })
-    })
-    router.push(PagePaths.myPosts)
+        image: imageUrlResult.data.publicUrl,
+      });
+    });
+    router.push(PagePaths.myPosts);
   };
 
   useEffect(() => {
     async function getTags() {
       const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
       if (getTagsResult.error) {
-        console.log(getTagsResult.error)
-        return
+        console.log(getTagsResult.error);
+        return;
       }
-      setTags(getTagsResult.data)
+      setTags(getTagsResult.data);
     }
     getTags();
   }, [supabaseClient]);
 
-  if (userStatus.isLoading || tags.length == 0) return <Loading />
+  if (userStatus.isLoading) return <Loading />;
+  if (!userStatus.user) {
+    router.push(PagePaths.login);
+    return;
+  }
+  if (userStatus.user.is_admin) {
+    router.push(PagePaths.adminHome + userStatus.user.user_id);
+    return;
+  }
+  if (userStatus.isLoading || tags.length == 0) return <Loading />;
   return (
     <>
       <Navbar />
@@ -264,9 +277,7 @@ const CreatePost = () => {
             Location
           </Typography>
           <Stack spacing={2}>
-            <GoogleMaps
-              onChange={handleLocationChange}
-            />
+            <GoogleMaps onChange={handleLocationChange} />
             {isSubmit && formErrors.location && (
               <Box display="flex">
                 <FormHelperText error>{formErrors.location}</FormHelperText>
@@ -339,41 +350,38 @@ const CreatePost = () => {
             options={tags.map((e) => e.name)}
             value={selectedTags.map((e) => e.name)}
             onChange={handleAddTag}
-            renderTags={
-              (value: readonly string[], getTagProps) =>
-                value.map((option: string, index: number) => (
-                  <Paper
-                    key={index}
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      flexWrap: "wrap",
-                      border: "1px solid rgba(0, 0, 0, 0.12)",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    <Chip
-                      variant="outlined"
-                      label={option}
-                      style={{ color: "#6200EE", border: "none" }}
-                      {...getTagProps({ index })}
-                    />
-                  </Paper>
-                ))
+            renderTags={(value: readonly string[], getTagProps) =>
+              value.map((option: string, index: number) => (
+                <Paper
+                  key={index}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    border: "1px solid rgba(0, 0, 0, 0.12)",
+                    borderRadius: "4px",
+                  }}
+                >
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    style={{ color: "#6200EE", border: "none" }}
+                    {...getTagProps({ index })}
+                  />
+                </Paper>
+              ))
             }
-            renderInput={
-              (params) => (
-                <TextField
-                  {...params}
-                  placeholder={
-                    selectedTags.length < 5
-                      ? "คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)"
-                      : ""
-                  }
-                  fullWidth
-                />
-              )
-            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder={
+                  selectedTags.length < 5
+                    ? "คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)"
+                    : ""
+                }
+                fullWidth
+              />
+            )}
           />
           {isSubmit && formErrors.selectedTags && (
             <FormHelperText error>{formErrors.selectedTags}</FormHelperText>
