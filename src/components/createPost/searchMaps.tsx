@@ -45,11 +45,13 @@ interface StructuredFormatting {
 }
 interface PlaceType {
   description: string;
-  structured_formatting: StructuredFormatting;
+  structured_formatting?: StructuredFormatting;
 }
 
 export default function GoogleMaps(props: props) {
-  const [value, setValue] = React.useState<PlaceType | null>(null);
+  const [value, setValue] = React.useState<PlaceType | null>(
+    props.initialValue === null ? null : { description: props.initialValue! }
+  );
   const [inputValue, setInputValue] = React.useState(props.initialValue ?? "");
   const [options, setOptions] = React.useState<readonly PlaceType[]>([]);
   const loaded = React.useRef(false);
@@ -149,10 +151,10 @@ export default function GoogleMaps(props: props) {
       )}
       renderOption={(props, option) => {
         const matches =
-          option.structured_formatting.main_text_matched_substrings || [];
+          option.structured_formatting?.main_text_matched_substrings || [];
 
         const parts = parse(
-          option.structured_formatting.main_text,
+          option.structured_formatting?.main_text ?? "",
           matches.map((match: any) => [
             match.offset,
             match.offset + match.length,
@@ -179,7 +181,7 @@ export default function GoogleMaps(props: props) {
                   </Box>
                 ))}
                 <Typography variant="body2" color="text.secondary">
-                  {option.structured_formatting.secondary_text}
+                  {option.structured_formatting?.secondary_text}
                 </Typography>
               </Grid>
             </Grid>
