@@ -3,10 +3,11 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
+import Image from "next/image";
 
 type props = {
-  imgs: File[];
-  stateChanger: React.Dispatch<React.SetStateAction<File[]>>;
+  imgs: string[];
+  stateChanger: React.Dispatch<React.SetStateAction<string[]>>;
   st: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const cancleDesign = {
@@ -27,7 +28,7 @@ const addBoxDesign = {
 };
 
 const PictureList = (props: props) => {
-  const [dataPics, setDataPics] = useState<File[]>([]);
+  const [dataPics, setDataPics] = useState<string[]>([]);
 
   useEffect(() => {
     setDataPics(props.imgs);
@@ -41,6 +42,7 @@ const PictureList = (props: props) => {
   const handleAddPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFiles = e.target.files;
+      console.log(URL.createObjectURL(selectedFiles[0]));
       const selfilesarr = Array.from(selectedFiles).filter((file) =>
         file.type.startsWith("image/")
       );
@@ -51,8 +53,11 @@ const PictureList = (props: props) => {
         return;
       }
 
-      setDataPics((prevImg) => prevImg.concat(selfilesarr));
-      props.stateChanger(dataPics.concat(selfilesarr));
+      const imgArr = selfilesarr.map((file) => {
+        return URL.createObjectURL(file);
+      });
+      setDataPics((prevImg) => prevImg.concat(imgArr));
+      props.stateChanger(dataPics.concat(imgArr));
       props.st(false);
     }
   };
@@ -71,10 +76,12 @@ const PictureList = (props: props) => {
             <CancelIcon sx={cancleDesign} onClick={() => deletePicture(index)}>
               {" "}
             </CancelIcon>
-            <img
-              src={URL.createObjectURL(image)}
+            <Image
+              alt=""
+              src={`${image}`}
               loading="lazy"
-              style={{ width: "200px", height: "200px", objectFit: "cover" }}
+              width="200"
+              height="200"
             />
           </ImageListItem>
         ))}
