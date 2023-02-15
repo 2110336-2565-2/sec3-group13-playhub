@@ -1,11 +1,14 @@
-import React, { useContext } from "react";
-import { useRouter } from "next/router";
-import { Dayjs } from "dayjs";
-import { Box, Stack, Button, SelectChangeEvent, Grid } from "@mui/material";
+import { useContext, useState } from "react";
 
+import { useRouter } from "next/router";
+
+import { Dayjs } from "dayjs";
+
+import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { userContext } from "supabase/user_context";
+
+import { Box, Stack, Button, SelectChangeEvent, Grid } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Logo from "@/components/public/Logo";
@@ -13,11 +16,11 @@ import CommonTextField from "@/components/public/CommonTextField";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import CommonDropdown from "@/components/public/CommonDropdown";
 import CommonDatePicker from "@/components/public/CommonDatePicker";
-import { validateEmail, validateTextField } from "@/utilities/validation";
 
+import { validateEmail, validateTextField } from "@/utilities/validation";
+import { validation } from "@/types/Validation";
 import { Gender } from "enum/gender";
 import { CHAR_LIMIT } from "enum/inputLimit";
-import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 
 // style
@@ -32,20 +35,22 @@ export default function Home() {
   const router = useRouter();
 
   // state about variables
-  const [displayName, setDisplayName] = React.useState<string>("");
-  const [email, setEmail] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-  const [confirmPassword, setConfirmPassword] = React.useState<string>("");
-  const [gender, setGender] = React.useState<string>("");
-  const [birthDate, setBirthDate] = React.useState<Dayjs | null>(null);
+  const [displayName, setDisplayName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+  const [birthDate, setBirthDate] = useState<Dayjs | null>(null);
 
   // submit about variables
-  const [isSubmitDisplayName, setIsSubmitDisplayName] = React.useState<boolean>(false);
-  const [isSubmitEmail, setIsSubmitEmail] = React.useState<boolean>(false);
-  const [isSubmitPassword, setIsSubmitPassword] = React.useState<boolean>(false);
-  const [isSubmitConfirmPassword, setIsSubmitConfirmPassword] = React.useState<boolean>(false);
-  const [isSubmitGender, setIsSubmitGender] = React.useState<boolean>(false);
-  const [isSubmitBirthDate, setIsSubmitBirthDate] = React.useState<boolean>(false);
+  const [isSubmitDisplayName, setIsSubmitDisplayName] =
+    useState<boolean>(false);
+  const [isSubmitEmail, setIsSubmitEmail] = useState<boolean>(false);
+  const [isSubmitPassword, setIsSubmitPassword] = useState<boolean>(false);
+  const [isSubmitConfirmPassword, setIsSubmitConfirmPassword] =
+    useState<boolean>(false);
+  const [isSubmitGender, setIsSubmitGender] = useState<boolean>(false);
+  const [isSubmitBirthDate, setIsSubmitBirthDate] = useState<boolean>(false);
 
   // error about variables
   const displayNameErr: validation = validateTextField(
@@ -54,13 +59,19 @@ export default function Home() {
     CHAR_LIMIT.MAX_DISPLAY_NAME
   );
 
-  // Must declare isEmailAlreadyUsed before emailErr ! 
-  const [isEmailAlreadyUsed,setIsEmailAlreadyUsed] = React.useState<validation>({msg:"",err:false})
-  const emailErr: validation = emailHandlerErr()
-  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
+  // Must declare isEmailAlreadyUsed before emailErr !
+  const [isEmailAlreadyUsed, setIsEmailAlreadyUsed] = useState<validation>({
+    msg: "",
+    err: false,
+  });
+  const emailErr: validation = emailHandlerErr();
+  const passwordErr: validation = validateTextField(
+    password,
+    CHAR_LIMIT.MIN_PASSWORD
+  );
   const isValidConfirmPassword: boolean = password === confirmPassword;
-  const [isEmptyGender, setIsEmptyGender] = React.useState<boolean>(true);
-  const [isEmptyBirthDate, setIsEmptyBirthDate] = React.useState<boolean>(true);
+  const [isEmptyGender, setIsEmptyGender] = useState<boolean>(true);
+  const [isEmptyBirthDate, setIsEmptyBirthDate] = useState<boolean>(true);
 
   const readyToCreate: boolean = !(
     displayNameErr.err ||
@@ -71,13 +82,13 @@ export default function Home() {
     isEmptyBirthDate
   );
 
-  function emailHandlerErr(){
-    if(validateEmail(email).err){
-      return validateEmail(email)
-    }else if(isEmailAlreadyUsed.err){
-      return isEmailAlreadyUsed
-    }else{
-      return { msg : "", err : false }
+  function emailHandlerErr() {
+    if (validateEmail(email).err) {
+      return validateEmail(email);
+    } else if (isEmailAlreadyUsed.err) {
+      return isEmailAlreadyUsed;
+    } else {
+      return { msg: "", err: false };
     }
   }
 
@@ -94,7 +105,7 @@ export default function Home() {
   ): void => {
     setEmail(event.target.value);
     setIsSubmitEmail(false);
-    setIsEmailAlreadyUsed({msg:"",err:false})
+    setIsEmailAlreadyUsed({ msg: "", err: false });
   };
 
   const handlePasswordChange = (
@@ -135,12 +146,18 @@ export default function Home() {
     setIsSubmitBirthDate(true);
 
     if (readyToCreate) {
-      const signUpResult = await supabaseClient.auth.signUp({ email, password });
+      const signUpResult = await supabaseClient.auth.signUp({
+        email,
+        password,
+      });
       if (signUpResult.error) {
         // one possible error is request sign up repeatedly too fast
         console.log(signUpResult.error);
-        if(signUpResult.error.message === "User already registered"){
-          setIsEmailAlreadyUsed({msg:"ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",err:true})
+        if (signUpResult.error.message === "User already registered") {
+          setIsEmailAlreadyUsed({
+            msg: "ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",
+            err: true,
+          });
         }
         return;
       }
@@ -166,7 +183,12 @@ export default function Home() {
     return;
   }
   return (
-    <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
+    <Stack
+      spacing={3}
+      alignItems="center"
+      justifyContent="center"
+      style={{ minHeight: "100vh" }}
+    >
       <Logo width={119} height={119} />
 
       <Box style={register_layout}>
@@ -209,7 +231,11 @@ export default function Home() {
           placeholder="Confirm Password"
           value={confirmPassword}
           handleValueChange={handleConfirmPasswordChange}
-          isErr={isSubmitPassword && isSubmitConfirmPassword && !isValidConfirmPassword}
+          isErr={
+            isSubmitPassword &&
+            isSubmitConfirmPassword &&
+            !isValidConfirmPassword
+          }
           errMsg="Password และ Confirm Password ต้องเหมือนกัน"
         />
       </Box>

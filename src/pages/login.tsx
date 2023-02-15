@@ -1,17 +1,25 @@
-import React from "react";
+import { useContext, useState } from "react";
+
 import { NextRouter, useRouter } from "next/router";
+
+import { AuthResponse } from "@supabase/supabase-js";
+import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+
 import {
   Link,
   Box,
   Typography,
-  TextField,
   Stack,
   FormHelperText,
   Button,
 } from "@mui/material";
 
+import Loading from "@/components/public/Loading";
 import Logo from "@/components/public/Logo";
+import CommonTextField from "@/components/public/CommonTextField";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
+import { validateEmail, validateTextField } from "@/utilities/validation";
 
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
@@ -19,13 +27,6 @@ import {
 } from "@/constants/authentication";
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
-
-import { validateEmail, validateTextField } from "@/utilities/validation";
-import { AuthResponse } from "@supabase/supabase-js";
-import CommonTextField from "@/components/public/CommonTextField";
-import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import Loading from "@/components/public/Loading";
 import { CHAR_LIMIT } from "enum/inputLimit";
 
 // style
@@ -36,15 +37,15 @@ const login_layout = {
 
 export default function Home() {
   const router: NextRouter = useRouter();
-  const userStatus = React.useContext(userContext);
+  const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient();
 
   // state about variables
-  const [email, setEmail] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-  const [isSubmit, setIsSubmit] = React.useState<boolean>(false);
-  const [isLoginCredErr, setIsLoginCredErr] = React.useState<boolean>(false);
-  const [isValidateErr, setIsValidateErr] = React.useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [isLoginCredErr, setIsLoginCredErr] = useState<boolean>(false);
+  const [isValidateErr, setIsValidateErr] = useState<boolean>(false);
 
   // error about variables
   const emailErr: validation = validateEmail(email);
@@ -118,6 +119,7 @@ export default function Home() {
   }
   return (
     <Stack
+      component={Box}
       spacing={3}
       alignItems="center"
       justifyContent="center"

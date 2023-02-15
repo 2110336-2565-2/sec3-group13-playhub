@@ -1,21 +1,26 @@
-import MyPostCard from "@/components/post/MyPostCard";
-import Navbar from "@/components/public/Navbar";
-import { Post } from "@/types/Post";
+import { useContext, useEffect, useState } from "react";
+
+import { NextRouter, useRouter } from "next/router";
+import Link from "next/link";
+
+import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { useContext, useEffect, useState } from "react";
-import { userContext } from "supabase/user_context";
+
 import { Box, Fab, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import Link from "next/link";
+
 import Loading from "@/components/public/Loading";
-import { NextRouter, useRouter } from "next/router";
+import Navbar from "@/components/public/Navbar";
+import MyPostCard from "@/components/post/MyPostCard";
+
+import { Post } from "@/types/Post";
 import { PagePaths } from "enum/pages";
 
 export default function Home() {
   const router: NextRouter = useRouter();
-  const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
+  const supabaseClient = useSupabaseClient<Database>();
 
   const [posts, setPosts] = useState<Post[] | null>(null);
 

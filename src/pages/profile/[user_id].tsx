@@ -1,46 +1,52 @@
-import React, { Suspense, useContext, useEffect, useState } from "react";
-import { NextRouter, useRouter } from "next/router";
-import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
+import { Suspense, useContext, useEffect, useState } from "react";
 
-import EditIcon from "@mui/icons-material/Edit";
+import { NextRouter, useRouter } from "next/router";
+
+import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+
+import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import CakeIcon from "@mui/icons-material/Cake";
+import EditIcon from "@mui/icons-material/Edit";
 
 import Navbar from "@/components/public/Navbar";
 import Loading from "@/components/public/Loading";
 
+import { User } from "@/types/User";
 import { PagePaths } from "enum/pages";
 import { Gender } from "enum/gender";
-import { userContext } from "supabase/user_context";
-import { User } from "@/types/User";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 
 // style
 const profile_layout = {
   width: "30vw",
   minWidth: "200px",
 };
-
-const owner: boolean = true;
 const avatar = { width: 200, height: 200 };
 
 export default function Home() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
-  const [targetUserData, setTargetUserData] = useState<User | null>(null);
   const supabaseClient = useSupabaseClient<Database>();
+
+  const [targetUserData, setTargetUserData] = useState<User | null>(null);
 
   useEffect(() => {
     async function getTargetUserData() {
       if (!userStatus.user || !router.query.user_id || targetUserData) return;
-      const getUserDataResult = await supabaseClient.rpc("get_user_data_by_id", {
-        target_id: router.query.user_id as string,
-      });
+      const getUserDataResult = await supabaseClient.rpc(
+        "get_user_data_by_id",
+        {
+          target_id: router.query.user_id as string,
+        }
+      );
       if (getUserDataResult.error || getUserDataResult.count == 0) {
-        console.log(getUserDataResult.error ? getUserDataResult.error : "no user");
+        console.log(
+          getUserDataResult.error ? getUserDataResult.error : "no user"
+        );
         return;
       }
       setTargetUserData(getUserDataResult.data[0]);
@@ -55,9 +61,9 @@ export default function Home() {
   }
 
   if (userStatus.isLoading) return <Loading />;
-  if (!userStatus.user){
+  if (!userStatus.user) {
     router.push(PagePaths.login);
-    return ;
+    return;
   }
   if (!targetUserData) return <Loading />;
   return (
@@ -78,7 +84,11 @@ export default function Home() {
               {targetUserData.email}
             </Typography>
           )}
-          <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image as string} />
+          <Avatar
+            sx={avatar}
+            alt="Profile picture"
+            src={targetUserData.image as string}
+          />
           <Stack direction="row" spacing={1}>
             <Chip
               icon={

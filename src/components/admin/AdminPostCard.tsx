@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   Typography,
   Avatar,
@@ -54,8 +54,8 @@ export default function AdminPostCard(props: props) {
   const router: NextRouter = useRouter();
 
   const [openDeletePostModal, setOpenDeletePostModal] =
-    React.useState<boolean>(false);
-  const [hiddenPostDetail, setHiddenPostDetail] = React.useState<boolean>(true);
+    useState<boolean>(false);
+  const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
 
   const supabaseClient = useSupabaseClient<Database>();
 

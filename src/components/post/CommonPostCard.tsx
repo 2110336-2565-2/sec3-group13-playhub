@@ -1,4 +1,6 @@
-import React from "react";
+import { useState } from "react";
+import { NextRouter, useRouter } from "next/router";
+import Image from "next/image";
 import {
   Typography,
   Avatar,
@@ -14,16 +16,13 @@ import {
   Chip,
   Snackbar,
 } from "@mui/material";
-
+import { styled } from "@mui/material/styles";
+import { IconButtonProps } from "@mui/material/IconButton";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import Image from "next/image";
-import { styled } from "@mui/material/styles";
-import { IconButtonProps } from "@mui/material/IconButton";
 
 import { Post } from "../../types/Post";
-import { NextRouter, useRouter } from "next/router";
 import { PagePaths } from "enum/pages";
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -46,8 +45,8 @@ type props = {
 
 export default function PostCard(props: props) {
   const router: NextRouter = useRouter();
-  const [hiddenPostDetail, setHiddenPostDetail] = React.useState<boolean>(true);
-  const [openSnackBar, setOpenSnackBar] = React.useState<boolean>(false);
+  const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
+  const [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   return (

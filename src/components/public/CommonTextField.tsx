@@ -1,11 +1,13 @@
-import { Box, FormHelperText, Stack, TextField, Typography } from "@mui/material";
+import { Box, FormHelperText, TextField, Typography } from "@mui/material";
 
 type props = {
   header?: string;
   label?: string;
   placeholder?: string;
   value: string;
-  handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  handleValueChange: (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
   isMultiLine?: boolean;
   char_limit?: number;
   isErr: boolean;
@@ -20,7 +22,9 @@ const helperText = {
 };
 
 export default function CommonTextField(props: props) {
-  const exceedChar: boolean = props.char_limit ? props.value.length > props.char_limit : false;
+  const exceedChar: boolean = props.char_limit
+    ? props.value.length > props.char_limit
+    : false;
 
   return (
     <>

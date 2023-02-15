@@ -1,6 +1,12 @@
-import React, { useState, useContext } from "react";
-import Image from "next/image";
+import { useState, useContext, useEffect } from "react";
+
 import { NextRouter, useRouter } from "next/router";
+import Image from "next/image";
+
+import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+
 import {
   Typography,
   Button,
@@ -11,27 +17,23 @@ import {
   Link,
   IconButton,
 } from "@mui/material";
-
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
-import { Gender } from "enum/gender";
-import { CHAR_LIMIT } from "enum/inputLimit";
-import { PagePaths } from "enum/pages";
-
-import { User } from "@/types/User";
-import { validation } from "@/types/Validation";
 
 import Navbar from "@/components/public/Navbar";
 import CommonTextField from "@/components/public/CommonTextField";
 import CommonDropdown from "@/components/public/CommonDropdown";
 import { validateImage, validateTextField } from "@/utilities/validation";
 
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
-import { userContext } from "supabase/user_context";
+import { User } from "@/types/User";
+import { validation } from "@/types/Validation";
+import { Gender } from "enum/gender";
+import { CHAR_LIMIT } from "enum/inputLimit";
+import { PagePaths } from "enum/pages";
+
 import Loading from "@/components/public/Loading";
 
 export default function Home() {
@@ -51,15 +53,15 @@ export default function Home() {
 
   const router: NextRouter = useRouter();
 
-  const [displayName, setDisplayName] = React.useState<string>("");
-  const [gender, setGender] = React.useState<string>("");
-  const [description, setDescription] = React.useState<string>("");
-  const [image, setImage] = React.useState<string | null>(null);
-  const [originalImage, setOriginalImage] = React.useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string>("");
+  const [gender, setGender] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+  const [image, setImage] = useState<string | null>(null);
+  const [originalImage, setOriginalImage] = useState<string | null>(null);
 
-  const [isPressSubmit, setIsPressSubmit] = React.useState<boolean>(false);
-  const [fileImage, setFileImage] = React.useState<File | null>();
-  const [isImageUpload, setIsImageUpload] = React.useState<boolean>(false);
+  const [isPressSubmit, setIsPressSubmit] = useState<boolean>(false);
+  const [fileImage, setFileImage] = useState<File | null>();
+  const [isImageUpload, setIsImageUpload] = useState<boolean>(false);
   const [showImageUploadError, setShowImageUploadError] = useState({
     msg: "",
     err: false,
@@ -188,7 +190,7 @@ export default function Home() {
     return;
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (userStatus.isLoading || !userStatus.user) return;
     getProfile(userStatus.user);
   }, [userStatus]);

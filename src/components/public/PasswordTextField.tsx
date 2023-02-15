@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import {
   TextField,
   InputAdornment,
@@ -15,7 +15,9 @@ type props = {
   label?: string;
   placeholder?: string;
   value: string;
-  handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  handleValueChange: (
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => void;
   isErr: boolean;
   errMsg: string;
   mediumSize?: boolean;
@@ -28,7 +30,7 @@ const helperText = {
 };
 
 export default function PasswordTextFeild(props: props) {
-  const [showPassword, setShowPassword] = React.useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const handleClickShowPassword = (): void => setShowPassword((show) => !show);
 
   return (

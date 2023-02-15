@@ -1,13 +1,18 @@
-import CommonPostCard from "@/components/post/CommonPostCard";
-import Navbar from "@/components/public/Navbar";
-import { Post } from "@/types/Post";
+import { Suspense, useContext, useEffect, useState } from "react";
+
+import { NextRouter, useRouter } from "next/router";
+
+import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Suspense, useContext, useEffect, useState } from "react";
-import { userContext } from "supabase/user_context";
+
 import { Box, Stack } from "@mui/material";
+
 import Loading from "@/components/public/Loading";
-import { NextRouter, useRouter } from "next/router";
+import Navbar from "@/components/public/Navbar";
+import CommonPostCard from "@/components/post/CommonPostCard";
+
+import { Post } from "@/types/Post";
 import { PagePaths } from "enum/pages";
 
 export default function Home() {

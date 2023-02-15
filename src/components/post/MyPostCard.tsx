@@ -1,4 +1,5 @@
-import React from "react";
+import { useState } from "react";
+import Image from "next/image";
 import {
   Typography,
   Avatar,
@@ -16,15 +17,15 @@ import {
   Chip,
   Snackbar,
 } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import { IconButtonProps } from "@mui/material/IconButton";
 
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import Image from "next/image";
-import { styled } from "@mui/material/styles";
-import { IconButtonProps } from "@mui/material/IconButton";
+
 import DeletePostDialog from "@/components/post/DeletePostDialog";
 
 import { Post } from "../../types/Post";
@@ -58,9 +59,9 @@ export default function PostCard(props: props) {
   const router: NextRouter = useRouter();
 
   const [openDeletePostModal, setOpenDeletePostModal] =
-    React.useState<boolean>(false);
-  const [hiddenPostDetail, setHiddenPostDetail] = React.useState<boolean>(true);
-  const [openSnackBar, setOpenSnackBar] = React.useState<boolean>(false);
+    useState<boolean>(false);
+  const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
+  const [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
 
   const supabaseClient = useSupabaseClient<Database>();
 

@@ -1,5 +1,8 @@
-import React, { useContext } from "react";
+import { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
+import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 import {
   AppBar,
   Avatar,
@@ -11,25 +14,20 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
-import Logo from "../public/Logo";
+import Logo from "@/components/public/Logo";
 
 import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
 
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
-import { userContext } from "supabase/user_context";
-import { grey } from "@mui/material/colors";
-
 export default function AdminNavbar() {
   const router: NextRouter = useRouter();
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-
+  const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
 
-  const userStatus = useContext(userContext);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const handleClose = () => setAnchorEl(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
