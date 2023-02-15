@@ -52,11 +52,6 @@ const EditPost = () => {
     display: "none",
   };
 
-  const helperText = {
-    textAlign: "end",
-    gridColumn: 2,
-  };
-
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
   const [isSubmit, setIsSubmit] = useState(false);
@@ -254,7 +249,8 @@ const EditPost = () => {
     getPostLocationImage();
   }, [supabaseClient, router.query.post_id]);
 
-  if (tags.length == 0 || userStatus.isLoading) return <Loading />;
+  if (tags.length == 0 || userStatus.isLoading || locationTitle == "") return <Loading />;
+  console.log(locationTitle)
   return (
     <>
       <Navbar />
@@ -308,7 +304,7 @@ const EditPost = () => {
             Location
           </Typography>
           <Stack spacing={2}>
-            <GoogleMaps initialValue={"asd"} onChange={handleLocationChange} />
+            <GoogleMaps initialValue={locationTitle} onChange={handleLocationChange} />
             {isSubmit && formErrors.location && (
               <Box display="flex">
                 <FormHelperText error>{formErrors.location}</FormHelperText>
