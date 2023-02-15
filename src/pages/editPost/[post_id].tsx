@@ -203,7 +203,7 @@ const EditPost = () => {
       if(!images.includes(image)){
         const deleteImage = image.split("/").at(-1) as string;
         const deleteImageResult = await supabaseClient.storage
-            .from("profileimage")
+            .from("locationimage")
             .remove([deleteImage]);
         if (deleteImageResult.error != null) {
           console.log(deleteImageResult.error);
@@ -222,17 +222,20 @@ const EditPost = () => {
       const timeStamp = Date.now();
 
       if(!originalImages.includes(image)){
-        const uploadImage = image.split("/").at(-1) as string
         const uploadImageFile = await fetch(image).then(r => r.blob());
         const uploadImageResult = await supabaseClient.storage
-        .from("profileimage")
+        .from("locationimage")
         .upload(postId.toString() + index + timeStamp, uploadImageFile);
         if (uploadImageResult.error != null) {
           console.log(uploadImageResult.error);
           return;
         }
 
-        const addImageToTable = await supabaseClient.rpc('add_location_image', {target_post_id: postId, target_image_link: image})
+        const getImageURLResult = await supabaseClient.storage
+        .from("loactionimage")
+        .getPublicUrl(postId.toString() + index + timeStamp);
+        
+        const addImageToTable = await supabaseClient.rpc('add_location_image', {target_post_id: postId, target_image_link: getImageURLResult.data.publicUrl})
       }
     })
 
