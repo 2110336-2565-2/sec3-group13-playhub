@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState, useContext, ChangeEvent } from "react";
 import Navbar from "@/components/public/Navbar";
 
 import {
@@ -14,7 +14,7 @@ import {
   Box,
   Paper,
 } from "@mui/material";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
@@ -22,94 +22,48 @@ import PictureList from "@/components/createPost/pictureList";
 
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import GoogleMaps from "@/components/createPost/searchMaps";
-import { emptyPost, Post } from "@/types/Post";
 import * as message from "@/utilities/createPostVal";
+import { Tag } from "@/types/Tag";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+import { userContext } from "supabase/user_context";
+import Loading from "@/components/public/Loading";
 
-type formErrors = {
-  title: string;
-  locationTitle: string;
-  startDate: string;
-  desc: string;
-  endDate: string;
-  selectedTags: string[];
-  images: string[];
-};
-
-//start function
 const CreatePost = () => {
-  const Tags = [
-    "Poseidon entertainment complex",
-    "The Lord รัชดา",
-    "วิคตอเรียซีเครท",
-    "แคทเธอรีนเอ็นเตอร์เทนเม้นท์",
-    "เอ็มมานูเอล",
-    "โคปาคาบาน่า",
-    "ลาเดอ ฟรองซ์",
-    "โคลอนเซ่",
-    "ยูโธเปีย",
-    "อัมสเตอร์ดัม",
-  ];
-  const dummyEditFrom: Post = {
-    title: "this is title",
-    ownerName: "this is owner name",
-    ownerProfilePic: "",
-    tags: [Tags[0], Tags[1]],
-    description: "this is description",
-    image: [
-      "https://picsum.photos/id/12/200",
-      "https://picsum.photos/id/13/200",
-    ],
-
-    location: "this is location",
-    startDateTime: "2023-03-01",
-    endDateTime: "2023-04-02",
-  };
-
-  const initialValue: Post = true ? dummyEditFrom : emptyPost;
 
   const createPostLayout = {
     width: "35vw",
     margin: "2vh 0 0 0",
   };
+
   const helperTextBox = {
     display: "grid",
     gridTemplateColumns: "repeat(2, 1fr)",
   };
+
   const helperTextError = {
     textAlign: "start",
     gridColumn: 1,
     color: "error",
     display: "none",
   };
+
   const helperText = {
     textAlign: "end",
     gridColumn: 2,
   };
-  const fontDesign = {
-    fontstyle: "normal",
-    fontweight: "700",
-    fontsize: "20px",
-    lineheight: "24px",
-    letterspacing: "0.15px",
-    color: "secondary.main",
-  };
-  const [isSubmit, setIsSubmit] = React.useState(false);
-  // value of every text field
 
-  const [title, setTitle] = React.useState("");
-  const [locationTitle, setLocationTitle] = React.useState<string>("");
-  const [startDate, setStartDate] = React.useState<Dayjs | null>(
-    dayjs(initialValue.startDateTime === "" ? null : initialValue.startDateTime)
-  );
-  const [endDate, setEndDate] = React.useState<Dayjs | null>(
-    initialValue.endDateTime === "" ? null : dayjs(initialValue.endDateTime)
-  );
-  const [selectedTags, setSelectedTags] = useState(initialValue.tags);
-  const [desc, setDesc] = React.useState(initialValue.description);
+  const userStatus = useContext(userContext);
+  const supabaseClient = useSupabaseClient<Database>();
+  const [isSubmit, setIsSubmit] = useState(false);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [title, setTitle] = useState("");
+  const [locationTitle, setLocationTitle] = useState<string>("");
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [desc, setDesc] = useState("");
   const [images, setImages] = useState<string[]>([]);
-  // value of every text field
-
-  //----For Error----
 
   const [imgErrState, setImgErrState] = useState(false);
   const [formErrors, setFormErrors] = useState({
@@ -121,13 +75,8 @@ const CreatePost = () => {
     desc: "",
   });
 
-  //const [formErrors, setFormErrors] = useState({});
-  useEffect(() => {
-    setImages(initialValue.image);
-  }, []);
-
   function handleTitleChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setTitle(event.target.value);
     formErrors.title = "";
@@ -136,7 +85,7 @@ const CreatePost = () => {
   }
 
   function handleDescChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setDesc(event.target.value);
     formErrors.desc = "";
@@ -148,9 +97,9 @@ const CreatePost = () => {
     //setIsSubmit(false);
   }
 
-  function handleAddTag(event: any, tag: any): void {
+  function handleAddTag(event: any, tag: string[]): void {
     if (tag.length <= 5) {
-      setSelectedTags(tag);
+      setSelectedTags(tags.filter((value) => tag.includes(value.name)));
       formErrors.selectedTags = "";
     }
     // setIsSubmit(false);
@@ -223,6 +172,19 @@ const CreatePost = () => {
     console.log("Form submitted");
   };
 
+  useEffect(() => {
+    async function getTags() {
+      const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
+      if (getTagsResult.error) {
+        console.log(getTagsResult.error)
+        return
+      }
+      setTags(getTagsResult.data)
+    }
+    getTags();
+  }, [supabaseClient]);
+
+  if (userStatus.isLoading || tags.length == 0) return <Loading />
   return (
     <>
       <Navbar />
@@ -267,8 +229,6 @@ const CreatePost = () => {
           </Typography>
           <Stack spacing={2}>
             <GoogleMaps
-              initialValue={initialValue.location}
-              //locationTitle={setLocationTitle}
               onChange={handleLocationChange}
             />
             {isSubmit && formErrors.location && (
@@ -340,12 +300,11 @@ const CreatePost = () => {
           </Typography>
           <Autocomplete
             multiple
-            options={Tags}
-            value={selectedTags}
+            options={tags.map((e) => e.name)}
+            value={selectedTags.map((e) => e.name)}
             onChange={handleAddTag}
             renderTags={
               (value: readonly string[], getTagProps) =>
-                //selectedTags.length <= 4
                 value.map((option: string, index: number) => (
                   <Paper
                     key={index}
@@ -365,12 +324,9 @@ const CreatePost = () => {
                     />
                   </Paper>
                 ))
-              //: null
             }
             renderInput={
               (params) => (
-                //selectedTags.length <= 5 ? (
-
                 <TextField
                   {...params}
                   placeholder={
@@ -380,7 +336,7 @@ const CreatePost = () => {
                   }
                   fullWidth
                 />
-              ) //: null
+              )
             }
           />
           {isSubmit && formErrors.selectedTags && (
