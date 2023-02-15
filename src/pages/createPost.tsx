@@ -28,6 +28,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import Loading from "@/components/public/Loading";
+import { useRouter } from "next/router";
 
 const CreatePost = () => {
 
@@ -55,6 +56,7 @@ const CreatePost = () => {
 
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
+  const router = useRouter();
   const [isSubmit, setIsSubmit] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
@@ -65,6 +67,7 @@ const CreatePost = () => {
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<string[]>([]);
 
+  console.log(images)
   const [imgErrState, setImgErrState] = useState(false);
   const [formErrors, setFormErrors] = useState({
     title: "",
@@ -125,7 +128,7 @@ const CreatePost = () => {
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     //DIY NA Backend
     setIsSubmit(true);
 
@@ -169,7 +172,40 @@ const CreatePost = () => {
       return;
     }
 
-    console.log("Form submitted");
+    const addPostResult = await supabaseClient.rpc("add_post", {
+      title: title,
+      location: locationTitle,
+      description: desc,
+      owner_id: userStatus.user?.user_id,
+      start_timestamp: startDate,
+      end_timestamp: endDate
+    })
+    if (addPostResult.error) {
+      console.log(addPostResult.error)
+      return
+    }
+
+    console.log(addPostResult.data)
+    
+    selectedTags.forEach(async (e) => {
+      await supabaseClient.rpc("add_post_tag", {
+        tag_id: e.id,
+        post_id: addPostResult.data
+      })
+    })
+
+    const now = Date.now();
+    images.forEach(async (e, index) => {
+      const filePath = addPostResult.data.toString() + index.toString() + now.toString()
+      const uploadResult = await supabaseClient.storage.from("locationimage").upload(filePath,e)
+      if (uploadResult.error) return
+      const imageUrl = await supabaseClient.storage.from("locationimage").getPublicUrl(filePath)
+      await supabaseClient.rpc("add_post_image", {
+        post_id: addPostResult.data,
+        image: imageUrl
+      })
+    })
+    //router.push("/")
   };
 
   useEffect(() => {
