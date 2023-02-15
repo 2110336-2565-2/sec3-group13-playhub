@@ -5,8 +5,8 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
 
 type props = {
-  imgs: string[];
-  stateChanger: React.Dispatch<React.SetStateAction<string[]>>;
+  imgs: File[];
+  stateChanger: React.Dispatch<React.SetStateAction<File[]>>;
   st: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const cancleDesign = {
@@ -27,7 +27,7 @@ const addBoxDesign = {
 };
 
 const PictureList = (props: props) => {
-  const [dataPics, setDataPics] = useState<string[]>([]);
+  const [dataPics, setDataPics] = useState<File[]>([]);
 
   useEffect(() => {
     setDataPics(props.imgs);
@@ -41,7 +41,6 @@ const PictureList = (props: props) => {
   const handleAddPicture = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const selectedFiles = e.target.files;
-      console.log(URL.createObjectURL(selectedFiles[0]));
       const selfilesarr = Array.from(selectedFiles).filter((file) =>
         file.type.startsWith("image/")
       );
@@ -52,11 +51,8 @@ const PictureList = (props: props) => {
         return;
       }
 
-      const imgArr = selfilesarr.map((file) => {
-        return URL.createObjectURL(file);
-      });
-      setDataPics((prevImg) => prevImg.concat(imgArr));
-      props.stateChanger(dataPics.concat(imgArr));
+      setDataPics((prevImg) => prevImg.concat(selfilesarr));
+      props.stateChanger(dataPics.concat(selfilesarr));
       props.st(false);
     }
   };
@@ -76,7 +72,7 @@ const PictureList = (props: props) => {
               {" "}
             </CancelIcon>
             <img
-              src={`${image}`}
+              src={URL.createObjectURL(image)}
               loading="lazy"
               style={{ width: "200px", height: "200px", objectFit: "cover" }}
             />

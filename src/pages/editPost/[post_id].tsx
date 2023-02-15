@@ -214,7 +214,7 @@ const EditPost = () => {
 
   }, [supabaseClient, router.query.post_id]);
 
-  if (tags.length == 0) return <Loading />
+  if (tags.length == 0 || userStatus.isLoading) return <Loading />
   return (
     <>
       <Navbar />

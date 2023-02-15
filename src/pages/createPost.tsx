@@ -65,9 +65,8 @@ const CreatePost = () => {
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [desc, setDesc] = useState("");
-  const [images, setImages] = useState<string[]>([]);
+  const [fileImages, setFileImages] = useState<File[]>([]);
 
-  console.log(images)
   const [imgErrState, setImgErrState] = useState(false);
   const [formErrors, setFormErrors] = useState({
     title: "",
@@ -172,6 +171,7 @@ const CreatePost = () => {
       return;
     }
 
+    console.log("sad")
     const addPostResult = await supabaseClient.rpc("add_post", {
       title: title,
       location: locationTitle,
@@ -195,14 +195,14 @@ const CreatePost = () => {
     })
 
     const now = Date.now();
-    images.forEach(async (e, index) => {
+    fileImages.forEach(async (e, index) => {
       const filePath = addPostResult.data.toString() + index.toString() + now.toString()
       const uploadResult = await supabaseClient.storage.from("locationimage").upload(filePath,e)
       if (uploadResult.error) return
-      const imageUrl = await supabaseClient.storage.from("locationimage").getPublicUrl(filePath)
+      const imageUrlResult = await supabaseClient.storage.from("locationimage").getPublicUrl(filePath)
       await supabaseClient.rpc("add_post_image", {
         post_id: addPostResult.data,
-        image: imageUrl
+        image: imageUrlResult.data.publicUrl
       })
     })
     //router.push("/")
@@ -241,7 +241,6 @@ const CreatePost = () => {
             Title
           </Typography>
           <TextField
-            //defaultValue={initialValue.title}
             variant="outlined"
             fullWidth
             placeholder="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
@@ -418,8 +417,8 @@ const CreatePost = () => {
             spacing={1}
           >
             <PictureList
-              imgs={images}
-              stateChanger={setImages}
+              imgs={fileImages}
+              stateChanger={setFileImages}
               st={setImgErrState}
             />
           </Stack>
