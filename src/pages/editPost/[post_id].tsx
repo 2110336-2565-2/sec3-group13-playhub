@@ -63,7 +63,9 @@ const EditPost = () => {
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [desc, setDesc] = useState("");
-  const [images, setImages] = useState<File[]>([]);
+
+  const [originalImages, setOriginalImages] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>([]);
 
   const [loadingData, setLoadingData] = useState(true);
   const [loadingImage, setLoadingImage] = useState(true);
@@ -276,10 +278,12 @@ const EditPost = () => {
 
       const locationImage = getPostLocationImageResult.data.map((e) => e.image);
       setImages(locationImage);
+      setOriginalImages(locationImage);
+      setLoadingImage(false);
     }
 
     getPostLocationImage();
-    setLoadingImage(false);
+    
   }, [supabaseClient, router.query.post_id]);
 
   if (tags.length == 0 || userStatus.isLoading || loadingTag || loadingData || loadingImage) return <Loading />;
