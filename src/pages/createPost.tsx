@@ -62,7 +62,7 @@ const CreatePost = () => {
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [desc, setDesc] = useState("");
-  const [fileImages, setFileImages] = useState<File[]>([]);
+  const [fileImages, setFileImages] = useState<string[]>([]);
 
   const [imgErrState, setImgErrState] = useState(false);
   const [formErrors, setFormErrors] = useState({
@@ -195,9 +195,10 @@ const CreatePost = () => {
     fileImages.forEach(async (e, index) => {
       const filePath =
         addPostResult.data.toString() + index.toString() + now.toString();
+      const fileBlob = await fetch(e).then(r => r.blob());
       const uploadResult = await supabaseClient.storage
         .from("locationimage")
-        .upload(filePath, e);
+        .upload(filePath, fileBlob);
       if (uploadResult.error) return;
       const imageUrlResult = await supabaseClient.storage
         .from("locationimage")
