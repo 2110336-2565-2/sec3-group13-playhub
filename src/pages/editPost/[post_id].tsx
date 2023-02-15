@@ -31,7 +31,6 @@ import Loading from "@/components/public/Loading";
 import { NextRouter, useRouter } from "next/router";
 
 const EditPost = () => {
-  
   const router: NextRouter = useRouter();
 
   const createPostLayout = {
@@ -67,8 +66,6 @@ const EditPost = () => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
-
-  
 
   const [imgErrState, setImgErrState] = useState(false);
   const [formErrors, setFormErrors] = useState({
@@ -177,50 +174,55 @@ const EditPost = () => {
     console.log("Form submitted");
   };
 
-  const postId = parseInt(router.query.post_id as string) ;
-  
+  const postId = parseInt(router.query.post_id as string);
+
   useEffect(() => {
     async function getAllTags() {
       const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
       if (getTagsResult.error) {
-        console.log(getTagsResult.error)
-        return
+        console.log(getTagsResult.error);
+        return;
       }
-      setTags(getTagsResult.data)
+      setTags(getTagsResult.data);
     }
 
     getAllTags();
-  }, [supabaseClient])
+  }, [supabaseClient]);
 
   useEffect(() => {
     async function getSelectedTag() {
-      const getSelectedTagResult = await supabaseClient.rpc("get_all_post_tag") ;
-      if(getSelectedTagResult.error){
+      const getSelectedTagResult = await supabaseClient.rpc("get_all_post_tag");
+      if (getSelectedTagResult.error) {
         console.log(getSelectedTagResult.error);
-        return ;
+        return;
       }
 
-      const userPostTags = getSelectedTagResult.data.filter(data => data.post_id == postId)
+      const userPostTags = getSelectedTagResult.data.filter(
+        (data) => data.post_id == postId
+      );
 
       setSelectedTags(userPostTags);
     }
-    
+
     getSelectedTag();
-  }, [supabaseClient, router.query.post_id])
+  }, [supabaseClient, router.query.post_id]);
 
   useEffect(() => {
     async function getPostData() {
-      if(!router.query.post_id) return ;
+      if (!router.query.post_id) return;
 
-      const getPostDataResult = await supabaseClient.rpc("get_post_data_by_post_id", {
-        target_id:postId
-      });
-      if(getPostDataResult.error) {
+      const getPostDataResult = await supabaseClient.rpc(
+        "get_post_data_by_post_id",
+        {
+          target_id: postId,
+        }
+      );
+      if (getPostDataResult.error) {
         console.log(getPostDataResult.error);
         return;
       }
 
-      if(!getPostDataResult.data) return ; 
+      if (!getPostDataResult.data) return;
 
       setTitle(getPostDataResult.data[0].title);
       setDesc(getPostDataResult.data[0].description);
@@ -234,20 +236,23 @@ const EditPost = () => {
 
   useEffect(() => {
     async function getPostLocationImage() {
-      const getPostLocationImageResult = await supabaseClient.rpc('get_post_location_image', {target_post_id: postId})
-      if (getPostLocationImageResult.error){
+      const getPostLocationImageResult = await supabaseClient.rpc(
+        "get_post_location_image",
+        { target_post_id: postId }
+      );
+      if (getPostLocationImageResult.error) {
         console.log(getPostLocationImageResult.error);
-        return ;
+        return;
       }
 
-      const locationImage = getPostLocationImageResult.data.map(e => e.image)
-      setImages(locationImage) ;
+      const locationImage = getPostLocationImageResult.data.map((e) => e.image);
+      setImages(locationImage);
     }
 
-    getPostLocationImage() ;   
-  }, [supabaseClient, router.query.post_id])
+    getPostLocationImage();
+  }, [supabaseClient, router.query.post_id]);
 
-  if (tags.length == 0 || userStatus.isLoading) return <Loading />
+  if (tags.length == 0 || userStatus.isLoading) return <Loading />;
   return (
     <>
       <Navbar />
@@ -291,10 +296,7 @@ const EditPost = () => {
             Location
           </Typography>
           <Stack spacing={2}>
-            <GoogleMaps
-              initialValue={"asd"}
-              onChange={handleLocationChange}
-            />
+            <GoogleMaps initialValue={"asd"} onChange={handleLocationChange} />
             {isSubmit && formErrors.location && (
               <Box display="flex">
                 <FormHelperText error>{formErrors.location}</FormHelperText>
@@ -367,41 +369,38 @@ const EditPost = () => {
             options={tags.map((e) => e.name)}
             value={selectedTags.map((e) => e.name)}
             onChange={handleAddTag}
-            renderTags={
-              (value: readonly string[], getTagProps) =>
-                value.map((option: string, index: number) => (
-                  <Paper
-                    key={index}
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      flexWrap: "wrap",
-                      border: "1px solid rgba(0, 0, 0, 0.12)",
-                      borderRadius: "4px",
-                    }}
-                  >
-                    <Chip
-                      variant="outlined"
-                      label={option}
-                      style={{ color: "#6200EE", border: "none" }}
-                      {...getTagProps({ index })}
-                    />
-                  </Paper>
-                ))
+            renderTags={(value: readonly string[], getTagProps) =>
+              value.map((option: string, index: number) => (
+                <Paper
+                  key={index}
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    border: "1px solid rgba(0, 0, 0, 0.12)",
+                    borderRadius: "4px",
+                  }}
+                >
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    style={{ color: "#6200EE", border: "none" }}
+                    {...getTagProps({ index })}
+                  />
+                </Paper>
+              ))
             }
-            renderInput={
-              (params) => (
-                <TextField
-                  {...params}
-                  placeholder={
-                    selectedTags.length < 5
-                      ? "คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)"
-                      : ""
-                  }
-                  fullWidth
-                />
-              )
-            }
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                placeholder={
+                  selectedTags.length < 5
+                    ? "คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)"
+                    : ""
+                }
+                fullWidth
+              />
+            )}
           />
           {isSubmit && formErrors.selectedTags && (
             <FormHelperText error>{formErrors.selectedTags}</FormHelperText>

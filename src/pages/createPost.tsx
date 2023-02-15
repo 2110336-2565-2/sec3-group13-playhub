@@ -30,6 +30,8 @@ import { userContext } from "supabase/user_context";
 import Loading from "@/components/public/Loading";
 import { useRouter } from "next/router";
 import { PagePaths } from "enum/pages";
+import CommonTextField from "@/components/public/CommonTextField";
+import { CHAR_LIMIT } from "enum/inputLimit";
 
 const CreatePost = () => {
   const createPostLayout = {
@@ -251,7 +253,17 @@ const CreatePost = () => {
           </Typography>
         </Box>
         <Box sx={createPostLayout}>
-          <Typography variant="h5" margin="0 0 1vh 0">
+          <CommonTextField
+            header="Title"
+            label="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
+            value={title}
+            handleValueChange={handleTitleChange}
+            char_limit={CHAR_LIMIT.MAX_TITLE}
+            isErr={isSubmit && formErrors.title.trim() !== ""}
+            errMsg={formErrors.title}
+          />
+
+          {/* <Typography variant="h5" margin="0 0 1vh 0">
             Title
           </Typography>
           <TextField
@@ -269,11 +281,11 @@ const CreatePost = () => {
           )}
           <div style={helperTextBox}>
             <FormHelperText sx={helperText}>{title.length}/100</FormHelperText>
-          </div>
+          </div> */}
         </Box>
 
         <Box sx={createPostLayout}>
-          <Typography variant="h5" margin="0 0 1vh 0">
+          <Typography variant="body1" margin="0 0 1vh 0">
             Location
           </Typography>
           <Stack spacing={2}>
@@ -286,7 +298,7 @@ const CreatePost = () => {
           </Stack>
         </Box>
         <Box sx={createPostLayout}>
-          <Typography variant="h5" margin="0 0 1vh 0">
+          <Typography variant="body1" margin="0 0 1vh 0">
             Date time
           </Typography>
           <Grid container spacing={2}>
@@ -342,7 +354,7 @@ const CreatePost = () => {
           </Grid>
         </Box>
         <Box sx={createPostLayout}>
-          <Typography variant="h5" margin="0 0 1vh 0">
+          <Typography variant="body1" margin="0 0 1vh 0">
             Tag
           </Typography>
           <Autocomplete
@@ -388,7 +400,18 @@ const CreatePost = () => {
           )}
         </Box>
         <Box sx={createPostLayout}>
-          <Typography variant="h5" margin="0 0 1vh 0">
+          <CommonTextField
+            header="Description"
+            label="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
+            value={title}
+            handleValueChange={handleTitleChange}
+            char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
+            isMultiLine={true}
+            isErr={isSubmit && formErrors.desc.trim() !== ""}
+            errMsg={formErrors.desc}
+          />
+
+          {/* <Typography variant="body1" margin="0 0 1vh 0">
             Description
           </Typography>
           <TextField
@@ -409,10 +432,10 @@ const CreatePost = () => {
           )}
           <div style={helperTextBox}>
             <FormHelperText sx={helperText}>{desc.length}/500</FormHelperText>
-          </div>
+          </div> */}
         </Box>
         <Box sx={createPostLayout}>
-          <Typography variant="h5" margin="0 0 1vh 0">
+          <Typography variant="body1" margin="0 0 1vh 0">
             <span>Image </span>
             <span style={{ color: "grey" }}>
               (Optional, เลือกได้สูงสุด 3 รูป )
