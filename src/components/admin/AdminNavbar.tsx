@@ -1,17 +1,14 @@
 import { useContext, useState } from "react";
-
 import { NextRouter, useRouter } from "next/router";
-import Link from "next/link";
-
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-
 import {
   AppBar,
   Avatar,
   Box,
   IconButton,
+  Link,
   Menu,
   MenuItem,
   Toolbar,
@@ -24,12 +21,13 @@ import Logo from "@/components/public/Logo";
 import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
 
-export default function Navbar() {
+export default function AdminNavbar() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const handleClose = () => setAnchorEl(null);
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -63,19 +61,13 @@ export default function Navbar() {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            {userStatus.user && (
-              userStatus.user.image ? (
-                <Avatar
-                  alt="Profile picture"
-                  src={userStatus.user.image}
-                  sx={{ bgcolor: grey[50] }}
-                />
-              ) : (
-                <Avatar 
-                  alt="Profile picture"
-                />
-              )
-            )}
+            {userStatus.user && userStatus.user.image ? (
+              <Avatar
+                alt="Profile picture"
+                src={userStatus.user.image}
+                sx={{ bgcolor: grey[50] }}
+              />
+            ) : null}
           </IconButton>
           <Menu
             sx={{ mt: "40px" }}
@@ -91,24 +83,15 @@ export default function Navbar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem key={1}>
-              <Link href={PagePaths.profile + userStatus.user?.user_id}>
-                <Box alignContent={"center"}>
-                  <Typography variant="body1">{NavbarPages.profile}</Typography>
-                </Box>
+            <MenuItem>
+              <Link
+                textAlign="center"
+                color="error"
+                underline="none"
+                onClick={handleSignOut}
+              >
+                <Typography variant="body1">{NavbarPages.logout}</Typography>
               </Link>
-            </MenuItem>
-            <MenuItem key={2}>
-              <Link href={PagePaths.myPosts}>
-                <Typography variant="body1">{NavbarPages.myPost}</Typography>
-              </Link>
-            </MenuItem>
-            <MenuItem key={3}>
-              <Box onClick={handleSignOut}>
-                <Typography variant="body1" color="error">
-                  {NavbarPages.logout}
-                </Typography>
-              </Box>
             </MenuItem>
           </Menu>
         </Toolbar>

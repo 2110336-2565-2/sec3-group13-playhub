@@ -181,9 +181,9 @@ export interface Database {
       }
       Tag: {
         Row: {
-          created_at: string | null
+          created_at: string
           id: number
-          name: string | null
+          name: string 
         }
         Insert: {
           created_at?: string | null
@@ -204,12 +204,11 @@ export interface Database {
           email: string
           image: string
           is_enabled: boolean | null
-          name: string
           password: string | null
           rating_score: number | null
           sex: string
           user_id: string
-          username: string | null
+          username: string
           verified_email: boolean | null
         }
         Insert: {
@@ -219,7 +218,6 @@ export interface Database {
           email?: string | null
           image?: string | null
           is_enabled?: boolean | null
-          name?: string | null
           password?: string | null
           rating_score?: number | null
           sex?: string | null
@@ -234,7 +232,6 @@ export interface Database {
           email?: string | null
           image?: string | null
           is_enabled?: boolean | null
-          name?: string | null
           password?: string | null
           rating_score?: number | null
           sex?: string | null
@@ -248,7 +245,58 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_posts_by_user_id: {
+        Args: {
+          target_id: string
+        }
+        Returns: {
+          post_id: number
+          user_id: string
+          username: string
+          title: string
+          description: string
+          profile_image: string
+          start_time: string
+          end_time: string
+          location: string
+        }
+      },
+      get_user_data_by_id: {
+        Args: {
+          target_id: string
+        }
+        Returns: {
+          user_id: string
+          username: string
+          sex: string
+          birthdate: string
+          description: string
+          image: string | null
+          email: string
+          is_admin: boolean
+        }
+      },
+      delete_post_by_id: {
+        Args: {
+          target_id: number
+        }
+      },
+      get_all_post_tag: {
+        Returns: {
+          name: string
+          post_id: number
+        }
+      },
+      add_user: {
+        Args: {
+          user_id: string,
+          username: string,
+          password: string,
+          email: string,
+          birthdate: string,
+          sex: string
+        }
+      }
     }
     Enums: {
       [_ in never]: never
