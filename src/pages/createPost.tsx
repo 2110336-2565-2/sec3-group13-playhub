@@ -255,7 +255,7 @@ const CreatePost = () => {
         <Box sx={createPostLayout}>
           <CommonTextField
             header="Title"
-            label="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
+            placeholder="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
             value={title}
             handleValueChange={handleTitleChange}
             char_limit={CHAR_LIMIT.MAX_TITLE}
@@ -402,9 +402,9 @@ const CreatePost = () => {
         <Box sx={createPostLayout}>
           <CommonTextField
             header="Description"
-            label="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
-            value={title}
-            handleValueChange={handleTitleChange}
+            placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
+            value={desc}
+            handleValueChange={handleDescChange}
             char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
             isMultiLine={true}
             isErr={isSubmit && formErrors.desc.trim() !== ""}
