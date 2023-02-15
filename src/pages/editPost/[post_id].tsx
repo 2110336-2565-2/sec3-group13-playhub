@@ -66,7 +66,7 @@ const EditPost = () => {
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [desc, setDesc] = useState("");
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<File[]>([]);
 
   
 
