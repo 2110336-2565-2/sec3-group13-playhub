@@ -87,7 +87,8 @@ export default function Home() {
           description: data.description,
           image: imageURL,
           location: data.location,
-          time: data.start_time,
+          startDateTime: data.start_time,
+          endDateTime: data.end_time,
         };
       });
 
