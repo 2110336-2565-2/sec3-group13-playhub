@@ -63,6 +63,9 @@ const EditPost = () => {
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
   const [desc, setDesc] = useState("");
   const [images, setImages] = useState<File[]>([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const [loadingImage, setLoadingImage] = useState(true);
+  const [loadingTag, setLoadingTag] = useState(true);
 
   const [imgErrState, setImgErrState] = useState(false);
   const [formErrors, setFormErrors] = useState({
@@ -224,6 +227,7 @@ const EditPost = () => {
       );
 
       setSelectedTags(userPostTags);
+      setLoadingTag(false);
     }
 
     getSelectedTag();
@@ -251,6 +255,7 @@ const EditPost = () => {
       setLocationTitle(getPostDataResult.data[0].location);
       setStartDate(dayjs(getPostDataResult.data[0].start_timestamp));
       setEndDate(dayjs(getPostDataResult.data[0].end_timestamp));
+      setLoadingData(false);
     }
 
     getPostData();
@@ -272,10 +277,10 @@ const EditPost = () => {
     }
 
     getPostLocationImage();
+    setLoadingImage(false);
   }, [supabaseClient, router.query.post_id]);
 
-  if (tags.length == 0 || userStatus.isLoading || locationTitle == "") return <Loading />;
-  console.log(locationTitle)
+  if (tags.length == 0 || userStatus.isLoading || loadingData || loadingTag || loadingImage) return <Loading />;
   return (
     <>
       <Navbar />
