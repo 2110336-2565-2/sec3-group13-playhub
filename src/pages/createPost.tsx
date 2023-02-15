@@ -36,7 +36,7 @@ type formErrors = {
 };
 
 //start function
-const createPost = () => {
+const CreatePost = () => {
   const Tags = [
     "Poseidon entertainment complex",
     "The Lord รัชดา",
@@ -222,14 +222,6 @@ const createPost = () => {
 
     console.log("Form submitted");
   };
-
-  const Location = [
-    "Poseidon entertainment complex",
-    "Jod Fair",
-    "Fortune",
-    "The street",
-    "ศูนย์วัฒนธรรมแห่งประเทศไทย",
-  ];
 
   return (
     <>
@@ -453,4 +445,4 @@ const createPost = () => {
   );
 };
 
-export default createPost;
+export default CreatePost;
