@@ -232,7 +232,7 @@ const EditPost = () => {
         }
 
         const getImageURLResult = await supabaseClient.storage
-        .from("loactionimage")
+        .from("locationimage")
         .getPublicUrl(postId.toString() + index + timeStamp);
         
         const addImageToTable = await supabaseClient.rpc('add_location_image', {target_post_id: postId, target_image_link: getImageURLResult.data.publicUrl})
