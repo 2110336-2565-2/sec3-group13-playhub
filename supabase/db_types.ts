@@ -279,6 +279,16 @@ export interface Database {
         Returns: {
           post_id: number
         }
+      },
+      update_post_by_post_id: {
+        Args: {
+          post_id: number,
+          post_title: string,
+          post_location: string,
+          post_start_time: number,
+          post_end_time: number,
+          post_description: string
+        }
       }
     }
     Enums: {
