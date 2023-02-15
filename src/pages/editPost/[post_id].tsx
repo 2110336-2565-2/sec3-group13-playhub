@@ -31,6 +31,7 @@ import Loading from "@/components/public/Loading";
 import { NextRouter, useRouter } from "next/router";
 import CommonTextField from "@/components/public/CommonTextField";
 import { CHAR_LIMIT } from "enum/inputLimit";
+import { PagePaths } from "enum/pages";
 
 const EditPost = () => {
   const router: NextRouter = useRouter();
@@ -183,8 +184,6 @@ const EditPost = () => {
       return;
     }
 
-    console.log(sendData) ;
-
     const deleteOldTagResult = await supabaseClient.rpc("delete_post_tag", {target_post_id: postId});
 
     selectedTags.forEach(async (e) => {
@@ -194,6 +193,8 @@ const EditPost = () => {
       });
       }
     )
+
+    router.push(PagePaths.myPosts);
   };
 
   const postId = parseInt(router.query.post_id as string);
@@ -275,7 +276,6 @@ const EditPost = () => {
   }, [supabaseClient, router.query.post_id]);
 
   if (tags.length == 0 || userStatus.isLoading || locationTitle == "") return <Loading />;
-  console.log(locationTitle)
   return (
     <>
       <Navbar />
