@@ -51,19 +51,13 @@ const CreatePost = () => {
     display: "none",
   };
 
-  const helperText = {
-    textAlign: "end",
-    gridColumn: 2,
-  };
-
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
   const router = useRouter();
   const [isSubmit, setIsSubmit] = useState(false);
   const [tags, setTags] = useState<Tag[]>([]);
   const [title, setTitle] = useState("");
-  const [locationTitle, setLocationTitle] =
-    useState<string>("initial location");
+  const [locationTitle, setLocationTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
