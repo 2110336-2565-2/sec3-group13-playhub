@@ -177,14 +177,43 @@ const EditPost = () => {
     console.log("Form submitted");
   };
 
+  const postId = parseInt(router.query.post_id as string) ;
+  
+  useEffect(() => {
+    async function getAllTags() {
+      const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
+      if (getTagsResult.error) {
+        console.log(getTagsResult.error)
+        return
+      }
+      setTags(getTagsResult.data)
+    }
+
+    getAllTags();
+  }, [supabaseClient])
+
+  useEffect(() => {
+    async function getSelectedTag() {
+      const getSelectedTagResult = await supabaseClient.rpc("get_all_post_tag") ;
+      if(getSelectedTagResult.error){
+        console.log(getSelectedTagResult.error);
+        return ;
+      }
+
+      const userPostTags = getSelectedTagResult.data.filter(data => data.post_id == postId)
+
+      setSelectedTags(userPostTags);
+    }
+    
+    getSelectedTag();
+  }, [supabaseClient, router.query.post_id])
+
   useEffect(() => {
     async function getPostData() {
       if(!router.query.post_id) return ;
 
-      const post_id = parseInt(router.query.post_id as string) ;
-
       const getPostDataResult = await supabaseClient.rpc("get_post_data_by_post_id", {
-        target_id:post_id
+        target_id:postId
       });
       if(getPostDataResult.error) {
         console.log(getPostDataResult.error);
@@ -200,19 +229,23 @@ const EditPost = () => {
       setEndDate(getPostDataResult.data[0].end_timestamp);
     }
 
-    async function getTags() {
-      const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
-      if (getTagsResult.error) {
-        console.log(getTagsResult.error)
-        return
+    getPostData();
+  }, [supabaseClient, router.query.post_id]);
+
+  useEffect(() => {
+    async function getPostLocationImage() {
+      const getPostLocationImageResult = await supabaseClient.rpc('get_post_location_image', {target_post_id: postId})
+      if (getPostLocationImageResult.error){
+        console.log(getPostLocationImageResult.error);
+        return ;
       }
-      setTags(getTagsResult.data)
+
+      const locationImage = getPostLocationImageResult.data.map(e => e.image)
+      setImages(locationImage) ;
     }
 
-    getPostData();
-    getTags();
-
-  }, [supabaseClient, router.query.post_id]);
+    getPostLocationImage() ;   
+  }, [supabaseClient, router.query.post_id])
 
   if (tags.length == 0) return <Loading />
   return (
