@@ -1,5 +1,5 @@
 
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 
 export function checkTitle(
@@ -30,8 +30,9 @@ export function checkTag(
     return "";
 }
 export function checkStartDate(
-    startDate: dayjs)
+    startDate: Dayjs | null)
     : string {
+    if (!startDate) return ""
     const isBeforeNow = startDate.isBefore(dayjs());
 
     if (isBeforeNow) {
@@ -41,9 +42,10 @@ export function checkStartDate(
 }
 
 export function checkEndDate(
-    startDate: dayjs,
-    endDate: dayjs)
+    startDate: Dayjs | null,
+    endDate: Dayjs | null)
     : string {
+    if (!startDate || !endDate) return ""
     const isBeforeNow = endDate.isBefore(startDate);
 
     if (isBeforeNow) {
