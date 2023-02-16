@@ -83,7 +83,17 @@ export default function Home() {
     CHAR_LIMIT.MIN_DESCRIPTION,
     CHAR_LIMIT.MAX_DESCRIPTION
   );
-  const imagesError: boolean = true;
+  const imagesError: boolean = false;
+
+  const isCreatingAllow: boolean = !(
+    titleError.err ||
+    locationError ||
+    startDateError.err ||
+    endDateError.err ||
+    tagsError ||
+    descriptionError.err ||
+    imagesError
+  );
 
   // input field change
   function handleTitleChange(
@@ -133,47 +143,48 @@ export default function Home() {
     setIsSubmitTags(true);
     setIsSubmitDescription(true);
     setIsSubmitImages(true);
-
-    const addPostResult = await supabaseClient.rpc("add_post", {
-      title: title,
-      location: location,
-      description: description,
-      owner_id: userStatus.user?.user_id,
-      start_timestamp: startDate,
-      end_timestamp: endDate,
-    });
-    if (addPostResult.error) {
-      console.log(addPostResult.error);
-      return;
-    }
-
-    tags.forEach(async (e) => {
-      await supabaseClient.rpc("add_post_tag", {
-        tag_id: e.id,
-        post_id: addPostResult.data,
+    if (isCreatingAllow) {
+      const addPostResult = await supabaseClient.rpc("add_post", {
+        title: title,
+        location: location,
+        description: description,
+        owner_id: userStatus.user?.user_id,
+        start_timestamp: startDate,
+        end_timestamp: endDate,
       });
-    });
+      if (addPostResult.error) {
+        console.log(addPostResult.error);
+        return;
+      }
 
-    const now = Date.now();
-    let index = 0;
-    for (const e of images) {
-      const filePath =
-        addPostResult.data.toString() + index.toString() + now.toString();
-      const fileBlob = await fetch(e).then((r) => r.blob());
-      const uploadResult = await supabaseClient.storage
-        .from("locationimage")
-        .upload(filePath, fileBlob);
-      if (uploadResult.error) return;
-      const imageUrlResult = await supabaseClient.storage
-        .from("locationimage")
-        .getPublicUrl(filePath);
-      await supabaseClient.rpc("add_post_image", {
-        post_id: addPostResult.data,
-        image: imageUrlResult.data.publicUrl,
+      tags.forEach(async (e) => {
+        await supabaseClient.rpc("add_post_tag", {
+          tag_id: e.id,
+          post_id: addPostResult.data,
+        });
       });
-      index += 1;
+
+      const now = Date.now();
+      let index = 0;
+      for (const e of images) {
+        const filePath =
+          addPostResult.data.toString() + index.toString() + now.toString();
+        const fileBlob = await fetch(e).then((r) => r.blob());
+        const uploadResult = await supabaseClient.storage
+          .from("locationimage")
+          .upload(filePath, fileBlob);
+        if (uploadResult.error) return;
+        const imageUrlResult = await supabaseClient.storage
+          .from("locationimage")
+          .getPublicUrl(filePath);
+        await supabaseClient.rpc("add_post_image", {
+          post_id: addPostResult.data,
+          image: imageUrlResult.data.publicUrl,
+        });
+        index += 1;
+      }
+      router.push(PagePaths.myPosts);
     }
-    router.push(PagePaths.myPosts);
   };
 
   useEffect(() => {

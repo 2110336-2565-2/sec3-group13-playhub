@@ -57,9 +57,9 @@ export default function Home() {
   const [images, setImages] = useState<string[]>([]);
   const [originalImages, setOriginalImages] = useState<string[]>([]);
 
-  const [loadingData, setLoadingData] = useState(true);
-  const [loadingImage, setLoadingImage] = useState(true);
-  const [loadingTag, setLoadingTag] = useState(true);
+  const [loadingData, setLoadingData] = useState<boolean>(true);
+  const [loadingImage, setLoadingImage] = useState<boolean>(true);
+  const [loadingTag, setLoadingTag] = useState<boolean>(true);
 
   // all selectable tags offered
   const [tagMenu, setTagMenu] = useState<Tag[]>([]);
@@ -88,7 +88,17 @@ export default function Home() {
     CHAR_LIMIT.MIN_DESCRIPTION,
     CHAR_LIMIT.MAX_DESCRIPTION
   );
-  const imagesError: boolean = true;
+  const imagesError: boolean = false;
+
+  const isEditingAllow: boolean = !(
+    titleError.err ||
+    locationError ||
+    startDateError.err ||
+    endDateError.err ||
+    tagsError ||
+    descriptionError.err ||
+    imagesError
+  );
 
   // input field change
   function handleTitleChange(
@@ -138,86 +148,90 @@ export default function Home() {
     setIsSubmitTags(true);
     setIsSubmitDescription(true);
     setIsSubmitImages(true);
-
-    const sendData = {
-      post_id: postId,
-      post_title: title,
-      post_location: location,
-      post_start_time: startDate,
-      post_end_time: endDate,
-      post_description: description,
-    };
-
-    const updatePostResult = await supabaseClient.rpc(
-      "update_post_by_post_id",
-      sendData
-    );
-    if (updatePostResult.error) {
-      console.log(updatePostResult.error);
-      return;
-    }
-
-    const deleteOldTagResult = await supabaseClient.rpc("delete_post_tag", {
-      target_post_id: postId,
-    });
-
-    tags.forEach(async (e) => {
-      await supabaseClient.rpc("add_post_tag", {
-        tag_id: e.id,
+    if (isEditingAllow) {
+      const sendData = {
         post_id: postId,
-      });
-    });
+        post_title: title,
+        post_location: location,
+        post_start_time: startDate,
+        post_end_time: endDate,
+        post_description: description,
+      };
 
-    let index = 0;
-    for (const image of originalImages) {
-      if (!images.includes(image)) {
-        const deleteImage = image.split("/").at(-1) as string;
-        const deleteImageResult = await supabaseClient.storage
-          .from("locationimage")
-          .remove([deleteImage]);
-        if (deleteImageResult.error != null) {
-          console.log(deleteImageResult.error);
-          return;
-        }
-
-        const deleteImageFromTableResult = await supabaseClient.rpc(
-          "delete_image_by_link",
-          { target_image_link: image }
-        );
-        if (deleteImageFromTableResult.error) {
-          console.log(deleteImageFromTableResult.error);
-          return;
-        }
+      const updatePostResult = await supabaseClient.rpc(
+        "update_post_by_post_id",
+        sendData
+      );
+      if (updatePostResult.error) {
+        console.log(updatePostResult.error);
+        return;
       }
-      index += 1;
-    }
 
-    index = 0;
-    for (const image of images) {
-      const timeStamp = Date.now();
+      // const deleteOldTagResult = await supabaseClient.rpc("delete_post_tag", {
+      //   target_post_id: postId,
+      // });
 
-      if (!originalImages.includes(image)) {
-        const uploadImageFile = await fetch(image).then((r) => r.blob());
-        const uploadImageResult = await supabaseClient.storage
-          .from("locationimage")
-          .upload(postId.toString() + index + timeStamp, uploadImageFile);
-        if (uploadImageResult.error != null) {
-          console.log(uploadImageResult.error);
-          return;
-        }
-
-        const getImageURLResult = await supabaseClient.storage
-          .from("locationimage")
-          .getPublicUrl(postId.toString() + index + timeStamp);
-
-        const addImageToTable = await supabaseClient.rpc("add_location_image", {
-          target_post_id: postId,
-          target_image_link: getImageURLResult.data.publicUrl,
+      tags.forEach(async (e) => {
+        await supabaseClient.rpc("add_post_tag", {
+          tag_id: e.id,
+          post_id: postId,
         });
-      }
-    }
+      });
 
-    router.push(PagePaths.myPosts);
+      let index = 0;
+      for (const image of originalImages) {
+        if (!images.includes(image)) {
+          const deleteImage = image.split("/").at(-1) as string;
+          const deleteImageResult = await supabaseClient.storage
+            .from("locationimage")
+            .remove([deleteImage]);
+          if (deleteImageResult.error != null) {
+            console.log(deleteImageResult.error);
+            return;
+          }
+
+          const deleteImageFromTableResult = await supabaseClient.rpc(
+            "delete_image_by_link",
+            { target_image_link: image }
+          );
+          if (deleteImageFromTableResult.error) {
+            console.log(deleteImageFromTableResult.error);
+            return;
+          }
+        }
+        index += 1;
+      }
+
+      index = 0;
+      for (const image of images) {
+        const timeStamp = Date.now();
+
+        if (!originalImages.includes(image)) {
+          const uploadImageFile = await fetch(image).then((r) => r.blob());
+          const uploadImageResult = await supabaseClient.storage
+            .from("locationimage")
+            .upload(postId.toString() + index + timeStamp, uploadImageFile);
+          if (uploadImageResult.error != null) {
+            console.log(uploadImageResult.error);
+            return;
+          }
+
+          const getImageURLResult = await supabaseClient.storage
+            .from("locationimage")
+            .getPublicUrl(postId.toString() + index + timeStamp);
+
+          const addImageToTable = await supabaseClient.rpc(
+            "add_location_image",
+            {
+              target_post_id: postId,
+              target_image_link: getImageURLResult.data.publicUrl,
+            }
+          );
+        }
+      }
+
+      router.push(PagePaths.myPosts);
+    }
   };
 
   const postId = parseInt(router.query.post_id as string);
