@@ -182,8 +182,6 @@ const CreatePost = () => {
       return;
     }
 
-    console.log(addPostResult.data);
-
     selectedTags.forEach(async (e) => {
       await supabaseClient.rpc("add_post_tag", {
         tag_id: e.id,
@@ -192,7 +190,8 @@ const CreatePost = () => {
     });
 
     const now = Date.now();
-    fileImages.forEach(async (e, index) => {
+    let index = 0;
+    for (const e of fileImages) {
       const filePath =
         addPostResult.data.toString() + index.toString() + now.toString();
       const fileBlob = await fetch(e).then(r => r.blob());
@@ -207,7 +206,8 @@ const CreatePost = () => {
         post_id: addPostResult.data,
         image: imageUrlResult.data.publicUrl,
       });
-    });
+      index += 1;
+    }
     router.push(PagePaths.myPosts);
   };
 
