@@ -13,7 +13,7 @@ export enum CHAR_LIMIT {
 
 export enum TAG_LIMIT {
   MIN_TAG = 1,
-  MAX_TAG = 30,
+  MAX_TAG = 5,
 }
 
 export enum IMAGE_LIMIT {
