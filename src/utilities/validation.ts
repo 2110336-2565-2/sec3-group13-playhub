@@ -71,11 +71,12 @@ export function validateDateWithInterval(
           err: true,
         };
       }
+    } else {
+      return {
+        msg: "ช่องนี้ไม่สามารถเว้นว่างได้",
+        err: true,
+      };
     }
-    return {
-      msg: "ช่องนี้ไม่สามารถเว้นว่างได้",
-      err: true,
-    };
   }
   return { msg: "", err: false };
 }
