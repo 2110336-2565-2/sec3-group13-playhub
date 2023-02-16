@@ -1,4 +1,5 @@
 import { validation } from "@/types/Validation";
+import dayjs, { Dayjs } from "dayjs";
 import { IMAGE_LIMIT } from "enum/inputLimit";
 
 const expression: RegExp =
@@ -51,3 +52,30 @@ export function validateImage(fileType: string, fileSize: number): validation {
   return { msg: "", err: false };
 }
 
+export function validateDate(date: Dayjs | null): validation {
+  if (date === null) return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+  return { msg: "", err: false };
+}
+
+export function validateDateWithInterval(
+  startDate: Dayjs | null,
+  endDate: Dayjs | null
+): validation {
+  if (startDate) {
+    if (endDate) {
+      if (startDate >= endDate) {
+        const displayStartDate: string =
+          dayjs(startDate).format("DD/MM/YYYY hh:mm a");
+        return {
+          msg: `กรุณาเลือกวันที่และเวลา หลังจาก ${displayStartDate}`,
+          err: true,
+        };
+      }
+    }
+    return {
+      msg: "ช่องนี้ไม่สามารถเว้นว่างได้",
+      err: true,
+    };
+  }
+  return { msg: "", err: false };
+}
