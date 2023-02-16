@@ -34,6 +34,9 @@ import {
   validateTextField,
 } from "@/utilities/validation";
 import { validation } from "@/types/Validation";
+import { GetAllTags, GetTagsByPost } from "@/services/Tags";
+import { PostInfo } from "@/types/Post";
+import { UpdatePost } from "@/services/Posts";
 
 //style
 const editPostLayout = {
@@ -149,86 +152,23 @@ export default function Home() {
     setIsSubmitDescription(true);
     setIsSubmitImages(true);
     if (isEditingAllow) {
-      const sendData = {
-        post_id: postId,
-        post_title: title,
-        post_location: location,
-        post_start_time: startDate,
-        post_end_time: endDate,
-        post_description: description,
+      const updatedPost: PostInfo = {
+        title: title,
+        user_id: userStatus.user?.user_id,
+        location: location,
+        tags: tags,
+        description: description,
+        images: images,
+        start_time: startDate,
+        end_time: endDate,
       };
 
-      const updatePostResult = await supabaseClient.rpc(
-        "update_post_by_post_id",
-        sendData
+      UpdatePost(postId, originalImages, updatedPost, supabaseClient).catch(
+        (err) => {
+          console.log(err);
+          return;
+        }
       );
-      if (updatePostResult.error) {
-        console.log(updatePostResult.error);
-        return;
-      }
-
-      // const deleteOldTagResult = await supabaseClient.rpc("delete_post_tag", {
-      //   target_post_id: postId,
-      // });
-
-      tags.forEach(async (e) => {
-        await supabaseClient.rpc("add_post_tag", {
-          tag_id: e.id,
-          post_id: postId,
-        });
-      });
-
-      let index = 0;
-      for (const image of originalImages) {
-        if (!images.includes(image)) {
-          const deleteImage = image.split("/").at(-1) as string;
-          const deleteImageResult = await supabaseClient.storage
-            .from("locationimage")
-            .remove([deleteImage]);
-          if (deleteImageResult.error != null) {
-            console.log(deleteImageResult.error);
-            return;
-          }
-
-          const deleteImageFromTableResult = await supabaseClient.rpc(
-            "delete_image_by_link",
-            { target_image_link: image }
-          );
-          if (deleteImageFromTableResult.error) {
-            console.log(deleteImageFromTableResult.error);
-            return;
-          }
-        }
-        index += 1;
-      }
-
-      index = 0;
-      for (const image of images) {
-        const timeStamp = Date.now();
-
-        if (!originalImages.includes(image)) {
-          const uploadImageFile = await fetch(image).then((r) => r.blob());
-          const uploadImageResult = await supabaseClient.storage
-            .from("locationimage")
-            .upload(postId.toString() + index + timeStamp, uploadImageFile);
-          if (uploadImageResult.error != null) {
-            console.log(uploadImageResult.error);
-            return;
-          }
-
-          const getImageURLResult = await supabaseClient.storage
-            .from("locationimage")
-            .getPublicUrl(postId.toString() + index + timeStamp);
-
-          const addImageToTable = await supabaseClient.rpc(
-            "add_location_image",
-            {
-              target_post_id: postId,
-              target_image_link: getImageURLResult.data.publicUrl,
-            }
-          );
-        }
-      }
 
       router.push(PagePaths.myPosts);
     }
@@ -237,35 +177,18 @@ export default function Home() {
   const postId = parseInt(router.query.post_id as string);
 
   useEffect(() => {
-    async function getAllTags() {
-      const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
-      if (getTagsResult.error) {
-        console.log(getTagsResult.error);
-        return;
-      }
-      setTagMenu(getTagsResult.data);
-    }
-
-    getAllTags();
+    GetAllTags(supabaseClient)
+      .then((allTags) => setTagMenu(allTags))
+      .catch((err) => console.log(err));
   }, [supabaseClient]);
 
   useEffect(() => {
-    async function getSelectedTag() {
-      const getSelectedTagResult = await supabaseClient.rpc("get_all_post_tag");
-      if (getSelectedTagResult.error) {
-        console.log(getSelectedTagResult.error);
-        return;
-      }
-
-      const userPostTags = getSelectedTagResult.data.filter(
-        (data) => data.post_id == postId
-      );
-
-      setTags(userPostTags);
-      setLoadingTag(false);
-    }
-
-    getSelectedTag();
+    GetTagsByPost(postId, supabaseClient)
+      .then((tags) => {
+        setTags(tags);
+        setLoadingTag(false);
+      })
+      .catch((err) => console.log(err));
   }, [supabaseClient, router.query.post_id]);
 
   useEffect(() => {

@@ -34,6 +34,9 @@ import {
   validateTextField,
 } from "@/utilities/validation";
 import { validation } from "@/types/Validation";
+import { GetAllTags } from "@/services/Tags";
+import { CreatePost } from "@/services/Posts";
+import { PostInfo } from "@/types/Post";
 
 //style
 const createPostLayout = {
@@ -144,59 +147,28 @@ export default function Home() {
     setIsSubmitDescription(true);
     setIsSubmitImages(true);
     if (isCreatingAllow) {
-      const addPostResult = await supabaseClient.rpc("add_post", {
+      const newPost: PostInfo = {
         title: title,
+        user_id: userStatus.user?.user_id,
         location: location,
+        tags: tags,
         description: description,
-        owner_id: userStatus.user?.user_id,
-        start_timestamp: startDate,
-        end_timestamp: endDate,
-      });
-      if (addPostResult.error) {
-        console.log(addPostResult.error);
+        images: images,
+        start_time: startDate,
+        end_time: endDate,
+      };
+      CreatePost(newPost, supabaseClient).catch((err) => {
+        console.log(err);
         return;
-      }
-
-      tags.forEach(async (e) => {
-        await supabaseClient.rpc("add_post_tag", {
-          tag_id: e.id,
-          post_id: addPostResult.data,
-        });
       });
-
-      const now = Date.now();
-      let index = 0;
-      for (const e of images) {
-        const filePath =
-          addPostResult.data.toString() + index.toString() + now.toString();
-        const fileBlob = await fetch(e).then((r) => r.blob());
-        const uploadResult = await supabaseClient.storage
-          .from("locationimage")
-          .upload(filePath, fileBlob);
-        if (uploadResult.error) return;
-        const imageUrlResult = await supabaseClient.storage
-          .from("locationimage")
-          .getPublicUrl(filePath);
-        await supabaseClient.rpc("add_post_image", {
-          post_id: addPostResult.data,
-          image: imageUrlResult.data.publicUrl,
-        });
-        index += 1;
-      }
       router.push(PagePaths.myPosts);
     }
   };
 
   useEffect(() => {
-    async function getAllTags() {
-      const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
-      if (getTagsResult.error) {
-        console.log(getTagsResult.error);
-        return;
-      }
-      setTagMenu(getTagsResult.data);
-    }
-    getAllTags();
+    GetAllTags(supabaseClient)
+      .then((allTags) => setTagMenu(allTags))
+      .catch((err) => console.log(err));
   }, [supabaseClient]);
 
   if (userStatus.isLoading) return <Loading />;

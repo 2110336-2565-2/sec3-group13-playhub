@@ -1,3 +1,6 @@
+import { Dayjs } from "dayjs";
+import { Tag } from "./Tag";
+
 export type Post = {
   post_id: number;
   title: string;
@@ -11,14 +14,26 @@ export type Post = {
   startDateTime: string;
   endDateTime: string;
 };
-export const emptyPost: Post = {
-  title: "",
-  ownerName: "",
-  ownerProfilePic: "",
-  tags: [],
-  description: "",
-  image: [],
-  location: "",
-  startDateTime: "",
-  endDateTime: "",
+
+export type PostInfo = {
+  title: string;
+  user_id: string | undefined;
+  location: string;
+  tags: Tag[];
+  description: string;
+  images: string[];
+  start_time: Dayjs | null;
+  end_time: Dayjs | null;
 };
+
+// export const emptyPost: Post = {
+//   title: "",
+//   ownerName: "",
+//   ownerProfilePic: "",
+//   tags: [],
+//   description: "",
+//   image: [],
+//   location: "",
+//   startDateTime: "",
+//   endDateTime: "",
+// };

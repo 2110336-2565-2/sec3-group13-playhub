@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { grey } from "@mui/material/colors";
 import { Tag } from "@/types/Tag";
-import { CHAR_LIMIT, TAG_LIMIT } from "enum/inputLimit";
+import { TAG_LIMIT } from "enum/inputLimit";
 
 type props = {
   header?: string;
@@ -40,7 +40,7 @@ export default function Tags(props: props) {
   const handleDeleteTag = (toDeleteTag: Tag) => () => {
     // Update displyed tags (delete)
     props.handleValueChange(
-      props.value.filter((tag) => tag.id !== toDeleteTag.id)
+      props.value.filter((tag) => tag.name !== toDeleteTag.name)
     );
     // Update menu item (insert)
     setMenuItems(
