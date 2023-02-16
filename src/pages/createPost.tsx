@@ -1,178 +1,143 @@
 import { useEffect, useState, useContext, ChangeEvent } from "react";
-import Navbar from "@/components/public/Navbar";
+import { Dayjs } from "dayjs";
+
+import { useRouter } from "next/router";
+
+import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 import {
   Grid,
   Typography,
-  TextField,
   Button,
   FormHelperText,
   Stack,
-  Autocomplete,
-  InputAdornment,
-  Chip,
   Box,
-  Paper,
 } from "@mui/material";
-import { Dayjs } from "dayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
-import PictureList from "@/components/createPost/pictureList";
 
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import GoogleMaps from "@/components/createPost/searchMaps";
-import * as message from "@/utilities/createPostVal";
-import { Tag } from "@/types/Tag";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
-import { userContext } from "supabase/user_context";
 import Loading from "@/components/public/Loading";
-import { useRouter } from "next/router";
-import { PagePaths } from "enum/pages";
+import Navbar from "@/components/public/Navbar";
 import CommonTextField from "@/components/public/CommonTextField";
+import CommonDateTimePicker from "@/components/public/CommonDateTimePicker";
+import Tags from "@/components/createPost/Tags";
+import GoogleMap from "@/components/createPost/searchMaps";
+import PictureList from "@/components/createPost/PictureList";
+
+import { Tag } from "@/types/Tag";
+import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
 
-const CreatePost = () => {
-  const createPostLayout = {
-    width: "35vw",
-    margin: "2vh 0 0 0",
-  };
+import {
+  validateDate,
+  validateDateWithInterval,
+  validateTextField,
+} from "@/utilities/validation";
+import { validation } from "@/types/Validation";
 
-  const helperTextBox = {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, 1fr)",
-  };
+//style
+const createPostLayout = {
+  width: "35vw",
+  minWidth: "300px",
+  margin: "2vh 0 0 0",
+};
 
-  const helperTextError = {
-    textAlign: "start",
-    gridColumn: 1,
-    color: "error",
-    display: "none",
-  };
-
+export default function Home() {
+  const router = useRouter();
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
-  const router = useRouter();
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [title, setTitle] = useState("");
-  const [locationTitle, setLocationTitle] = useState<string>("");
+
+  // input variables
+  const [title, setTitle] = useState<string>("");
+  const [location, setLocation] = useState<string>("");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-  const [desc, setDesc] = useState("");
-  const [fileImages, setFileImages] = useState<string[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
+  const [description, setDescription] = useState<string>("");
+  const [images, setImages] = useState<string[]>([]);
 
-  const [imgErrState, setImgErrState] = useState(false);
-  const [formErrors, setFormErrors] = useState({
-    title: "",
-    location: "",
-    startDate: "",
-    endDate: "",
-    selectedTags: "",
-    desc: "",
-  });
+  // all selectable tags offered
+  const [tagMenu, setTagMenu] = useState<Tag[]>([]);
 
+  // submit variables
+  const [isSubmitTitle, setIsSubmitTitle] = useState<boolean>(false);
+  const [isSubmitLocation, setIsSubmitLocation] = useState<boolean>(false);
+  const [isSubmitDate, setIsSubmitDate] = useState<boolean>(false);
+  const [isSubmitTags, setIsSubmitTags] = useState<boolean>(false);
+  const [isSubmitDescription, setIsSubmitDescription] =
+    useState<boolean>(false);
+  const [isSubmitImages, setIsSubmitImages] = useState<boolean>(false);
+
+  // error variables
+  const titleError: validation = validateTextField(
+    title,
+    CHAR_LIMIT.MIN_TITLE,
+    CHAR_LIMIT.MAX_TITLE
+  );
+  const locationError: boolean = location.trim() === "";
+  const startDateError: validation = validateDate(startDate);
+  const endDateError: validation = validateDateWithInterval(startDate, endDate);
+  const tagsError: boolean = tags.length === 0;
+  const descriptionError: validation = validateTextField(
+    description,
+    CHAR_LIMIT.MIN_DESCRIPTION,
+    CHAR_LIMIT.MAX_DESCRIPTION
+  );
+  const imagesError: boolean = true;
+
+  // input field change
   function handleTitleChange(
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
     setTitle(event.target.value);
-    formErrors.title = "";
-
-    //setIsSubmit(false);
+    setIsSubmitTitle(false);
   }
 
-  function handleDescChange(
+  function handleLocationChange(newLocation: string): void {
+    setLocation(newLocation);
+    setIsSubmitLocation(false);
+  }
+
+  function handleStartDateChange(newStartDate: Dayjs | null): void {
+    setStartDate(newStartDate);
+    setIsSubmitDate(false);
+  }
+
+  function handleEndDateChange(newEndDate: Dayjs | null): void {
+    setEndDate(newEndDate);
+    setIsSubmitDate(false);
+  }
+
+  function handleTagsChange(newTags: Tag[]): void {
+    setTags(newTags);
+    setIsSubmitTags(false);
+  }
+
+  function handleDescriptionChange(
     event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
-    setDesc(event.target.value);
-    formErrors.desc = "";
-    //setIsSubmit(false);
-  }
-  function handleLocationChange(newValue: string): void {
-    setLocationTitle(newValue);
-    formErrors.location = "";
-    //setIsSubmit(false);
+    setDescription(event.target.value);
+    setIsSubmitDescription(false);
   }
 
-  function handleAddTag(event: any, tag: string[]): void {
-    if (tag.length <= 5) {
-      setSelectedTags(tags.filter((value) => tag.includes(value.name)));
-      formErrors.selectedTags = "";
-    }
-    // setIsSubmit(false);
-  }
-
-  function handleStartDate(newValue: Dayjs | null): void {
-    setStartDate(newValue);
-    if (message.checkStartDate(startDate) !== "") {
-      formErrors.startDate = message.checkStartDate(startDate);
-    } else {
-      formErrors.startDate = "";
-    }
-
-    //
-    //setIsSubmit(false);
-  }
-  function handleEndDate(newValue: Dayjs | null): void {
-    setEndDate(newValue);
-    if (message.checkEndDate(startDate, endDate) !== "") {
-      formErrors.endDate = message.checkEndDate(startDate, endDate);
-    } else {
-      formErrors.endDate = "";
-    }
+  function handleImagesChange(newImages: string[]): void {
+    setImages(newImages);
+    setIsSubmitImages(false);
   }
 
   const handleSubmit = async () => {
-    //DIY NA Backend
-    setIsSubmit(true);
+    // set submission
+    setIsSubmitTitle(true);
+    setIsSubmitLocation(true);
+    setIsSubmitDate(true);
+    setIsSubmitTags(true);
+    setIsSubmitDescription(true);
+    setIsSubmitImages(true);
 
-    // Perform validation on the form data
-    const errors = {
-      title: "",
-      location: "",
-      startDate: "",
-      endDate: "",
-      selectedTags: "",
-      desc: "",
-    };
-    if (message.checkTitle(title) !== "") {
-      errors.title = message.checkTitle(title);
-      setFormErrors(errors);
-      return;
-    }
-    if (locationTitle.trim() === "") {
-      errors.location = "ช่องนี้ไม่สามารถเว้นว่างได้";
-      setFormErrors(errors);
-      return;
-    }
-    if (message.checkStartDate(startDate) !== "") {
-      errors.startDate = message.checkStartDate(startDate);
-      setFormErrors(errors);
-      return;
-    }
-    if (message.checkEndDate(startDate, endDate) !== "") {
-      errors.endDate = message.checkEndDate(startDate, endDate);
-      setFormErrors(errors);
-      return;
-    }
-    if (message.checkTag(selectedTags) !== "") {
-      errors.selectedTags = message.checkTag(selectedTags);
-      setFormErrors(errors);
-      return;
-    }
-    if (message.checkDesc(desc) !== "") {
-      errors.desc = message.checkDesc(desc);
-      setFormErrors(errors);
-      return;
-    }
-
-    console.log("sad");
     const addPostResult = await supabaseClient.rpc("add_post", {
       title: title,
-      location: locationTitle,
-      description: desc,
+      location: location,
+      description: description,
       owner_id: userStatus.user?.user_id,
       start_timestamp: startDate,
       end_timestamp: endDate,
@@ -182,7 +147,7 @@ const CreatePost = () => {
       return;
     }
 
-    selectedTags.forEach(async (e) => {
+    tags.forEach(async (e) => {
       await supabaseClient.rpc("add_post_tag", {
         tag_id: e.id,
         post_id: addPostResult.data,
@@ -191,10 +156,10 @@ const CreatePost = () => {
 
     const now = Date.now();
     let index = 0;
-    for (const e of fileImages) {
+    for (const e of images) {
       const filePath =
         addPostResult.data.toString() + index.toString() + now.toString();
-      const fileBlob = await fetch(e).then(r => r.blob());
+      const fileBlob = await fetch(e).then((r) => r.blob());
       const uploadResult = await supabaseClient.storage
         .from("locationimage")
         .upload(filePath, fileBlob);
@@ -212,15 +177,15 @@ const CreatePost = () => {
   };
 
   useEffect(() => {
-    async function getTags() {
+    async function getAllTags() {
       const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
       if (getTagsResult.error) {
         console.log(getTagsResult.error);
         return;
       }
-      setTags(getTagsResult.data);
+      setTagMenu(getTagsResult.data);
     }
-    getTags();
+    getAllTags();
   }, [supabaseClient]);
 
   if (userStatus.isLoading) return <Loading />;
@@ -232,7 +197,7 @@ const CreatePost = () => {
     router.push(PagePaths.adminHome + userStatus.user.user_id);
     return;
   }
-  if (userStatus.isLoading || tags.length == 0) return <Loading />;
+  if (userStatus.isLoading || tagMenu.length == 0) return <Loading />;
   return (
     <>
       <Navbar />
@@ -243,11 +208,12 @@ const CreatePost = () => {
         style={{ minHeight: "100vh" }}
         margin="0 0 2vh 0"
       >
+        {/* Page header */}
         <Box sx={createPostLayout}>
-          <Typography variant="h1" component="h2">
-            Create post
-          </Typography>
+          <Typography variant="h1">Create post</Typography>
         </Box>
+
+        {/* Post title */}
         <Box sx={createPostLayout}>
           <CommonTextField
             header="Title"
@@ -255,215 +221,97 @@ const CreatePost = () => {
             value={title}
             handleValueChange={handleTitleChange}
             char_limit={CHAR_LIMIT.MAX_TITLE}
-            isErr={isSubmit && formErrors.title.trim() !== ""}
-            errMsg={formErrors.title}
+            isErr={isSubmitTitle && titleError.err}
+            errMsg={titleError.msg}
           />
-
-          {/* <Typography variant="h5" margin="0 0 1vh 0">
-            Title
-          </Typography>
-          <TextField
-            variant="outlined"
-            fullWidth
-            placeholder="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
-            value={title}
-            onChange={handleTitleChange}
-            inputProps={{ maxLength: 100 }}
-          />
-          {isSubmit && formErrors.title && (
-            <Box display="flex">
-              <FormHelperText error>{formErrors.title}</FormHelperText>
-            </Box>
-          )}
-          <div style={helperTextBox}>
-            <FormHelperText sx={helperText}>{title.length}/100</FormHelperText>
-          </div> */}
         </Box>
 
+        {/* Location */}
         <Box sx={createPostLayout}>
-          <Typography variant="body1" margin="0 0 1vh 0">
-            Location
-          </Typography>
+          <Typography variant="body1">Location</Typography>
           <Stack spacing={2}>
-            <GoogleMaps
-              onChange={handleLocationChange}
-            />
-            {isSubmit && formErrors.location && (
-              <Box display="flex">
-                <FormHelperText error>{formErrors.location}</FormHelperText>
-              </Box>
+            <GoogleMap onChange={handleLocationChange} />
+            {isSubmitLocation && locationError && (
+              <FormHelperText error>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
             )}
           </Stack>
         </Box>
+
+        {/* Date time */}
         <Box sx={createPostLayout}>
-          <Typography variant="body1" margin="0 0 1vh 0">
-            Date time
-          </Typography>
-          <Grid container spacing={2}>
+          <Typography variant="body1">Date time</Typography>
+          <Grid container columnSpacing={2}>
+            {/* Start date */}
             <Grid item xs={6}>
-              <Typography variant="body1">Start</Typography>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <MobileDateTimePicker
-                  inputFormat="DD/MM/YYYY hh:mm a"
-                  mask="__/__/____ __:__ _M"
-                  value={startDate}
-                  onChange={handleStartDate}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CalendarTodayIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </LocalizationProvider>
-              {formErrors.startDate && (
-                <FormHelperText error>{formErrors.startDate}</FormHelperText>
-              )}
+              <CommonDateTimePicker
+                header="Start"
+                placeHolder="xx / xx / xxxx xx.xx xx"
+                value={startDate}
+                handleValueChange={handleStartDateChange}
+                isErr={isSubmitDate && startDateError.err}
+                errMsg={startDateError.msg}
+              />
             </Grid>
+
+            {/* End date */}
             <Grid item xs={6}>
-              <Typography variant="body1">End</Typography>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <MobileDateTimePicker
-                  inputFormat="DD/MM/YYYY hh:mm a"
-                  mask="__/__/____ __:__ _M"
-                  value={endDate}
-                  onChange={handleEndDate}
-                  renderInput={(params) => <TextField {...params} fullWidth />}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CalendarTodayIcon />
-                      </InputAdornment>
-                    ),
-                  }}
-                />
-              </LocalizationProvider>
-              {formErrors.endDate && (
-                <FormHelperText error>{formErrors.endDate}</FormHelperText>
-              )}
-              <div style={helperTextBox}>
-                <FormHelperText sx={helperTextError}>
-                  ช่องนี้ไม่สามารถเว้นว่างได้
-                </FormHelperText>
-              </div>
+              <CommonDateTimePicker
+                header="End"
+                placeHolder="xx / xx / xxxx xx.xx xx"
+                value={endDate}
+                handleValueChange={handleEndDateChange}
+                isErr={isSubmitDate && endDateError.err}
+                errMsg={endDateError.msg}
+              />
             </Grid>
           </Grid>
         </Box>
+
+        {/* Tags */}
         <Box sx={createPostLayout}>
-          <Typography variant="body1" margin="0 0 1vh 0">
-            Tag
-          </Typography>
-          <Autocomplete
-            multiple
-            options={tags.map((e) => e.name)}
-            value={selectedTags.map((e) => e.name)}
-            onChange={handleAddTag}
-            renderTags={(value: readonly string[], getTagProps) =>
-              value.map((option: string, index: number) => (
-                <Paper
-                  key={index}
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    flexWrap: "wrap",
-                    border: "1px solid rgba(0, 0, 0, 0.12)",
-                    borderRadius: "4px",
-                  }}
-                >
-                  <Chip
-                    variant="outlined"
-                    label={option}
-                    style={{ color: "#6200EE", border: "none" }}
-                    {...getTagProps({ index })}
-                  />
-                </Paper>
-              ))
-            }
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder={
-                  selectedTags.length < 5
-                    ? "คลิกเพื่อเลือก Tags (เลือกได้สูงสุด 5 Tags)"
-                    : ""
-                }
-                fullWidth
-              />
-            )}
+          <Tags
+            header="Tag"
+            note="(เลือกได้สูงสุด 5 Tags)"
+            value={tags}
+            handleValueChange={handleTagsChange}
+            menuValue={tagMenu}
+            isErr={isSubmitTags && tagsError}
+            errMsg="กรุณาใส่อย่างน้อย 1 tag"
           />
-          {isSubmit && formErrors.selectedTags && (
-            <FormHelperText error>{formErrors.selectedTags}</FormHelperText>
-          )}
         </Box>
+
+        {/* Description */}
         <Box sx={createPostLayout}>
           <CommonTextField
             header="Description"
             placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
-            value={desc}
-            handleValueChange={handleDescChange}
+            value={description}
+            handleValueChange={handleDescriptionChange}
             char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
             isMultiLine={true}
-            isErr={isSubmit && formErrors.desc.trim() !== ""}
-            errMsg={formErrors.desc}
+            isErr={isSubmitDescription && descriptionError.err}
+            errMsg={descriptionError.msg}
           />
-
-          {/* <Typography variant="body1" margin="0 0 1vh 0">
-            Description
-          </Typography>
-          <TextField
-            variant="outlined"
-            fullWidth
-            multiline
-            rows={4}
-            size="medium"
-            placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
-            value={desc}
-            onChange={handleDescChange}
-            inputProps={{ maxLength: 500 }}
-          />
-          {isSubmit && formErrors.desc && (
-            <Box display="flex">
-              <FormHelperText error>{formErrors.desc}</FormHelperText>
-            </Box>
-          )}
-          <div style={helperTextBox}>
-            <FormHelperText sx={helperText}>{desc.length}/500</FormHelperText>
-          </div> */}
         </Box>
+
+        {/* Image list */}
         <Box sx={createPostLayout}>
-          <Typography variant="body1" margin="0 0 1vh 0">
-            <span>Image </span>
-            <span style={{ color: "grey" }}>
-              (Optional, เลือกได้สูงสุด 3 รูป )
-            </span>
-          </Typography>
+          <PictureList
+            header="Image"
+            note="(Optional, เลือกได้สูงสุด 3 รูป)"
+            imgs={images}
+            stateChanger={handleImagesChange}
+            // st={setImgErrState}
+            isErr={true}
+            errMsg="เลือกรูปภาพได้ไม่เกิน 3 รูป"
+          />
+        </Box>
 
-          <Stack
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="flex-start"
-            spacing={1}
-          >
-            <PictureList
-              imgs={fileImages}
-              stateChanger={setFileImages}
-              st={setImgErrState}
-            />
-          </Stack>
-          {imgErrState && (
-            <FormHelperText error>เลือกรูปภาพได้ไม่เกิน 3 รูป</FormHelperText>
-          )}
-        </Box>
-        <Box justifyContent="center" alignItems="center">
-          <Button variant="contained" color="primary">
-            <Typography onClick={handleSubmit}>Create Post</Typography>
-          </Button>
-        </Box>
+        {/* Create post button */}
+        <Button variant="contained" onClick={handleSubmit}>
+          Create Post
+        </Button>
       </Stack>
     </>
   );
-};
-
-export default CreatePost;
+}
