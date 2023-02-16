@@ -26,11 +26,16 @@ type props = {
 };
 
 export default function Tags(props: props) {
-  const [menuItems, setMenuItems] = useState<Tag[]>(
-    props.menuValue.filter((tag) => !props.value.includes(tag))
-  );
+  const [menuItems, setMenuItems] = useState<Tag[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const tagNames: string[] = props.value.map((tag) => {
+      return tag.name;
+    });
+    setMenuItems(props.menuValue.filter((tag) => !tagNames.includes(tag.name)));
+  }, []);
 
   const handleDeleteTag = (toDeleteTag: Tag) => () => {
     // Update displyed tags (delete)
