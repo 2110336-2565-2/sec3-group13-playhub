@@ -198,7 +198,9 @@ const EditPost = () => {
       });
       }
     )
-    originalImages.forEach(async (image) => {
+
+    let index = 0;
+    for (const image of originalImages) {
       if(!images.includes(image)){
         const deleteImage = image.split("/").at(-1) as string;
         const deleteImageResult = await supabaseClient.storage
@@ -215,9 +217,10 @@ const EditPost = () => {
           return ;
         }
       }
-    })
+      index += 1;
+    }
 
-    let index = 0;
+    index = 0;
     for (const image of images) {
       const timeStamp = Date.now();
 
@@ -237,7 +240,6 @@ const EditPost = () => {
         
         const addImageToTable = await supabaseClient.rpc('add_location_image', {target_post_id: postId, target_image_link: getImageURLResult.data.publicUrl})
       }
-      index += 1;
     }
 
     router.push(PagePaths.myPosts);
