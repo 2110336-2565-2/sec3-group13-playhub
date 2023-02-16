@@ -95,12 +95,12 @@ const EditPost = () => {
   ): void {
     setDesc(event.target.value);
     formErrors.desc = "";
-    //setIsSubmit(false);
+    setIsSubmit(false);
   }
   function handleLocationChange(newValue: string): void {
     setLocationTitle(newValue);
     formErrors.location = "";
-    //setIsSubmit(false);
+    setIsSubmit(false);
   }
 
   function handleAddTag(event: any, tag: string[]): void {
@@ -108,7 +108,7 @@ const EditPost = () => {
       setSelectedTags(tags.filter((value) => tag.includes(value.name)));
       formErrors.selectedTags = "";
     }
-    // setIsSubmit(false);
+    setIsSubmit(false);
   }
 
   function handleStartDate(newValue: Dayjs | null): void {
@@ -119,8 +119,7 @@ const EditPost = () => {
       formErrors.startDate = "";
     }
 
-    //
-    //setIsSubmit(false);
+    setIsSubmit(false);
   }
   function handleEndDate(newValue: Dayjs | null): void {
     setEndDate(newValue);
@@ -218,7 +217,8 @@ const EditPost = () => {
       }
     })
 
-    images.forEach(async (image, index) => {
+    let index = 0;
+    for (const image of images) {
       const timeStamp = Date.now();
 
       if(!originalImages.includes(image)){
@@ -237,7 +237,8 @@ const EditPost = () => {
         
         const addImageToTable = await supabaseClient.rpc('add_location_image', {target_post_id: postId, target_image_link: getImageURLResult.data.publicUrl})
       }
-    })
+      index += 1;
+    }
 
     router.push(PagePaths.myPosts);
   };
