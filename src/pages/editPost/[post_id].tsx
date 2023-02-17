@@ -22,7 +22,7 @@ import CommonTextField from "@/components/public/CommonTextField";
 import CommonDateTimePicker from "@/components/public/CommonDateTimePicker";
 import Tags from "@/components/createPost/Tags";
 import GoogleMap from "@/components/createPost/searchMaps";
-import PictureList from "@/components/createPost/PictureList";
+import PictureList from "@/components/createPost/pictureList";
 
 import { Tag } from "@/types/Tag";
 import { PagePaths } from "enum/pages";
