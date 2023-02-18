@@ -22,6 +22,7 @@ import { validation } from "@/types/Validation";
 import { Gender } from "enum/gender";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { PagePaths } from "enum/pages";
+import { CreateUser } from "@/services/User";
 
 // style
 const register_layout = {
@@ -145,35 +146,21 @@ export default function Home() {
     setIsSubmitGender(true);
     setIsSubmitBirthDate(true);
 
+    if(!birthDate) return;
+
     if (readyToCreate) {
-      const signUpResult = await supabaseClient.auth.signUp({
-        email,
-        password,
-      });
-      if (signUpResult.error) {
-        // one possible error is request sign up repeatedly too fast
-        console.log(signUpResult.error);
-        if (signUpResult.error.message === "User already registered") {
+      CreateUser(displayName, gender, birthDate.toString(), email, password, supabaseClient).then(() => {
+        router.push(PagePaths.login);
+      }).catch((err) => {
+        if(err.message == "User already registered"){
           setIsEmailAlreadyUsed({
             msg: "ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",
             err: true,
           });
         }
+        console.log(err);
         return;
-      }
-      const addUserData = await supabaseClient.rpc("add_user", {
-        user_id: signUpResult.data.user?.id,
-        username: displayName,
-        password: password,
-        email: email,
-        birthdate: birthDate,
-        sex: gender,
-      });
-      if (addUserData.error) {
-        console.log(addUserData.error);
-        return;
-      }
-      router.push(PagePaths.login);
+      })
     }
   };
 
