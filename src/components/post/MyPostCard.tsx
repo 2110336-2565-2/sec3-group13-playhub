@@ -70,8 +70,8 @@ export default function PostCard(props: props) {
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   async function handleDelete() {
-    const deletePostResult = await supabaseClient.rpc("delete_post_by_id", {
-      target_id: props.post.post_id,
+    const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {
+      id: props.post.postId,
     });
 
     if (deletePostResult.error) {
@@ -86,7 +86,7 @@ export default function PostCard(props: props) {
   function handleEditPost() {
     console.log("The post is edited");
     // edit post end-point
-    router.push(PagePaths.editPost + props.post.post_id);
+    router.push(PagePaths.editPost + props.post.postId);
   }
 
   return (
@@ -104,7 +104,7 @@ export default function PostCard(props: props) {
           avatar={
             <IconButton
               onClick={() => {
-                router.push(PagePaths.profile + props.post.user_id);
+                router.push(PagePaths.profile + props.post.ownerId);
               }}
               sx={{ padding: 0 }}
             >

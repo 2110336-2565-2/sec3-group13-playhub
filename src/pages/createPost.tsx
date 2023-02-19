@@ -147,15 +147,16 @@ export default function Home() {
     setIsSubmitDescription(true);
     setIsSubmitImages(true);
     if (isCreatingAllow) {
+      if(!userStatus.user?.userId) return ;
       const newPost: PostInfo = {
         title: title,
-        user_id: userStatus.user?.user_id,
+        userId: userStatus.user?.userId,
         location: location,
         tags: tags,
         description: description,
         images: images,
-        start_time: startDate,
-        end_time: endDate,
+        startTime: startDate,
+        endTime: endDate,
       };
       CreatePost(newPost, supabaseClient).catch((err) => {
         console.log(err);
@@ -176,8 +177,8 @@ export default function Home() {
     router.push(PagePaths.login);
     return;
   }
-  if (userStatus.user.is_admin) {
-    router.push(PagePaths.adminHome + userStatus.user.user_id);
+  if (userStatus.user.isAdmin) {
+    router.push(PagePaths.adminHome + userStatus.user.userId);
     return;
   }
   if (userStatus.isLoading || tagMenu.length == 0) return <Loading />;

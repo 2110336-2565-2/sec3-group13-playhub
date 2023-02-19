@@ -10,9 +10,9 @@ export async function CreatePost(
     title: newPost.title,
     location: newPost.location,
     description: newPost.description,
-    owner_id: newPost.user_id,
-    start_timestamp: newPost.start_time,
-    end_timestamp: newPost.end_time,
+    owner_id: newPost.userId,
+    start_timestamp: newPost.startTime,
+    end_timestamp: newPost.endTime,
   });
   if (addPostResult.error) {
     console.log(addPostResult.error);
@@ -57,8 +57,8 @@ export async function UpdatePost(
     post_id: postId,
     post_title: updatedPost.title,
     post_location: updatedPost.location,
-    post_start_time: updatedPost.start_time,
-    post_end_time: updatedPost.end_time,
+    post_start_time: updatedPost.startTime,
+    post_end_time: updatedPost.endTime,
     post_description: updatedPost.description,
   };
 

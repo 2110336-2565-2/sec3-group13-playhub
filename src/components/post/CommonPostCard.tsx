@@ -64,7 +64,7 @@ export default function PostCard(props: props) {
           avatar={
             <IconButton
               onClick={() => {
-                router.push(PagePaths.profile + props.post.user_id);
+                router.push(PagePaths.profile + props.post.ownerId);
               }}
               sx={{ padding: 0 }}
             >

@@ -64,8 +64,8 @@ export default function AdminPostCard(props: props) {
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   async function handleDelete() {
-    const deletePostResult = await supabaseClient.rpc("delete_post_by_id", {
-      target_id: props.post.post_id,
+    const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {
+      id: props.post.postId,
     });
 
     if (deletePostResult.error) {
@@ -93,7 +93,7 @@ export default function AdminPostCard(props: props) {
           avatar={
             <IconButton
               onClick={() => {
-                router.push(PagePaths.profile + props.post.user_id);
+                router.push(PagePaths.profile + props.post.ownerId);
               }}
               sx={{ padding: 0 }}
             >

@@ -25,7 +25,7 @@ export async function UpdateProfile(
 
         const uploadImageResult = await supabaseClient.storage
           .from("profileimage")
-          .upload(user.user_id + timeStamp, newFileImage);
+          .upload(user.userId + timeStamp, newFileImage);
         if (uploadImageResult.error != null) {
           console.log(uploadImageResult.error);
           throw new Error("Something went wrong!!");
@@ -33,25 +33,25 @@ export async function UpdateProfile(
       }
       const getImageURLResult = await supabaseClient.storage
         .from("profileimage")
-        .getPublicUrl(user.user_id + timeStamp);
+        .getPublicUrl(user.userId + timeStamp);
 
       const sendData =
         newFileImage != null
           ? {
-              id: user.user_id,
+              id: user.userId,
               username: newDisplayName,
               sex: newGender,
               description: newDescription,
               image: getImageURLResult.data.publicUrl,
             }
           : {
-              id: user.user_id,
+              id: user.userId,
               username: newDisplayName,
               sex: newGender,
               description: newDescription,
               image: null
             };
-
+      
       const updateResult = await supabaseClient
         .rpc('update_user_by_user_id', sendData);
 

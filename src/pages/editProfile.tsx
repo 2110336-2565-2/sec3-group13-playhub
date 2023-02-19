@@ -97,7 +97,7 @@ export default function Home() {
     );
     if (readyToSubmit) {
       UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient).then(() => {
-        router.push(PagePaths.profile + "/" + userStatus.user?.user_id);
+        router.push(PagePaths.profile + "/" + userStatus.user?.userId);
       }).catch((err) => {
         console.log(err);
       }
