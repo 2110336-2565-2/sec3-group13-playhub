@@ -9,209 +9,158 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      Advertisement: {
+      advertisement: {
         Row: {
-          created_at: string | null
           id: number
           image_url: string | null
           link_to: string | null
+          title: string | null
+        }
+        Insert: {
+          id?: number
+          image_url?: string | null
+          link_to?: string | null
+          title?: string | null
+        }
+        Update: {
+          id?: number
+          image_url?: string | null
+          link_to?: string | null
+          title?: string | null
+        }
+      }
+      appointment: {
+        Row: {
+          accept_user_id: string[] | null
+          description: string | null
+          end_time: string | null
+          id: number
+          images: string[] | null
+          location: string | null
+          owner_id: string | null
+          pending_user_id: string[] | null
+          reject_user_id: string[] | null
+          start_time: string | null
+          tags: number[] | null
+          title: string | null
+        }
+        Insert: {
+          accept_user_id?: string[] | null
+          description?: string | null
+          end_time?: string | null
+          id?: number
+          images?: string[] | null
+          location?: string | null
+          owner_id?: string | null
+          pending_user_id?: string[] | null
+          reject_user_id?: string[] | null
+          start_time?: string | null
+          tags?: number[] | null
+          title?: string | null
+        }
+        Update: {
+          accept_user_id?: string[] | null
+          description?: string | null
+          end_time?: string | null
+          id?: number
+          images?: string[] | null
+          location?: string | null
+          owner_id?: string | null
+          pending_user_id?: string[] | null
+          reject_user_id?: string[] | null
+          start_time?: string | null
+          tags?: number[] | null
+          title?: string | null
+        }
+      }
+      post: {
+        Row: {
+          description: string | null
+          end_time: string
+          id: number
+          images: string[]
+          location: string | null
+          owner_id: string
+          start_time: string
+          tags: number[]
+          title: string
+        }
+        Insert: {
+          description?: string | null
+          end_time: string
+          id?: number
+          images?: string[]
+          location?: string | null
+          owner_id: string
+          start_time: string
+          tags: number[]
+          title: string
+        }
+        Update: {
+          description?: string | null
+          end_time?: string
+          id?: number
+          images?: string[]
+          location?: string | null
+          owner_id?: string
+          start_time?: string
+          tags?: number[]
+          title?: string
+        }
+      }
+      tag: {
+        Row: {
+          id: number
           name: string | null
         }
         Insert: {
-          created_at?: string | null
-          id?: number
-          image_url?: string | null
-          link_to?: string | null
-          name?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          image_url?: string | null
-          link_to?: string | null
-          name?: string | null
-        }
-      }
-      Appointment: {
-        Row: {
-          appointment_owner: number | null
-          appointment_rating: number | null
-          created_at: string | null
-          end_time: string | null
-          id: number
-          location: string | null
-          start_time: string | null
-          status: string | null
-          topic: string | null
-        }
-        Insert: {
-          appointment_owner?: number | null
-          appointment_rating?: number | null
-          created_at?: string | null
-          end_time?: string | null
-          id?: number
-          location?: string | null
-          start_time?: string | null
-          status?: string | null
-          topic?: string | null
-        }
-        Update: {
-          appointment_owner?: number | null
-          appointment_rating?: number | null
-          created_at?: string | null
-          end_time?: string | null
-          id?: number
-          location?: string | null
-          start_time?: string | null
-          status?: string | null
-          topic?: string | null
-        }
-      }
-      AppointmentParticipant: {
-        Row: {
-          appointment_id: number | null
-          created_at: string | null
-          id: number
-          participant_id: number | null
-        }
-        Insert: {
-          appointment_id?: number | null
-          created_at?: string | null
-          id?: number
-          participant_id?: number | null
-        }
-        Update: {
-          appointment_id?: number | null
-          created_at?: string | null
-          id?: number
-          participant_id?: number | null
-        }
-      }
-      locationImage: {
-        Row: {
-          created_at: string | null
-          id: number
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-        }
-      }
-      Post: {
-        Row: {
-          created_at: string | null
-          end_time: string | null
-          id: number
-          location: string | null
-          post_description: string | null
-          post_name: string
-          post_owner_id: number
-          start_time: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          end_time?: string | null
-          id?: number
-          location?: string | null
-          post_description?: string | null
-          post_name: string
-          post_owner_id: number
-          start_time?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          end_time?: string | null
-          id?: number
-          location?: string | null
-          post_description?: string | null
-          post_name?: string
-          post_owner_id?: number
-          start_time?: string | null
-        }
-      }
-      PostGameTag: {
-        Row: {
-          created_at: string | null
-          id: number
-          post_id: number | null
-          tag_id: number | null
-        }
-        Insert: {
-          created_at?: string | null
-          id?: number
-          post_id?: number | null
-          tag_id?: number | null
-        }
-        Update: {
-          created_at?: string | null
-          id?: number
-          post_id?: number | null
-          tag_id?: number | null
-        }
-      }
-      Tag: {
-        Row: {
-          created_at: string
-          id: number
-          name: string 
-        }
-        Insert: {
-          created_at?: string | null
           id?: number
           name?: string | null
         }
         Update: {
-          created_at?: string | null
           id?: number
           name?: string | null
         }
       }
-      User: {
+      user: {
         Row: {
-          birthdate: string
-          created_at: string | null
-          description: string
-          email: string
-          image: string
+          birthdate: string | null
+          description: string | null
+          email: string | null
+          id: string
+          image: string | null
+          is_admin: boolean
           is_enabled: boolean | null
           password: string | null
           rating_score: number | null
-          sex: string
-          user_id: string
-          username: string
-          verified_email: boolean | null
+          sex: string | null
+          username: string | null
         }
         Insert: {
           birthdate?: string | null
-          created_at?: string | null
           description?: string | null
           email?: string | null
+          id: string
           image?: string | null
+          is_admin?: boolean
           is_enabled?: boolean | null
           password?: string | null
           rating_score?: number | null
           sex?: string | null
-          user_id: string
           username?: string | null
-          verified_email?: boolean | null
         }
         Update: {
           birthdate?: string | null
-          created_at?: string | null
           description?: string | null
           email?: string | null
+          id?: string
           image?: string | null
+          is_admin?: boolean
           is_enabled?: boolean | null
           password?: string | null
           rating_score?: number | null
           sex?: string | null
-          user_id?: string
           username?: string | null
-          verified_email?: boolean | null
         }
       }
     }
@@ -219,12 +168,79 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
+      create_post: {
+        Args: {
+          title: string
+          location: string
+          description: string
+          tags: number[]
+          start_time: string
+          end_time: string
+          images: string[]
+          owner_id: string
+        }
+        Returns: undefined
+      }
+      create_user: {
+        Args: {
+          id: string
+          username: string
+          password: string
+          email: string
+          birthdate: string
+          sex: string
+        }
+        Returns: undefined
+      }
+      delete_post_by_post_id: {
+        Args: {
+          id: number
+        }
+        Returns: undefined
+      }
+      get_is_email_exist: {
+        Args: {
+          email: string
+        }
+        Returns: boolean
+      }
+      get_post_by_post_id: {
+        Args: {
+          id: number
+        }
+        Returns: {
+          id: number
+          title: string
+          description: string
+          owner_id: string
+          location: string
+          start_time: string
+          end_time: string
+          tags: number[]
+          tag_names: string[]
+          images: string[]
+        }[]
+      }
+      get_posts: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: number
+          title: string
+          description: string
+          owner_id: string
+          location: string
+          start_time: string
+          end_time: string
+          tags: number[]
+          tag_names: string[]
+          images: string[]
+        }[]
+      }
       get_posts_by_user_id: {
         Args: {
           target_id: string
         }
         Returns: {
-          post_id: number
           user_id: string
           username: string
           title: string
@@ -233,74 +249,61 @@ export interface Database {
           start_time: string
           end_time: string
           location: string
-        }
-      },
-      get_user_data_by_id: {
-        Args: {
-          target_id: string
-        }
-        Returns: {
-          user_id: string
-          username: string
-          sex: string
-          birthdate: string
-          description: string
-          image: string | null
-          email: string
-          is_admin: boolean
-        }
-      },
-      delete_post_by_id: {
-        Args: {
-          target_id: number
-        }
-      },
-      get_all_post_tag: {
-        Returns: {
-          name: string
           post_id: number
-        }
-      },
-      get_all_possible_tags: {
+        }[]
+      }
+      get_tags: {
+        Args: Record<PropertyKey, never>
         Returns: {
-          name: string
           id: number
-        }
-      },
-      add_user: {
+          name: string
+        }[]
+      }
+      get_user_by_user_id: {
         Args: {
-          user_id: string,
-          username: string,
-          password: string,
-          email: string,
-          birthdate: string,
-          sex: string
-        },
-        Returns: {
-          post_id: number
+          id: string
         }
-      },
+        Returns: {
+          id: string
+          username: string
+          email: string
+          birthdate: string
+          sex: string
+          description: string
+          is_admin: boolean
+          is_enabled: boolean
+          image: string
+          rating_score: number
+        }[]
+      }
       update_post_by_post_id: {
         Args: {
-          post_id: number,
-          post_title: string,
-          post_location: string,
-          post_start_time: number,
-          post_end_time: number,
-          post_description: string
+          id: number
+          title: string
+          location: string
+          tags: number[]
+          start_time: string
+          end_time: string
+          description: string
+          images: string[]
         }
-      },
-      update_user_profile: {
+        Returns: undefined
+      }
+      update_user_by_user_id: {
         Args: {
-          target_id: string,
-          target_username: string,
-          target_sex: string,
-          target_description: string,
-          target_image: string
+          id: string
+          username: string
+          sex: string
+          description: string
+          image: string
         }
+        Returns: undefined
       }
     }
     Enums: {
+      [_ in never]: never
+    }
+    CompositeTypes: {
       [_ in never]: never
     }
   }
