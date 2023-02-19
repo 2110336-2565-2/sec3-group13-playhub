@@ -35,7 +35,8 @@ export default function Home() {
       setPosts(getAllUserPostResult.data.map((post) => ({
         postId: post.id,
         title: post.title,
-        ownerName: post.owner_id,
+        ownerId: post.owner_id,
+        ownerName: post.owner_name,
         ownerProfilePic: post.owner_profile,
         tags: post.tag_names,
         description: post.description,
