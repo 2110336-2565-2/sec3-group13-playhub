@@ -299,7 +299,7 @@ export interface Database {
           username: string
           sex: string
           description: string
-          image: string
+          image: string | null
         }
         Returns: undefined
       }

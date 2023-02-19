@@ -5,7 +5,7 @@ import { Database } from "supabase/db_types";
 export async function GetAllTags(
   supabaseClient: SupabaseClient<Database, "public", any>
 ): Promise<Tag[]> {
-  const getTagsResult = await supabaseClient.rpc("get_all_possible_tags");
+  const getTagsResult = await supabaseClient.rpc("get_tags");
   if (getTagsResult.error) {
     console.log(getTagsResult.error);
     throw new Error("Something went wrong!!");

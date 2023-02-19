@@ -9,7 +9,7 @@ export async function CreateUser(
     password: string,
     supabaseClient: SupabaseClient<Database, "public", any>,
 ): Promise<void> {
-    const isEmailExist = await supabaseClient.rpc('is_email_exist', {target_email:email});
+    const isEmailExist = await supabaseClient.rpc('get_is_email_exist', {email});
     if(isEmailExist.data){
         throw new Error("User already registered")
     }
@@ -25,8 +25,8 @@ export async function CreateUser(
         throw new Error("Something went wrong!!");
     }
     
-    const addUserData = await supabaseClient.rpc("add_user", {
-        user_id: signUpResult.data.user?.id,
+    const addUserData = await supabaseClient.rpc("create_user", {
+        id: signUpResult.data.user?.id,
         username: username,
         password: password,
         email: email,
