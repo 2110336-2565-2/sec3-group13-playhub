@@ -35,6 +35,7 @@ import { CHAR_LIMIT } from "enum/inputLimit";
 import { PagePaths } from "enum/pages";
 
 import Loading from "@/components/public/Loading";
+import { UpdateProfile } from "@/services/Profile";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -60,7 +61,7 @@ export default function Home() {
   const [originalImage, setOriginalImage] = useState<string | null>(null);
 
   const [isPressSubmit, setIsPressSubmit] = useState<boolean>(false);
-  const [fileImage, setFileImage] = useState<File | null>();
+  const [fileImage, setFileImage] = useState<File | null>(null);
   const [isImageUpload, setIsImageUpload] = useState<boolean>(false);
   const [showImageUploadError, setShowImageUploadError] = useState({
     msg: "",
@@ -95,58 +96,12 @@ export default function Home() {
       showImageUploadError.err
     );
     if (readyToSubmit) {
-      //send to API
-      const timeStamp = Date.now();
-      if (fileImage) {
-        if (userStatus.user.image) {
-          const deleteImageResult = await supabaseClient.storage
-            .from("profileimage")
-            .remove([userStatus.user.image.split("/").at(-1) as string]);
-          if (deleteImageResult.error != null) {
-            console.log(deleteImageResult.error);
-            return;
-          }
-        }
-
-        const uploadImageResult = await supabaseClient.storage
-          .from("profileimage")
-          .upload(userStatus.user.user_id + timeStamp, fileImage);
-        if (uploadImageResult.error != null) {
-          console.log(uploadImageResult.error);
-          return;
-        }
+      UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient).then(() => {
+        router.push(PagePaths.profile + "/" + userStatus.user?.user_id);
+      }).catch((err) => {
+        console.log(err);
       }
-      const getImageURLResult = await supabaseClient.storage
-        .from("profileimage")
-        .getPublicUrl(userStatus.user.user_id + timeStamp);
-
-      const sendData =
-        fileImage != null
-          ? {
-              target_id: userStatus.user.user_id,
-              target_username: displayName,
-              target_sex: gender,
-              target_description: description,
-              target_image: getImageURLResult.data.publicUrl,
-            }
-          : {
-              target_id: userStatus.user.user_id,
-              target_username: displayName,
-              target_sex: gender,
-              target_description: description,
-              target_image: null
-            };
-
-      const updateResult = await supabaseClient
-        .rpc('update_user_profile', sendData);
-
-      if (updateResult.error) {
-        console.log(updateResult.error);
-        return;
-      }
-      console.log("Edit success");
-
-      router.push(PagePaths.profile + "/" + userStatus.user.user_id);
+      )
     } else {
       console.log("Something went wrong");
     }
