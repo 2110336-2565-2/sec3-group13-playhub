@@ -38,22 +38,22 @@ export async function UpdateProfile(
       const sendData =
         newFileImage != null
           ? {
-              target_id: user.user_id,
-              target_username: newDisplayName,
-              target_sex: newGender,
-              target_description: newDescription,
-              target_image: getImageURLResult.data.publicUrl,
+              id: user.user_id,
+              username: newDisplayName,
+              sex: newGender,
+              description: newDescription,
+              image: getImageURLResult.data.publicUrl,
             }
           : {
-              target_id: user.user_id,
-              target_username: newDisplayName,
-              target_sex: newGender,
-              target_description: newDescription,
-              target_image: null
+              id: user.user_id,
+              username: newDisplayName,
+              sex: newGender,
+              description: newDescription,
+              image: null
             };
 
       const updateResult = await supabaseClient
-        .rpc('update_user_profile', sendData);
+        .rpc('update_user_by_user_id', sendData);
 
       if (updateResult.error) {
         console.log(updateResult.error);
