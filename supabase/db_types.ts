@@ -242,19 +242,22 @@ export interface Database {
       }
       get_posts_by_user_id: {
         Args: {
-          target_id: string
+          id: string
         }
         Returns: {
-          user_id: string
-          username: string
+          id: number
           title: string
           description: string
-          profile_image: string
+          owner_id: string
+          owner_name: string
+          owner_profile: string
+          location: string
           start_time: string
           end_time: string
-          location: string
-          post_id: number
-        }[]
+          tags: number[]
+          tag_names: string[]
+          images: string[]
+        }
       }
       get_tags: {
         Args: Record<PropertyKey, never>
