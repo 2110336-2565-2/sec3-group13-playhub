@@ -4,6 +4,7 @@ import { Tag } from "./Tag";
 export type Post = {
   postId: number;
   title: string;
+  ownerId: string;
   ownerName: string;
   ownerProfilePic: string;
   tags: string[];
@@ -16,7 +17,7 @@ export type Post = {
 
 export type PostInfo = {
   title: string;
-  userId: string | undefined;
+  userId: string;
   location: string;
   tags: Tag[];
   description: string;
