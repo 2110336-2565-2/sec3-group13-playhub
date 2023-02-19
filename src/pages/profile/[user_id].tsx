@@ -38,9 +38,9 @@ export default function Home() {
     async function getTargetUserData() {
       if (!userStatus.user || !router.query.user_id || targetUserData) return;
       const getUserDataResult = await supabaseClient.rpc(
-        "get_user_data_by_id",
+        "get_user_by_user_id",
         {
-          target_id: router.query.user_id as string,
+          id: router.query.user_id as string,
         }
       );
       if (getUserDataResult.error || getUserDataResult.count == 0) {
@@ -49,7 +49,16 @@ export default function Home() {
         );
         return;
       }
-      setTargetUserData(getUserDataResult.data[0]);
+      setTargetUserData({
+        userId: getUserDataResult.data[0].id,
+        username: getUserDataResult.data[0].username,
+        email: getUserDataResult.data[0].email,
+        birthdate: getUserDataResult.data[0].birthdate,
+        sex: getUserDataResult.data[0].sex,
+        description: getUserDataResult.data[0].description,
+        isAdmin: getUserDataResult.data[0].is_admin,
+        image: getUserDataResult.data[0].image
+      });
     }
 
     getTargetUserData();
@@ -79,7 +88,7 @@ export default function Home() {
           <Typography variant="h1" align="center" sx={profile_layout}>
             {targetUserData.username}
           </Typography>
-          {router.query.user_id === userStatus.user.user_id && (
+          {router.query.user_id === userStatus.user.userId && (
             <Typography variant="body1" align="center" sx={profile_layout}>
               {targetUserData.email}
             </Typography>
@@ -116,7 +125,7 @@ export default function Home() {
               {row}
             </Typography>
           ))}
-          {router.query.user_id === userStatus.user.user_id && (
+          {router.query.user_id === userStatus.user.userId && (
             <IconButton onClick={handleEditProfile}>
               <EditIcon />
             </IconButton>

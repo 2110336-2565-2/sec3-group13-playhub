@@ -92,8 +92,8 @@ export default function Home() {
     return;
   }
   if (
-    !userStatus.user.is_admin ||
-    userStatus.user.user_id !== router.query.user_id
+    !userStatus.user.isAdmin ||
+    userStatus.user.userId !== router.query.user_id
   ) {
     router.push(PagePaths.home);
     return;

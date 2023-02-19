@@ -154,7 +154,7 @@ export default function Home() {
     if (isEditingAllow) {
       const updatedPost: PostInfo = {
         title: title,
-        user_id: userStatus.user?.user_id,
+        user_id: userStatus.user?.userId,
         location: location,
         tags: tags,
         description: description,

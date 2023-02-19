@@ -29,14 +29,23 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
         setUserStatus({ user: null, isLoading: false });
         return;
       }
-      const userData = await supabaseClient.rpc("get_user_data_by_id", {
-        target_id: sessionContext.session.user.id,
+      const userData = await supabaseClient.rpc("get_user_by_user_id", {
+        id: sessionContext.session.user.id,
       });
       if (userData.error || userData.count == 0 || userData.data == null) {
         setUserStatus({ user: null, isLoading: false });
         return;
       }
-      setUserStatus({ user: userData.data[0], isLoading: false });
+      setUserStatus({ user: {
+        userId: userData.data[0].id,
+        username: userData.data[0].username,
+        email: userData.data[0].email,
+        birthdate: userData.data[0].birthdate,
+        sex: userData.data[0].sex,
+        description: userData.data[0].description,
+        image: userData.data[0].image,
+        isAdmin: userData.data[0].is_admin
+      }, isLoading: false });
     }
     getUserData();
   // eslint-disable-next-line react-hooks/exhaustive-deps

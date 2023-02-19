@@ -274,7 +274,7 @@ export interface Database {
           is_enabled: boolean
           image: string
           rating_score: number
-        }[]
+        }
       }
       update_post_by_post_id: {
         Args: {
