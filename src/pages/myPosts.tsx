@@ -52,7 +52,7 @@ export default function Home() {
         postId: post.id,
         title: post.title,
         ownerId: post.owner_id,
-        ownerName: post.owner_id,
+        ownerName: post.owner_name,
         ownerProfilePic: post.owner_profile,
         tags: post.tag_names,
         description: post.description,
