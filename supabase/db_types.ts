@@ -213,6 +213,8 @@ export interface Database {
           title: string
           description: string
           owner_id: string
+          owner_name: string
+          owner_profile: string
           location: string
           start_time: string
           end_time: string
@@ -228,13 +230,15 @@ export interface Database {
           title: string
           description: string
           owner_id: string
+          owner_name: string
+          owner_profile: string
           location: string
           start_time: string
           end_time: string
           tags: number[]
           tag_names: string[]
           images: string[]
-        }[]
+        }
       }
       get_posts_by_user_id: {
         Args: {
