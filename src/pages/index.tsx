@@ -26,59 +26,24 @@ export default function Home() {
     async function getPostData() {
       if (!userStatus.user) return;
 
-      const getAllUserPostResult = await supabaseClient.rpc("get_all_posts");
+      const getAllUserPostResult = await supabaseClient.rpc("get_posts");
       if (getAllUserPostResult.error) {
         console.log(getAllUserPostResult.error);
         return;
       }
 
-      if (!getAllUserPostResult.data) return;
-
-      const getPostTagResult = await supabaseClient.rpc("get_all_post_tag");
-      if (getPostTagResult.error) {
-        console.log(getPostTagResult.error);
-        return;
-      }
-
-      if (!getPostTagResult.data) return;
-
-      const getPostLocationImgResult = await supabaseClient.rpc(
-        "get_all_post_location_image"
-      );
-      if (getPostLocationImgResult.error) {
-        console.log(getPostLocationImgResult.error);
-        return;
-      }
-
-      const postDataList = getAllUserPostResult.data.map((data) => {
-        // extract tags from post data
-        const postTagList = getPostTagResult.data.filter(
-          (post) => post.post_id == data.post_id
-        );
-        const tagName = postTagList.map((data) => data.name);
-
-        // extract image from post data
-        const postLocationImgList = getPostLocationImgResult.data.filter(
-          (post) => post.post_id == data.post_id
-        );
-        const imageURL = postLocationImgList.map((data) => data.image);
-
-        return {
-          post_id: data.post_id,
-          title: data.title,
-          user_id: data.owner_id,
-          ownerName: data.username,
-          ownerProfilePic: data.profile_image,
-          tags: tagName,
-          description: data.description,
-          image: imageURL,
-          location: data.location,
-          startDateTime: data.start_time,
-          endDateTime: data.end_time,
-        };
-      });
-
-      setPosts(postDataList);
+      setPosts(getAllUserPostResult.data.map((post) => ({
+        postId: post.id,
+        title: post.title,
+        ownerName: post.owner_id,
+        ownerProfilePic: post.owner_profile,
+        tags: post.tag_names,
+        description: post.description,
+        image: post.images,
+        location: post.location,
+        startDateTime: post.start_time,
+        endDateTime: post.end_time
+      })));
     }
 
     getPostData();
@@ -89,8 +54,8 @@ export default function Home() {
     router.push(PagePaths.login);
     return;
   }
-  if (userStatus.user.is_admin) {
-    router.push(PagePaths.adminHome + userStatus.user.user_id);
+  if (userStatus.user.isAdmin) {
+    router.push(PagePaths.adminHome + userStatus.user.userId);
     return;
   }
   if (posts == null) return <Loading />;
