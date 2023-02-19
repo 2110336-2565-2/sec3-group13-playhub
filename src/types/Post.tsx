@@ -2,9 +2,8 @@ import { Dayjs } from "dayjs";
 import { Tag } from "./Tag";
 
 export type Post = {
-  post_id: number;
+  postId: number;
   title: string;
-  user_id: string;
   ownerName: string;
   ownerProfilePic: string;
   tags: string[];
@@ -17,13 +16,13 @@ export type Post = {
 
 export type PostInfo = {
   title: string;
-  user_id: string | undefined;
+  userId: string | undefined;
   location: string;
   tags: Tag[];
   description: string;
   images: string[];
-  start_time: Dayjs | null;
-  end_time: Dayjs | null;
+  startTime: Dayjs | null;
+  endTime: Dayjs | null;
 };
 
 // export const emptyPost: Post = {
