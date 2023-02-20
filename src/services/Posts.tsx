@@ -2,6 +2,7 @@ import { Post, PostInfo } from "@/types/Post";
 import { User } from "@/types/User";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
+import dayjs from "dayjs";
 
 export async function CreatePost(
   newPost: PostInfo,
@@ -172,4 +173,39 @@ export async function GetPosts(
     startDateTime: post.start_time,
     endDateTime: post.end_time
   }))
+}
+
+export async function GetPostByPostId(
+  user: User,
+  postId: number,
+  supabaseClient: SupabaseClient<Database>
+) : Promise<PostInfo> {
+  const getPostDataResult = await supabaseClient.rpc(
+    "get_post_by_post_id",
+    {
+      id: postId,
+    }
+  );
+  if (getPostDataResult.error || !getPostDataResult.data) {
+    console.log(getPostDataResult.error);
+    throw new Error("Cant get posts data");
+  }
+
+  let tag_name = [...getPostDataResult.data[0].tag_names].sort()
+  let tag_ids = [...getPostDataResult.data[0].tags].sort()
+
+  const postData: PostInfo = {
+    userId: user.userId,
+    title: getPostDataResult.data[0].title,
+    description: getPostDataResult.data[0].description,
+    location: getPostDataResult.data[0].location,
+    startTime: dayjs(getPostDataResult.data[0].start_time),
+    endTime: dayjs(getPostDataResult.data[0].end_time),
+    images: getPostDataResult.data[0].images,
+    tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
+      id: tag_ids[idx],
+      name: tag_name[idx]
+    }))
+  }
+  return postData;
 }

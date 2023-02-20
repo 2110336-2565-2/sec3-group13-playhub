@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext, ChangeEvent } from "react";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 
-import { NextRouter, useRouter } from "next/router";
+import { useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -36,7 +36,7 @@ import {
 import { validation } from "@/types/Validation";
 import { GetAllTags, GetTagsByPost } from "@/services/Tags";
 import { PostInfo } from "@/types/Post";
-import { UpdatePost } from "@/services/Posts";
+import { GetPostByPostId, UpdatePost } from "@/services/Posts";
 
 //style
 const editPostLayout = {
@@ -182,38 +182,23 @@ export default function Home() {
 
   useEffect(() => {
     async function getPostData() {
-      if (!postId) return;
-
-      const getPostDataResult = await supabaseClient.rpc(
-        "get_post_by_post_id",
-        {
-          id: postId,
-        }
-      );
-      if (getPostDataResult.error) {
-        console.log(getPostDataResult.error);
-        return;
-      }
-
-      if (!getPostDataResult.data) return;
-
-      let tag_name = [...getPostDataResult.data[0].tag_names].sort()
-      let tag_ids = [...getPostDataResult.data[0].tags].sort()
-
-      setTitle(getPostDataResult.data[0].title);
-      setDescription(getPostDataResult.data[0].description);
-      setLocation(getPostDataResult.data[0].location);
-      setStartDate(dayjs(getPostDataResult.data[0].start_time));
-      setEndDate(dayjs(getPostDataResult.data[0].end_time));
-      setImages(getPostDataResult.data[0].images);
-      setOriginalImages(getPostDataResult.data[0].images);
-      setTags(getPostDataResult.data[0].tag_names.map((_, idx) => ({
-        id: tag_ids[idx],
-        name: tag_name[idx]
-      })));
-      setLoadingData(false);
+      if (!postId || !userStatus.user) return;
+      GetPostByPostId(userStatus.user, postId, supabaseClient)
+      .then((p) => {
+        setTitle(p.title);
+        setDescription(p.description);
+        setLocation(p.location);
+        setStartDate(p.startTime);
+        setEndDate(p.endTime);
+        setImages(p.images);
+        setOriginalImages(p.images);
+        setTags(p.tags);
+        setLoadingData(false);
+      }).catch((err) => {
+        console.log(err)
+        return
+      })
     }
-
     getPostData();
   }, [supabaseClient, router.query.post_id]);
 
