@@ -28,6 +28,7 @@ import {
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
+import { SignIn } from "@/services/User";
 
 // style
 const login_layout = {
@@ -63,15 +64,12 @@ export default function Home() {
     setIsSubmit(true);
 
     // sign in via supabase
-    const signInResult: AuthResponse =
-      await supabaseClient.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-    if (signInResult.error) {
+    SignIn(email, password, supabaseClient).then(() => {
+      // route to post feed page
+      router.push(PagePaths.home);
+    }).catch((err) => {
       // in case : cannot find user using inputed email and password
-      if (signInResult.error.message == SUPABASE_LOGIN_CREDENTIALS_ERROR) {
+      if (err == "Error: " + SUPABASE_LOGIN_CREDENTIALS_ERROR) {
         setIsLoginCredErr(true);
         console.log("wrong email or password");
         return;
@@ -79,16 +77,13 @@ export default function Home() {
 
       // in case : user has not validate email yet
       if (
-        signInResult.error.message == SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR
+        err == "Error: " + SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR
       ) {
         setIsValidateErr(true);
         console.log("You have not validate your email yet");
         return;
       }
-    }
-
-    // route to post feed page
-    router.push(PagePaths.home);
+    })
     return;
   }
 

@@ -1,4 +1,4 @@
-import { SupabaseClient } from "@supabase/supabase-js";
+import { AuthResponse, SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 
 export async function CreateUser(
@@ -36,5 +36,22 @@ export async function CreateUser(
     if (addUserData.error) {
         console.log(addUserData.error);
         throw new Error("Something went wrong!!");
+    }
+}
+
+export async function SignIn(
+    email: string,
+    password: string,
+    supabaseClient: SupabaseClient<Database, "public", any>,
+){
+    // sign in via supabase
+    const signInResult: AuthResponse =
+      await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+    if (signInResult.error) {
+        throw new Error(signInResult.error.message);
     }
 }
