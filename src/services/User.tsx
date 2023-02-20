@@ -43,7 +43,7 @@ export async function SignIn(
     email: string,
     password: string,
     supabaseClient: SupabaseClient<Database, "public", any>,
-){
+): Promise<void> {
     // sign in via supabase
     const signInResult: AuthResponse =
       await supabaseClient.auth.signInWithPassword({
@@ -53,5 +53,15 @@ export async function SignIn(
 
     if (signInResult.error) {
         throw new Error(signInResult.error.message);
+    }
+}
+
+export async function SignOut(
+    supabaseClient: SupabaseClient<Database, "public", any>,
+){
+    const signOutResult = await supabaseClient.auth.signOut();
+    if (signOutResult.error) {
+      console.log(signOutResult.error);
+      throw new Error("Something went wrong!!");
     }
 }

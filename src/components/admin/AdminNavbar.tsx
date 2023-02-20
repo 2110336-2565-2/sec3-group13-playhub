@@ -20,6 +20,7 @@ import Logo from "@/components/public/Logo";
 
 import { PagePaths } from "enum/pages";
 import { NavbarPages } from "enum/navbar";
+import { SignOut } from "@/services/User";
 
 export default function AdminNavbar() {
   const router: NextRouter = useRouter();
@@ -39,13 +40,13 @@ export default function AdminNavbar() {
   };
 
   async function handleSignOut() {
-    const signOutResult = await supabaseClient.auth.signOut();
-    if (signOutResult.error) {
-      console.log(signOutResult.error);
+    SignOut(supabaseClient).then(() => {
+      router.push(PagePaths.login);
       return;
-    }
-    router.push(PagePaths.login);
-    return;
+    }).catch((err) => {
+      console.log(err);
+      return;
+    })
   }
 
   return (
