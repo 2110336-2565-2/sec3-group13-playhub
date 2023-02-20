@@ -1,3 +1,4 @@
+import { User } from "@/types/User";
 import { AuthResponse, SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 
@@ -37,6 +38,29 @@ export async function CreateUser(
         console.log(addUserData.error);
         throw new Error("Something went wrong!!");
     }
+}
+
+export async function GetUserByUserId(
+    id: string,
+    supabaseClient: SupabaseClient<Database, "public", any>,
+): Promise <User> {
+    const getUserDataResult = await supabaseClient.rpc("get_user_by_user_id",{id});
+    if (getUserDataResult.error || getUserDataResult.count == 0) {
+        console.log(
+          getUserDataResult.error ? getUserDataResult.error : "no user"
+        );
+        throw new Error("Something went wrong!!");
+    }
+    return ({
+        userId: getUserDataResult.data[0].id,
+        username: getUserDataResult.data[0].username,
+        email: getUserDataResult.data[0].email,
+        birthdate: getUserDataResult.data[0].birthdate,
+        sex: getUserDataResult.data[0].sex,
+        description: getUserDataResult.data[0].description,
+        isAdmin: getUserDataResult.data[0].is_admin,
+        image: getUserDataResult.data[0].image
+    });
 }
 
 export async function SignIn(
