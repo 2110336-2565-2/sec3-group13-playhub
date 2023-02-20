@@ -4,15 +4,14 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 
 export async function CreatePost(
-  user: User,
   newPost: PostInfo,
-  supabaseClient: SupabaseClient<Database, "public", any>
+  supabaseClient: SupabaseClient<Database>
 ): Promise<void> {
   const now = Date.now();
   let index = 0;
   let images: string[] = [];
   for (const e of newPost.images) {
-    const filePath = user.userId + index.toString() + now.toString();
+    const filePath = newPost.userId + index.toString() + now.toString();
     const fileBlob = await fetch(e).then((r) => r.blob());
     const uploadResult = await supabaseClient.storage
       .from("locationimage")
@@ -25,13 +24,15 @@ export async function CreatePost(
     index += 1;
   }
 
-  const addPostResult = await supabaseClient.rpc("add_post", {
+  const addPostResult = await supabaseClient.rpc("create_post", {
     title: newPost.title,
     location: newPost.location,
     description: newPost.description,
     owner_id: newPost.userId,
-    start_timestamp: newPost.startTime,
-    end_timestamp: newPost.endTime,
+    start_time: newPost.startTime.toString(),
+    end_time: newPost.endTime.toString(),
+    tags: newPost.tags.map((e) => e.id),
+    images: images
   });
 
   if (addPostResult.error) {
