@@ -14,6 +14,7 @@ import CommonPostCard from "@/components/post/CommonPostCard";
 
 import { Post } from "@/types/Post";
 import { PagePaths } from "enum/pages";
+import { GetPosts } from "@/services/Posts";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -25,28 +26,14 @@ export default function Home() {
   useEffect(() => {
     async function getPostData() {
       if (!userStatus.user) return;
-
-      const getAllUserPostResult = await supabaseClient.rpc("get_posts");
-      if (getAllUserPostResult.error) {
-        console.log(getAllUserPostResult.error);
-        return;
-      }
-
-      setPosts(getAllUserPostResult.data.map((post) => ({
-        postId: post.id,
-        title: post.title,
-        ownerId: post.owner_id,
-        ownerName: post.owner_name,
-        ownerProfilePic: post.owner_profile,
-        tags: post.tag_names,
-        description: post.description,
-        image: post.images,
-        location: post.location,
-        startDateTime: post.start_time,
-        endDateTime: post.end_time
-      })));
+      GetPosts(supabaseClient)
+      .then((p) => {
+        setPosts(p);
+      }).catch((err) => {
+        console.log(err)
+        return
+      })
     }
-
     getPostData();
   }, [userStatus.user, supabaseClient]);
 

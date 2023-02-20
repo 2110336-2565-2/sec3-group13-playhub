@@ -16,7 +16,7 @@ import MyPostCard from "@/components/post/MyPostCard";
 
 import { Post } from "@/types/Post";
 import { PagePaths } from "enum/pages";
-import { GetPosts } from "@/services/Posts";
+import { GetCurrentUserPosts } from "@/services/Posts";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -35,7 +35,7 @@ export default function Home() {
   useEffect(() => {
     async function getPostData() {
       if (!userStatus.user) return;
-      GetPosts(userStatus.user, supabaseClient)
+      GetCurrentUserPosts(userStatus.user, supabaseClient)
       .then((p) => {
         setPosts(p);
       }).catch((err) => {

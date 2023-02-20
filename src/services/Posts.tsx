@@ -119,7 +119,7 @@ export async function DeletePost(
   }
 }
 
-export async function GetPosts(
+export async function GetCurrentUserPosts(
   user: User,
   supabaseClient: SupabaseClient<Database>
 ) : Promise<Post[]> {
@@ -136,6 +136,29 @@ export async function GetPosts(
 
   if (!getAllUserPostResult.data) throw new Error("Cant get posts data");;
 
+  return getAllUserPostResult.data.map((post) => ({
+    postId: post.id,
+    title: post.title,
+    ownerId: post.owner_id,
+    ownerName: post.owner_name,
+    ownerProfilePic: post.owner_profile,
+    tags: post.tag_names,
+    description: post.description,
+    image: post.images,
+    location: post.location,
+    startDateTime: post.start_time,
+    endDateTime: post.end_time
+  }))
+}
+
+export async function GetPosts(
+  supabaseClient: SupabaseClient<Database>
+): Promise<Post[]> {
+  const getAllUserPostResult = await supabaseClient.rpc("get_posts");
+    if (getAllUserPostResult.error) {
+      console.log(getAllUserPostResult.error);
+      throw new Error("Cant get posts data");
+    }
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
     title: post.title,
