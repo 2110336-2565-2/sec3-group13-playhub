@@ -59,10 +59,7 @@ export default function Home() {
   const [description, setDescription] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
   const [originalImages, setOriginalImages] = useState<string[]>([]);
-
   const [loadingData, setLoadingData] = useState<boolean>(true);
-  const [loadingImage, setLoadingImage] = useState<boolean>(true);
-  const [loadingTag, setLoadingTag] = useState<boolean>(true);
 
   // all selectable tags offered
   const [tagMenu, setTagMenu] = useState<Tag[]>([]);
@@ -102,6 +99,8 @@ export default function Home() {
     descriptionError.err ||
     imagesError
   );
+
+  const postId = parseInt(router.query.post_id as string);
 
   // input field change
   function handleTitleChange(
@@ -144,6 +143,7 @@ export default function Home() {
   }
 
   const handleSubmit = async () => {
+    if (!userStatus.user || !startDate || !endDate) return;
     // set submission
     setIsSubmitTitle(true);
     setIsSubmitLocation(true);
@@ -154,27 +154,25 @@ export default function Home() {
     if (isEditingAllow) {
       const updatedPost: PostInfo = {
         title: title,
-        user_id: userStatus.user?.userId,
+        userId: userStatus.user.userId,
         location: location,
         tags: tags,
         description: description,
         images: images,
-        start_time: startDate,
-        end_time: endDate,
+        startTime: startDate,
+        endTime: endDate,
       };
-
-      UpdatePost(postId, originalImages, updatedPost, supabaseClient).catch(
+      UpdatePost(postId, originalImages, updatedPost, supabaseClient)
+      .then(() => {
+        router.push(PagePaths.myPosts);
+      }).catch(
         (err) => {
           console.log(err);
           return;
         }
       );
-
-      router.push(PagePaths.myPosts);
     }
   };
-
-  const postId = parseInt(router.query.post_id as string);
 
   useEffect(() => {
     GetAllTags(supabaseClient)
@@ -183,22 +181,13 @@ export default function Home() {
   }, [supabaseClient]);
 
   useEffect(() => {
-    GetTagsByPost(postId, supabaseClient)
-      .then((tags) => {
-        setTags(tags);
-        setLoadingTag(false);
-      })
-      .catch((err) => console.log(err));
-  }, [supabaseClient, router.query.post_id]);
-
-  useEffect(() => {
     async function getPostData() {
-      if (!router.query.post_id) return;
+      if (!postId) return;
 
       const getPostDataResult = await supabaseClient.rpc(
-        "get_post_data_by_post_id",
+        "get_post_by_post_id",
         {
-          target_id: postId,
+          id: postId,
         }
       );
       if (getPostDataResult.error) {
@@ -208,43 +197,31 @@ export default function Home() {
 
       if (!getPostDataResult.data) return;
 
+      let tag_name = [...getPostDataResult.data[0].tag_names].sort()
+      let tag_ids = [...getPostDataResult.data[0].tags].sort()
+
       setTitle(getPostDataResult.data[0].title);
       setDescription(getPostDataResult.data[0].description);
       setLocation(getPostDataResult.data[0].location);
-      setStartDate(dayjs(getPostDataResult.data[0].start_timestamp));
-      setEndDate(dayjs(getPostDataResult.data[0].end_timestamp));
+      setStartDate(dayjs(getPostDataResult.data[0].start_time));
+      setEndDate(dayjs(getPostDataResult.data[0].end_time));
+      setImages(getPostDataResult.data[0].images);
+      setOriginalImages(getPostDataResult.data[0].images);
+      setTags(getPostDataResult.data[0].tag_names.map((_, idx) => ({
+        id: tag_ids[idx],
+        name: tag_name[idx]
+      })));
       setLoadingData(false);
     }
 
     getPostData();
   }, [supabaseClient, router.query.post_id]);
 
-  useEffect(() => {
-    async function getPostLocationImage() {
-      const getPostLocationImageResult = await supabaseClient.rpc(
-        "get_post_location_image",
-        { target_post_id: postId }
-      );
-      if (getPostLocationImageResult.error) {
-        console.log(getPostLocationImageResult.error);
-        return;
-      }
-
-      const locationImage = getPostLocationImageResult.data.map((e) => e.image);
-      setImages(locationImage);
-      setOriginalImages(locationImage);
-      setLoadingImage(false);
-    }
-
-    getPostLocationImage();
-  }, [supabaseClient, router.query.post_id]);
 
   if (
     tagMenu.length == 0 ||
     userStatus.isLoading ||
-    loadingTag ||
-    loadingData ||
-    loadingImage
+    loadingData
   )
     return <Loading />;
   return (
@@ -279,7 +256,7 @@ export default function Home() {
         <Box sx={editPostLayout}>
           <Typography variant="body1">Location</Typography>
           <Stack spacing={2}>
-            <GoogleMap onChange={handleLocationChange} />
+            <GoogleMap onChange={handleLocationChange} initialValue={location}/>
             {isSubmitLocation && locationError && (
               <FormHelperText error>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
             )}

@@ -147,7 +147,7 @@ export default function Home() {
     setIsSubmitDescription(true);
     setIsSubmitImages(true);
     if (isCreatingAllow) {
-      if(!userStatus.user?.userId) return ;
+      if(!userStatus.user?.userId || !startDate || !endDate) return ;
       const newPost: PostInfo = {
         title: title,
         userId: userStatus.user?.userId,
@@ -158,11 +158,12 @@ export default function Home() {
         startTime: startDate,
         endTime: endDate,
       };
-      CreatePost(newPost, supabaseClient).catch((err) => {
+      CreatePost(newPost, supabaseClient).then(() => {
+        router.push(PagePaths.myPosts);
+      }).catch((err) => {
         console.log(err);
         return;
       });
-      router.push(PagePaths.myPosts);
     }
   };
 
