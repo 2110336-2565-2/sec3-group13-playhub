@@ -221,7 +221,7 @@ export interface Database {
           tags: number[]
           tag_names: string[]
           images: string[]
-        }[]
+        }
       }
       get_posts: {
         Args: Record<PropertyKey, never>
