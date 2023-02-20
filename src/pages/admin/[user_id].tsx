@@ -9,6 +9,7 @@ import { NextRouter, useRouter } from "next/router";
 import { PagePaths } from "enum/pages";
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import AdminPostCard from "@/components/admin/AdminPostCard";
+import { GetPosts } from "@/services/Posts";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -28,27 +29,13 @@ export default function Home() {
     async function getPostData() {
       if (!userStatus.user) return;
 
-      const getAllUserPostResult = await supabaseClient.rpc("get_posts");
-      if (getAllUserPostResult.error) {
-        console.log(getAllUserPostResult.error);
+      GetPosts(supabaseClient)
+      .then((p) => {
+        setPosts(p);
+      }).catch((err) => {
+        console.log(err);
         return;
-      }
-
-      if (!getAllUserPostResult.data) return;
-
-      setPosts(getAllUserPostResult.data.map((post) => ({
-        postId: post.id,
-        title: post.title,
-        ownerId: post.owner_id,
-        ownerName: post.owner_id,
-        ownerProfilePic: post.owner_profile,
-        tags: post.tag_names,
-        description: post.description,
-        image: post.images,
-        location: post.location,
-        startDateTime: post.start_time,
-        endDateTime: post.end_time
-      })));
+      })
     }
 
     getPostData();
