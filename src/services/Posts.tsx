@@ -105,3 +105,15 @@ export async function UpdatePost(
     throw new Error("Something went wrong!!");
   }
 }
+
+export async function DeletePost(
+  id: number,
+  supabaseClient: SupabaseClient<Database, "public", any>
+) : Promise <void> {
+  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {id});
+
+  if (deletePostResult.error) {
+    console.error(deletePostResult.error);
+    throw new Error("Something went wrong!!");
+  }
+}

@@ -28,6 +28,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { NextRouter, useRouter } from "next/router";
 import { PagePaths } from "enum/pages";
+import { DeletePost } from "@/services/Posts";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -64,17 +65,13 @@ export default function AdminPostCard(props: props) {
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   async function handleDelete() {
-    const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {
-      id: props.post.postId,
-    });
-
-    if (deletePostResult.error) {
-      console.error(deletePostResult.error);
-    } else {
+    DeletePost(props.post.postId, supabaseClient).then(() => {
       props.handleDeletePost(props.post);
-    }
-
-    handleCloseDeletePostModal();
+      handleCloseDeletePostModal();
+    }).catch((err) => {
+      console.log(err);
+      return;
+    })
   }
 
   return (
