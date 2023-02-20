@@ -1,6 +1,6 @@
 import { validation } from "@/types/Validation";
 import dayjs, { Dayjs } from "dayjs";
-import { IMAGE_LIMIT } from "enum/inputLimit";
+import { CHAR_LIMIT, IMAGE_LIMIT } from "enum/inputLimit";
 
 const expression: RegExp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -64,8 +64,7 @@ export function validateDateWithInterval(
   if (startDate) {
     if (endDate) {
       if (startDate >= endDate) {
-        const displayStartDate: string =
-          dayjs(startDate).format("DD/MM/YYYY hh:mm a");
+        const displayStartDate: string = dayjs(startDate).format("DD/MM/YYYY hh:mm a");
         return {
           msg: `กรุณาเลือกวันที่และเวลา หลังจาก ${displayStartDate}`,
           err: true,
@@ -77,6 +76,25 @@ export function validateDateWithInterval(
         err: true,
       };
     }
+  }
+  return { msg: "", err: false };
+}
+
+export function validateConfirmPassword(password: string, confirmPassword: string): validation {
+  if (
+    password.length < CHAR_LIMIT.MIN_PASSWORD ||
+    confirmPassword.length < CHAR_LIMIT.MIN_PASSWORD
+  ) {
+    return {
+      msg: `ช่องนี้ต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัว`,
+      err: true,
+    };
+  }
+  if (password !== confirmPassword) {
+    return {
+      msg: "Password และ Confirm Password ต้องเหมือนกัน",
+      err: true,
+    };
   }
   return { msg: "", err: false };
 }
