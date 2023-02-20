@@ -1,4 +1,4 @@
-import { PostInfo } from "@/types/Post";
+import { Post, PostInfo } from "@/types/Post";
 import { User } from "@/types/User";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
@@ -109,7 +109,7 @@ export async function UpdatePost(
 
 export async function DeletePost(
   id: number,
-  supabaseClient: SupabaseClient<Database, "public", any>
+  supabaseClient: SupabaseClient<Database>
 ) : Promise <void> {
   const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {id});
 
@@ -117,4 +117,36 @@ export async function DeletePost(
     console.error(deletePostResult.error);
     throw new Error("Something went wrong!!");
   }
+}
+
+export async function GetPosts(
+  user: User,
+  supabaseClient: SupabaseClient<Database>
+) : Promise<Post[]> {
+  const getAllUserPostResult = await supabaseClient.rpc(
+    "get_posts_by_user_id",
+    {
+      id: user.userId,
+    }
+  );
+  if (getAllUserPostResult.error) {
+    console.log(getAllUserPostResult.error);
+    throw new Error("Cant get posts data");
+  }
+
+  if (!getAllUserPostResult.data) throw new Error("Cant get posts data");;
+
+  return getAllUserPostResult.data.map((post) => ({
+    postId: post.id,
+    title: post.title,
+    ownerId: post.owner_id,
+    ownerName: post.owner_name,
+    ownerProfilePic: post.owner_profile,
+    tags: post.tag_names,
+    description: post.description,
+    image: post.images,
+    location: post.location,
+    startDateTime: post.start_time,
+    endDateTime: post.end_time
+  }))
 }
