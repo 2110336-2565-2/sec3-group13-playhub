@@ -22,8 +22,8 @@ export type PostInfo = {
   tags: Tag[];
   description: string;
   images: string[];
-  startTime: Dayjs | null;
-  endTime: Dayjs | null;
+  startTime: Dayjs;
+  endTime: Dayjs;
 };
 
 // export const emptyPost: Post = {
