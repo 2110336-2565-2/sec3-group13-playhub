@@ -1,13 +1,17 @@
-import { Box, Button, Card, FormHelperText, Stack, Typography } from "@mui/material";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { NextRouter, useRouter } from "next/router";
 import { useContext, useState } from "react";
+import { NextRouter, useRouter } from "next/router";
+import { Box, Button, Card, FormHelperText, Stack, Typography } from "@mui/material";
+import { grey } from "@mui/material/colors";
+
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
-import { grey } from "@mui/material/colors";
+
+import Background from "@/components/public/Background";
 import PasswordTextField from "@/components/resetPassword/PasswordTextField";
-import { validation } from "@/types/Validation";
 import { validateConfirmPassword } from "@/utilities/validation";
+
+import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 
 type ResetPassword = {
@@ -49,29 +53,28 @@ export default function Home() {
 
   return (
     <>
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        style={{ height: "100vh" }}
-        sx={{ backgroundColor: "primary.main" }}
-      >
+      <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
+        <Background />
         <Card
           sx={{
             width: "45vw",
+            minWidth: "300px",
+            minHeight: "200px",
+
             backgroundColor: grey[300],
           }}
         >
           <Stack
             spacing={3}
-            alignItems="center"
-            justifyContent="center"
             sx={{
               padding: "40px",
             }}
+            alignItems="center"
+            justifyContent="center"
           >
             <Typography variant="h1">Reset Password</Typography>
 
-            <Box sx={{ width: "20vw" }}>
+            <Box sx={{ width: "20vw", minWidth: "250px" }}>
               <PasswordTextField
                 name="password"
                 placeholder="New Password"
@@ -81,7 +84,7 @@ export default function Home() {
               />
             </Box>
 
-            <Stack spacing={1} sx={{ width: "20vw" }}>
+            <Stack spacing={1} sx={{ width: "20vw", minWidth: "250px" }}>
               <PasswordTextField
                 name="confirmPassword"
                 placeholder="Comfirm New Password"
@@ -89,9 +92,11 @@ export default function Home() {
                 handleValueChange={handlePasswordChange}
                 isErr={isSubmit && arePasswordsErr.err}
               />
-              {isSubmit && arePasswordsErr.err && (
-                <FormHelperText error>{arePasswordsErr.msg}</FormHelperText>
-              )}
+
+              <FormHelperText error>
+                {isSubmit && arePasswordsErr.err && arePasswordsErr.msg}
+                {"\u00A0"}
+              </FormHelperText>
             </Stack>
 
             <Button variant="contained" onClick={handleSubmit}>

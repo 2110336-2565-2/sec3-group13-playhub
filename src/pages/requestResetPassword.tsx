@@ -1,14 +1,18 @@
-import EmailTextField from "@/components/requestResetPassword/EmailTextField";
-import { validation } from "@/types/Validation";
-import { validateEmail } from "@/utilities/validation";
+import { useContext, useState } from "react";
+import { NextRouter, useRouter } from "next/router";
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
+
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { PagePaths } from "enum/pages";
-import { NextRouter, useRouter } from "next/router";
-import { useContext, useState } from "react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
+
+import Background from "@/components/public/Background";
+import EmailTextField from "@/components/requestResetPassword/EmailTextField";
+import { validateEmail } from "@/utilities/validation";
+
+import { validation } from "@/types/Validation";
+import { PagePaths } from "enum/pages";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -38,24 +42,27 @@ export default function Home() {
 
   return (
     <>
-      <Stack
-        alignItems="center"
-        justifyContent="center"
-        style={{ height: "100vh" }}
-        sx={{ backgroundColor: "primary.main" }}
-      >
+      <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
+        <Background />
         <Card
           sx={{
-            width: "40vw",
+            width: "45vw",
+            minWidth: "300px",
+            minHeight: "200px",
+
+            paddingTop: "12vh",
+            paddingBottom: "6vh",
+
             backgroundColor: grey[300],
-            paddingTop: "100px",
-            paddingBottom: "50px",
           }}
         >
           <Stack spacing={3} alignItems="center" justifyContent="center">
-            <Stack spacing={2}>
+            <Stack spacing={2} alignItems="center" justifyContent="center">
+              {/* header text */}
               <Typography variant="h1">Enter your email to get reset password link!</Typography>
-              <Box sx={{ width: "30vw" }}>
+
+              {/* email textfield */}
+              <Box sx={{ width: "30vw", minWidth: "250px" }}>
                 <EmailTextField
                   placeholder="e.g. playhub@mail.com"
                   value={email}
@@ -66,6 +73,7 @@ export default function Home() {
               </Box>
             </Stack>
 
+            {/* send link button */}
             <Button variant="contained" onClick={handleSubmit}>
               Send Link!
             </Button>
