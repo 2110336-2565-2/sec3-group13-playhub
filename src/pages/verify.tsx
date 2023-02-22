@@ -19,24 +19,24 @@ export default function Verify() {
             >
                 <Box>
                     <Typography gutterBottom variant="h1">Verify คืออะไร</Typography>
-                    <Typography component="span" variant="body1">คือ ระบบการยืนยันตัวตน เพื่อสร้างความอุ่นใจและปลอดภัยแก่ท่านและสมาชิกชาว PlayHub ที่เข้ามาใช้บริการเว็บไซต์ของเรา รวมไปถึงการได้รับสิทธิพิเศษต่าง ๆ จาก PlayHub</Typography>
+                    <Typography component="span" variant="body2">คือ ระบบการยืนยันตัวตน เพื่อสร้างความอุ่นใจและปลอดภัยแก่ท่านและสมาชิกชาว PlayHub ที่เข้ามาใช้บริการเว็บไซต์ของเรา รวมไปถึงการได้รับสิทธิพิเศษต่าง ๆ จาก PlayHub</Typography>
                 </Box>
 
                 <Box>
                     <Typography gutterBottom variant="h1">Verify แล้วได้อะไร</Typography>
-                    <Typography component="div" variant="body1">1. ท่านจะสามารถสร้างกิจกรรมเพื่อหาเพื่อนๆมาร่วมสนุกกับท่านได้</Typography>
-                    <Typography component="div" variant="body1">2. ท่านจะได้รับเครื่องหมายยืนยันตัวตนสุดเท่ในหน้าโปรไฟล์ของท่าน</Typography>
+                    <Typography component="div" variant="body2">1. ท่านจะสามารถสร้างกิจกรรมเพื่อหาเพื่อนๆมาร่วมสนุกกับท่านได้</Typography>
+                    <Typography component="div" variant="body2">2. ท่านจะได้รับเครื่องหมายยืนยันตัวตนสุดเท่ในหน้าโปรไฟล์ของท่าน</Typography>
                 </Box>
 
                 <Box>
                     <Typography gutterBottom variant="h1">Verify อย่างไร</Typography>
-                    <Typography component="span" variant="body1">
+                    <Typography component="span" variant="body2">
                         ส่ง
                         <Link href="/" style={{ color: "blue", textDecorationLine: "underline" }}>
                             อีเมล
                         </Link>
                         นี้ พร้อมแนบ
-                        <Typography display="inline" variant="body1" color="red">
+                        <Typography display="inline" variant="body2" color="red">
                             รูปถ่ายบัตรประจำตัวประชาชน
                         </Typography>
                         แล้วรอการตรวจสอบประมาณ 1 สัปดาห์ หากการยืนยันตัวตนสำเร็จจะมีสัญลักษณ์
