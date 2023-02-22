@@ -26,22 +26,20 @@ export default function Home() {
   const [posts, setPosts] = useState<Post[] | null>(null);
 
   function handleDeletePost(toDeletePost: Post): void {
-    setPosts(
-      (posts) =>
-        posts && posts.filter((post) => post.postId !== toDeletePost.postId)
-    );
+    setPosts((posts) => posts && posts.filter((post) => post.postId !== toDeletePost.postId));
   }
 
   useEffect(() => {
     async function getPostData() {
       if (!userStatus.user) return;
       GetCurrentUserPosts(userStatus.user, supabaseClient)
-      .then((p) => {
-        setPosts(p);
-      }).catch((err) => {
-        console.log(err)
-        return
-      })
+        .then((p) => {
+          setPosts(p);
+        })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
 
     getPostData();

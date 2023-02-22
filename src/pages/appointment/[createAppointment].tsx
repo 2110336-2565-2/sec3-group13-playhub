@@ -1,19 +1,11 @@
 import { useContext, useEffect, useState } from "react";
-
 import { NextRouter, useRouter } from "next/router";
-import Link from "next/link";
-
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-
 import { Box, Fab, Stack, Typography } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import MyPostCard from "@/components/post/MyPostCard";
-
 import { Post } from "@/types/Post";
 import { PagePaths } from "enum/pages";
 import { GetCurrentUserPosts } from "@/services/Posts";
