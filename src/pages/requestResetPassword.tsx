@@ -49,9 +49,9 @@ export default function Home() {
   }
 
   if (userStatus.isLoading) return <Loading />
-  if (isSubmit) return <p>requesting...</p> // temporary display
   return (
     <>
+      {isSubmit && <Loading />}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
         <Card
