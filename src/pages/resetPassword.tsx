@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { Box, Button, Card, FormHelperText, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
@@ -13,6 +13,8 @@ import { validateConfirmPassword } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
+import Loading from "@/components/public/Loading";
+import { ResetPassword } from "@/services/Password";
 
 type ResetPassword = {
   password: string;
@@ -23,6 +25,7 @@ export default function Home() {
   const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
+  const [canResetPassword, setCanResetPassword] = useState(false);
 
   const [newPassword, setNewPassword] = useState<ResetPassword>({
     password: "",
@@ -42,15 +45,32 @@ export default function Home() {
     setNewPassword({ ...newPassword, [event.target.name]: event.target.value });
   }
 
-  function handleSubmit(): void {
+  async function handleSubmit() {
     setIsSubmit(true);
 
     if (!arePasswordsErr.err) {
       // reset password end point goes here
-      router.push(PagePaths.successResetPassword);
+      ResetPassword(newPassword.password, supabaseClient).then(() => {
+        router.push(PagePaths.successResetPassword);
+      }).catch((err) => {
+        setIsSubmit(false);
+        console.log(err)
+        return
+      })
     }
   }
 
+  useEffect(() => {
+    supabaseClient.auth.onAuthStateChange(async (event, session) => {
+      console.log(event)
+      if (event == "PASSWORD_RECOVERY") {
+        setCanResetPassword(true)
+      }
+    })
+  }, [])
+
+  if (!canResetPassword) return <Loading />
+  if (isSubmit) return <p>requesting...</p> // temporary display
   return (
     <>
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">

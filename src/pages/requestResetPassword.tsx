@@ -13,6 +13,8 @@ import { validateEmail } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
+import Loading from "@/components/public/Loading";
+import { RequestResetPassword } from "@/services/Password";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -31,15 +33,23 @@ export default function Home() {
     setEmail(event.target.value);
   }
 
-  function handleSubmit(): void {
+  async function handleSubmit() {
     setIsSubmit(true);
 
     if (!isEmailErr.err) {
       // reset password end point goes here
-      router.push(PagePaths.successRequestResetPassword);
+      RequestResetPassword(email, supabaseClient).then(() => {
+        router.push(PagePaths.successRequestResetPassword)
+      }).catch((err) => {
+        setIsSubmit(false);
+        console.log(err)
+        return
+      })
     }
   }
 
+  if (userStatus.isLoading) return <Loading />
+  if (isSubmit) return <p>requesting...</p> // temporary display
   return (
     <>
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
