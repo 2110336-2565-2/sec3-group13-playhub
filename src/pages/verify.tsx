@@ -1,5 +1,5 @@
 import Navbar from "@/components/public/Navbar";
-import { Chip, Typography, Stack, Box } from "@mui/material";
+import { Chip, Typography, Stack, Box, List, ListItem } from "@mui/material";
 import VerifiedIcon from '@mui/icons-material/Verified';
 import Link from "next/link";
 
@@ -24,8 +24,8 @@ export default function Verify() {
 
                 <Box>
                     <Typography gutterBottom variant="h1">Verify แล้วได้อะไร</Typography>
-                    <Typography component="span" variant="body1">ท่านจะสามารถสร้างกิจกรรมเพื่อหาเพื่อนๆมาร่วมสนุกกับท่านได้
-                        ท่านจะได้รับเครื่องหมายยืนยันตัวตนสุดเท่ในหน้าโปรไฟล์ของท่าน</Typography>
+                    <Typography component="div" variant="body1">1. ท่านจะสามารถสร้างกิจกรรมเพื่อหาเพื่อนๆมาร่วมสนุกกับท่านได้</Typography>
+                    <Typography component="div" variant="body1">2. ท่านจะได้รับเครื่องหมายยืนยันตัวตนสุดเท่ในหน้าโปรไฟล์ของท่าน</Typography>
                 </Box>
 
                 <Box>
