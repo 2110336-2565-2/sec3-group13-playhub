@@ -28,7 +28,7 @@ export default function AppointmentCard(props: props) {
                     />
                 </IconButton>
             }
-            title="This is title"
+            title={props.appointment.title}
             subheader={"by " + props.appointment.ownerName}
             titleTypographyProps={{ variant: "h5" }}
             subheaderTypographyProps={{ variant: "h6" }}
