@@ -1,3 +1,4 @@
+import { Appointment } from "@/types/Appointment";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 
@@ -35,4 +36,26 @@ export async function RejectAppointment(
     console.log(rejectAppointmentResult.error);
     throw new Error("Something went wrong!!");
   }
+}
+
+export async function GetAppointments(
+  supabaseClient: SupabaseClient<Database>
+): Promise<Appointment[]>{
+  const GetAppointmentsResult = await supabaseClient.rpc("get_appointments") ;
+
+  if (GetAppointmentsResult.error) {
+    console.log(GetAppointmentsResult.error);
+    throw new Error("Something went wrong!!");
+  }
+
+  return GetAppointmentsResult.data.map((appointment) => ({
+    title: appointment.title,
+    ownerId: appointment.owner_id,
+    ownerName: appointment.username,
+    ownerProfilePic: appointment.image,
+    location: appointment.location,
+    startDateTime: appointment.start_time,
+    endDateTime: appointment.end_time,
+    participantAmount: appointment.participant_number
+  }))
 }
