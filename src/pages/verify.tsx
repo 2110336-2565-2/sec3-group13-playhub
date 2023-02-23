@@ -1,9 +1,27 @@
+import { useContext } from "react";
 import Navbar from "@/components/public/Navbar";
-import { Chip, Typography, Stack, Box, List, ListItem } from "@mui/material";
-import VerifiedIcon from '@mui/icons-material/Verified';
+import Loading from "@/components/public/Loading";
+
 import Link from "next/link";
+import { NextRouter, useRouter } from "next/router";
+
+import { Chip, Typography, Stack, Box } from "@mui/material";
+import VerifiedIcon from '@mui/icons-material/Verified';
+
+import { PagePaths } from "enum/pages";
+
+import { userContext } from "supabase/user_context";
 
 export default function Verify() {
+    const router: NextRouter = useRouter();
+    const userStatus = useContext(userContext);
+
+    if (userStatus.isLoading) return <Loading />;
+    if (!userStatus.user) {
+        router.push(PagePaths.login);
+        return;
+    }
+
     return (
         <>
             <Navbar />
