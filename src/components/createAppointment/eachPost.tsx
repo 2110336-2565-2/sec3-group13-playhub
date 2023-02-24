@@ -20,20 +20,13 @@ import {
 import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
 
-import EditIcon from "@mui/icons-material/Edit";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-
-import DeletePostDialog from "@/components/post/DeletePostDialog";
-
 import { Post } from "../../types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { PagePaths } from "enum/pages";
 import { NextRouter, useRouter } from "next/router";
-import { DeletePost } from "@/services/Posts";
 const styles = {
   //boxSizing: "border-box",//padding: "0 0 20px 0",
   position: "static",
@@ -44,21 +37,6 @@ const styles = {
   width: "60%",
   height: "280px",
 };
-interface ExpandMoreProps extends IconButtonProps {
-  expand: boolean;
-}
-
-const ExpandMore = styled((props: ExpandMoreProps) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
-
-const owner: boolean = true;
 
 type props = {
   post: Post;
@@ -68,15 +46,7 @@ type props = {
 export default function EachPostCard(props: props) {
   const router: NextRouter = useRouter();
 
-  const [openDeletePostModal, setOpenDeletePostModal] = useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
-  const [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
-
-  const supabaseClient = useSupabaseClient<Database>();
-
-  const handleOpenDeletePostModal = (): void => setOpenDeletePostModal(true);
-  const handleCloseDeletePostModal = (): void => setOpenDeletePostModal(false);
-  const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   return (
     <>
@@ -98,8 +68,8 @@ export default function EachPostCard(props: props) {
           }
           title={props.post.title}
           subheader={props.post.ownerName}
-          titleTypographyProps={{ variant: "h5" }}
-          subheaderTypographyProps={{ variant: "h6" }}
+          titleTypographyProps={{ fontWeight: "700", fontSize: "32px" }}
+          subheaderTypographyProps={{ fontWeight: "400", fontSize: "16px" }}
           //action={}
         />
         <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
