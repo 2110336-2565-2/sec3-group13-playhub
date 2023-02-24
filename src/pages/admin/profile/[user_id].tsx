@@ -20,6 +20,7 @@ import { PagePaths } from "enum/pages";
 import { Gender } from "enum/gender";
 import { GetUserByUserId } from "@/services/User";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
+import CommonTextField from "@/components/public/CommonTextField";
 
 // style
 const profile_layout = {
@@ -37,6 +38,8 @@ export default function adminProfile() {
     const [nationalIDCard, setnationalIDCard] = useState<string>("")
 
     const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
+    const [isError, setIsError] = useState<boolean>(false)
+    const [errMsg, setErrMsg] = useState<string>("")
 
     useEffect(() => {
         async function getTargetUserData() {
@@ -49,17 +52,38 @@ export default function adminProfile() {
     }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
 
     function verifyUser(): void {
-        console.log("confirm button is clicked!!")
-    }
+        console.log("confirm button is clicked!!", nationalIDCard)
 
+        if (nationalIDCard.length == 0) {
+            setIsError(true)
+            setErrMsg("ช่องนี้ไม่สามารถเว้นว่างได้")
+            return
+        }
+
+        const regexIDCard = new RegExp(/\d{13}/)
+        if (nationalIDCard.length != 13 || !regexIDCard.test(nationalIDCard)) {
+            setIsError(true)
+            setErrMsg("รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง")
+            return
+        }
+        // TODO: เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว
+        // return
+
+        // Validate success
+        // Send to Backend
+    }
     function openVerifyModal(): void {
         setIsVerifyModalShow(true)
+        setIsError(false)
+        setErrMsg("")
     }
     function closeVerifyModal(): void {
         setIsVerifyModalShow(false)
     }
     function handleNationalIDCardChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         setnationalIDCard(event.target.value)
+        setIsError(false)
+        setErrMsg("")
     }
 
     if (userStatus.isLoading) return <Loading />;
@@ -127,9 +151,15 @@ export default function adminProfile() {
                         openModal={isVerifyModalShow}
                         handleCloseModal={closeVerifyModal}
                         verifyUser={verifyUser}
-                        nationalIDCard={nationalIDCard}
-                        handleNationalIDCardChange={handleNationalIDCardChange}
-                    />
+                    >
+                        <CommonTextField
+                            placeholder="asd"
+                            value={nationalIDCard}
+                            handleValueChange={handleNationalIDCardChange}
+                            isErr={isError}
+                            errMsg={errMsg}
+                        />
+                    </AdminVerifyDialog>
                 </Stack>
             </Suspense>
         </>

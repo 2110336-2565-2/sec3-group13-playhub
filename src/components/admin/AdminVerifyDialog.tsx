@@ -6,14 +6,12 @@ import {
     DialogTitle,
     Typography,
 } from "@mui/material";
-import CommonTextField from "../public/CommonTextField";
 
 type props = {
+    children: JSX.Element;
     openModal: boolean;
     handleCloseModal: () => void;
     verifyUser: () => void;
-    nationalIDCard: string;
-    handleNationalIDCardChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 };
 
 export default function AdminVerifyDialog(props: props) {
@@ -30,13 +28,7 @@ export default function AdminVerifyDialog(props: props) {
                 </DialogTitle>
                 <DialogContent dividers>
                     <Typography>เลขบัตรประจำตัวประชาชน</Typography>
-                    <CommonTextField
-                        placeholder="asd"
-                        value={props.nationalIDCard}
-                        handleValueChange={props.handleNationalIDCardChange}
-                        isErr={false}
-                        errMsg=""
-                    />
+                    {props.children}
                 </DialogContent>
                 <DialogActions>
                     <Button variant="contained" color="inherit" onClick={props.handleCloseModal}>
