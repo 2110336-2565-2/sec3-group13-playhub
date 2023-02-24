@@ -39,10 +39,10 @@ export default function Home() {
 
             <Box display="flex">
               <Typography variant="body1">Click{"\u00A0"}</Typography>
-              <Link color="primary" underline="hover" href={PagePaths.login}>
+              <Link color="primary" underline="hover" href={PagePaths.home}>
                 <Typography variant="body1">here</Typography>
               </Link>
-              <Typography variant="body1">{"\u00A0"}to return to log in page</Typography>
+              <Typography variant="body1">{"\u00A0"}to return to home page</Typography>
             </Box>
           </Stack>
         </Card>
