@@ -1,10 +1,11 @@
+import { Appointment } from "@/types/Appointment";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 
 export async function GetAppointmentsByUserId(
     userId: string,
     supabaseClient: SupabaseClient<Database>
-) {
+): Promise<Appointment[]> {
     const getAppointmentsResult = await supabaseClient.rpc("get_appointments_by_user_id", { id: userId })
 
     if (getAppointmentsResult.error) {
