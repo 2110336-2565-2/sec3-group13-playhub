@@ -6,7 +6,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Avatar, Chip, Typography, Stack, Button, Modal } from "@mui/material";
+import { Avatar, Chip, Typography, Stack, Button } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -34,6 +34,7 @@ export default function adminProfile() {
     const supabaseClient = useSupabaseClient<Database>();
 
     const [targetUserData, setTargetUserData] = useState<User | null>(null);
+    const [nationalIDCard, setnationalIDCard] = useState<string>("")
 
     const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
 
@@ -56,6 +57,9 @@ export default function adminProfile() {
     }
     function closeVerifyModal(): void {
         setIsVerifyModalShow(false)
+    }
+    function handleNationalIDCardChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+        setnationalIDCard(event.target.value)
     }
 
     if (userStatus.isLoading) return <Loading />;
@@ -123,6 +127,8 @@ export default function adminProfile() {
                         openModal={isVerifyModalShow}
                         handleCloseModal={closeVerifyModal}
                         verifyUser={verifyUser}
+                        nationalIDCard={nationalIDCard}
+                        handleNationalIDCardChange={handleNationalIDCardChange}
                     />
                 </Stack>
             </Suspense>
