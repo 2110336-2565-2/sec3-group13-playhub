@@ -1,4 +1,4 @@
-import { AppointmentDetail, AppointmentDetailHeader } from "@/types/Appointment";
+import { AppointmentDetail } from "@/types/Appointment";
 import { CardContent, Grid, Stack, Typography, Box, Chip } from "@mui/material";
 import Image from "next/image";
 import BorderWithShadow from "../public/BorderWithShadow";
@@ -16,23 +16,7 @@ const chipsStyle = {
 type props = {
   appointmentDetail: AppointmentDetail,
 };
-const mockHeader: AppointmentDetailHeader = {
-  title: "adadadad",
-  location: "tiananmen square",
-  startDateTime: "15/4/1989",
-  endDateTime: "4/6/1989",
-  tags: ["WARHAMMER", "THEPOOH", "GAMEOFTHRONES"],
-  description: "sasaoslasoals"
-}
-const mockData: AppointmentDetail = {
-  detailHeader: mockHeader,
-  images: ['https://yhvwtxoqpasglonyjmpe.supabase.co/storage/v1/object/public/locationimage/7f6184d2-91dc-478e-911b-e18b7e17cec901676866401794', 'https://yhvwtxoqpasglonyjmpe.supabase.co/storage/v1/object/public/locationimage/7f6184d2-91dc-478e-911b-e18b7e17cec901676866401794'],
-  participantAmount: 10,
-  pendingParticipants: ["Participant1", "Participant2", "Participant3"],
-  acceptParticipants: ["Participant1", "Participant2", "Participant3", "Participant1", "Participant2", "Participant3"],
-  rejectParticipants: ["Participant1", "Participant2", "Participant3"]
-}
-export default function AppointmentHostCard() {
+export default function AppointmentHostCard(props: props) {
   return <Grid container
     spacing="40px"
     width="80vw"
@@ -40,12 +24,12 @@ export default function AppointmentHostCard() {
     <Grid item xs={12} md={6} style={{ display: "flex" }}>
       <BorderWithShadow>
         <CardContent>
-          <Stack spacing="12px" sx={{ padding: "20px" }}>
-            <AppointmentHeader detailHeader={mockHeader} isHost={true} />
+          <Stack spacing="12px" sx={{ padding: "20px", height: "100%" }}>
+            <AppointmentHeader detailHeader={props.appointmentDetail.detailHeader} isHost={true} />
             <Box >
               <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Image</Typography>
               <Grid container spacing={1}>
-                {mockData.images.map((e, index) => (
+                {props.appointmentDetail.images.map((e, index) => (
                   <Grid item key={'i' + index}>
                     <Image src={e} alt="location" width={150} height={150} />
                   </Grid>
@@ -59,12 +43,12 @@ export default function AppointmentHostCard() {
     <Grid item xs={12} md={6} style={{ display: "flex" }} >
       <BorderWithShadow>
         <CardContent >
-          <Stack spacing="12px" sx={{ padding: "20px" }}>
-            <Typography variant="h5" sx={{ fontWeight: "bold" }}>Number of Participant : {mockData.participantAmount}</Typography>
+          <Stack spacing="12px" sx={{ padding: "20px", height: "100%" }}>
+            <Typography variant="h5" sx={{ fontWeight: "bold" }}>Number of Participant : {props.appointmentDetail.participantAmount}</Typography>
             <Box >
               <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Pending Participant List :</Typography>
               <Grid container spacing={1}>
-                {mockData.pendingParticipants.map((e, index) => (
+                {props.appointmentDetail.pendingParticipants.map((e, index) => (
                   <Grid item key={'p' + index}>
                     <Chip
                       label={e}
@@ -79,7 +63,7 @@ export default function AppointmentHostCard() {
             <Box >
               <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Accept Participant List :</Typography>
               <Grid container spacing={1}>
-                {mockData.acceptParticipants.map((e, index) => (
+                {props.appointmentDetail.acceptParticipants.map((e, index) => (
                   <Grid item key={'a' + index}>
                     <Chip
                       label={e}
@@ -94,7 +78,7 @@ export default function AppointmentHostCard() {
             <Box >
               <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Reject Participant List :</Typography>
               <Grid container spacing={1}>
-                {mockData.rejectParticipants.map((e, index) => (
+                {props.appointmentDetail.rejectParticipants.map((e, index) => (
                   <Grid item key={'r' + index}>
                     <Chip
                       label={e}
