@@ -64,8 +64,7 @@ export function validateDateWithInterval(
   if (startDate) {
     if (endDate) {
       if (startDate >= endDate) {
-        const displayStartDate: string =
-          dayjs(startDate).format("DD/MM/YYYY hh:mm a");
+        const displayStartDate: string = dayjs(startDate).format("DD/MM/YYYY hh:mm a");
         return {
           msg: `กรุณาเลือกวันที่และเวลา หลังจาก ${displayStartDate}`,
           err: true,
@@ -78,5 +77,20 @@ export function validateDateWithInterval(
       };
     }
   }
+  return { msg: "", err: false };
+}
+
+export function validateNationalIDCardNumber(nationalIDCardNumber: string): validation {
+  if (nationalIDCardNumber.length == 0) {
+    return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+  }
+
+  const regexIDCard = new RegExp(/\d{13}/);
+  if (nationalIDCardNumber.length != 13 || !regexIDCard.test(nationalIDCardNumber)) {
+    return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
+  }
+
+  // TODO: เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว
+
   return { msg: "", err: false };
 }

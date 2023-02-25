@@ -21,6 +21,8 @@ import { Gender } from "enum/gender";
 import { GetUserByUserId } from "@/services/User";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
 import CommonTextField from "@/components/public/CommonTextField";
+import { validateNationalIDCardNumber } from "@/utilities/validation";
+import { validation } from "@/types/Validation";
 
 // style
 const profile_layout = {
@@ -54,20 +56,12 @@ export default function adminProfile() {
     function verifyUser(): void {
         console.log("confirm button is clicked!!", nationalIDCard)
 
-        if (nationalIDCard.length == 0) {
+        const validate: validation = validateNationalIDCardNumber(nationalIDCard)
+        if (validate.err) {
             setIsError(true)
-            setErrMsg("ช่องนี้ไม่สามารถเว้นว่างได้")
+            setErrMsg(validate.msg)
             return
         }
-
-        const regexIDCard = new RegExp(/\d{13}/)
-        if (nationalIDCard.length != 13 || !regexIDCard.test(nationalIDCard)) {
-            setIsError(true)
-            setErrMsg("รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง")
-            return
-        }
-        // TODO: เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว
-        // return
 
         // Validate success
         // Send to Backend
