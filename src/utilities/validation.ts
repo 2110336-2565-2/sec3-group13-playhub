@@ -15,6 +15,19 @@ export function validateEmail(email: string): validation {
   return { msg: "", err: false };
 }
 
+export function validatePassword(password: string): validation {
+  if (password.trim().length < CHAR_LIMIT.MIN_PASSWORD) {
+    return {
+      msg: `รหัสผ่านต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัวอักษร`,
+      err: true,
+    };
+  }
+  if (password.includes(" ")) {
+    return { msg: "รหัสผ่านไม่สามารถประกอบด้วยช่องว่าง", err: true };
+  }
+  return { msg: "", err: false };
+}
+
 export function validateTextField(
   input: string,
   minChar: number = 0,
@@ -81,14 +94,14 @@ export function validateDateWithInterval(
 }
 
 export function validateConfirmPassword(password: string, confirmPassword: string): validation {
-  if (
-    password.length < CHAR_LIMIT.MIN_PASSWORD ||
-    confirmPassword.length < CHAR_LIMIT.MIN_PASSWORD
-  ) {
-    return {
-      msg: `ช่องนี้ต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัว`,
-      err: true,
-    };
+  const passwordErr: validation = validatePassword(password);
+  const confirmPasswordErr: validation = validatePassword(confirmPassword);
+
+  if (passwordErr.err) {
+    return passwordErr;
+  }
+  if (confirmPasswordErr.err) {
+    return confirmPasswordErr;
   }
   if (password !== confirmPassword) {
     return {
@@ -103,14 +116,14 @@ export function validateConfirmNewPassword(
   newPassword: string,
   confirmNewPassword: string
 ): validation {
-  if (
-    newPassword.length < CHAR_LIMIT.MIN_PASSWORD ||
-    confirmNewPassword.length < CHAR_LIMIT.MIN_PASSWORD
-  ) {
-    return {
-      msg: `ช่องนี้ต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัว`,
-      err: true,
-    };
+  const newPasswordErr: validation = validatePassword(newPassword);
+  const confirmNewPasswordErr: validation = validatePassword(confirmNewPassword);
+
+  if (newPasswordErr.err) {
+    return newPasswordErr;
+  }
+  if (confirmNewPasswordErr.err) {
+    return confirmNewPasswordErr;
   }
   if (newPassword !== confirmNewPassword) {
     return {
