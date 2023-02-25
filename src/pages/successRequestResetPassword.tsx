@@ -40,7 +40,7 @@ export default function Home() {
 
           <Box display="flex" justifyContent="center">
             <Typography variant="body1">Didn’t receive link? Click{"\u00A0"}</Typography>
-            <Link color="primary" underline="hover" href={PagePaths.login}>
+            <Link color="primary" underline="hover" href={PagePaths.requestResetPassword}>
               <Typography variant="body1">here</Typography>
             </Link>
             <Typography variant="body1">{"\u00A0"}to resend</Typography>
