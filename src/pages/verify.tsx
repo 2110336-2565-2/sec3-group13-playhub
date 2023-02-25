@@ -5,12 +5,11 @@ import Loading from "@/components/public/Loading";
 import Link from "next/link";
 import { NextRouter, useRouter } from "next/router";
 
-import { Chip, Typography, Stack, Box } from "@mui/material";
-import VerifiedIcon from '@mui/icons-material/Verified';
-
+import { Typography, Stack, Box } from "@mui/material";
 import { PagePaths } from "enum/pages";
 
 import { userContext } from "supabase/user_context";
+import VerifyChip from "@/components/profile/VerifyChip";
 
 export default function Verify() {
     const router: NextRouter = useRouter();
@@ -59,11 +58,7 @@ export default function Verify() {
                         </Typography>
                         แล้วรอการตรวจสอบประมาณ 1 สัปดาห์ หากการยืนยันตัวตนสำเร็จจะมีสัญลักษณ์
                         &nbsp;
-                        <Chip
-                            icon={<VerifiedIcon sx={{ color: "white" }} />}
-                            color="primary"
-                            label="Verified"
-                        />
+                        <VerifyChip />
                         &nbsp;
                         ปรากฎขึ้นในหน้าโปร์ไฟล์ของท่าน
                     </Typography>
