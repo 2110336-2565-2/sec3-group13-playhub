@@ -6,7 +6,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Avatar, Chip, Typography, Stack, Button } from "@mui/material";
+import { Avatar, Chip, Typography, Stack, Button, Box } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -18,6 +18,7 @@ import Loading from "@/components/public/Loading";
 import { User } from "@/types/User";
 import { PagePaths } from "enum/pages";
 import { Gender } from "enum/gender";
+import { CHAR_LIMIT } from "enum/inputLimit";
 import { GetUserByUserId } from "@/services/User";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
 import CommonTextField from "@/components/public/CommonTextField";
@@ -75,9 +76,11 @@ export default function adminProfile() {
         setIsVerifyModalShow(true)
         setIsError(false)
         setErrMsg("")
+        setnationalIDCard("")
     }
     function closeVerifyModal(): void {
         setIsVerifyModalShow(false)
+        setnationalIDCard("")
     }
     function handleNationalIDCardChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         setnationalIDCard(event.target.value)
@@ -151,15 +154,16 @@ export default function adminProfile() {
                         handleCloseModal={closeVerifyModal}
                         verifyUser={verifyUser}
                     >
-                        <CommonTextField
-                            style={{ width: "70%", margin: "auto" }}
-                            placeholder="asd"
-                            value={nationalIDCard}
-                            handleValueChange={handleNationalIDCardChange}
-                            isErr={isError}
-                            errMsg={errMsg}
-                            char_limit={13}
-                        />
+                        <Box sx={{ width: "70%", margin: "auto" }}>
+                            <CommonTextField
+                                placeholder="เลขโดด 13 หลักเท่านั้น"
+                                value={nationalIDCard}
+                                handleValueChange={handleNationalIDCardChange}
+                                isErr={isError}
+                                errMsg={errMsg}
+                                char_limit={CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}
+                            />
+                        </Box>
                     </AdminVerifyDialog>
                 </Stack>
             </Suspense>
