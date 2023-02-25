@@ -66,10 +66,12 @@ export default function adminProfile() {
 
         // Frontend Validate success
         // Send to Backend
+        // USE: nationalIDCard
 
         // CASE: เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว
         // setIsError(true)
         // setErrMsg("เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว")
+        // return
     }
 
     function openVerifyModal(): void {
