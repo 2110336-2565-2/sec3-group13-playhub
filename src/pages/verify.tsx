@@ -21,6 +21,13 @@ export default function Verify() {
         return;
     }
 
+    const newLine: string = "%0D%0A"
+    const emailToAdmin: string = `mailto:${process.env.NEXT_PUBLIC_ADMIN_EMAIL}
+    ?subject=Verify ${userStatus.user.email} PlayHub account
+    &body=รายละเอียดบัญชี${newLine}
+    Profile link : ${process.env.NEXT_PUBLIC_DOMAIN_NAME + PagePaths.profile + userStatus.user.userId}${newLine}
+    ${newLine}โปรดแนบ รูปถ่ายบัตรประจำตัวประชาชน`
+
     return (
         <>
             <Navbar />
@@ -49,7 +56,7 @@ export default function Verify() {
                     <Typography gutterBottom variant="h1">Verify อย่างไร</Typography>
                     <Typography component="span" variant="body2">
                         ส่ง
-                        <Link href="/" style={{ color: "blue", textDecorationLine: "underline" }}>
+                        <Link href={emailToAdmin} style={{ color: "blue", textDecorationLine: "underline" }}>
                             อีเมล
                         </Link>
                         นี้ พร้อมแนบ
