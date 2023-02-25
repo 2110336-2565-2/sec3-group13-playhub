@@ -32,6 +32,7 @@ export default function Home() {
     confirmPassword: "",
   });
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [isRequesting, setIsRequesting] = useState<boolean>(false);
 
   const arePasswordsErr: validation = validateConfirmNewPassword(
     newPassword.password,
@@ -50,12 +51,13 @@ export default function Home() {
 
     if (!arePasswordsErr.err) {
       // reset password end point goes here
+      setIsRequesting(true);
       ResetPassword(newPassword.password, supabaseClient)
         .then(() => {
           router.push(PagePaths.successResetPassword);
         })
         .catch((err) => {
-          setIsSubmit(false);
+          setIsRequesting(false);
           console.log(err);
           return;
         });
@@ -70,11 +72,16 @@ export default function Home() {
     });
   }, []);
 
+  useEffect(() => {
+    if (router.asPath.indexOf("error") != -1) {
+      router.push(PagePaths.requestResetPassword)
+    }
+  }, [router])
   // if (!canResetPassword) return <Loading />;
   // if (isSubmit) return <p>requesting...</p>; // temporary display
   return (
     <>
-      {isSubmit && <Loading />}
+      {(isRequesting || !canResetPassword) && <Loading />}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
         <Card
