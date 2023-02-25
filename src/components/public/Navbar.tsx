@@ -72,7 +72,7 @@ export default function Navbar() {
                   sx={{ bgcolor: grey[50] }}
                 />
               ) : (
-                <Avatar 
+                <Avatar
                   alt="Profile picture"
                 />
               )
@@ -105,6 +105,11 @@ export default function Navbar() {
               </Link>
             </MenuItem>
             <MenuItem key={3}>
+              <Link href={PagePaths.verify}>
+                <Typography variant="body1" color="primary">{NavbarPages.verify}</Typography>
+              </Link>
+            </MenuItem>
+            <MenuItem key={4}>
               <Box onClick={handleSignOut}>
                 <Typography variant="body1" color="error">
                   {NavbarPages.logout}

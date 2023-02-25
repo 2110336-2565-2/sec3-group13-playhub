@@ -10,6 +10,7 @@ export enum PagePaths {
   createPost = "/createPost",
   profile = "/profile/", // subfix : user_id
   editProfile = "/editProfile",
+  verify = "/verify",
 
   // admin
   adminHome = "/admin/", // subfix : user_id
