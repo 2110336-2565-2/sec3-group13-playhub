@@ -30,8 +30,8 @@ export async function CreatePost(
     location: newPost.location,
     description: newPost.description,
     owner_id: newPost.userId,
-    start_time: newPost.startTime.toString(),
-    end_time: newPost.endTime.toString(),
+    start_time: newPost.startTime.format('MM/DD/YYYY HH:mm:ss'),
+    end_time: newPost.endTime.format('MM/DD/YYYY HH:mm:ss'),
     tags: newPost.tags.map((e) => e.id),
     images: images
   });
@@ -90,8 +90,8 @@ export async function UpdatePost(
     id: postId,
     title: updatedPost.title,
     location: updatedPost.location,
-    start_time: updatedPost.startTime.toString(),
-    end_time: updatedPost.endTime.toString(),
+    start_time: updatedPost.startTime.format('MM/DD/YYYY HH:mm:ss'),
+    end_time: updatedPost.endTime.format('MM/DD/YYYY HH:mm:ss'),
     description: updatedPost.description,
     tags: updatedPost.tags.map((e) => e.id),
     images: images
