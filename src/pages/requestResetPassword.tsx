@@ -23,6 +23,7 @@ export default function Home() {
 
   const [email, setEmail] = useState<string>("");
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [isRequesting, setIsRequesting] = useState<boolean>(false);
 
   const isEmailErr: validation = validateEmail(email);
 
@@ -38,10 +39,11 @@ export default function Home() {
 
     if (!isEmailErr.err) {
       // reset password end point goes here
+      setIsRequesting(true);
       RequestResetPassword(email, supabaseClient).then(() => {
         router.push(PagePaths.successRequestResetPassword)
       }).catch((err) => {
-        setIsSubmit(false);
+        setIsRequesting(false);
         console.log(err)
         return
       })
@@ -51,7 +53,7 @@ export default function Home() {
   if (userStatus.isLoading) return <Loading />
   return (
     <>
-      {isSubmit && <Loading />}
+      {isRequesting && <Loading />}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
         <Card
