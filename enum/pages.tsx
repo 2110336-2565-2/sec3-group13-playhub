@@ -8,7 +8,7 @@ export enum PagePaths {
   myPosts = "/myPosts",
   editPost = "/editPost/", // subfix : postId
   createPost = "/createPost",
-  profile = "/profile/", // subfix : username
+  profile = "/profile/", // subfix : user_id
   editProfile = "/editProfile",
 
   // admin
