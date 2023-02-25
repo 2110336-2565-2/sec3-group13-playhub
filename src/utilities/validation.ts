@@ -1,15 +1,15 @@
 import { validation } from "@/types/Validation";
 import dayjs, { Dayjs } from "dayjs";
-import { IMAGE_LIMIT } from "enum/inputLimit";
+import { CHAR_LIMIT, IMAGE_LIMIT } from "enum/inputLimit";
 
-const expression: RegExp =
+const regexEmail: RegExp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export function validateEmail(email: string): validation {
   if (email.length === 0) {
     return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
   }
-  if (!expression.test(email)) {
+  if (!regexEmail.test(email)) {
     return { msg: "รูปแบบอีเมลไม่ถูกต้อง", err: true };
   }
   return { msg: "", err: false };
@@ -81,12 +81,16 @@ export function validateDateWithInterval(
 }
 
 export function validateNationalIDCardNumber(nationalIDCardNumber: string): validation {
+  nationalIDCardNumber = nationalIDCardNumber.trim();
+
   if (nationalIDCardNumber.length == 0) {
     return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
   }
 
-  const regexIDCard = new RegExp(/\d{13}/);
-  if (nationalIDCardNumber.length != 13 || !regexIDCard.test(nationalIDCardNumber)) {
+  if (
+    nationalIDCardNumber.length != CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER ||
+    !RegExp(/\d{13}/).test(nationalIDCardNumber)
+  ) {
     return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
   }
 

@@ -148,7 +148,7 @@ export default function adminProfile() {
                             {row}
                         </Typography>
                     ))}
-                    <Button onClick={openVerifyModal} variant="contained">Verify</Button>
+                    <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">Verify</Button>
                     <AdminVerifyDialog
                         openModal={isVerifyModalShow}
                         handleCloseModal={closeVerifyModal}
