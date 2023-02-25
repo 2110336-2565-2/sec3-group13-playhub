@@ -1,4 +1,5 @@
 import { Box, FormHelperText, TextField, Typography } from "@mui/material";
+import { CSSProperties } from "react";
 
 type props = {
   header?: string;
@@ -13,6 +14,7 @@ type props = {
   isErr: boolean;
   errMsg: string;
   mediumSize?: boolean;
+  style?: CSSProperties;
 };
 
 const helperText = {
@@ -27,7 +29,7 @@ export default function CommonTextField(props: props) {
     : false;
 
   return (
-    <>
+    <Box style={props.style}>
       <Typography variant="body1">{props?.header}</Typography>
       <TextField
         label={props?.label}
@@ -46,6 +48,6 @@ export default function CommonTextField(props: props) {
         </FormHelperText>
         {props.isErr && <FormHelperText error>{props.errMsg}</FormHelperText>}
       </Box>
-    </>
+    </Box>
   );
 }

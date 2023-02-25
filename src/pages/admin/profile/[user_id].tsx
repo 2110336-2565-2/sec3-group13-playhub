@@ -63,9 +63,14 @@ export default function adminProfile() {
             return
         }
 
-        // Validate success
+        // Frontend Validate success
         // Send to Backend
+
+        // CASE: เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว
+        // setIsError(true)
+        // setErrMsg("เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว")
     }
+
     function openVerifyModal(): void {
         setIsVerifyModalShow(true)
         setIsError(false)
@@ -147,11 +152,13 @@ export default function adminProfile() {
                         verifyUser={verifyUser}
                     >
                         <CommonTextField
+                            style={{ width: "70%", margin: "auto" }}
                             placeholder="asd"
                             value={nationalIDCard}
                             handleValueChange={handleNationalIDCardChange}
                             isErr={isError}
                             errMsg={errMsg}
+                            char_limit={13}
                         />
                     </AdminVerifyDialog>
                 </Stack>
