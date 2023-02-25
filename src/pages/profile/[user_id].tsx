@@ -38,7 +38,7 @@ export default function Home() {
   useEffect(() => {
     async function getTargetUserData() {
       if (!userStatus.user || !router.query.user_id || targetUserData) return;
-      const userData = await GetUserByUserId(router.query.user_id as string, supabaseClient) ;
+      const userData = await GetUserByUserId(router.query.user_id as string, supabaseClient);
       setTargetUserData(userData);
     }
 
@@ -53,6 +53,10 @@ export default function Home() {
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
     router.push(PagePaths.login);
+    return;
+  }
+  if (userStatus.user.isAdmin) {
+    router.push(PagePaths.adminProfile + router.query.user_id)
     return;
   }
   if (!targetUserData) return <Loading />;
