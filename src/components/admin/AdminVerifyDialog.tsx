@@ -27,7 +27,7 @@ export default function AdminVerifyDialog(props: props) {
                     <Typography>Verify this user</Typography>
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Typography>เลขบัตรประจำตัวประชาชน</Typography>
+                    <Typography align="center">เลขบัตรประจำตัวประชาชน</Typography>
                     {props.children}
                 </DialogContent>
                 <DialogActions>

@@ -90,7 +90,5 @@ export function validateNationalIDCardNumber(nationalIDCardNumber: string): vali
     return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
   }
 
-  // TODO: เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว
-
   return { msg: "", err: false };
 }
