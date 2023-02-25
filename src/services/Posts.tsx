@@ -2,7 +2,12 @@ import { Post, PostInfo } from "@/types/Post";
 import { User } from "@/types/User";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+
+function postgresqlDateToString(date: string) : string {
+  const dateWithoutTZ = date.substring(0, date.indexOf("+"))
+  return dayjs(dateWithoutTZ).format('MM/DD/YYYY hh:mm A');
+}
 
 export async function CreatePost(
   newPost: PostInfo,
@@ -48,6 +53,7 @@ export async function UpdatePost(
   updatedPost: PostInfo,
   supabaseClient: SupabaseClient<Database>
 ): Promise<void> {
+  console.log(updatedPost)
   let images = [...originalImages];
   let index = 0;
   for (const image of originalImages) {
@@ -147,8 +153,8 @@ export async function GetCurrentUserPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time
+    startDateTime: postgresqlDateToString(post.start_time),
+    endDateTime: postgresqlDateToString(post.end_time)
   }))
 }
 
@@ -170,8 +176,8 @@ export async function GetPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time
+    startDateTime: postgresqlDateToString(post.start_time),
+    endDateTime: postgresqlDateToString(post.end_time)
   }))
 }
 
