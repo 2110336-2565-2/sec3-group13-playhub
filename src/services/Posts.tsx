@@ -4,9 +4,9 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 import dayjs, { Dayjs } from "dayjs";
 
-function postgresqlDateToString(date: string) : string {
+function dayjsWithoutTZ(date: string) : Dayjs {
   const dateWithoutTZ = date.substring(0, date.indexOf("+"))
-  return dayjs(dateWithoutTZ).format('MM/DD/YYYY hh:mm A');
+  return dayjs(dateWithoutTZ);
 }
 
 export async function CreatePost(
@@ -153,8 +153,8 @@ export async function GetCurrentUserPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: postgresqlDateToString(post.start_time),
-    endDateTime: postgresqlDateToString(post.end_time)
+    startDateTime: dayjsWithoutTZ(post.start_time).format('DD/MM/YYYY hh:mm A'),
+    endDateTime: dayjsWithoutTZ(post.end_time).format('DD/MM/YYYY hh:mm A')
   }))
 }
 
@@ -176,8 +176,8 @@ export async function GetPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: postgresqlDateToString(post.start_time),
-    endDateTime: postgresqlDateToString(post.end_time)
+    startDateTime: dayjsWithoutTZ(post.start_time).format('DD/MM/YYYY hh:mm A'),
+    endDateTime: dayjsWithoutTZ(post.end_time).format('DD/MM/YYYY hh:mm A')
   }))
 }
 
@@ -205,8 +205,8 @@ export async function GetPostByPostId(
     title: getPostDataResult.data[0].title,
     description: getPostDataResult.data[0].description,
     location: getPostDataResult.data[0].location,
-    startTime: dayjs(postgresqlDateToString(getPostDataResult.data[0].start_time)),
-    endTime: dayjs(postgresqlDateToString(getPostDataResult.data[0].end_time)),
+    startTime: dayjsWithoutTZ(getPostDataResult.data[0].start_time),
+    endTime: dayjsWithoutTZ(getPostDataResult.data[0].end_time),
     images: getPostDataResult.data[0].images,
     tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
       id: tag_ids[idx],
