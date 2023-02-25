@@ -98,3 +98,25 @@ export function validateConfirmPassword(password: string, confirmPassword: strin
   }
   return { msg: "", err: false };
 }
+
+export function validateConfirmNewPassword(
+  newPassword: string,
+  confirmNewPassword: string
+): validation {
+  if (
+    newPassword.length < CHAR_LIMIT.MIN_PASSWORD ||
+    confirmNewPassword.length < CHAR_LIMIT.MIN_PASSWORD
+  ) {
+    return {
+      msg: `ช่องนี้ต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัว`,
+      err: true,
+    };
+  }
+  if (newPassword !== confirmNewPassword) {
+    return {
+      msg: "New Password และ Confirm New Password ต้องเหมือนกัน",
+      err: true,
+    };
+  }
+  return { msg: "", err: false };
+}

@@ -9,7 +9,7 @@ import { userContext } from "supabase/user_context";
 
 import Background from "@/components/public/Background";
 import PasswordTextField from "@/components/resetPassword/PasswordTextField";
-import { validateConfirmPassword } from "@/utilities/validation";
+import { validateConfirmNewPassword } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
@@ -33,7 +33,7 @@ export default function Home() {
   });
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
 
-  const arePasswordsErr: validation = validateConfirmPassword(
+  const arePasswordsErr: validation = validateConfirmNewPassword(
     newPassword.password,
     newPassword.confirmPassword
   );
@@ -50,29 +50,31 @@ export default function Home() {
 
     if (!arePasswordsErr.err) {
       // reset password end point goes here
-      ResetPassword(newPassword.password, supabaseClient).then(() => {
-        router.push(PagePaths.successResetPassword);
-      }).catch((err) => {
-        setIsSubmit(false);
-        console.log(err)
-        return
-      })
+      ResetPassword(newPassword.password, supabaseClient)
+        .then(() => {
+          router.push(PagePaths.successResetPassword);
+        })
+        .catch((err) => {
+          setIsSubmit(false);
+          console.log(err);
+          return;
+        });
     }
   }
 
   useEffect(() => {
     supabaseClient.auth.onAuthStateChange(async (event, session) => {
       if (event == "PASSWORD_RECOVERY") {
-        setCanResetPassword(true)
+        setCanResetPassword(true);
       }
-    })
-  }, [])
+    });
+  }, []);
 
-  if (!canResetPassword) return <Loading />
-  if (isSubmit) return <p>requesting...</p> // temporary display
+  // if (!canResetPassword) return <Loading />;
+  // if (isSubmit) return <p>requesting...</p>; // temporary display
   return (
     <>
-      { isSubmit && <Loading /> }
+      {isSubmit && <Loading />}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
         <Card
