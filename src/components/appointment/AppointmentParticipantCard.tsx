@@ -2,9 +2,8 @@ import { AppointmentDetail } from "@/types/Appointment";
 import { CardContent, Grid, Stack, Typography, Box, Chip } from "@mui/material";
 import Image from "next/image";
 import BorderWithShadow from "../public/BorderWithShadow";
-import TagComponent from "../public/TagComponent";
-import AppointmentHeader from "./AppointmentHeader";
-import AddParticipant from "./AddParticipant";
+import AppointmentHeader from "../createAppointment/AppointmentHeader";
+
 const chipsStyle = {
   minWidth: 100,
   height: 40,
@@ -17,7 +16,7 @@ const chipsStyle = {
 type props = {
   appointmentDetail: AppointmentDetail,
 };
-export default function AppointmentHostCard(props: props) {
+export default function AppointmentParticipantCard(props: props) {
   return <Grid container
     spacing="40px"
     width="80vw"
@@ -25,17 +24,16 @@ export default function AppointmentHostCard(props: props) {
     <Grid item xs={12} md={6} style={{ display: "flex" }}>
       <BorderWithShadow>
         <CardContent>
-          <Stack spacing="12px" sx={{ padding: "20px", height: "100%" }}>
-            <AppointmentHeader detailHeader={props.appointmentDetail.detailHeader} isHost={true} />
-
+          <Stack spacing="12px" sx={{ padding: "20px" }}>
+            <AppointmentHeader detailHeader={props.appointmentDetail.detailHeader} isHost={false} />
           </Stack>
         </CardContent>
       </BorderWithShadow>
     </Grid>
     <Grid item xs={12} md={6} style={{ display: "flex" }} >
       <BorderWithShadow>
-        <CardContent >
-          <Stack spacing="12px" sx={{ padding: "20px", height: "100%" }}>
+        <CardContent>
+          <Stack spacing="12px" sx={{ padding: "20px" }}>
             <Box >
               <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Image</Typography>
               <Grid container spacing={1}>
@@ -46,18 +44,22 @@ export default function AppointmentHostCard(props: props) {
                 ))}
               </Grid>
             </Box>
-
+            <Typography variant="h5" sx={{ fontWeight: "bold" }}>Number of Participant : {props.appointmentDetail.participantAmount}</Typography>
             <Box >
-              <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Select Participants :</Typography>
+              <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Participant List :</Typography>
               <Grid container spacing={1}>
-                {props.appointmentDetail.pendingParticipants.map((e, index) => (
+                {props.appointmentDetail.acceptParticipants.map((e, index) => (
                   <Grid item key={'p' + index}>
-                    {/*<AddParticipant></AddParticipant>*/}
+                    <Chip
+                      label={e}
+                      variant="outlined"
+                      color='primary'
+                      style={chipsStyle}
+                    />
                   </Grid>
                 ))}
               </Grid>
             </Box>
-
           </Stack>
         </CardContent>
       </BorderWithShadow>

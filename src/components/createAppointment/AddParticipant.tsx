@@ -13,45 +13,47 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { grey } from "@mui/material/colors";
 import { Tag } from "@/types/Tag";
-import { TAG_LIMIT } from "enum/inputLimit";
-
+import { User } from "@/types/User";
 type props = {
-  value: Tag[];
-  handleValueChange: (tags: Tag[]) => void;
-  menuValue: Tag[];
+  header?: string;
+  note?: string;
+  value: User[];
+  handleValueChange: (tags: User[]) => void;
+  menuValue: User[];
   isErr: boolean;
   errMsg: string;
 };
 
 export default function AddParticipant(props: props) {
-  const [menuItems, setMenuItems] = useState<Tag[]>([]);
+  const [menuItems, setMenuItems] = useState<User[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    const tagNames: string[] = props.value.map((tag) => {
-      return tag.name;
+    const userNames: string[] = props.value.map((tag) => {
+      return tag.username;
     });
-    setMenuItems(props.menuValue.filter((tag) => !tagNames.includes(tag.name)));
+    setMenuItems(props.menuValue.filter((tag) => !userNames.includes(tag.username)));
   }, []);
 
-  const handleDeleteTag = (toDeleteTag: Tag) => () => {
+  const handleDeleteTag = (toDeleteTag: User) => () => {
     // Update displyed tags (delete)
     props.handleValueChange(
-      props.value.filter((tag) => tag.name !== toDeleteTag.name)
+      props.value.filter((tag) => tag.username !== toDeleteTag.username)
     );
     // Update menu item (insert)
     setMenuItems(
-      [...menuItems, toDeleteTag].sort((a, b) => (a.id > b.id ? 1 : -1))
+      [...menuItems, toDeleteTag].sort((a, b) => (a.username > b.username ? 1 : -1))
     );
   };
 
-  const handleAddTag = (toAddLabel: Tag) => () => {
+  const handleAddTag = (toAddLabel: User) => () => {
     // Update displyed tags (insert)
+    console.log(toAddLabel)
     props.handleValueChange([...props.value, toAddLabel]);
     // Update menu item (delete)
     setMenuItems((menuItems) =>
-      menuItems.filter((menuItem) => menuItem.id !== toAddLabel.id)
+      menuItems.filter((menuItem) => menuItem.userId !== toAddLabel.userId)
     );
     // Close menu
     handleCloseMenu();
@@ -64,23 +66,31 @@ export default function AddParticipant(props: props) {
   const handleCloseMenu = (): void => {
     setAnchorEl(null);
   };
-
   return (
     <>
+      <Box display="flex">
+        <Typography variant="body1">
+          {props.header}
+          {"\u00A0"}
+        </Typography>
+        <Typography variant="body1" sx={{ color: grey[500] }}>
+          {props.note}
+        </Typography>
+      </Box>
       <Container disableGutters>
         {/* Selected tags */}
         {props.value.map((tag) => {
           return (
             <Chip
-              key={tag.id}
+              key={tag.userId}
               label={
                 <Typography variant="body2" color="primary">
-                  {tag.name}
+                  {tag.username}
                 </Typography>
               }
               sx={{ m: "6px 1px" }}
               variant="outlined"
-              size="small"
+              size="medium"
               deleteIcon={<CloseIcon />}
               onDelete={handleDeleteTag(tag)}
             />
@@ -88,15 +98,16 @@ export default function AddParticipant(props: props) {
         })}
 
         {/* Add tag button component */}
-        {menuItems.length > 0 && props.value.length < TAG_LIMIT.MAX_TAG && (
+        {menuItems.length > 0 && (
           <Button
+            variant="outlined"
             sx={{ padding: "6px 10px" }}
             size="small"
             startIcon={<AddIcon />}
             onClick={handleOpenMenu}
           >
             <Typography variant="body2" color="primary">
-              ADD TAG
+              ADD Participants
             </Typography>
           </Button>
         )}
@@ -104,8 +115,8 @@ export default function AddParticipant(props: props) {
         {/* Menu component */}
         <Menu anchorEl={anchorEl} open={open} onClose={handleCloseMenu}>
           {menuItems.map((menuItem) => (
-            <MenuItem key={menuItem.id} onClick={handleAddTag(menuItem)}>
-              {menuItem.name}
+            <MenuItem key={menuItem.userId} onClick={handleAddTag(menuItem)}>
+              {menuItem.username}
             </MenuItem>
           ))}
         </Menu>

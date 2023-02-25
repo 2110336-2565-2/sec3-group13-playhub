@@ -1,5 +1,4 @@
 import { useState } from "react";
-import Image from "next/image";
 import {
   Typography,
   Avatar,
@@ -18,9 +17,8 @@ import {
   Snackbar,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { IconButtonProps } from "@mui/material/IconButton";
 import TagComponent from "../public/TagComponent";
-
+import dayjs from 'dayjs';
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Post } from "../../types/Post";
@@ -83,7 +81,7 @@ export default function EachPostCard(props: props) {
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>
-                {props.post.startDateTime} - {props.post.endDateTime}
+                {dayjs(props.post.startDateTime).format('dddd D MMMM YYYY h.mm A')} - {dayjs(props.post.endDateTime).format('dddd D MMMM YYYY h.mm A')}
               </span>
             </Typography>
           </Stack>

@@ -10,7 +10,7 @@ import { Post } from "@/types/Post";
 import { PagePaths } from "enum/pages";
 import { GetCurrentUserPosts } from "@/services/Posts";
 import { Grid } from "@mui/material";
-import EachPostCard from "@/components/createAppointment/eachPost";
+import EachPostCard from "@/components/createAppointment/EachPostCard";
 const MainLayout = {
   margin: "1vh 0 0 0",
   //border: "1px dashed grey",
@@ -49,6 +49,12 @@ export default function showAppointment() {
     return;
   }
   if (posts == null) return <Loading />;
+
+  function handleClickCard(item: Post) {
+
+    //window.alert(PagePaths.createAppointment + "/" + item?.postId);
+    router.push(PagePaths.createAppointment + "/" + item?.postId);
+  }
   return (
     <>
       <Navbar />
@@ -64,11 +70,10 @@ export default function showAppointment() {
             item
             xs={6}
             key={index}
-            /*sx={{
-              border: "1px dashed grey",
-            }}*/
           >
-            <EachPostCard post={item} isLeft={index % 2 == 0} />
+            <Box onClick={() => handleClickCard(item)}>
+              <EachPostCard post={item} isLeft={index % 2 == 0} />
+            </Box>
           </Grid>
         ))}
         {posts.length % 2 != 0 ? <Grid item xs={6}></Grid> : null}
