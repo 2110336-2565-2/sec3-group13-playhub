@@ -1,12 +1,13 @@
 import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
 import { User } from "@/types/User";
 import { AuthResponse, SupabaseClient } from "@supabase/supabase-js";
+import { Dayjs } from "dayjs";
 import { Database } from "supabase/db_types";
 
 export async function CreateUser(
     username: string,
     sex: string,
-    birthdate: string,
+    birthdate: Dayjs,
     email: string,
     password: string,
     supabaseClient: SupabaseClient<Database, "public", any>,
@@ -32,7 +33,7 @@ export async function CreateUser(
         username: username,
         password: password,
         email: email,
-        birthdate: birthdate,
+        birthdate: birthdate.format('MM/DD/YYYY'),
         sex: sex,
     });
     if (addUserData.error) {
