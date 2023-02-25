@@ -74,14 +74,14 @@ export default function Home() {
 
   useEffect(() => {
     if (router.asPath.indexOf("error") != -1) {
-      router.push(PagePaths.requestResetPassword)
+      router.push(PagePaths.requestResetPassword);
     }
-  }, [router])
+  }, [router]);
   // if (!canResetPassword) return <Loading />;
   // if (isSubmit) return <p>requesting...</p>; // temporary display
   return (
     <>
-      {(isRequesting || !canResetPassword) && <Loading />}
+      {/* {(isRequesting || !canResetPassword) && <Loading />} */}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
         <Card
