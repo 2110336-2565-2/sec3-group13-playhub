@@ -205,8 +205,8 @@ export async function GetPostByPostId(
     title: getPostDataResult.data[0].title,
     description: getPostDataResult.data[0].description,
     location: getPostDataResult.data[0].location,
-    startTime: dayjs(getPostDataResult.data[0].start_time),
-    endTime: dayjs(getPostDataResult.data[0].end_time),
+    startTime: dayjs(postgresqlDateToString(getPostDataResult.data[0].start_time)),
+    endTime: dayjs(postgresqlDateToString(getPostDataResult.data[0].end_time)),
     images: getPostDataResult.data[0].images,
     tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
       id: tag_ids[idx],
