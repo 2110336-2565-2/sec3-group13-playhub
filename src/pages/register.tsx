@@ -149,7 +149,7 @@ export default function Home() {
     if(!birthDate) return;
 
     if (readyToCreate) {
-      CreateUser(displayName, gender, birthDate.toString(), email, password, supabaseClient).then(() => {
+      CreateUser(displayName, gender, birthDate.format('MM/DD/YYYY'), email, password, supabaseClient).then(() => {
         router.push(PagePaths.login);
       }).catch((err) => {
         if(err.message == "User already registered"){

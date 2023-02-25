@@ -142,7 +142,7 @@ export default function Home() {
   };
 
   function handleGoBack(): void {
-    router.push(PagePaths.profile + "/" + userStatus.user?.username);
+    router.push(PagePaths.profile + "/" + userStatus.user?.userId);
     return;
   }
 
