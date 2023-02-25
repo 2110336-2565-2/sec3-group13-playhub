@@ -6,7 +6,7 @@ const expression: RegExp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export function validateEmail(email: string): validation {
-  if (email.length === 0) {
+  if (email.trim().length === 0) {
     return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
   }
   if (!expression.test(email)) {
