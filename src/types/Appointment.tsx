@@ -23,6 +23,6 @@ export type AppointmentDetailHeader = {
     location: string,
     startDateTime: string,
     endDateTime: string,
-    tags: string[],
+    tags: number[],
     description: string
 }
