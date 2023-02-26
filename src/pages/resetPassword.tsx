@@ -77,8 +77,8 @@ export default function Home() {
       router.push(PagePaths.requestResetPassword);
     }
   }, [router]);
-  // if (!canResetPassword) return <Loading />;
-  // if (isSubmit) return <p>requesting...</p>; // temporary display
+  if (!canResetPassword) return <Loading />;
+  if (isSubmit) return <p>requesting...</p>; // temporary display
   return (
     <>
       {/* {(isRequesting || !canResetPassword) && <Loading />} */}
