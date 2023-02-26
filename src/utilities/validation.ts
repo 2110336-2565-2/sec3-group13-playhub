@@ -16,19 +16,12 @@ export function validateEmail(email: string): validation {
 }
 
 export function validatePassword(password: string): validation {
-  // check empty (not containing anything, even space, in both fields) -> min char error
-  if (password.length == 0) {
-    return {
-      msg: `รหัสผ่านต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัวอักษร`,
-      err: true,
-    };
-  }
   // check contain space (starting, between, ending)
   if (password.includes(" ")) {
     return { msg: "รหัสผ่านไม่สามารถประกอบด้วยช่องว่าง", err: true };
   }
-  // check min char
-  if (password.trim().length < CHAR_LIMIT.MIN_PASSWORD) {
+  // check empty & check min char
+  if (password.length < CHAR_LIMIT.MIN_PASSWORD) {
     return {
       msg: `รหัสผ่านต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัวอักษร`,
       err: true,
