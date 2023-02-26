@@ -17,7 +17,7 @@ export function validateEmail(email: string): validation {
 
 export function validatePassword(password: string): validation {
   // check empty (not containing anything, even space, in both fields) -> min char error
-  if (password.trim().length == 0) {
+  if (password.length == 0) {
     return {
       msg: `รหัสผ่านต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัวอักษร`,
       err: true,
@@ -105,13 +105,9 @@ export function validateDateWithInterval(
 
 export function validateConfirmPassword(password: string, confirmPassword: string): validation {
   const passwordErr: validation = validatePassword(password);
-  const confirmPasswordErr: validation = validatePassword(confirmPassword);
 
   if (passwordErr.err) {
     return passwordErr;
-  }
-  if (confirmPasswordErr.err) {
-    return confirmPasswordErr;
   }
   if (password !== confirmPassword) {
     return {
@@ -127,13 +123,9 @@ export function validateConfirmNewPassword(
   confirmNewPassword: string
 ): validation {
   const newPasswordErr: validation = validatePassword(newPassword);
-  const confirmNewPasswordErr: validation = validatePassword(confirmNewPassword);
 
   if (newPasswordErr.err) {
     return newPasswordErr;
-  }
-  if (confirmNewPasswordErr.err) {
-    return confirmNewPasswordErr;
   }
   if (newPassword !== confirmNewPassword) {
     return {
