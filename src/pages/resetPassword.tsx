@@ -78,10 +78,9 @@ export default function Home() {
     }
   }, [router]);
   if (!canResetPassword) return <Loading />;
-  if (isSubmit) return <p>requesting...</p>; // temporary display
   return (
     <>
-      {/* {(isRequesting || !canResetPassword) && <Loading />} */}
+      {isRequesting && <Loading />}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
         <Card
