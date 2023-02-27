@@ -20,6 +20,7 @@ import { User } from "@/types/User";
 import { PagePaths } from "enum/pages";
 import { Gender } from "enum/gender";
 import { GetUserByUserId } from "@/services/User";
+import VerifyChip from "@/components/profile/VerifyChip";
 
 // style
 const profile_layout = {
@@ -83,6 +84,9 @@ export default function Home() {
             alt="Profile picture"
             src={targetUserData.image as string}
           />
+          {targetUserData.isVerified &&
+            <VerifyChip />
+          }
           <Stack direction="row" spacing={1}>
             <Chip
               icon={

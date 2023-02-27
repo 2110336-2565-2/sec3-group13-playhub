@@ -24,6 +24,7 @@ import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
 import CommonTextField from "@/components/public/CommonTextField";
 import { validateNationalIDCardNumber } from "@/utilities/validation";
 import { validation } from "@/types/Validation";
+import VerifyChip from "@/components/profile/VerifyChip";
 
 // style
 const profile_layout = {
@@ -125,6 +126,10 @@ export default function adminProfile() {
             </Typography>
           )}
           <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image as string} />
+
+          {targetUserData.isVerified &&
+            <VerifyChip />
+          }
           <Stack direction="row" spacing={1}>
             <Chip
               icon={
