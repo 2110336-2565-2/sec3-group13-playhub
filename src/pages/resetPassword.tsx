@@ -46,7 +46,7 @@ export default function Home() {
     setNewPassword({ ...newPassword, [event.target.name]: event.target.value });
   }
 
-  async function handleSubmit() {
+  function handleSubmit() {
     setIsSubmit(true);
 
     if (!arePasswordsErr.err) {
