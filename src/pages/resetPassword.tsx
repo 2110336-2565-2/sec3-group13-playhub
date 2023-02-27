@@ -73,7 +73,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (router.asPath.indexOf("error") != -1) {
+    if (router.asPath.indexOf("access_token") == -1) {
       router.push(PagePaths.requestResetPassword);
     }
   }, [router]);
