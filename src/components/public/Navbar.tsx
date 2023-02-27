@@ -104,11 +104,13 @@ export default function Navbar() {
                 <Typography variant="body1">{NavbarPages.myPost}</Typography>
               </Link>
             </MenuItem>
-            <MenuItem key={3}>
-              <Link href={PagePaths.verify}>
-                <Typography variant="body1" color="primary">{NavbarPages.verify}</Typography>
-              </Link>
-            </MenuItem>
+            {!userStatus.user?.isVerified &&
+              <MenuItem key={3}>
+                <Link href={PagePaths.verify}>
+                  <Typography variant="body1" color="primary">{NavbarPages.verify}</Typography>
+                </Link>
+              </MenuItem>
+            }
             <MenuItem key={4}>
               <Box onClick={handleSignOut}>
                 <Typography variant="body1" color="error">
