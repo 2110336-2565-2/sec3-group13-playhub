@@ -4,8 +4,11 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Stack,
     Typography,
 } from "@mui/material";
+
+import CloseIcon from '@mui/icons-material/Close';
 
 type props = {
     children: JSX.Element;
@@ -24,16 +27,20 @@ export default function AdminVerifyDialog(props: props) {
                 onClose={props.handleCloseModal}
             >
                 <DialogTitle>
-                    <Typography>Verify this user</Typography>
+                    <Stack direction="row" alignItems="center" justifyContent="space-between">
+                        <Typography variant="h1">Verify this user</Typography>
+                        <CloseIcon onClick={props.handleCloseModal}>
+                            Cancel
+                        </CloseIcon>
+                    </Stack>
                 </DialogTitle>
                 <DialogContent dividers>
-                    <Typography align="center">เลขบัตรประจำตัวประชาชน</Typography>
-                    {props.children}
+                    <Stack spacing={1} alignItems="center" sx={{ margin: "30px 0" }}>
+                        <Typography align="center">เลขบัตรประจำตัวประชาชน</Typography>
+                        {props.children}
+                    </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" color="inherit" onClick={props.handleCloseModal}>
-                        Cancel
-                    </Button>
                     <Button variant="contained" color="primary" onClick={props.verifyUser}>
                         Confirm
                     </Button>
