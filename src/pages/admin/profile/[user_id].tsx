@@ -32,12 +32,6 @@ const profile_layout = {
 };
 const avatar = { width: 200, height: 200 };
 
-const helperText = {
-  display: "flex",
-  flexDirection: "row-reverse",
-  justifyContent: "space-between",
-};
-
 export default function adminProfile() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
@@ -97,6 +91,7 @@ export default function adminProfile() {
   function handleNationalIDCardChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
+    if (event.target.value.length > CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER) return
     setnationalIDCard(event.target.value);
     setIsError(false);
     setErrMsg("");
@@ -171,6 +166,7 @@ export default function adminProfile() {
             openModal={isVerifyModalShow}
             handleCloseModal={closeVerifyModal}
             verifyUser={verifyUser}
+            nationalID={nationalIDCard}
           >
             <Box sx={{ width: "70%", margin: "auto" }}>
               <TextField
@@ -188,10 +184,7 @@ export default function adminProfile() {
                   },
                 }}
               />
-              <Box sx={helperText}>
-                <FormHelperText error={isError}>
-                  {`${nationalIDCard.length}/${CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}`}
-                </FormHelperText>
+              <Box>
                 {isError && <FormHelperText error>{errMsg}</FormHelperText>}
               </Box>
             </Box>
