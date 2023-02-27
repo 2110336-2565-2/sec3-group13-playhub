@@ -64,22 +64,14 @@ export default function adminProfile() {
       return;
     }
 
-    // Frontend Validate success
-    // Send to Backend
-    // USE: nationalIDCard
-
-    // CASE: เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว
-    // setIsError(true)
-    // setErrMsg("เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว")
-    // return
     UpdateUserNationalIdByUserId(router.query.user_id as string, nationalIDCard, supabaseClient)
       .then((is_national_id_exist) => {
-        console.log(is_national_id_exist);
         if (is_national_id_exist) {
           setIsError(true);
           setErrMsg("เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว");
           return;
         }
+        router.reload()
       })
       .catch((err) => {
         console.log(err);
@@ -160,9 +152,11 @@ export default function adminProfile() {
               {row}
             </Typography>
           ))}
-          <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
-            Verify
-          </Button>
+          {!targetUserData.isVerified &&
+            <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
+              Verify
+            </Button>
+          }
           <AdminVerifyDialog
             openModal={isVerifyModalShow}
             handleCloseModal={closeVerifyModal}
