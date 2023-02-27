@@ -334,11 +334,11 @@ export interface Database {
           location: string;
           title: string;
           description: string;
-          tags: number[];
+          tags: string[];
           images: string[];
-          pending_user_id: string[];
-          accept_user_id: string[];
-          reject_user_id: string[];
+          pending_user_names: string[];
+          accept_user_names: string[];
+          reject_user_names: string[];
           username: string;
           image: string;
           participant_number: number;

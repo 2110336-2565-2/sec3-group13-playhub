@@ -51,9 +51,9 @@ export async function GetAppointmentsByAppointmentId(
         detailHeader,
         images: getAppointmentsResult.data[0].images,
         participantAmount: getAppointmentsResult.data[0].participant_number,
-        pendingParticipants: getAppointmentsResult.data[0].pending_user_id,
-        acceptParticipants: getAppointmentsResult.data[0].accept_user_id,
-        rejectParticipants: getAppointmentsResult.data[0].reject_user_id
+        pendingParticipants: getAppointmentsResult.data[0].pending_user_names,
+        acceptParticipants: getAppointmentsResult.data[0].accept_user_names,
+        rejectParticipants: getAppointmentsResult.data[0].reject_user_names
     }
 
 }

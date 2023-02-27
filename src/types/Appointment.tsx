@@ -25,6 +25,6 @@ export type AppointmentDetailHeader = {
     location: string,
     startDateTime: Dayjs,
     endDateTime: Dayjs,
-    tags: number[],
+    tags: string[],
     description: string
 }
