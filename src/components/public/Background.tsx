@@ -10,9 +10,7 @@ export default function Background() {
         sx={{
           position: "absolute",
           width: "100vw",
-          minWidth: "320px",
           height: "100vh",
-          minHeight: "868px",
           zIndex: -9,
           opacity: 0.8,
 
@@ -27,9 +25,7 @@ export default function Background() {
         sx={{
           position: "absolute",
           width: "100vw",
-          minWidth: "320px",
           height: "100vh",
-          minHeight: "868px",
           zIndex: -9,
           opacity: 0.3,
 
