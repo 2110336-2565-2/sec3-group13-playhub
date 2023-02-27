@@ -16,6 +16,7 @@ import { grey } from "@mui/material/colors";
 import { Tag } from "@/types/Tag";
 import { User } from "@/types/User";
 import MemberDetail from "./MemberDetail";
+
 type props = {
   header?: string;
   note?: string;
@@ -30,26 +31,6 @@ export default function AddParticipant(props: props) {
   const [menuItems, setMenuItems] = useState<User[]>([]);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-
-  const [popanchorEl, setpopAnchorEl] = useState<null | HTMLElement>(null);
-  let popopen = false;
-
-  const [hoveredMenuItem, setHoveredMenuItem] = useState<User | null>(null);
-
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLButtonElement>, menuItem: User) => {
-    setpopAnchorEl(event.currentTarget);
-    setHoveredMenuItem(menuItem);
-    popopen = true;
-    console.log("fuck");
-    console.log(popopen);
-  };
-
-  const handlePopoverClose = () => {
-    setpopAnchorEl(null);
-    setHoveredMenuItem(null);
-    popopen = false;
-    console.log(popopen);
-  };
 
   useEffect(() => {
     const userNames: string[] = props.value.map((tag) => {
@@ -85,6 +66,20 @@ export default function AddParticipant(props: props) {
     setAnchorEl(null);
   };
 
+  const [hoveredMenuItem, setHoveredMenuItem] = useState<User | null>(null);
+  const [popanchorEl, setpopAnchorEl] = useState<null | HTMLElement>(null);
+  // Popover handle functions
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, menuItem: User) => {
+    console.log("in");
+    setHoveredMenuItem(menuItem);
+    setpopAnchorEl(event.currentTarget);
+  };
+  const handlePopoverClose = () => {
+    console.log("out");
+    setHoveredMenuItem(null);
+    setpopAnchorEl(null);
+  };
+
   return (
     <>
       <Box display="flex">
@@ -96,7 +91,7 @@ export default function AddParticipant(props: props) {
           {props.note}
         </Typography>
       </Box>
-      <Container disableGutters>
+      <Container disableGutters style={{ position: "relative", minHeight: "50vh" }}>
         {/* Selected tags */}
         {props.value.map((tag) => {
           return (
@@ -137,21 +132,18 @@ export default function AddParticipant(props: props) {
             <MenuItem
               key={menuItem.userId}
               onClick={handleAddTag(menuItem)}
+              onMouseEnter={(e) => handlePopoverOpen(e, menuItem)}
               onMouseLeave={handlePopoverClose}
-              //onMouseEnter={(event) => handlePopoverOpen(event, menuItem)}
             >
-              <button onMouseEnter={(event) => handlePopoverOpen(event, menuItem)}>
-                {menuItem.username}
-              </button>
-              {/*menuItem.username*/}
+              {menuItem.username}
             </MenuItem>
           ))}
         </Menu>
+        {/* Popover component */}
         <Popover
-          open={popopen}
+          open={Boolean(hoveredMenuItem)}
           anchorEl={popanchorEl}
           onClose={handlePopoverClose}
-          anchorPosition={{ top: 100, left: 200 }}
           anchorOrigin={{
             vertical: "top",
             horizontal: "right",
@@ -161,11 +153,19 @@ export default function AddParticipant(props: props) {
             horizontal: "left",
           }}
         >
-          <MemberDetail value={hoveredMenuItem} />
-          ควย
+          {<MemberDetail value={hoveredMenuItem} />}
+          {/*<Typography sx={{ p: 2 }}>The content of the Popover.</Typography>*/}
         </Popover>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Button
+            variant="contained"
+            style={{ position: "absolute", bottom: 0 }} /*onClick={handleSubmit}*/
+          >
+            Create
+          </Button>
+        </Box>
+        {props.isErr && <FormHelperText error>{props.errMsg}</FormHelperText>}
       </Container>
-      {props.isErr && <FormHelperText error>{props.errMsg}</FormHelperText>}
     </>
   );
 }

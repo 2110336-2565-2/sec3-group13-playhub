@@ -23,13 +23,15 @@ import { setTextRange } from "typescript";
 type props = {
   value: User | null;
 };
+
 const profile_layout = {
-  /*width: "30vw",
-  minWidth: "200px",*/
+  width: "30vw",
+  minWidth: "100px",
+};
+const box_size = {
   width: "250px",
-  height: "220px",
+  height: "50vw",
   boxSizing: "border-box",
-  position: "absolute",
   background: "#FFFFFF",
   border: "1px solid rgba(0, 0, 0, 0.2)",
   borderRadius: " 15px",
@@ -43,12 +45,7 @@ export default function MemberDetail(props: props) {
   return (
     <>
       {props.value && (
-        <Stack
-          spacing={2}
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: "90vh" }}
-        >
+        <Stack spacing={2} alignItems="center" justifyContent="center" style={box_size}>
           <Typography variant="h1" align="center" sx={profile_layout}>
             {props.value.username}
           </Typography>
@@ -74,11 +71,15 @@ export default function MemberDetail(props: props) {
             <Chip icon={<CakeIcon />} label={props.value.birthdate} />
           </Stack>
 
-          {/*text.split("\n").map((row) => (
-          <Typography variant="body1" sx={{ ...profile_layout, wordBreak: "break-word" }} key={row}>
-            {row}
-          </Typography>
-        ))*/}
+          {props.value.description.split("\n").map((row) => (
+            <Typography
+              variant="body1"
+              sx={{ ...profile_layout, wordBreak: "break-word", textAlign: "center" }}
+              key={row}
+            >
+              {row}
+            </Typography>
+          ))}
         </Stack>
       )}
     </>
