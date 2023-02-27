@@ -25,6 +25,7 @@ export default function Verify() {
     const emailToAdmin: string = `mailto:${process.env.NEXT_PUBLIC_ADMIN_EMAIL}
     ?subject=Verify ${userStatus.user.email} PlayHub account
     &body=รายละเอียดบัญชี${newLine}
+    Email account : ${userStatus.user.email}${newLine}
     Profile link : ${process.env.NEXT_PUBLIC_DOMAIN_NAME + PagePaths.profile + userStatus.user.userId}${newLine}
     ${newLine}โปรดแนบ รูปถ่ายบัตรประจำตัวประชาชน`
 
