@@ -43,6 +43,7 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
           description: userData.data[0].description,
           image: userData.data[0].image,
           isAdmin: userData.data[0].is_admin,
+          isVerified: userData.data[0].is_verified,
         },
         isLoading: false,
       });

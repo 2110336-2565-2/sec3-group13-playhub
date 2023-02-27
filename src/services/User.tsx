@@ -58,6 +58,7 @@ export async function GetUserByUserId(
     description: getUserDataResult.data[0].description,
     isAdmin: getUserDataResult.data[0].is_admin,
     image: getUserDataResult.data[0].image,
+    isVerified: getUserDataResult.data[0].is_verified,
   };
 }
 
