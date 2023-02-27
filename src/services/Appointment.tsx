@@ -1,5 +1,6 @@
 import { Appointment, AppointmentDetail, AppointmentDetailHeader } from "@/types/Appointment";
 import { SupabaseClient } from "@supabase/supabase-js";
+import dayjs from "dayjs";
 import { Database } from "supabase/db_types";
 
 export async function GetAppointmentsByUserId(
@@ -20,8 +21,8 @@ export async function GetAppointmentsByUserId(
             ownerName: appointment.username,
             ownerProfilePic: appointment.image,
             location: appointment.location,
-            startDateTime: appointment.start_time,
-            endDateTime: appointment.end_time,
+            startDateTime: dayjs(appointment.start_time),
+            endDateTime: dayjs(appointment.end_time),
             participantAmount: appointment.participant_number
         }
     ));
@@ -41,8 +42,8 @@ export async function GetAppointmentsByAppointmentId(
     const detailHeader: AppointmentDetailHeader = {
         title: getAppointmentsResult.data[0].title,
         location: getAppointmentsResult.data[0].location,
-        startDateTime: getAppointmentsResult.data[0].start_time,
-        endDateTime: getAppointmentsResult.data[0].end_time,
+        startDateTime: dayjs(getAppointmentsResult.data[0].start_time),
+        endDateTime: dayjs(getAppointmentsResult.data[0].end_time),
         tags: getAppointmentsResult.data[0].tags,
         description: getAppointmentsResult.data[0].description,
     }

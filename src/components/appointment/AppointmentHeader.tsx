@@ -49,7 +49,7 @@ export default function AppointmentHeader(props: props) {
       <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
         <Typography variant='h6' sx={textinBox}>
           <CalendarTodayIcon fontSize="large" />
-          <span style={{ marginLeft: '16px' }}>{props.detailHeader.startDateTime}</span>
+          <span style={{ marginLeft: '16px' }}>{props.detailHeader.startDateTime.format('DD/MM/YYYY HH:mm A')}</span>
         </Typography>
       </Card>
     </Box>

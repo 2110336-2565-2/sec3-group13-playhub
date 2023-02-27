@@ -45,7 +45,7 @@ export default function AppointmentCard(props: props) {
                 <Typography display="inline-flex">
                     <CalendarTodayIcon fontSize="medium" />
                     <span style={{ marginLeft: 8 }}>
-                        {props.appointment.startDateTime} - {props.appointment.endDateTime}
+                        {props.appointment.startDateTime.format('DD/MM/YYYY HH:mm A')} - {props.appointment.endDateTime.format('DD/MM/YYYY HH:mm A')}
                     </span>
                 </Typography>
                 <Typography display="inline-flex">

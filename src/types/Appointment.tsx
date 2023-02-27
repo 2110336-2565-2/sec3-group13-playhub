@@ -1,11 +1,13 @@
+import { Dayjs } from "dayjs";
+
 export type Appointment = {
     title: string,
     ownerId: string;
     ownerName: string;
     ownerProfilePic: string;
     location: string;
-    startDateTime: string;
-    endDateTime: string;
+    startDateTime: Dayjs;
+    endDateTime: Dayjs;
     participantAmount: number;
 }
 
@@ -21,8 +23,8 @@ export type AppointmentDetail = {
 export type AppointmentDetailHeader = {
     title: string,
     location: string,
-    startDateTime: string,
-    endDateTime: string,
+    startDateTime: Dayjs,
+    endDateTime: Dayjs,
     tags: number[],
     description: string
 }
