@@ -36,12 +36,12 @@ export default function Home() {
     async function getPostData() {
       if (!userStatus.user) return;
       GetCurrentUserPosts(userStatus.user, supabaseClient)
-      .then((p) => {
-        setPosts(p);
-      }).catch((err) => {
-        console.log(err)
-        return
-      })
+        .then((p) => {
+          setPosts(p);
+        }).catch((err) => {
+          console.log(err)
+          return
+        })
     }
 
     getPostData();
@@ -74,15 +74,17 @@ export default function Home() {
           </Box>
         ))}
       </Stack>
-      <Link href={"createPost"} color="inherit">
-        <Fab
-          color="primary"
-          aria-label="add"
-          sx={{ position: "fixed", right: "20px", bottom: "20px" }}
-        >
-          <AddIcon />
-        </Fab>
-      </Link>
+      {userStatus.user.isVerified &&
+        <Link href={"createPost"} color="inherit">
+          <Fab
+            color="primary"
+            aria-label="add"
+            sx={{ position: "fixed", right: "20px", bottom: "20px" }}
+          >
+            <AddIcon />
+          </Fab>
+        </Link>
+      }
     </>
   );
 }
