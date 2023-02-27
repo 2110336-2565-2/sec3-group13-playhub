@@ -120,14 +120,9 @@ export default function adminProfile() {
           <Typography variant="h1" align="center" sx={profile_layout}>
             {targetUserData.username}
           </Typography>
-          <Typography variant="body1" align="center" sx={profile_layout}>
+          <Typography variant="body2" align="center" sx={profile_layout}>
             {targetUserData.email}
           </Typography>
-          {router.query.user_id === userStatus.user.userId && (
-            <Typography variant="body1" align="center" sx={profile_layout}>
-              {targetUserData.email}
-            </Typography>
-          )}
           <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image as string} />
 
           {targetUserData.isVerified &&
