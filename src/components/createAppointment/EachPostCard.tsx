@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import TagComponent from "../public/TagComponent";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Post } from "../../types/Post";
@@ -34,7 +34,8 @@ const styles = {
   boxShadow: "10px 10px 1px rgba(0, 0, 0, 0.25)",
   borderRadius: "30px",
   width: "60%",
-  height: "280px",
+  flexDirection: "row",
+  padding: "0 0 50px 0",
 };
 
 type props = {
@@ -69,7 +70,7 @@ export default function EachPostCard(props: props) {
           subheader={props.post.ownerName}
           titleTypographyProps={{ fontWeight: "700", fontSize: "32px" }}
           subheaderTypographyProps={{ fontWeight: "400", fontSize: "16px" }}
-        //action={}
+          //action={}
         />
         <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
           {/* post preview details start here */}
@@ -81,7 +82,8 @@ export default function EachPostCard(props: props) {
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>
-                {dayjs(props.post.startDateTime).format('dddd D MMMM YYYY h.mm A')} - {dayjs(props.post.endDateTime).format('dddd D MMMM YYYY h.mm A')}
+                {dayjs(props.post.startDateTime).format("dddd D MMMM YYYY h.mm A")} -{" "}
+                {dayjs(props.post.endDateTime).format("dddd D MMMM YYYY h.mm A")}
               </span>
             </Typography>
           </Stack>
