@@ -81,8 +81,6 @@ export function validateDateWithInterval(
 }
 
 export function validateNationalIDCardNumber(nationalIDCardNumber: string): validation {
-  nationalIDCardNumber = nationalIDCardNumber.trim();
-
   if (nationalIDCardNumber.length == 0) {
     return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
   }
@@ -94,5 +92,25 @@ export function validateNationalIDCardNumber(nationalIDCardNumber: string): vali
     return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
   }
 
+  if (!checkLastDigit(nationalIDCardNumber)) {
+    return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
+  }
+
   return { msg: "", err: false };
+
+  // --- Lemma Function ---
+  function checkLastDigit(nationalIDCardNumber: string): boolean {
+    //firstStep: find place value
+    const firstStep: number = nationalIDCardNumber
+      .slice(0, 12)
+      .split("")
+      .reduce((total, str, currentIndex) => total + (13 - currentIndex) * parseInt(str), 0);
+
+    const secondStep: number = firstStep % 11;
+    const thirdStep: number = (11 - secondStep) % 10;
+    if (thirdStep !== parseInt(nationalIDCardNumber[12])) {
+      return false;
+    }
+    return true;
+  }
 }
