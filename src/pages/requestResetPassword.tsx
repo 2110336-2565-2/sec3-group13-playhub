@@ -1,11 +1,10 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { userContext } from "supabase/user_context";
 
 import Background from "@/components/public/Background";
 import EmailTextField from "@/components/requestResetPassword/EmailTextField";
@@ -19,7 +18,6 @@ import { RequestResetPassword } from "@/services/Password";
 export default function Home() {
   const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
-  const userStatus = useContext(userContext);
 
   const [email, setEmail] = useState<string>("");
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -50,7 +48,6 @@ export default function Home() {
     }
   }
 
-  if (userStatus.isLoading) return <Loading />
   return (
     <>
       {isRequesting && <Loading />}
