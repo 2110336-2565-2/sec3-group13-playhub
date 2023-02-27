@@ -50,6 +50,11 @@ const mainTheme = createTheme({
         },
       },
     },
+    MuiTextField: {
+      styleOverrides: {
+        root: { boxShadow: "8px 8px 1px grey", borderRadius: "6px" },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {

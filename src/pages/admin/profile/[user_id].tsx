@@ -182,7 +182,7 @@ export default function adminProfile() {
                   },
                 }}
               />
-              <Box>
+              <Box sx={{ marginTop: "10px" }}>
                 {isError && <FormHelperText error>{errMsg}</FormHelperText>}
               </Box>
             </Box>
