@@ -6,7 +6,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Avatar, Chip, Typography, Stack, Button, Box } from "@mui/material";
+import { Avatar, Chip, Typography, Stack, Button, Box, TextField, FormHelperText } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -21,7 +21,6 @@ import { Gender } from "enum/gender";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { GetUserByUserId, UpdateUserNationalIdByUserId } from "@/services/User";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
-import CommonTextField from "@/components/public/CommonTextField";
 import { validateNationalIDCardNumber } from "@/utilities/validation";
 import { validation } from "@/types/Validation";
 import VerifyChip from "@/components/profile/VerifyChip";
@@ -32,6 +31,12 @@ const profile_layout = {
   minWidth: "200px",
 };
 const avatar = { width: 200, height: 200 };
+
+const helperText = {
+  display: "flex",
+  flexDirection: "row-reverse",
+  justifyContent: "space-between",
+};
 
 export default function adminProfile() {
   const router: NextRouter = useRouter();
@@ -168,14 +173,27 @@ export default function adminProfile() {
             verifyUser={verifyUser}
           >
             <Box sx={{ width: "70%", margin: "auto" }}>
-              <CommonTextField
+              <TextField
                 placeholder="เลขโดด 13 หลักเท่านั้น"
+                error={isError || nationalIDCard.length > CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}
                 value={nationalIDCard}
-                handleValueChange={handleNationalIDCardChange}
-                isErr={isError}
-                errMsg={errMsg}
-                char_limit={CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}
+                onChange={handleNationalIDCardChange}
+                fullWidth
+                inputProps={{
+                  sx: {
+                    textAlign: "center",
+                    "&::placeholder": {
+                      textAlign: "center",
+                    },
+                  },
+                }}
               />
+              <Box sx={helperText}>
+                <FormHelperText error={isError}>
+                  {`${nationalIDCard.length}/${CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}`}
+                </FormHelperText>
+                {isError && <FormHelperText error>{errMsg}</FormHelperText>}
+              </Box>
             </Box>
           </AdminVerifyDialog>
         </Stack>
