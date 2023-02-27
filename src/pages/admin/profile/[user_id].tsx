@@ -120,6 +120,9 @@ export default function adminProfile() {
           <Typography variant="h1" align="center" sx={profile_layout}>
             {targetUserData.username}
           </Typography>
+          <Typography variant="body1" align="center" sx={profile_layout}>
+            {targetUserData.email}
+          </Typography>
           {router.query.user_id === userStatus.user.userId && (
             <Typography variant="body1" align="center" sx={profile_layout}>
               {targetUserData.email}
