@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { grey } from "@mui/material/colors";
 import { Tag } from "@/types/Tag";
 
-import { Avatar, IconButton, Chip, Typography, Stack, Box } from "@mui/material";
+import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -25,20 +25,19 @@ type props = {
 };
 
 const profile_layout = {
-  width: "30vw",
-  minWidth: "100px",
+  width: "50vw",
+  minWidth: "200px",
 };
 const stack_design = {
   width: "250px",
   height: "50%",
-  //minheight: "30%",
   boxSizing: "border-box",
   background: "#FFFFFF",
   border: "1px solid rgba(0, 0, 0, 0.2)",
   borderRadius: " 15px",
 };
 
-const avatar = { width: 50, height: 50 };
+const avatar = { width: 120, height: 120 };
 
 export default function MemberDetail(props: props) {
   /*const [text, setText] = useState<string>("");
