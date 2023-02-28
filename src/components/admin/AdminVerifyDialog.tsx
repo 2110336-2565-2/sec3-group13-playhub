@@ -32,6 +32,8 @@ type props = {
 };
 
 export default function AdminVerifyDialog(props: props) {
+    const previewID = props.nationalID + "_".repeat(CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER - props.nationalID.length)
+
     return (
         <>
             <Dialog
@@ -49,7 +51,7 @@ export default function AdminVerifyDialog(props: props) {
                 <DialogContent dividers>
                     <Stack spacing={1} alignItems="center" sx={{ margin: "30px 0" }}>
                         <Typography align="center">เลขบัตรประจำตัวประชาชน</Typography>
-                        <Typography>{props.nationalID.slice(0, 1)} {props.nationalID.slice(1, 5)} {props.nationalID.slice(5, 10)} {props.nationalID.slice(10, 12)} {props.nationalID[12]}</Typography>
+                        <Typography>{previewID.slice(0, 1)}-{previewID.slice(1, 5)}-{previewID.slice(5, 10)}-{previewID.slice(10, 12)}-{previewID[12]}</Typography>
                         <Box sx={{ width: "70%", margin: "auto" }}>
                             <TextField
                                 placeholder="เลขโดด 13 หลักเท่านั้น"
