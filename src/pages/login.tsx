@@ -24,7 +24,7 @@ import { validateEmail, validateTextField } from "@/utilities/validation";
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
-} from "@/constants/authentication";
+} from "@/constants/supabase";
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";

@@ -43,7 +43,7 @@ export async function CreatePost(
 
   if (addPostResult.error) {
     console.log(addPostResult.error);
-    throw new Error("Something went wrong!!");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 }
 
@@ -64,7 +64,7 @@ export async function UpdatePost(
         .remove([deleteImage]);
       if (deleteImageResult.error) {
         console.log(deleteImageResult.error);
-        throw new Error("Something went wrong!!");
+        throw new Error(SUPABASE_CONNECTING_ERROR);
       }
       images.splice(images.findIndex((value, index) => image == value));
     }
@@ -82,7 +82,7 @@ export async function UpdatePost(
         .upload(filePath, uploadImageFile);
       if (uploadImageResult.error != null) {
         console.log(uploadImageResult.error);
-        throw new Error("Something went wrong!!");
+        throw new Error(SUPABASE_CONNECTING_ERROR);
       }
 
       const getImageURLResult = supabaseClient.storage
@@ -110,7 +110,7 @@ export async function UpdatePost(
 
   if (updatePostResult.error) {
     console.log(updatePostResult.error);
-    throw new Error("Something went wrong!!");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 }
 
@@ -122,7 +122,7 @@ export async function DeletePost(
 
   if (deletePostResult.error) {
     console.error(deletePostResult.error);
-    throw new Error("Something went wrong!!");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 }
 
@@ -138,10 +138,10 @@ export async function GetCurrentUserPosts(
   );
   if (getAllUserPostResult.error) {
     console.log(getAllUserPostResult.error);
-    throw new Error("Cant get posts data");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 
-  if (!getAllUserPostResult.data) throw new Error("Cant get posts data");;
+  if (!getAllUserPostResult.data) throw new Error(SUPABASE_CONNECTING_ERROR);;
 
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
@@ -164,7 +164,7 @@ export async function GetPosts(
   const getAllUserPostResult = await supabaseClient.rpc("get_posts");
     if (getAllUserPostResult.error) {
       console.log(getAllUserPostResult.error);
-      throw new Error("Cant get posts data");
+      throw new Error(SUPABASE_CONNECTING_ERROR);
     }
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
@@ -194,7 +194,7 @@ export async function GetPostByPostId(
   );
   if (getPostDataResult.error || !getPostDataResult.data) {
     console.log(getPostDataResult.error);
-    throw new Error("Cant get posts data");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 
   let tag_name = [...getPostDataResult.data[0].tag_names].sort()

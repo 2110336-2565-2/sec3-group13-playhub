@@ -1,3 +1,4 @@
+import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
 import { User } from "@/types/User";
 import { AuthResponse, SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
@@ -23,7 +24,7 @@ export async function CreateUser(
     if (signUpResult.error) {
         // one possible error is request sign up repeatedly too fast
         console.log(signUpResult.error);
-        throw new Error("Something went wrong!!");
+        throw new Error(SUPABASE_CONNECTING_ERROR);
     }
     
     const addUserData = await supabaseClient.rpc("create_user", {
@@ -36,7 +37,7 @@ export async function CreateUser(
     });
     if (addUserData.error) {
         console.log(addUserData.error);
-        throw new Error("Something went wrong!!");
+        throw new Error(SUPABASE_CONNECTING_ERROR);
     }
 }
 
@@ -49,7 +50,7 @@ export async function GetUserByUserId(
         console.log(
           getUserDataResult.error ? getUserDataResult.error : "no user"
         );
-        throw new Error("Something went wrong!!");
+        throw new Error(SUPABASE_CONNECTING_ERROR);
     }
     return ({
         userId: getUserDataResult.data[0].id,
@@ -86,6 +87,6 @@ export async function SignOut(
     const signOutResult = await supabaseClient.auth.signOut();
     if (signOutResult.error) {
       console.log(signOutResult.error);
-      throw new Error("Something went wrong!!");
+      throw new Error(SUPABASE_CONNECTING_ERROR);
     }
 }
