@@ -1,49 +1,22 @@
 import Navbar from "@/components/public/Navbar";
 import { Box, Link, Typography, Grid, Stack, CardContent } from "@mui/material";
-
 import { AppointmentDetailHeader, AppointmentDetail } from "@/types/Appointment";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { NextRouter, useRouter } from "next/router";
-
 import { useEffect, useState, useContext, ChangeEvent } from "react";
 import { Dayjs } from "dayjs";
-
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-
 import Loading from "@/components/public/Loading";
-import CommonTextField from "@/components/public/CommonTextField";
-import CommonDateTimePicker from "@/components/public/CommonDateTimePicker";
-import Tags from "@/components/createPost/Tags";
-import GoogleMap from "@/components/createPost/searchMaps";
-import PictureList from "@/components/createPost/pictureList";
-
 import { Tag } from "@/types/Tag";
 import { PagePaths } from "enum/pages";
-import { CHAR_LIMIT } from "enum/inputLimit";
-
-import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
-import { validation } from "@/types/Validation";
 import { GetAllTags, GetTagsByPost } from "@/services/Tags";
-import { PostInfo } from "@/types/Post";
 import { GetPostByPostId, UpdatePost } from "@/services/Posts";
-import LeftCard from "@/components/createAppointment/leftCard";
+import LeftCard from "@/components/createAppointment/LeftCard";
 import RightCard from "@/components/createAppointment/RightCard";
 import { User } from "@/types/User";
-const MainLayout = {
-  margin: "1vh 0 0 0",
-  border: "1px dashed grey",
-  textAlign: "center",
-
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "100%",
-  flexDirection: "row",
-  padding: "40px",
-};
-
+import { UserStatus } from "@/types/User";
 type props = {
   appointmentDetail: AppointmentDetail;
 };
@@ -54,9 +27,9 @@ const person: User[] = [
   {
     userId: 1,
     username: "เสี่ยโอ",
-    sex: "เกย์ตุ๋ยตูดเด็ก",
+    sex: "male",
     birthdate: "28-07-1959",
-    description: "เจ้าชู้\nชอบขับเครื่องบินไปเที่ยวเยมัน\nมีเมียเยอะ",
+    description: "เจ้าชู้\nชอบขับเครื่องบินไปเที่ยว\nมีแฟนหลายคนเยอะ",
     image: "https://i.im.ge/2023/02/28/77PS0P.download.jpg",
     email: "siaO@gmail.com",
     isAdmin: false,
@@ -64,7 +37,7 @@ const person: User[] = [
   {
     userId: 2,
     username: "เสี่ยที",
-    sex: "ชาย",
+    sex: "male",
     birthdate: "12-05-1990",
     description: "แองกรี้เบิร์ด",
     image: "https://i.im.ge/2023/02/28/77fcLJ.EWwNZFtXsAA7Iw9.jpg",
@@ -74,7 +47,7 @@ const person: User[] = [
   {
     userId: 3,
     username: "Monk God",
-    sex: "ชาย",
+    sex: "female",
     birthdate: "30-10-1980",
     description: "รวย",
     image: null,
@@ -84,7 +57,7 @@ const person: User[] = [
   {
     userId: 4,
     username: "อุบลราชธานี",
-    sex: "หญิง",
+    sex: "male",
     birthdate: "14-04-1999",
     description: "ชอบเล่นติ๊กต๊อก",
     image: null,
@@ -94,24 +67,48 @@ const person: User[] = [
   {
     userId: 5,
     username: "ไอบอด",
-    sex: "ชาย",
+    sex: "male",
     birthdate: "05-12-1900",
-    description: "บอสใหญ่สุด",
+    description: "ชอบเล่นเกมยิงปืน",
     image: null,
     email: "Ibod@hotmail.com",
     isAdmin: false,
   },
 ];
-const isCreate = true;
 export default function Home(props: props) {
-  //const [participant, setParticipant] = useState<string>([]);
-
+  //----Props saving----(Although Refresh)
   const router = useRouter();
-  const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
-
+  const [savedPostId, setSavedPostId] = useState<number | null>(() => {
+    if (typeof window !== "undefined") {
+      const savedPostIdString = localStorage.getItem("myAppSavedPostId");
+      return savedPostIdString ? parseInt(savedPostIdString) : null;
+    } else {
+      return null;
+    }
+  });
   const postId = parseInt(router.query.createAppointment as string);
 
+  useEffect(() => {
+    // Save the postId to localStorage whenever it changes
+    if (typeof window !== "undefined") {
+      if (postId) {
+        localStorage.setItem("myAppSavedPostId", postId.toString());
+        setSavedPostId(postId);
+      } else {
+        localStorage.removeItem("myAppSavedPostId");
+        setSavedPostId(null);
+      }
+    }
+  }, [postId]);
+
+  // Use the savedPostId value if it exists, otherwise use the postId value
+  const finalPostId = savedPostId !== null ? savedPostId : postId;
+
+  const userStatus = useContext(userContext);
+  console.log(userStatus, finalPostId);
+
+  const [participant, setParticipant] = useState<User[]>([]);
   const [title, setTitle] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -119,9 +116,9 @@ export default function Home(props: props) {
   const [tags, setTags] = useState<Tag[]>([]);
   const [description, setDescription] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
-  /*function handleParticipantChange(newParticipant: []): void {
-        setParticipant(newParticipant);
-    }*/
+  function handleParticipantChange(newParticipant: User[]): void {
+    setParticipant(newParticipant);
+  }
 
   useEffect(() => {
     GetAllTags(supabaseClient)
@@ -130,22 +127,19 @@ export default function Home(props: props) {
   }, [supabaseClient]);
   useEffect(() => {
     async function getPostData() {
-      if (!postId || !userStatus.user) {
+      if (!finalPostId || !userStatus.user) {
         console.log("error2");
         return;
       }
-      GetPostByPostId(userStatus.user, postId, supabaseClient)
+      GetPostByPostId(userStatus.user, finalPostId, supabaseClient)
         .then((p) => {
-          console.log(p);
           setTitle(p.title);
           setDescription(p.description);
           setLocation(p.location);
           setStartDate(p.startTime);
           setEndDate(p.endTime);
           setImages(p.images);
-          //setOriginalImages(p.images);
           setTags(p.tags);
-          //setLoadingData(false);
         })
         .catch((err) => {
           console.log(err);
@@ -162,7 +156,6 @@ export default function Home(props: props) {
     tags: tags,
     description: description,
   };
-  console.log(leftSideData);
   const rightSideData: AppointmentDetail = {
     detailHeader: leftSideData,
     images: images,
@@ -177,31 +170,58 @@ export default function Home(props: props) {
     return;
   }
 
+  function handleClick() {
+    router.back(); // Navigate back to the previous page
+  }
+
   return (
     <>
       <Navbar />
+      {/*  ArrowBackIcon */}
+
       <Box display="flex" paddingBottom="40px">
         <Link>
           <ArrowBackIcon
             fontSize="large"
             sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
+            onClick={handleClick}
           />
         </Link>
       </Box>
+      {/*  Title */}
       <Box>
         <Typography variant="h1" sx={{ fontWeight: "700", fontSize: "40px" }}>
           Create Appointment
         </Typography>
       </Box>
+      {/*  Left and Right Card */}
       <Box display="flex" justifyContent="center" padding="40px">
-        {/*isCreate ? <AppointmentHostCard appointmentDetail={mockData} />
-                    : null*/}
         <Grid container spacing="40px" width="80vw">
+          {/*  Left Card */}
           <Grid item xs={12} md={6} style={{ display: "flex" }}>
-            <LeftCard leftSideData={leftSideData} isUnClick={true} />
+            {finalPostId && (
+              <LeftCard
+                leftSideData={leftSideData}
+                isUnClick={true} /* isUnClick mean in text block cannot click or fill value */
+              />
+            )}
           </Grid>
+          {/*  Right Card */}
           <Grid item xs={12} md={6} style={{ display: "flex" }}>
-            <RightCard rightSideData={rightSideData} />
+            <RightCard
+              rightSideData={rightSideData}
+              /*
+              Try to send data from this
+              IsSubmit through right card 
+              and 
+              Participant<User[]> through AddParicipant through right card.
+              */
+
+              /*
+              sendParticipant={childToParent1}
+              sendIsSubmit={childToParent2}
+              */
+            />
           </Grid>
         </Grid>
       </Box>
