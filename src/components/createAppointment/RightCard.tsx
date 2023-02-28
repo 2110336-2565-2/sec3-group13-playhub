@@ -5,7 +5,7 @@ import AddParticipant from "./AddParticipant";
 import React, { Fragment } from "react";
 
 import { AppointmentDetail } from "@/types/Appointment";
-import { CardContent, Card, Grid, Stack, Typography, Box, Chip } from "@mui/material";
+import { CardContent, Card, Grid, Stack, Typography, Box, Chip, Button } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import TagComponent from "../public/TagComponent";
@@ -94,15 +94,6 @@ export default function RightCard(props: props) {
             </Box>
 
             <Box>
-              {/*<Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Select Participants</Typography>
-                        <Grid container spacing={1}>
-                            {props.rightSideData.pendingParticipants.map((e, index) => (
-                                <Grid item key={'p' + index}>
-                                    {<AddParticipant></AddParticipant>}
-                                </Grid>
-                            ))}
-                        </Grid>*/}
-
               <AddParticipant
                 header="Select Participants"
                 note="(เลือกอย่างน้อย 1 คน)"
@@ -115,6 +106,14 @@ export default function RightCard(props: props) {
             </Box>
           </Stack>
         </CardContent>
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <Button
+            variant="contained"
+            style={{ position: "absolute", bottom: 0 }} /*onClick={handleSubmit}*/
+          >
+            Create
+          </Button>
+        </Box>
       </BorderWithShadow>
     </>
   );

@@ -5,7 +5,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { grey } from "@mui/material/colors";
 import { Tag } from "@/types/Tag";
 
-import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
+import { Avatar, IconButton, Chip, Typography, Stack, Box } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -28,9 +28,10 @@ const profile_layout = {
   width: "30vw",
   minWidth: "100px",
 };
-const box_size = {
+const stack_design = {
   width: "250px",
-  height: "50vw",
+  height: "50%",
+  //minheight: "30%",
   boxSizing: "border-box",
   background: "#FFFFFF",
   border: "1px solid rgba(0, 0, 0, 0.2)",
@@ -45,7 +46,12 @@ export default function MemberDetail(props: props) {
   return (
     <>
       {props.value && (
-        <Stack spacing={2} alignItems="center" justifyContent="center" style={box_size}>
+        <Stack
+          spacing={2}
+          alignItems="center"
+          justifyContent="center"
+          sx={{ /*margin: "10px"*/ padding: "30px", ...stack_design }}
+        >
           <Typography variant="h1" align="center" sx={profile_layout}>
             {props.value.username}
           </Typography>

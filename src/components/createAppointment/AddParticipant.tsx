@@ -46,7 +46,8 @@ export default function AddParticipant(props: props) {
     setMenuItems([...menuItems, toDeleteTag].sort((a, b) => (a.username > b.username ? 1 : -1)));
   };
 
-  const handleAddTag = (toAddLabel: User) => () => {
+  const handleAddTag = (toAddLabel: User) => {
+    console.log("mouse click");
     // Update displyed tags (insert)
     console.log(toAddLabel);
     props.handleValueChange([...props.value, toAddLabel]);
@@ -55,6 +56,7 @@ export default function AddParticipant(props: props) {
       menuItems.filter((menuItem) => menuItem.userId !== toAddLabel.userId)
     );
     // Close menu
+
     handleCloseMenu();
   };
 
@@ -74,12 +76,14 @@ export default function AddParticipant(props: props) {
     setHoveredMenuItem(menuItem);
     setpopAnchorEl(event.currentTarget);
   };
+
   const handlePopoverClose = () => {
     console.log("out");
     setHoveredMenuItem(null);
     setpopAnchorEl(null);
   };
-
+  const popopen = Boolean(popanchorEl);
+  const popoverId = popopen ? "simple-popover" : undefined;
   return (
     <>
       <Box display="flex">
@@ -131,9 +135,8 @@ export default function AddParticipant(props: props) {
           {menuItems.map((menuItem) => (
             <MenuItem
               key={menuItem.userId}
-              onClick={handleAddTag(menuItem)}
+              onClick={() => handleAddTag(menuItem)}
               onMouseEnter={(e) => handlePopoverOpen(e, menuItem)}
-              onMouseLeave={handlePopoverClose}
             >
               {menuItem.username}
             </MenuItem>
@@ -141,6 +144,7 @@ export default function AddParticipant(props: props) {
         </Menu>
         {/* Popover component */}
         <Popover
+          id={popoverId}
           open={Boolean(hoveredMenuItem)}
           anchorEl={popanchorEl}
           onClose={handlePopoverClose}
@@ -154,16 +158,7 @@ export default function AddParticipant(props: props) {
           }}
         >
           {<MemberDetail value={hoveredMenuItem} />}
-          {/*<Typography sx={{ p: 2 }}>The content of the Popover.</Typography>*/}
         </Popover>
-        <Box display="flex" justifyContent="center" alignItems="center">
-          <Button
-            variant="contained"
-            style={{ position: "absolute", bottom: 0 }} /*onClick={handleSubmit}*/
-          >
-            Create
-          </Button>
-        </Box>
         {props.isErr && <FormHelperText error>{props.errMsg}</FormHelperText>}
       </Container>
     </>

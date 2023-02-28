@@ -28,7 +28,7 @@ import { validation } from "@/types/Validation";
 import { GetAllTags, GetTagsByPost } from "@/services/Tags";
 import { PostInfo } from "@/types/Post";
 import { GetPostByPostId, UpdatePost } from "@/services/Posts";
-import LeftCard from "@/components/createAppointment/LeftCard";
+import LeftCard from "@/components/createAppointment/leftCard";
 import RightCard from "@/components/createAppointment/RightCard";
 import { User } from "@/types/User";
 const MainLayout = {
@@ -67,7 +67,7 @@ const person: User[] = [
     sex: "ชาย",
     birthdate: "12-05-1990",
     description: "แองกรี้เบิร์ด",
-    image: null,
+    image: "https://i.im.ge/2023/02/28/77fcLJ.EWwNZFtXsAA7Iw9.jpg",
     email: "siaT@gmail.com",
     isAdmin: false,
   },
