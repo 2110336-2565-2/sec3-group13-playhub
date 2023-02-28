@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "@/components/public/Navbar";
 import { Box, Link } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -11,25 +11,28 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { PagePaths } from "enum/pages";
 import Loading from "@/components/public/Loading";
+import { userContext } from "supabase/user_context";
 
 const isHost = true;
 export default function Home() {
   const router = useRouter();
+  const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>(null);
+  const [isHost, setIsHost] = useState<boolean | null>(null)
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
-    console.log(appointmentId);
     GetAppointmentsByAppointmentId(appointmentId, supabaseClient).then((appointment) => {
-      console.log(appointment);
+      setIsHost(userStatus.user?.userId == appointment?.ownerId);
       setAppointment(appointment);
     }).catch((err) => {
       console.log(err)
       return;
     })
 
-  }, [supabaseClient, appointmentId]);
+  }, [supabaseClient, appointmentId, userStatus.user?.userId]);
+
   function handleGoBack(): void {
     router.push(PagePaths.myAppointments);
     return;

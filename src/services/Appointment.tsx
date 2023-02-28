@@ -50,6 +50,7 @@ export async function GetAppointmentsByAppointmentId(
     }
     return {
         detailHeader,
+        ownerId: getAppointmentsResult.data[0].owner_id,
         images: getAppointmentsResult.data[0].images,
         participantAmount: getAppointmentsResult.data[0].participant_number,
         pendingParticipants: getAppointmentsResult.data[0].pending_user_names,

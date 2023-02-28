@@ -14,6 +14,7 @@ export type Appointment = {
 
 export type AppointmentDetail = {
     detailHeader: AppointmentDetailHeader,
+    ownerId: string,
     images: string[],
     participantAmount: number,
     pendingParticipants: string[],
