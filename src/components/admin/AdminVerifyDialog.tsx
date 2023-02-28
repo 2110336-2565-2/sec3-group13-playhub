@@ -30,16 +30,13 @@ export default function AdminVerifyDialog(props: props) {
                 <DialogTitle>
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                         <Typography variant="h1">Verify this user</Typography>
-                        <CloseIcon onClick={props.handleCloseModal} style={{ cursor: "pointer" }}>
-                            Cancel
-                        </CloseIcon>
+                        <CloseIcon onClick={props.handleCloseModal} style={{ cursor: "pointer" }} />
                     </Stack>
                 </DialogTitle>
                 <DialogContent dividers>
                     <Stack spacing={1} alignItems="center" sx={{ margin: "30px 0" }}>
                         <Typography align="center">เลขบัตรประจำตัวประชาชน</Typography>
                         <Typography>{props.nationalID.slice(0, 1)} {props.nationalID.slice(1, 5)} {props.nationalID.slice(5, 10)} {props.nationalID.slice(10, 12)} {props.nationalID[12]}</Typography>
-                        <Typography></Typography>
                         {props.children}
                     </Stack>
                 </DialogContent>
