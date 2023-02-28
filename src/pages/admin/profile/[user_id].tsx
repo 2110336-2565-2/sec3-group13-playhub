@@ -1,7 +1,6 @@
 import { Suspense, useContext, useEffect, useState } from "react";
 
 import { NextRouter, useRouter } from "next/router";
-
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
@@ -31,6 +30,12 @@ const profile_layout = {
   minWidth: "200px",
 };
 const avatar = { width: 200, height: 200 };
+const helperText = {
+  display: "flex",
+  flexDirection: "row-reverse",
+  justifyContent: "space-between",
+  marginTop: "10px"
+};
 
 export default function adminProfile() {
   const router: NextRouter = useRouter();
@@ -182,7 +187,10 @@ export default function adminProfile() {
                   },
                 }}
               />
-              <Box sx={{ marginTop: "10px" }}>
+              <Box sx={helperText}>
+                <FormHelperText>
+                  {`${nationalIDCard.length}/${CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}`}
+                </FormHelperText>
                 {isError && <FormHelperText error>{errMsg}</FormHelperText>}
               </Box>
             </Box>
