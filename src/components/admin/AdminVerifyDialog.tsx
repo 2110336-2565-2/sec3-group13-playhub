@@ -14,13 +14,6 @@ import {
 import CloseIcon from '@mui/icons-material/Close';
 import { CHAR_LIMIT } from "enum/inputLimit";
 
-const helperText = {
-    display: "flex",
-    flexDirection: "row-reverse",
-    justifyContent: "space-between",
-    marginTop: "10px"
-};
-
 type props = {
     openModal: boolean;
     handleCloseModal: () => void;
@@ -33,7 +26,6 @@ type props = {
 
 export default function AdminVerifyDialog(props: props) {
     const previewID = props.nationalID + "_".repeat(CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER - props.nationalID.length)
-
     return (
         <>
             <Dialog
@@ -68,10 +60,7 @@ export default function AdminVerifyDialog(props: props) {
                                     },
                                 }}
                             />
-                            <Box sx={helperText}>
-                                <FormHelperText>
-                                    {`${props.nationalID.length}/${CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}`}
-                                </FormHelperText>
+                            <Box sx={{ marginTop: "10px" }}>
                                 {props.isError && <FormHelperText error>{props.errMsg}</FormHelperText>}
                             </Box>
                         </Box>
