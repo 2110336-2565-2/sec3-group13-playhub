@@ -1,21 +1,34 @@
 import {
+    Box,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    FormHelperText,
     Stack,
+    TextField,
     Typography,
 } from "@mui/material";
 
 import CloseIcon from '@mui/icons-material/Close';
+import { CHAR_LIMIT } from "enum/inputLimit";
+
+const helperText = {
+    display: "flex",
+    flexDirection: "row-reverse",
+    justifyContent: "space-between",
+    marginTop: "10px"
+};
 
 type props = {
-    children: JSX.Element;
     openModal: boolean;
     handleCloseModal: () => void;
     verifyUser: () => void;
     nationalID: string;
+    isError: boolean;
+    handleTextFieldChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+    errMsg: string;
 };
 
 export default function AdminVerifyDialog(props: props) {
@@ -37,7 +50,29 @@ export default function AdminVerifyDialog(props: props) {
                     <Stack spacing={1} alignItems="center" sx={{ margin: "30px 0" }}>
                         <Typography align="center">เลขบัตรประจำตัวประชาชน</Typography>
                         <Typography>{props.nationalID.slice(0, 1)} {props.nationalID.slice(1, 5)} {props.nationalID.slice(5, 10)} {props.nationalID.slice(10, 12)} {props.nationalID[12]}</Typography>
-                        {props.children}
+                        <Box sx={{ width: "70%", margin: "auto" }}>
+                            <TextField
+                                placeholder="เลขโดด 13 หลักเท่านั้น"
+                                error={props.isError}
+                                value={props.nationalID}
+                                onChange={props.handleTextFieldChange}
+                                fullWidth
+                                inputProps={{
+                                    sx: {
+                                        textAlign: "center",
+                                        "&::placeholder": {
+                                            textAlign: "center",
+                                        },
+                                    },
+                                }}
+                            />
+                            <Box sx={helperText}>
+                                <FormHelperText>
+                                    {`${props.nationalID.length}/${CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}`}
+                                </FormHelperText>
+                                {props.isError && <FormHelperText error>{props.errMsg}</FormHelperText>}
+                            </Box>
+                        </Box>
                     </Stack>
                 </DialogContent>
                 <DialogActions>

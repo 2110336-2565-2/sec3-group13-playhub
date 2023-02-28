@@ -30,12 +30,6 @@ const profile_layout = {
   minWidth: "200px",
 };
 const avatar = { width: 200, height: 200 };
-const helperText = {
-  display: "flex",
-  flexDirection: "row-reverse",
-  justifyContent: "space-between",
-  marginTop: "10px"
-};
 
 export default function adminProfile() {
   const router: NextRouter = useRouter();
@@ -170,31 +164,10 @@ export default function adminProfile() {
             handleCloseModal={closeVerifyModal}
             verifyUser={verifyUser}
             nationalID={nationalIDCard}
-          >
-            <Box sx={{ width: "70%", margin: "auto" }}>
-              <TextField
-                placeholder="เลขโดด 13 หลักเท่านั้น"
-                error={isError || nationalIDCard.length > CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}
-                value={nationalIDCard}
-                onChange={handleNationalIDCardChange}
-                fullWidth
-                inputProps={{
-                  sx: {
-                    textAlign: "center",
-                    "&::placeholder": {
-                      textAlign: "center",
-                    },
-                  },
-                }}
-              />
-              <Box sx={helperText}>
-                <FormHelperText>
-                  {`${nationalIDCard.length}/${CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER}`}
-                </FormHelperText>
-                {isError && <FormHelperText error>{errMsg}</FormHelperText>}
-              </Box>
-            </Box>
-          </AdminVerifyDialog>
+            isError={isError}
+            handleTextFieldChange={handleNationalIDCardChange}
+            errMsg={errMsg}
+          />
         </Stack>
       </Suspense>
     </>
