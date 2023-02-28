@@ -9,6 +9,7 @@ import {
   MenuItem,
   Typography,
   Popover,
+  Tooltip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
@@ -21,15 +22,16 @@ type props = {
   header?: string;
   note?: string;
   value: User[];
-  handleValueChange: (tags: User[]) => void;
+  handleValueChange: (tags: User[]) => void; //for you to handle when value(menuItems) changed
   menuValue: User[];
   isErr: boolean;
   errMsg: string;
 };
 
 export default function AddParticipant(props: props) {
-  const [menuItems, setMenuItems] = useState<User[]>([]);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  //---- Menu item
+  const [menuItems, setMenuItems] = useState<User[]>([]); // Keep value of who is selected
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null); //anchorEl for Add participant button
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -47,16 +49,16 @@ export default function AddParticipant(props: props) {
   };
 
   const handleAddTag = (toAddLabel: User) => {
-    console.log("mouse click");
-    // Update displyed tags (insert)
-    console.log(toAddLabel);
+    // Update displyed tags (insert)F
     props.handleValueChange([...props.value, toAddLabel]);
     // Update menu item (delete)
     setMenuItems((menuItems) =>
       menuItems.filter((menuItem) => menuItem.userId !== toAddLabel.userId)
     );
+    //Close DropDown(MenuItem) also for prevent obsecure
+    setHoveredMenuItem(null);
+    setpopAnchorEl(null);
     // Close menu
-
     handleCloseMenu();
   };
 
@@ -67,23 +69,21 @@ export default function AddParticipant(props: props) {
   const handleCloseMenu = (): void => {
     setAnchorEl(null);
   };
-
+  //--For Dropdown(MenuItem)
   const [hoveredMenuItem, setHoveredMenuItem] = useState<User | null>(null);
-  const [popanchorEl, setpopAnchorEl] = useState<null | HTMLElement>(null);
+  const [popanchorEl, setpopAnchorEl] = useState<null | HTMLElement>(null); //popanchorEl for MenuItem(each dropdown component)
+
   // Popover handle functions
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, menuItem: User) => {
-    console.log("in");
     setHoveredMenuItem(menuItem);
     setpopAnchorEl(event.currentTarget);
   };
-
   const handlePopoverClose = () => {
-    console.log("out");
     setHoveredMenuItem(null);
     setpopAnchorEl(null);
   };
   const popopen = Boolean(popanchorEl);
-  const popoverId = popopen ? "simple-popover" : undefined;
+
   return (
     <>
       <Box display="flex">
@@ -131,12 +131,21 @@ export default function AddParticipant(props: props) {
         )}
 
         {/* Menu component */}
-        <Menu anchorEl={anchorEl} open={open} onClose={handleCloseMenu}>
+        <Menu
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleCloseMenu}
+          keepMounted
+          TransitionProps={{ timeout: 0 }}
+        >
           {menuItems.map((menuItem) => (
             <MenuItem
+              aria-owns={popopen ? "mouse-over-popover" : undefined}
+              aria-haspopup="true"
               key={menuItem.userId}
               onClick={() => handleAddTag(menuItem)}
               onMouseEnter={(e) => handlePopoverOpen(e, menuItem)}
+              onMouseLeave={handlePopoverClose}
             >
               {menuItem.username}
             </MenuItem>
@@ -144,8 +153,11 @@ export default function AddParticipant(props: props) {
         </Menu>
         {/* Popover component */}
         <Popover
-          id={popoverId}
-          open={Boolean(hoveredMenuItem)}
+          id="mouse-over-popover"
+          sx={{
+            pointerEvents: "none",
+          }}
+          open={popopen}
           anchorEl={popanchorEl}
           onClose={handlePopoverClose}
           anchorOrigin={{
@@ -156,6 +168,7 @@ export default function AddParticipant(props: props) {
             vertical: "bottom",
             horizontal: "left",
           }}
+          disableRestoreFocus
         >
           {<MemberDetail value={hoveredMenuItem} />}
         </Popover>
