@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { NextRouter, useRouter } from "next/router";
 import Link from "next/link";
@@ -42,13 +42,15 @@ export default function Navbar() {
   };
 
   async function handleSignOut() {
-    SignOut(supabaseClient).then(() => {
-      router.push(PagePaths.login);
-      return;
-    }).catch((err) => {
-      console.log(err);
-      return;
-    })
+    SignOut(supabaseClient)
+      .then(() => {
+        router.push(PagePaths.login);
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }
 
   return (
@@ -64,19 +66,16 @@ export default function Navbar() {
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            {userStatus.user && (
-              userStatus.user.image ? (
+            {userStatus.user &&
+              (userStatus.user.image ? (
                 <Avatar
                   alt="Profile picture"
                   src={userStatus.user.image}
                   sx={{ bgcolor: grey[50] }}
                 />
               ) : (
-                <Avatar 
-                  alt="Profile picture"
-                />
-              )
-            )}
+                <Avatar alt="Profile picture" />
+              ))}
           </IconButton>
           <Menu
             sx={{ mt: "40px" }}

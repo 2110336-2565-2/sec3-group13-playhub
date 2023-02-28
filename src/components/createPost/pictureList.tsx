@@ -1,19 +1,13 @@
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
-import {
-  Box,
-  Container,
-  FormHelperText,
-  IconButton,
-  Stack,
-  Typography,
-} from "@mui/material";
+import { Box, Container, FormHelperText, IconButton, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { IMAGE_LIMIT } from "enum/inputLimit";
 import { validation } from "@/types/Validation";
+import Image from "next/image";
 
 // style
 const image_layout = {
@@ -95,11 +89,7 @@ export default function PictureList(props: props) {
       </Box>
 
       <Container disableGutters>
-        <ImageList
-          variant="woven"
-          cols={Math.min(3, images.length + 2)}
-          gap={10}
-        >
+        <ImageList variant="woven" cols={Math.min(3, images.length + 2)} gap={10}>
           {images.map((image, index) => {
             // const imageErr :validation = validateImage(image.type, image.size);
             return (
@@ -119,16 +109,10 @@ export default function PictureList(props: props) {
                       >
                         <CancelIcon />
                       </IconButton>
-                      <img
-                        alt="Post_Image"
-                        src={image}
-                        style={{ objectFit: "contain" }}
-                      />
+                      <Image alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
                     </ImageListItem>
                   </Box>
-                  {false && (
-                    <FormHelperText error>{props.errMsg}</FormHelperText>
-                  )}
+                  {false && <FormHelperText error>{props.errMsg}</FormHelperText>}
                 </Stack>
               </>
             );
