@@ -54,8 +54,7 @@ type props = {
 export default function AdminPostCard(props: props) {
   const router: NextRouter = useRouter();
 
-  const [openDeletePostModal, setOpenDeletePostModal] =
-    useState<boolean>(false);
+  const [openDeletePostModal, setOpenDeletePostModal] = useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
 
   const supabaseClient = useSupabaseClient<Database>();
@@ -65,13 +64,15 @@ export default function AdminPostCard(props: props) {
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   async function handleDelete() {
-    DeletePost(props.post.postId, supabaseClient).then(() => {
-      props.handleDeletePost(props.post);
-      handleCloseDeletePostModal();
-    }).catch((err) => {
-      console.log(err);
-      return;
-    })
+    DeletePost(props.post.postId, supabaseClient)
+      .then(() => {
+        props.handleDeletePost(props.post);
+        handleCloseDeletePostModal();
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }
 
   return (
@@ -108,26 +109,16 @@ export default function AdminPostCard(props: props) {
           action={
             <>
               {owner && (
-                <IconButton
-                  size="large"
-                  color="error"
-                  onClick={handleOpenDeletePostModal}
-                >
+                <IconButton size="large" color="error" onClick={handleOpenDeletePostModal}>
                   <DeleteOutlineIcon />
                 </IconButton>
               )}
             </>
           }
         />
-        <CardContent
-          style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}
-        >
+        <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
           {/* post preview details start here */}
-          <Stack
-            direction={!hiddenPostDetail ? "row" : "column"}
-            spacing={2}
-            marginBottom={2}
-          >
+          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.post.location}</span>
@@ -140,8 +131,8 @@ export default function AdminPostCard(props: props) {
             </Typography>
           </Stack>
           <Grid container spacing={1}>
-            {props.post.tags.map((e) => (
-              <Grid item>
+            {props.post.tags.map((e, index) => (
+              <Grid item key={index}>
                 <Chip
                   label={e}
                   variant="outlined"
@@ -157,17 +148,14 @@ export default function AdminPostCard(props: props) {
           </Grid>
 
           {/* post preview details end here */}
-          <Collapse
-            in={!hiddenPostDetail}
-            sx={{ marginTop: 2, marginBottom: 1 }}
-          >
+          <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2, marginBottom: 1 }}>
             {/* post hidden details start here */}
             {props.post.description.split("\n").map((row) => (
               <Typography key={row}>{row}</Typography>
             ))}
             <Grid container spacing={2}>
-              {props.post.image.map((e) => (
-                <Grid item>
+              {props.post.image.map((e, index) => (
+                <Grid item key={index}>
                   <Image src={e} alt="location" width={300} height={350} />
                 </Grid>
               ))}

@@ -3,7 +3,7 @@ import dayjs, { Dayjs } from "dayjs";
 import { IMAGE_LIMIT } from "enum/inputLimit";
 
 const expression: RegExp =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export function validateEmail(email: string): validation {
   if (email.length === 0) {
@@ -64,8 +64,7 @@ export function validateDateWithInterval(
   if (startDate) {
     if (endDate) {
       if (startDate >= endDate) {
-        const displayStartDate: string =
-          dayjs(startDate).format("DD/MM/YYYY hh:mm a");
+        const displayStartDate: string = dayjs(startDate).format("DD/MM/YYYY hh:mm a");
         return {
           msg: `กรุณาเลือกวันที่และเวลา หลังจาก ${displayStartDate}`,
           err: true,

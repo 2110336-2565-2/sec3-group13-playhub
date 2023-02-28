@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { NextRouter, useRouter } from "next/router";
 
@@ -6,14 +6,7 @@ import { AuthResponse } from "@supabase/supabase-js";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
-import {
-  Link,
-  Box,
-  Typography,
-  Stack,
-  FormHelperText,
-  Button,
-} from "@mui/material";
+import { Link, Box, Typography, Stack, FormHelperText, Button } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Logo from "@/components/public/Logo";
@@ -50,10 +43,7 @@ export default function Home() {
 
   // error about variables
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validateTextField(
-    password,
-    CHAR_LIMIT.MIN_PASSWORD
-  );
+  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
   const isSupabaseErr: boolean =
     (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg: string = isLoginCredErr
@@ -64,26 +54,26 @@ export default function Home() {
     setIsSubmit(true);
 
     // sign in via supabase
-    SignIn(email, password, supabaseClient).then(() => {
-      // route to post feed page
-      router.push(PagePaths.home);
-    }).catch((err) => {
-      // in case : cannot find user using inputed email and password
-      if (err == "Error: " + SUPABASE_LOGIN_CREDENTIALS_ERROR) {
-        setIsLoginCredErr(true);
-        console.log("wrong email or password");
-        return;
-      }
+    SignIn(email, password, supabaseClient)
+      .then(() => {
+        // route to post feed page
+        router.push(PagePaths.home);
+      })
+      .catch((err) => {
+        // in case : cannot find user using inputed email and password
+        if (err == "Error: " + SUPABASE_LOGIN_CREDENTIALS_ERROR) {
+          setIsLoginCredErr(true);
+          console.log("wrong email or password");
+          return;
+        }
 
-      // in case : user has not validate email yet
-      if (
-        err == "Error: " + SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR
-      ) {
-        setIsValidateErr(true);
-        console.log("You have not validate your email yet");
-        return;
-      }
-    })
+        // in case : user has not validate email yet
+        if (err == "Error: " + SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR) {
+          setIsValidateErr(true);
+          console.log("You have not validate your email yet");
+          return;
+        }
+      });
     return;
   }
 

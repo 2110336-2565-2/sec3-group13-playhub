@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 
 import { useRouter } from "next/router";
 
@@ -44,12 +44,10 @@ export default function Home() {
   const [birthDate, setBirthDate] = useState<Dayjs | null>(null);
 
   // submit about variables
-  const [isSubmitDisplayName, setIsSubmitDisplayName] =
-    useState<boolean>(false);
+  const [isSubmitDisplayName, setIsSubmitDisplayName] = useState<boolean>(false);
   const [isSubmitEmail, setIsSubmitEmail] = useState<boolean>(false);
   const [isSubmitPassword, setIsSubmitPassword] = useState<boolean>(false);
-  const [isSubmitConfirmPassword, setIsSubmitConfirmPassword] =
-    useState<boolean>(false);
+  const [isSubmitConfirmPassword, setIsSubmitConfirmPassword] = useState<boolean>(false);
   const [isSubmitGender, setIsSubmitGender] = useState<boolean>(false);
   const [isSubmitBirthDate, setIsSubmitBirthDate] = useState<boolean>(false);
 
@@ -66,10 +64,7 @@ export default function Home() {
     err: false,
   });
   const emailErr: validation = emailHandlerErr();
-  const passwordErr: validation = validateTextField(
-    password,
-    CHAR_LIMIT.MIN_PASSWORD
-  );
+  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
   const isValidConfirmPassword: boolean = password === confirmPassword;
   const [isEmptyGender, setIsEmptyGender] = useState<boolean>(true);
   const [isEmptyBirthDate, setIsEmptyBirthDate] = useState<boolean>(true);
@@ -146,21 +141,23 @@ export default function Home() {
     setIsSubmitGender(true);
     setIsSubmitBirthDate(true);
 
-    if(!birthDate) return;
+    if (!birthDate) return;
 
     if (readyToCreate) {
-      CreateUser(displayName, gender, birthDate.toString(), email, password, supabaseClient).then(() => {
-        router.push(PagePaths.login);
-      }).catch((err) => {
-        if(err.message == "User already registered"){
-          setIsEmailAlreadyUsed({
-            msg: "ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",
-            err: true,
-          });
-        }
-        console.log(err);
-        return;
-      })
+      CreateUser(displayName, gender, birthDate.toString(), email, password, supabaseClient)
+        .then(() => {
+          router.push(PagePaths.login);
+        })
+        .catch((err) => {
+          if (err.message == "User already registered") {
+            setIsEmailAlreadyUsed({
+              msg: "ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",
+              err: true,
+            });
+          }
+          console.log(err);
+          return;
+        });
     }
   };
 
@@ -170,12 +167,7 @@ export default function Home() {
     return;
   }
   return (
-    <Stack
-      spacing={3}
-      alignItems="center"
-      justifyContent="center"
-      style={{ minHeight: "100vh" }}
-    >
+    <Stack spacing={3} alignItems="center" justifyContent="center" style={{ minHeight: "100vh" }}>
       <Logo width={119} height={119} />
 
       <Box style={register_layout}>
@@ -218,11 +210,7 @@ export default function Home() {
           placeholder="Confirm Password"
           value={confirmPassword}
           handleValueChange={handleConfirmPasswordChange}
-          isErr={
-            isSubmitPassword &&
-            isSubmitConfirmPassword &&
-            !isValidConfirmPassword
-          }
+          isErr={isSubmitPassword && isSubmitConfirmPassword && !isValidConfirmPassword}
           errMsg="Password และ Confirm Password ต้องเหมือนกัน"
         />
       </Box>

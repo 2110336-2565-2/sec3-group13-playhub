@@ -7,14 +7,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import {
-  Grid,
-  Typography,
-  Button,
-  FormHelperText,
-  Stack,
-  Box,
-} from "@mui/material";
+import { Grid, Typography, Button, FormHelperText, Stack, Box } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
@@ -28,11 +21,7 @@ import { Tag } from "@/types/Tag";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
 
-import {
-  validateDate,
-  validateDateWithInterval,
-  validateTextField,
-} from "@/utilities/validation";
+import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
 import { validation } from "@/types/Validation";
 import { GetAllTags, GetTagsByPost } from "@/services/Tags";
 import { PostInfo } from "@/types/Post";
@@ -69,8 +58,7 @@ export default function Home() {
   const [isSubmitLocation, setIsSubmitLocation] = useState<boolean>(false);
   const [isSubmitDate, setIsSubmitDate] = useState<boolean>(false);
   const [isSubmitTags, setIsSubmitTags] = useState<boolean>(false);
-  const [isSubmitDescription, setIsSubmitDescription] =
-    useState<boolean>(false);
+  const [isSubmitDescription, setIsSubmitDescription] = useState<boolean>(false);
   const [isSubmitImages, setIsSubmitImages] = useState<boolean>(false);
 
   // error variables
@@ -103,9 +91,7 @@ export default function Home() {
   const postId = parseInt(router.query.post_id as string);
 
   // input field change
-  function handleTitleChange(
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
+  function handleTitleChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
     setTitle(event.target.value);
     setIsSubmitTitle(false);
   }
@@ -163,14 +149,13 @@ export default function Home() {
         endTime: endDate,
       };
       UpdatePost(postId, originalImages, updatedPost, supabaseClient)
-      .then(() => {
-        router.push(PagePaths.myPosts);
-      }).catch(
-        (err) => {
+        .then(() => {
+          router.push(PagePaths.myPosts);
+        })
+        .catch((err) => {
           console.log(err);
           return;
-        }
-      );
+        });
     }
   };
 
@@ -184,31 +169,26 @@ export default function Home() {
     async function getPostData() {
       if (!postId || !userStatus.user) return;
       GetPostByPostId(userStatus.user, postId, supabaseClient)
-      .then((p) => {
-        setTitle(p.title);
-        setDescription(p.description);
-        setLocation(p.location);
-        setStartDate(p.startTime);
-        setEndDate(p.endTime);
-        setImages(p.images);
-        setOriginalImages(p.images);
-        setTags(p.tags);
-        setLoadingData(false);
-      }).catch((err) => {
-        console.log(err)
-        return
-      })
+        .then((p) => {
+          setTitle(p.title);
+          setDescription(p.description);
+          setLocation(p.location);
+          setStartDate(p.startTime);
+          setEndDate(p.endTime);
+          setImages(p.images);
+          setOriginalImages(p.images);
+          setTags(p.tags);
+          setLoadingData(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
     getPostData();
-  }, [supabaseClient, router.query.post_id]);
+  }, [supabaseClient, postId, userStatus.user]);
 
-
-  if (
-    tagMenu.length == 0 ||
-    userStatus.isLoading ||
-    loadingData
-  )
-    return <Loading />;
+  if (tagMenu.length == 0 || userStatus.isLoading || loadingData) return <Loading />;
   return (
     <>
       <Navbar />
@@ -241,7 +221,7 @@ export default function Home() {
         <Box sx={editPostLayout}>
           <Typography variant="body1">Location</Typography>
           <Stack spacing={2}>
-            <GoogleMap onChange={handleLocationChange} initialValue={location}/>
+            <GoogleMap onChange={handleLocationChange} initialValue={location} />
             {isSubmitLocation && locationError && (
               <FormHelperText error>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
             )}

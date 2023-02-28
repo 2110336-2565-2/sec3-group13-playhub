@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -40,13 +40,15 @@ export default function AdminNavbar() {
   };
 
   async function handleSignOut() {
-    SignOut(supabaseClient).then(() => {
-      router.push(PagePaths.login);
-      return;
-    }).catch((err) => {
-      console.log(err);
-      return;
-    })
+    SignOut(supabaseClient)
+      .then(() => {
+        router.push(PagePaths.login);
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }
 
   return (
@@ -85,12 +87,7 @@ export default function AdminNavbar() {
             onClose={handleClose}
           >
             <MenuItem>
-              <Link
-                textAlign="center"
-                color="error"
-                underline="none"
-                onClick={handleSignOut}
-              >
+              <Link textAlign="center" color="error" underline="none" onClick={handleSignOut}>
                 <Typography variant="body1">{NavbarPages.logout}</Typography>
               </Link>
             </MenuItem>

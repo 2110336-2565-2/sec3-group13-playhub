@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import { NextRouter, useRouter } from "next/router";
 import Image from "next/image";
@@ -96,12 +96,13 @@ export default function Home() {
       showImageUploadError.err
     );
     if (readyToSubmit) {
-      UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient).then(() => {
-        router.push(PagePaths.profile + "/" + userStatus.user?.userId);
-      }).catch((err) => {
-        console.log(err);
-      }
-      )
+      UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient)
+        .then(() => {
+          router.push(PagePaths.profile + "/" + userStatus.user?.userId);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       console.log("Something went wrong");
     }
@@ -186,22 +187,11 @@ export default function Home() {
               alt="Upload avatar"
               width={200}
               height={200}
-              style={
-                !isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }
-              }
+              style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
             />
           )}
-          <IconButton
-            sx={overlayIcon}
-            aria-label="upload picture"
-            component="label"
-          >
-            <input
-              onChange={handleImageChange}
-              hidden
-              accept="image/*"
-              type="file"
-            />
+          <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
+            <input onChange={handleImageChange} hidden accept="image/*" type="file" />
             <CameraAltIcon sx={{ fontSize: "100px" }} />
           </IconButton>
         </Avatar>

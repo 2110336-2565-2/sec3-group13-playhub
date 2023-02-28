@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   TextField,
   InputAdornment,
@@ -15,9 +15,7 @@ type props = {
   label?: string;
   placeholder?: string;
   value: string;
-  handleValueChange: (
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ) => void;
+  handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   isErr: boolean;
   errMsg: string;
   mediumSize?: boolean;
