@@ -30,7 +30,7 @@ export default function AdminVerifyDialog(props: props) {
                 <DialogTitle>
                     <Stack direction="row" alignItems="center" justifyContent="space-between">
                         <Typography variant="h1">Verify this user</Typography>
-                        <CloseIcon onClick={props.handleCloseModal}>
+                        <CloseIcon onClick={props.handleCloseModal} style={{ cursor: "pointer" }}>
                             Cancel
                         </CloseIcon>
                     </Stack>
