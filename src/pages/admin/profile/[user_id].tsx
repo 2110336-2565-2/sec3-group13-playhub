@@ -5,7 +5,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Avatar, Chip, Typography, Stack, Button, Box, TextField, FormHelperText } from "@mui/material";
+import { Avatar, Chip, Typography, Stack, Button } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -17,11 +17,8 @@ import Loading from "@/components/public/Loading";
 import { User } from "@/types/User";
 import { PagePaths } from "enum/pages";
 import { Gender } from "enum/gender";
-import { CHAR_LIMIT } from "enum/inputLimit";
-import { GetUserByUserId, UpdateUserNationalIdByUserId } from "@/services/User";
+import { GetUserByUserId } from "@/services/User";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
-import { validateNationalIDCardNumber } from "@/utilities/validation";
-import { validation } from "@/types/Validation";
 import VerifyChip from "@/components/profile/VerifyChip";
 
 // style
@@ -37,11 +34,8 @@ export default function adminProfile() {
   const supabaseClient = useSupabaseClient<Database>();
 
   const [targetUserData, setTargetUserData] = useState<User | null>(null);
-  const [nationalIDCard, setnationalIDCard] = useState<string>("");
 
   const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [errMsg, setErrMsg] = useState<string>("");
 
   useEffect(() => {
     async function getTargetUserData() {
@@ -53,47 +47,11 @@ export default function adminProfile() {
     getTargetUserData();
   }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
 
-  function verifyUser(): void {
-    console.log("confirm button is clicked!!", nationalIDCard);
-
-    const validate: validation = validateNationalIDCardNumber(nationalIDCard);
-    if (validate.err) {
-      setIsError(true);
-      setErrMsg(validate.msg);
-      return;
-    }
-
-    UpdateUserNationalIdByUserId(router.query.user_id as string, nationalIDCard, supabaseClient)
-      .then((is_national_id_exist) => {
-        if (is_national_id_exist) {
-          setIsError(true);
-          setErrMsg("เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว");
-          return;
-        }
-        router.reload()
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
   function openVerifyModal(): void {
     setIsVerifyModalShow(true);
-    setIsError(false);
-    setErrMsg("");
-    setnationalIDCard("");
   }
   function closeVerifyModal(): void {
     setIsVerifyModalShow(false);
-    setnationalIDCard("");
-  }
-  function handleNationalIDCardChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
-    if (event.target.value.length > CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER) return
-    setnationalIDCard(event.target.value);
-    setIsError(false);
-    setErrMsg("");
   }
 
   if (userStatus.isLoading) return <Loading />;
@@ -162,11 +120,6 @@ export default function adminProfile() {
           <AdminVerifyDialog
             openModal={isVerifyModalShow}
             handleCloseModal={closeVerifyModal}
-            verifyUser={verifyUser}
-            nationalID={nationalIDCard}
-            isError={isError}
-            handleTextFieldChange={handleNationalIDCardChange}
-            errMsg={errMsg}
           />
         </Stack>
       </Suspense>

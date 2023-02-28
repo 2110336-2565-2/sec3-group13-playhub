@@ -13,19 +13,69 @@ import {
 
 import CloseIcon from '@mui/icons-material/Close';
 import { CHAR_LIMIT } from "enum/inputLimit";
+import { useEffect, useState } from "react";
+import { UpdateUserNationalIdByUserId } from "@/services/User";
+import { validation } from "@/types/Validation";
+import { validateNationalIDCardNumber } from "@/utilities/validation";
+import { NextRouter, useRouter } from "next/router";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 type props = {
     openModal: boolean;
     handleCloseModal: () => void;
-    verifyUser: () => void;
-    nationalID: string;
-    isError: boolean;
-    handleTextFieldChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-    errMsg: string;
 };
 
 export default function AdminVerifyDialog(props: props) {
-    const previewID = props.nationalID + "_".repeat(CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER - props.nationalID.length)
+    const router: NextRouter = useRouter();
+    const supabaseClient = useSupabaseClient<Database>();
+
+    const [nationalIDCard, setnationalIDCard] = useState<string>("");
+    const [errMsg, setErrMsg] = useState<string>("");
+    const [isError, setIsError] = useState<boolean>(false);
+
+    const previewID = nationalIDCard + "_".repeat(CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER - nationalIDCard.length)
+
+    useEffect(() => {
+        clearError()
+        setnationalIDCard("")
+    }, [props.openModal])
+
+    function verifyUser(): void {
+        console.log("confirm button is clicked!!", nationalIDCard);
+
+        const validate: validation = validateNationalIDCardNumber(nationalIDCard);
+        if (validate.err) {
+            setIsError(true);
+            setErrMsg(validate.msg);
+            return;
+        }
+
+        UpdateUserNationalIdByUserId(router.query.user_id as string, nationalIDCard, supabaseClient)
+            .then((is_national_id_exist) => {
+                if (is_national_id_exist) {
+                    setIsError(true);
+                    setErrMsg("เลขบัตรประจำตัวประชาชนนี้ถูกใช้งานไปแล้ว");
+                    return;
+                }
+                router.reload()
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }
+
+    function handleNationalIDCardChange(
+        event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ): void {
+        if (event.target.value.length > CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER) return
+        setnationalIDCard(event.target.value);
+        clearError()
+    }
+    function clearError(): void {
+        setErrMsg("")
+        setIsError(false)
+    }
     return (
         <>
             <Dialog
@@ -47,9 +97,9 @@ export default function AdminVerifyDialog(props: props) {
                         <Box sx={{ width: "70%", margin: "auto" }}>
                             <TextField
                                 placeholder="เลขโดด 13 หลักเท่านั้น"
-                                error={props.isError}
-                                value={props.nationalID}
-                                onChange={props.handleTextFieldChange}
+                                error={isError}
+                                value={nationalIDCard}
+                                onChange={handleNationalIDCardChange}
                                 fullWidth
                                 inputProps={{
                                     sx: {
@@ -61,13 +111,13 @@ export default function AdminVerifyDialog(props: props) {
                                 }}
                             />
                             <Box sx={{ marginTop: "10px" }}>
-                                {props.isError && <FormHelperText error>{props.errMsg}</FormHelperText>}
+                                {isError && <FormHelperText error>{errMsg}</FormHelperText>}
                             </Box>
                         </Box>
                     </Stack>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="contained" color="primary" onClick={props.verifyUser}>
+                    <Button variant="contained" color="primary" onClick={verifyUser}>
                         Confirm
                     </Button>
                 </DialogActions>
