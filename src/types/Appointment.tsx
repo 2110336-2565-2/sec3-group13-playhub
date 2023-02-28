@@ -1,6 +1,7 @@
 import { Dayjs } from "dayjs";
 
 export type Appointment = {
+    appointmentId: string,
     title: string,
     ownerId: string;
     ownerName: string;

@@ -16,6 +16,7 @@ export async function GetAppointmentsByUserId(
 
     return getAppointmentsResult.data.map((appointment) => (
         {
+            appointmentId: appointment.id,
             title: appointment.title,
             ownerId: appointment.owner_id,
             ownerName: appointment.username,

@@ -7,12 +7,19 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useContext, useEffect, useState } from "react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
+import { NextRouter, useRouter } from "next/router";
+import { PagePaths } from "enum/pages";
 
 export default function Home() {
+    const router: NextRouter = useRouter();
 
     const supabaseClient = useSupabaseClient<Database>();
     const [appointments, setAppointments] = useState<Appointment[]>([]);
     const userStatus = useContext(userContext);
+
+    function handleCardClick(appointmentId: string): void {
+        router.push(PagePaths.myAppointments + appointmentId);
+    }
 
     useEffect(() => {
         if (!userStatus.user) return;
@@ -40,7 +47,9 @@ export default function Home() {
             >
                 {appointments.map((item, index) => (
                     <Grid item xs={12} md={6} key={index}>
-                        <AppointmentCard appointment={item} />
+                        <div onClick={() => handleCardClick(item.appointmentId)}>
+                            <AppointmentCard appointment={item} />
+                        </div>
                     </Grid>
                 ))}
             </Grid>
