@@ -9,6 +9,7 @@ import { GetAppointmentsByAppointmentId } from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
+import { PagePaths } from "enum/pages";
 import Loading from "@/components/public/Loading";
 
 const isHost = true;
@@ -29,7 +30,10 @@ export default function Home() {
     })
 
   }, [supabaseClient, appointmentId]);
-
+  function handleGoBack(): void {
+    router.push(PagePaths.myAppointments);
+    return;
+  }
 
   if (!appointment) return <Loading />
   return <>
@@ -38,7 +42,7 @@ export default function Home() {
       display="flex"
       paddingBottom="40px"
     >
-      <Link>
+      <Link onClick={handleGoBack}>
         <ArrowBackIcon
           fontSize="large"
           sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
