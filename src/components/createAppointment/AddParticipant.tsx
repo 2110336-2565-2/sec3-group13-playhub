@@ -22,6 +22,7 @@ type props = {
   header?: string;
   note?: string;
   value: User[];
+  // eslint-disable-next-line no-unused-vars
   handleValueChange: (tags: User[]) => void;
   //I will leave it error because when i commented code below is error.Please help me fix
   //for you to handle when value(menuItems) changed (I copy from createPost/Tags.tsx)
