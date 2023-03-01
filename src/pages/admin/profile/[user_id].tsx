@@ -28,7 +28,7 @@ const profile_layout = {
 };
 const avatar = { width: 200, height: 200 };
 
-export default function adminProfile() {
+export default function AdminProfile() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
@@ -65,6 +65,7 @@ export default function adminProfile() {
     router.push(PagePaths.home);
     return;
   }
+
   if (!targetUserData) return <Loading />;
   return (
     <>
@@ -112,12 +113,17 @@ export default function adminProfile() {
               {row}
             </Typography>
           ))}
-          {!targetUserData.isVerified && (
-            <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
-              Verify
-            </Button>
-          )}
-          <AdminVerifyDialog openModal={isVerifyModalShow} handleCloseModal={closeVerifyModal} />
+          {!targetUserData.isVerified && !targetUserData.isAdmin &&
+            <>
+              <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
+                Verify
+              </Button>
+              <AdminVerifyDialog
+                openModal={isVerifyModalShow}
+                handleCloseModal={closeVerifyModal}
+              />
+            </>
+          }
         </Stack>
       </Suspense>
     </>
