@@ -63,6 +63,7 @@ export default function AddParticipant(props: props) {
     setpopAnchorEl(null);
     // Close menu
     handleCloseMenu();
+    handlePopoverClose();
   };
 
   // Menu handle function
