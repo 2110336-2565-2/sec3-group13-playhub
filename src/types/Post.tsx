@@ -17,7 +17,7 @@ export type Post = {
 
 export type PostInfo = {
   title: string;
-  userId: number;
+  userId: string;
   location: string;
   tags: Tag[];
   description: string;
