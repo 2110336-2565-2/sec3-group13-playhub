@@ -87,15 +87,11 @@ export function validateNationalIDCardNumber(nationalIDCardNumber: string): vali
 
   if (
     nationalIDCardNumber.length != CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER ||
-    !RegExp(/\d{13}/).test(nationalIDCardNumber)
+    !RegExp(/\d{13}/).test(nationalIDCardNumber) ||
+    !checkLastDigit(nationalIDCardNumber)
   ) {
     return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
   }
-
-  if (!checkLastDigit(nationalIDCardNumber)) {
-    return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
-  }
-
   return { msg: "", err: false };
 
   // --- Lemma Function ---
