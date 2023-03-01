@@ -1,25 +1,11 @@
-import { Suspense, useEffect, useState } from "react";
-
-import CloseIcon from "@mui/icons-material/Close";
-import AddIcon from "@mui/icons-material/Add";
-import { grey } from "@mui/material/colors";
-import { Tag } from "@/types/Tag";
-
-import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
+import { Avatar, Chip, Typography, Stack } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import CakeIcon from "@mui/icons-material/Cake";
-import EditIcon from "@mui/icons-material/Edit";
-
-import Navbar from "@/components/public/Navbar";
-import Loading from "@/components/public/Loading";
-
 import { User } from "@/types/User";
-import { PagePaths } from "enum/pages";
 import { Gender } from "enum/gender";
-import { GetUserByUserId } from "@/services/User";
-import { setTextRange } from "typescript";
+
 type props = {
   value: User | null;
 };

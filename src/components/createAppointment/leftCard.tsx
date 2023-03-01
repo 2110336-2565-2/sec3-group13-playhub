@@ -1,12 +1,8 @@
-import Image from "next/image";
 import BorderWithShadow from "../public/BorderWithShadow";
-import AddParticipant from "./AddParticipant";
-import React, { Fragment } from "react";
+import React from "react";
 import { Dayjs } from "dayjs";
 import { AppointmentDetailHeader } from "@/types/Appointment";
-import { CardContent, Card, Grid, Stack, Typography, Box, Chip } from "@mui/material";
-import LocationOnIcon from "@mui/icons-material/LocationOn";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import { CardContent, Grid, Stack, Typography, Box } from "@mui/material";
 import TagComponent from "../public/TagComponent";
 import FloatTextField from "../public/FloatTextField";
 
