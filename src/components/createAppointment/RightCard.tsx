@@ -1,26 +1,20 @@
 import Image from "next/image";
 import BorderWithShadow from "../public/BorderWithShadow";
-
 import AddParticipant from "./AddParticipant";
-import React, { Fragment } from "react";
-
+import React from "react";
 import { AppointmentDetail } from "@/types/Appointment";
-import { CardContent, Card, Grid, Stack, Typography, Box, Chip, Button } from "@mui/material";
-
-import { useEffect, useState, useContext, ChangeEvent } from "react";
-
+import { CardContent, Grid, Stack, Typography, Box, Button } from "@mui/material";
+import { useEffect, useState, useContext } from "react";
 import Loading from "../public/Loading";
 import { useRouter } from "next/router";
-
 import { userContext } from "supabase/user_context";
-
 import { PagePaths } from "enum/pages";
 import { User } from "@/types/User";
 
 type props = {
   rightSideData: AppointmentDetail;
   /*sendParticipant: User[];
-  sendIsSubmit: Boolean;*/
+  sendIsSubmit: Boolean;*/ //for you
 };
 export default function RightCard(props: props) {
   const router = useRouter();
@@ -39,7 +33,7 @@ export default function RightCard(props: props) {
 
   useEffect(() => {
     setAvaliableParticipant(props.rightSideData.acceptParticipants);
-  });
+  }, [props.rightSideData.acceptParticipants]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
