@@ -65,8 +65,11 @@ export default function AdminProfile() {
     router.push(PagePaths.home);
     return;
   }
-
   if (!targetUserData) return <Loading />;
+  if (targetUserData.isAdmin) {
+    router.push(PagePaths.adminHome + userStatus.user.userId)
+    return
+  }
   return (
     <>
       <Suspense fallback={<Loading />}>
@@ -113,7 +116,7 @@ export default function AdminProfile() {
               {row}
             </Typography>
           ))}
-          {!targetUserData.isVerified && !targetUserData.isAdmin &&
+          {!targetUserData.isVerified &&
             <>
               <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
                 Verify

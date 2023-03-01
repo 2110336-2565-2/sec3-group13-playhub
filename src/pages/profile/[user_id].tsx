@@ -61,6 +61,10 @@ export default function Home() {
     return;
   }
   if (!targetUserData) return <Loading />;
+  if (targetUserData.isAdmin) {
+    router.push(PagePaths.home + userStatus.user.userId)
+    return
+  }
   return (
     <>
       <Suspense fallback={<Loading />}>
