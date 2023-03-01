@@ -1,9 +1,9 @@
 import Navbar from "@/components/public/Navbar";
-import { Box, Link, Typography, Grid, Stack, CardContent } from "@mui/material";
+import { Box, Link, Typography, Grid } from "@mui/material";
 import { AppointmentDetailHeader, AppointmentDetail } from "@/types/Appointment";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import { NextRouter, useRouter } from "next/router";
-import { useEffect, useState, useContext, ChangeEvent } from "react";
+import { useRouter } from "next/router";
+import { useEffect, useState, useContext } from "react";
 import { Dayjs } from "dayjs";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -11,15 +11,12 @@ import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import { Tag } from "@/types/Tag";
 import { PagePaths } from "enum/pages";
-import { GetAllTags, GetTagsByPost } from "@/services/Tags";
-import { GetPostByPostId, UpdatePost } from "@/services/Posts";
+import { GetAllTags } from "@/services/Tags";
+import { GetPostByPostId } from "@/services/Posts";
 import LeftCard from "@/components/createAppointment/LeftCard";
 import RightCard from "@/components/createAppointment/RightCard";
 import { User } from "@/types/User";
-import { UserStatus } from "@/types/User";
-type props = {
-  appointmentDetail: AppointmentDetail;
-};
+
 {
   ["เสี่ยโอ", "เสี่ยที", "Monk God", "อุบลราชธานี", "ไอบอด"];
 }
@@ -75,7 +72,7 @@ const person: User[] = [
     isAdmin: false,
   },
 ];
-export default function Home(props: props) {
+export default function Home() {
   //----Props saving----(Although Refresh)
   const router = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
@@ -108,7 +105,7 @@ export default function Home(props: props) {
   const userStatus = useContext(userContext);
   console.log(userStatus, finalPostId);
 
-  const [participant, setParticipant] = useState<User[]>([]);
+  //const [participant, setParticipant] = useState<User[]>([]); //For U to use
   const [title, setTitle] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [startDate, setStartDate] = useState<Dayjs | null>(null);
@@ -116,9 +113,9 @@ export default function Home(props: props) {
   const [tags, setTags] = useState<Tag[]>([]);
   const [description, setDescription] = useState<string>("");
   const [images, setImages] = useState<string[]>([]);
-  function handleParticipantChange(newParticipant: User[]): void {
+  /*function handleParticipantChange(newParticipant: User[]): void { //For U to use
     setParticipant(newParticipant);
-  }
+  }*/
 
   useEffect(() => {
     GetAllTags(supabaseClient)
@@ -147,7 +144,7 @@ export default function Home(props: props) {
         });
     }
     getPostData();
-  }, [supabaseClient, router.query.post_id]);
+  }, [supabaseClient, finalPostId, userStatus.user]);
   const leftSideData: AppointmentDetailHeader = {
     title: title,
     location: location,
