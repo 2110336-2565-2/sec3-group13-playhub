@@ -20,6 +20,10 @@ export default function Verify() {
         router.push(PagePaths.login);
         return;
     }
+    if (userStatus.user.isVerified) {
+        router.push(PagePaths.home)
+        return;
+    }
 
     const newLine: string = "%0D%0A"
     const emailToAdmin: string = `mailto:${process.env.NEXT_PUBLIC_ADMIN_EMAIL}
