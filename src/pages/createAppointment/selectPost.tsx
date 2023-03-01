@@ -3,7 +3,7 @@ import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Box, Fab, Stack, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
 import { Post } from "@/types/Post";
@@ -20,7 +20,7 @@ const MainLayout = {
   flexDirection: "row",
   padding: "30px",
 };
-export default function showAppointment() {
+export default function ShowAppointment() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
