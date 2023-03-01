@@ -1,29 +1,18 @@
-import { useState } from "react";
 import {
   Typography,
   Avatar,
-  Box,
-  Collapse,
   Card,
   CardHeader,
   CardContent,
-  CardActions,
-  Grow,
-  Button,
   IconButton,
   Grid,
   Stack,
-  Chip,
-  Snackbar,
 } from "@mui/material";
-import { styled } from "@mui/material/styles";
 import TagComponent from "../public/TagComponent";
 import dayjs from "dayjs";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Post } from "../../types/Post";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { PagePaths } from "enum/pages";
 import { NextRouter, useRouter } from "next/router";
 const styles = {
@@ -45,9 +34,6 @@ type props = {
 };
 export default function EachPostCard(props: props) {
   const router: NextRouter = useRouter();
-
-  const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
-
   return (
     <>
       <Card sx={[styles, { float: props.isLeft ? "right" : "left" }]}>
@@ -74,7 +60,7 @@ export default function EachPostCard(props: props) {
         />
         <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
           {/* post preview details start here */}
-          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
+          <Stack direction={"row"} spacing={2} marginBottom={2}>
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.post.location}</span>
