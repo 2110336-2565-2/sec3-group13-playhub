@@ -38,13 +38,15 @@ export default function adminProfile() {
   const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
 
   useEffect(() => {
-    async function getTargetUserData() {
-      if (!userStatus.user || !router.query.user_id || targetUserData) return;
-      const userData = await GetUserByUserId(router.query.user_id as string, supabaseClient);
-      setTargetUserData(userData);
-    }
+    if (!userStatus.user || !router.query.user_id || targetUserData) return;
 
-    getTargetUserData();
+    GetUserByUserId(router.query.user_id as string, supabaseClient)
+      .then((userData) => {
+        setTargetUserData(userData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
 
   function openVerifyModal(): void {
@@ -82,9 +84,7 @@ export default function adminProfile() {
           </Typography>
           <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image as string} />
 
-          {targetUserData.isVerified &&
-            <VerifyChip />
-          }
+          {targetUserData.isVerified && <VerifyChip />}
           <Stack direction="row" spacing={1}>
             <Chip
               icon={
@@ -112,15 +112,12 @@ export default function adminProfile() {
               {row}
             </Typography>
           ))}
-          {!targetUserData.isVerified &&
+          {!targetUserData.isVerified && (
             <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
               Verify
             </Button>
-          }
-          <AdminVerifyDialog
-            openModal={isVerifyModalShow}
-            handleCloseModal={closeVerifyModal}
-          />
+          )}
+          <AdminVerifyDialog openModal={isVerifyModalShow} handleCloseModal={closeVerifyModal} />
         </Stack>
       </Suspense>
     </>
