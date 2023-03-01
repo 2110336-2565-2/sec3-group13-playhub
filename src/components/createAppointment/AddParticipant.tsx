@@ -9,20 +9,22 @@ import {
   MenuItem,
   Typography,
   Popover,
-  Tooltip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { grey } from "@mui/material/colors";
-import { Tag } from "@/types/Tag";
 import { User } from "@/types/User";
 import MemberDetail from "./MemberDetail";
+//impot React from "react"
+import React from "react";
 
 type props = {
   header?: string;
   note?: string;
   value: User[];
-  handleValueChange: (tags: User[]) => void; //for you to handle when value(menuItems) changed
+  handleValueChange: (tags: User[]) => void;
+  //I will leave it error because when i commented code below is error.Please help me fix
+  //for you to handle when value(menuItems) changed (I copy from createPost/Tags.tsx)
   menuValue: User[];
   isErr: boolean;
   errMsg: string;
