@@ -22,7 +22,7 @@ import { User } from "@/types/User";
 }
 const person: User[] = [
   {
-    userId: 1,
+    userId: "id1",
     username: "เสี่ยโอ",
     sex: "male",
     birthdate: "28-07-1959",
@@ -32,7 +32,7 @@ const person: User[] = [
     isAdmin: false,
   },
   {
-    userId: 2,
+    userId: "id2",
     username: "เสี่ยที",
     sex: "male",
     birthdate: "12-05-1990",
@@ -42,7 +42,7 @@ const person: User[] = [
     isAdmin: false,
   },
   {
-    userId: 3,
+    userId: "id3",
     username: "Monk God",
     sex: "female",
     birthdate: "30-10-1980",
@@ -52,7 +52,7 @@ const person: User[] = [
     isAdmin: false,
   },
   {
-    userId: 4,
+    userId: "id4",
     username: "อุบลราชธานี",
     sex: "male",
     birthdate: "14-04-1999",
@@ -62,7 +62,7 @@ const person: User[] = [
     isAdmin: false,
   },
   {
-    userId: 5,
+    userId: "id5",
     username: "ไอบอด",
     sex: "male",
     birthdate: "05-12-1900",
