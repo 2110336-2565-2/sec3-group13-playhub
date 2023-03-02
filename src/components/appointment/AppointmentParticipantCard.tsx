@@ -50,12 +50,22 @@ export default function AppointmentParticipantCard(props: props) {
               <Grid container spacing={1}>
                 {props.appointmentDetail.acceptParticipants.map((e, index) => (
                   <Grid item key={'p' + index}>
-                    <Chip
-                      label={e}
-                      variant="outlined"
-                      color='primary'
-                      style={chipsStyle}
-                    />
+                    {index == 0 && (
+                      <Chip
+                        label={e}
+                        variant="outlined"
+                        color='primary'
+                        style={{ ...chipsStyle, backgroundColor: '#FFA31A40' }}
+                      />
+                    )}
+                    {index != 0 && (
+                      <Chip
+                        label={e}
+                        variant="outlined"
+                        color='primary'
+                        style={chipsStyle}
+                      />
+                    )}
                   </Grid>
                 ))}
               </Grid>
