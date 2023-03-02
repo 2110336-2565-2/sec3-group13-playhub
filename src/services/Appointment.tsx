@@ -40,6 +40,9 @@ export async function GetAppointmentsByAppointmentId(
         throw new Error("Something went wrong!!");
     }
 
+    const hostIndex = getAppointmentsResult.data[0].accept_user_names.indexOf(getAppointmentsResult.data[0].username);
+    [getAppointmentsResult.data[0].accept_user_names[0], getAppointmentsResult.data[0].accept_user_names[hostIndex]] = [getAppointmentsResult.data[0].accept_user_names[hostIndex], getAppointmentsResult.data[0].accept_user_names[0]];
+
     const detailHeader: AppointmentDetailHeader = {
         title: getAppointmentsResult.data[0].title,
         location: getAppointmentsResult.data[0].location,
