@@ -6,7 +6,6 @@ import { PostInfo } from "../types/Post";
 export async function CreateAppointment(
   post: PostInfo,
   pending_partipants: User[],
-  accept_participants: User[],
   supabaseClient: SupabaseClient<Database>
 ) {
   const addAppointmentResult = await supabaseClient.rpc("create_appointment", {
@@ -17,7 +16,6 @@ export async function CreateAppointment(
     start_time: post.startTime.toString(),
     end_time: post.endTime.toString(),
     pending_user_id: pending_partipants.map((p) => p.userId),
-    accept_user_id: accept_participants.map((p) => p.userId),
     images: post.images,
     owner_id: post.userId,
   });

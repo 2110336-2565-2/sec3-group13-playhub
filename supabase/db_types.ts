@@ -174,7 +174,6 @@ export interface Database {
           start_time: string;
           end_time: string;
           pending_user_id: string[];
-          accept_user_id: string[];
           images: string[];
           owner_id: string;
         };
