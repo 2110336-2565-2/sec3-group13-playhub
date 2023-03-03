@@ -55,6 +55,11 @@ const mainTheme = createTheme({
         root: { boxShadow: "8px 8px 1px grey", borderRadius: "6px" },
       },
     },
+    MuiFormControl: {
+      styleOverrides: {
+        root: { boxShadow: "8px 8px 1px grey", borderRadius: "6px" },
+      },
+    },
     MuiCard: {
       styleOverrides: {
         root: {

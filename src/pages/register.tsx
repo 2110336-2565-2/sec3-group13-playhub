@@ -25,6 +25,7 @@ import { PagePaths } from "enum/pages";
 import { CreateUser } from "@/services/User";
 import Background from "@/components/public/Background";
 import { grey } from "@mui/material/colors";
+import NormalTextField from "@/components/public/NormalTextField";
 
 // style
 const register_layout = {
@@ -190,7 +191,7 @@ export default function Home() {
           </Box>
 
           <Box style={register_layout}>
-            <CommonTextField
+            <NormalTextField
               header="Username"
               placeholder="Display Name"
               value={displayName}
@@ -202,7 +203,7 @@ export default function Home() {
           </Box>
 
           <Box style={{ ...register_layout, marginTop: 0 }}>
-            <CommonTextField
+            <NormalTextField
               header="Email"
               placeholder="Email"
               value={email}

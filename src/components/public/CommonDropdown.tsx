@@ -2,11 +2,13 @@ import {
   Box,
   FormControl,
   FormHelperText,
+  InputAdornment,
   MenuItem,
   Select,
   SelectChangeEvent,
   Typography,
 } from "@mui/material";
+import LockIcon from "@mui/icons-material/Lock";
 import { grey } from "@mui/material/colors";
 
 type props = {
@@ -29,7 +31,7 @@ export default function CommonDropdown(props: props) {
   return (
     <>
       <Typography variant="body1">{props.header}</Typography>
-      <FormControl error={props.isErr} size="small" fullWidth>
+      <FormControl error={props.isErr} sx={{ backgroundColor: "#ffffff" }} fullWidth>
         <Select
           value={props.value}
           onChange={props.handleValueChange}
@@ -42,6 +44,19 @@ export default function CommonDropdown(props: props) {
                     {props.placeHolder}
                   </Typography>
                 )
+          }
+          inputProps={{
+            sx: {
+              textAlign: "center",
+              "&::placeholder": {
+                textAlign: "center",
+              },
+            },
+          }}
+          startAdornment={
+            <InputAdornment position="start">
+              <LockIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
+            </InputAdornment>
           }
         >
           {props.items.map((item) => (

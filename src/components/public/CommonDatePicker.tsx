@@ -34,15 +34,23 @@ export default function CommonDatePicker(props: props) {
               {...params}
               placeholder={props.placeHolder}
               error={props.isErr}
+              sx={{ backgroundColor: "#ffffff" }}
               fullWidth
-              size="small"
+              inputProps={{
+                sx: {
+                  textAlign: "center",
+                  "&::placeholder": {
+                    textAlign: "center",
+                  },
+                },
+              }}
             />
           )}
           disableFuture
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <CalendarTodayIcon />
+                <CalendarTodayIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
               </InputAdornment>
             ),
           }}
