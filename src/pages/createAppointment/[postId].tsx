@@ -15,65 +15,67 @@ import RightCard from "@/components/createAppointment/RightCard";
 import { User } from "@/types/User";
 import { PostInfo } from "@/types/Post";
 
-// const mockParticipants: User[] = [
-//   {
-//     userId: "id1",
-//     username: "เสี่ยโอ",
-//     sex: "male",
-//     birthdate: "28-07-1959",
-//     description: "เจ้าชู้\nชอบขับเครื่องบินไปเที่ยว\nมีแฟนหลายคนเยอะ",
-//     image: "https://i.im.ge/2023/02/28/77PS0P.download.jpg",
-//     email: "siaO@gmail.com",
-//     isAdmin: false,
-//   },
-//   {
-//     userId: "id2",
-//     username: "เสี่ยที",
-//     sex: "male",
-//     birthdate: "12-05-1990",
-//     description: "แองกรี้เบิร์ด",
-//     image: "https://i.im.ge/2023/02/28/77fcLJ.EWwNZFtXsAA7Iw9.jpg",
-//     email: "siaT@gmail.com",
-//     isAdmin: false,
-//   },
-//   {
-//     userId: "id3",
-//     username: "Monk God",
-//     sex: "female",
-//     birthdate: "30-10-1980",
-//     description: "รวย",
-//     image: null,
-//     email: "MonkGod@gmail.com",
-//     isAdmin: false,
-//   },
-//   {
-//     userId: "id4",
-//     username: "อุบลราชธานี",
-//     sex: "male",
-//     birthdate: "14-04-1999",
-//     description: "ชอบเล่นติ๊กต๊อก",
-//     image: null,
-//     email: "Ubon@gmail.com",
-//     isAdmin: false,
-//   },
-//   {
-//     userId: "id5",
-//     username: "ไอบอด",
-//     sex: "male",
-//     birthdate: "05-12-1900",
-//     description: "ชอบเล่นเกมยิงปืน",
-//     image: null,
-//     email: "Ibod@hotmail.com",
-//     isAdmin: false,
-//   },
-// ];
+const mockParticipants: User[] = [
+  {
+    userId: "id1",
+    username: "เสี่ยโอ",
+    sex: "male",
+    birthdate: "28-07-1959",
+    description: "เจ้าชู้\nชอบขับเครื่องบินไปเที่ยว\nมีแฟนหลายคนเยอะ",
+    image: "https://i.im.ge/2023/02/28/77PS0P.download.jpg",
+    email: "siaO@gmail.com",
+    isAdmin: false,
+  },
+  {
+    userId: "id2",
+    username: "เสี่ยที",
+    sex: "male",
+    birthdate: "12-05-1990",
+    description: "แองกรี้เบิร์ด",
+    image: "https://i.im.ge/2023/02/28/77fcLJ.EWwNZFtXsAA7Iw9.jpg",
+    email: "siaT@gmail.com",
+    isAdmin: false,
+  },
+  {
+    userId: "id3",
+    username: "Monk God",
+    sex: "female",
+    birthdate: "30-10-1980",
+    description: "รวย",
+    image: null,
+    email: "MonkGod@gmail.com",
+    isAdmin: false,
+  },
+  {
+    userId: "id4",
+    username: "อุบลราชธานี",
+    sex: "male",
+    birthdate: "14-04-1999",
+    description: "ชอบเล่นติ๊กต๊อก",
+    image: null,
+    email: "Ubon@gmail.com",
+    isAdmin: false,
+  },
+  {
+    userId: "id5",
+    username: "ไอบอด",
+    sex: "male",
+    birthdate: "05-12-1900",
+    description: "ชอบเล่นเกมยิงปืน",
+    image: null,
+    email: "Ibod@hotmail.com",
+    isAdmin: false,
+  },
+];
 
 export default function Home() {
   const router = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
   const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
-  const [availableParticipants, setAvailableParticipants] = useState<User[] | null>(null);
+  const [availableParticipants, setAvailableParticipants] = useState<User[] | null>(
+    mockParticipants
+  );
   const [selectedParticipants, setSelectedParticipants] = useState<User[]>([]);
   const [participantCountError, setParticipantCountError] = useState<boolean>(false);
 
@@ -93,15 +95,15 @@ export default function Home() {
     }
 
     if (postInfo && availableParticipants) {
-      CreateAppointment(
-        postInfo,
-        availableParticipants,
-        selectedParticipants,
-        supabaseClient
-      ).catch((err) => {
-        console.log(err);
-        return;
-      });
+      CreateAppointment(postInfo, selectedParticipants, supabaseClient)
+        .then(() => {
+          // router.push(viewAppointment);
+          return;
+        })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
   }
 
