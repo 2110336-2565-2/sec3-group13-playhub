@@ -8,7 +8,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Box, Stack, Button, SelectChangeEvent, Grid } from "@mui/material";
+import { Box, Stack, Button, SelectChangeEvent, Grid, Card, Typography } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Logo from "@/components/public/Logo";
@@ -23,6 +23,8 @@ import { Gender } from "enum/gender";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { PagePaths } from "enum/pages";
 import { CreateUser } from "@/services/User";
+import Background from "@/components/public/Background";
+import { grey } from "@mui/material/colors";
 
 // style
 const register_layout = {
@@ -44,12 +46,10 @@ export default function Home() {
   const [birthDate, setBirthDate] = useState<Dayjs | null>(null);
 
   // submit about variables
-  const [isSubmitDisplayName, setIsSubmitDisplayName] =
-    useState<boolean>(false);
+  const [isSubmitDisplayName, setIsSubmitDisplayName] = useState<boolean>(false);
   const [isSubmitEmail, setIsSubmitEmail] = useState<boolean>(false);
   const [isSubmitPassword, setIsSubmitPassword] = useState<boolean>(false);
-  const [isSubmitConfirmPassword, setIsSubmitConfirmPassword] =
-    useState<boolean>(false);
+  const [isSubmitConfirmPassword, setIsSubmitConfirmPassword] = useState<boolean>(false);
   const [isSubmitGender, setIsSubmitGender] = useState<boolean>(false);
   const [isSubmitBirthDate, setIsSubmitBirthDate] = useState<boolean>(false);
 
@@ -66,10 +66,7 @@ export default function Home() {
     err: false,
   });
   const emailErr: validation = emailHandlerErr();
-  const passwordErr: validation = validateTextField(
-    password,
-    CHAR_LIMIT.MIN_PASSWORD
-  );
+  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
   const isValidConfirmPassword: boolean = password === confirmPassword;
   const [isEmptyGender, setIsEmptyGender] = useState<boolean>(true);
   const [isEmptyBirthDate, setIsEmptyBirthDate] = useState<boolean>(true);
@@ -146,21 +143,23 @@ export default function Home() {
     setIsSubmitGender(true);
     setIsSubmitBirthDate(true);
 
-    if(!birthDate) return;
+    if (!birthDate) return;
 
     if (readyToCreate) {
-      CreateUser(displayName, gender, birthDate.toString(), email, password, supabaseClient).then(() => {
-        router.push(PagePaths.login);
-      }).catch((err) => {
-        if(err.message == "User already registered"){
-          setIsEmailAlreadyUsed({
-            msg: "ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",
-            err: true,
-          });
-        }
-        console.log(err);
-        return;
-      })
+      CreateUser(displayName, gender, birthDate.toString(), email, password, supabaseClient)
+        .then(() => {
+          router.push(PagePaths.login);
+        })
+        .catch((err) => {
+          if (err.message == "User already registered") {
+            setIsEmailAlreadyUsed({
+              msg: "ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",
+              err: true,
+            });
+          }
+          console.log(err);
+          return;
+        });
     }
   };
 
@@ -170,93 +169,103 @@ export default function Home() {
     return;
   }
   return (
-    <Stack
-      spacing={3}
-      alignItems="center"
-      justifyContent="center"
-      style={{ minHeight: "100vh" }}
-    >
-      <Logo width={119} height={119} />
+    <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
+      <Background />
+      <Card
+        sx={{
+          width: "45vw",
+          minWidth: "300px",
+          minHeight: "200px",
 
-      <Box style={register_layout}>
-        <CommonTextField
-          header="Username"
-          placeholder="Display Name"
-          value={displayName}
-          handleValueChange={handleDisplayNameChange}
-          char_limit={100}
-          isErr={isSubmitDisplayName && displayNameErr.err}
-          errMsg={displayNameErr.msg}
-        />
-      </Box>
+          paddingTop: "3vh",
+          paddingBottom: "3vh",
 
-      <Box style={{ ...register_layout, marginTop: 0 }}>
-        <CommonTextField
-          header="Email"
-          placeholder="Email"
-          value={email}
-          handleValueChange={handleEmailChange}
-          isErr={isSubmitEmail && emailErr.err}
-          errMsg={emailErr.msg}
-        />
-      </Box>
+          backgroundColor: grey[300],
+        }}
+      >
+        <Stack spacing={3} alignItems="center" justifyContent="center">
+          <Box>
+            <Logo width={119} height={119} />
+            <Typography variant="h1">Sign Up</Typography>
+          </Box>
 
-      <Box style={register_layout}>
-        <PasswordTextFeild
-          header="Password"
-          placeholder="Password"
-          value={password}
-          handleValueChange={handlePasswordChange}
-          isErr={isSubmitPassword && passwordErr.err}
-          errMsg={passwordErr.msg}
-        />
-      </Box>
-
-      <Box style={register_layout}>
-        <PasswordTextFeild
-          header="Confirm Password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          handleValueChange={handleConfirmPasswordChange}
-          isErr={
-            isSubmitPassword &&
-            isSubmitConfirmPassword &&
-            !isValidConfirmPassword
-          }
-          errMsg="Password และ Confirm Password ต้องเหมือนกัน"
-        />
-      </Box>
-
-      <Box style={register_layout}>
-        <Grid container spacing={3} justifyContent="left">
-          <Grid item xs={6}>
-            <CommonDropdown
-              header="Gender"
-              placeHolder="Gender"
-              value={gender}
-              handleValueChange={handleGenderChange}
-              items={Object.values(Gender)}
-              isErr={isSubmitGender && isEmptyGender}
-              errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
+          <Box style={register_layout}>
+            <CommonTextField
+              header="Username"
+              placeholder="Display Name"
+              value={displayName}
+              handleValueChange={handleDisplayNameChange}
+              char_limit={100}
+              isErr={isSubmitDisplayName && displayNameErr.err}
+              errMsg={displayNameErr.msg}
             />
-          </Grid>
+          </Box>
 
-          <Grid item xs={6}>
-            <CommonDatePicker
-              header="Birth Date"
-              placeHolder="xx / xx / xxxx"
-              value={birthDate}
-              handleValueChange={handleBirthDateChange}
-              isErr={isSubmitBirthDate && isEmptyBirthDate}
-              errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
+          <Box style={{ ...register_layout, marginTop: 0 }}>
+            <CommonTextField
+              header="Email"
+              placeholder="Email"
+              value={email}
+              handleValueChange={handleEmailChange}
+              isErr={isSubmitEmail && emailErr.err}
+              errMsg={emailErr.msg}
             />
-          </Grid>
-        </Grid>
-      </Box>
+          </Box>
 
-      <Button variant="contained" onClick={handleCreateAccount}>
-        Create Account
-      </Button>
+          <Box style={register_layout}>
+            <PasswordTextFeild
+              header="Password"
+              placeholder="Password"
+              value={password}
+              handleValueChange={handlePasswordChange}
+              isErr={isSubmitPassword && passwordErr.err}
+              errMsg={passwordErr.msg}
+            />
+          </Box>
+
+          <Box style={register_layout}>
+            <PasswordTextFeild
+              header="Confirm Password"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              handleValueChange={handleConfirmPasswordChange}
+              isErr={isSubmitPassword && isSubmitConfirmPassword && !isValidConfirmPassword}
+              errMsg="Password และ Confirm Password ต้องเหมือนกัน"
+            />
+          </Box>
+
+          <Box style={register_layout}>
+            <Grid container spacing={3} justifyContent="left">
+              <Grid item xs={6}>
+                <CommonDropdown
+                  header="Gender"
+                  placeHolder="Gender"
+                  value={gender}
+                  handleValueChange={handleGenderChange}
+                  items={Object.values(Gender)}
+                  isErr={isSubmitGender && isEmptyGender}
+                  errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
+                />
+              </Grid>
+
+              <Grid item xs={6}>
+                <CommonDatePicker
+                  header="Birth Date"
+                  placeHolder="xx / xx / xxxx"
+                  value={birthDate}
+                  handleValueChange={handleBirthDateChange}
+                  isErr={isSubmitBirthDate && isEmptyBirthDate}
+                  errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
+                />
+              </Grid>
+            </Grid>
+          </Box>
+
+          <Button variant="contained" onClick={handleCreateAccount}>
+            Create Account
+          </Button>
+        </Stack>
+      </Card>
     </Stack>
   );
 }
