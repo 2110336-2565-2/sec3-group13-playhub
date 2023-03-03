@@ -7,14 +7,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import {
-  Grid,
-  Typography,
-  Button,
-  FormHelperText,
-  Stack,
-  Box,
-} from "@mui/material";
+import { Grid, Typography, Button, FormHelperText, Stack, Box } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
@@ -28,11 +21,7 @@ import { Tag } from "@/types/Tag";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
 
-import {
-  validateDate,
-  validateDateWithInterval,
-  validateTextField,
-} from "@/utilities/validation";
+import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
 import { validation } from "@/types/Validation";
 import { GetAllTags } from "@/services/Tags";
 import { CreatePost } from "@/services/Posts";
@@ -67,8 +56,7 @@ export default function Home() {
   const [isSubmitLocation, setIsSubmitLocation] = useState<boolean>(false);
   const [isSubmitDate, setIsSubmitDate] = useState<boolean>(false);
   const [isSubmitTags, setIsSubmitTags] = useState<boolean>(false);
-  const [isSubmitDescription, setIsSubmitDescription] =
-    useState<boolean>(false);
+  const [isSubmitDescription, setIsSubmitDescription] = useState<boolean>(false);
   const [isSubmitImages, setIsSubmitImages] = useState<boolean>(false);
 
   // error variables
@@ -99,9 +87,7 @@ export default function Home() {
   );
 
   // input field change
-  function handleTitleChange(
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
+  function handleTitleChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
     setTitle(event.target.value);
     setIsSubmitTitle(false);
   }
@@ -147,7 +133,7 @@ export default function Home() {
     setIsSubmitDescription(true);
     setIsSubmitImages(true);
     if (isCreatingAllow) {
-      if(!userStatus.user?.userId || !startDate || !endDate) return ;
+      if (!userStatus.user?.userId || !startDate || !endDate) return;
       const newPost: PostInfo = {
         title: title,
         userId: userStatus.user?.userId,
@@ -157,13 +143,16 @@ export default function Home() {
         images: images,
         startTime: startDate,
         endTime: endDate,
+        participants: [],
       };
-      CreatePost(newPost, supabaseClient).then(() => {
-        router.push(PagePaths.myPosts);
-      }).catch((err) => {
-        console.log(err);
-        return;
-      });
+      CreatePost(newPost, supabaseClient)
+        .then(() => {
+          router.push(PagePaths.myPosts);
+        })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
   };
 

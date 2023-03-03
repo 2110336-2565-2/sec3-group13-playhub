@@ -18,9 +18,7 @@ export async function CreatePost(
       .from("locationimage")
       .upload(filePath, fileBlob);
     if (uploadResult.error) return;
-    const imageUrlResult = supabaseClient.storage
-      .from("locationimage")
-      .getPublicUrl(filePath);
+    const imageUrlResult = supabaseClient.storage.from("locationimage").getPublicUrl(filePath);
     images.push(imageUrlResult.data.publicUrl);
     index += 1;
   }
@@ -33,7 +31,7 @@ export async function CreatePost(
     start_time: newPost.startTime.toString(),
     end_time: newPost.endTime.toString(),
     tags: newPost.tags.map((e) => e.id),
-    images: images
+    images: images,
   });
 
   if (addPostResult.error) {
@@ -79,9 +77,7 @@ export async function UpdatePost(
         throw new Error("Something went wrong!!");
       }
 
-      const getImageURLResult = supabaseClient.storage
-        .from("locationimage")
-        .getPublicUrl(filePath);
+      const getImageURLResult = supabaseClient.storage.from("locationimage").getPublicUrl(filePath);
       images.push(getImageURLResult.data.publicUrl);
     }
   }
@@ -94,13 +90,10 @@ export async function UpdatePost(
     end_time: updatedPost.endTime.toString(),
     description: updatedPost.description,
     tags: updatedPost.tags.map((e) => e.id),
-    images: images
+    images: images,
   };
 
-  const updatePostResult = await supabaseClient.rpc(
-    "update_post_by_post_id",
-    sendData
-  );
+  const updatePostResult = await supabaseClient.rpc("update_post_by_post_id", sendData);
 
   if (updatePostResult.error) {
     console.log(updatePostResult.error);
@@ -111,8 +104,8 @@ export async function UpdatePost(
 export async function DeletePost(
   id: number,
   supabaseClient: SupabaseClient<Database>
-) : Promise <void> {
-  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {id});
+): Promise<void> {
+  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", { id });
 
   if (deletePostResult.error) {
     console.error(deletePostResult.error);
@@ -123,19 +116,16 @@ export async function DeletePost(
 export async function GetCurrentUserPosts(
   user: User,
   supabaseClient: SupabaseClient<Database>
-) : Promise<Post[]> {
-  const getAllUserPostResult = await supabaseClient.rpc(
-    "get_posts_by_user_id",
-    {
-      id: user.userId,
-    }
-  );
+): Promise<Post[]> {
+  const getAllUserPostResult = await supabaseClient.rpc("get_posts_by_user_id", {
+    id: user.userId,
+  });
   if (getAllUserPostResult.error) {
     console.log(getAllUserPostResult.error);
     throw new Error("Cant get posts data");
   }
 
-  if (!getAllUserPostResult.data) throw new Error("Cant get posts data");;
+  if (!getAllUserPostResult.data) throw new Error("Cant get posts data");
 
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
@@ -148,18 +138,17 @@ export async function GetCurrentUserPosts(
     image: post.images,
     location: post.location,
     startDateTime: post.start_time,
-    endDateTime: post.end_time
-  }))
+    endDateTime: post.end_time,
+    participants: post.participants,
+  }));
 }
 
-export async function GetPosts(
-  supabaseClient: SupabaseClient<Database>
-): Promise<Post[]> {
+export async function GetPosts(supabaseClient: SupabaseClient<Database>): Promise<Post[]> {
   const getAllUserPostResult = await supabaseClient.rpc("get_posts");
-    if (getAllUserPostResult.error) {
-      console.log(getAllUserPostResult.error);
-      throw new Error("Cant get posts data");
-    }
+  if (getAllUserPostResult.error) {
+    console.log(getAllUserPostResult.error);
+    throw new Error("Cant get posts data");
+  }
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
     title: post.title,
@@ -171,28 +160,26 @@ export async function GetPosts(
     image: post.images,
     location: post.location,
     startDateTime: post.start_time,
-    endDateTime: post.end_time
-  }))
+    endDateTime: post.end_time,
+    participants: post.participants,
+  }));
 }
 
 export async function GetPostByPostId(
   user: User,
   postId: number,
   supabaseClient: SupabaseClient<Database>
-) : Promise<PostInfo> {
-  const getPostDataResult = await supabaseClient.rpc(
-    "get_post_by_post_id",
-    {
-      id: postId,
-    }
-  );
+): Promise<PostInfo> {
+  const getPostDataResult = await supabaseClient.rpc("get_post_by_post_id", {
+    id: postId,
+  });
   if (getPostDataResult.error || !getPostDataResult.data) {
     console.log(getPostDataResult.error);
     throw new Error("Cant get posts data");
   }
 
-  let tag_name = [...getPostDataResult.data[0].tag_names].sort()
-  let tag_ids = [...getPostDataResult.data[0].tags].sort()
+  let tag_name = [...getPostDataResult.data[0].tag_names].sort();
+  let tag_ids = [...getPostDataResult.data[0].tags].sort();
 
   const postData: PostInfo = {
     userId: user.userId,
@@ -204,8 +191,9 @@ export async function GetPostByPostId(
     images: getPostDataResult.data[0].images,
     tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
       id: tag_ids[idx],
-      name: tag_name[idx]
-    }))
-  }
+      name: tag_name[idx],
+    })),
+    participants: getPostDataResult.data[0].participants,
+  };
   return postData;
 }

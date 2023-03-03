@@ -78,6 +78,7 @@ export interface Database {
           start_time: string;
           tags: number[];
           title: string;
+          participants: string[];
         };
         Insert: {
           description?: string | null;
@@ -89,6 +90,7 @@ export interface Database {
           start_time: string;
           tags: number[];
           title: string;
+          participants: string[];
         };
         Update: {
           description?: string | null;
@@ -100,6 +102,7 @@ export interface Database {
           start_time?: string;
           tags?: number[];
           title?: string;
+          participants?: string[];
         };
       };
       tag: {
@@ -172,7 +175,6 @@ export interface Database {
           end_time: string;
           pending_user_id: string[];
           accept_user_id: string[];
-          reject_user_id: string[];
           images: string[];
           owner_id: string;
         };
@@ -231,6 +233,7 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
+          participants: string[];
         };
       };
       get_posts: {
@@ -248,6 +251,7 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
+          participants: string[];
         };
       };
       get_posts_by_user_id: {
@@ -267,6 +271,7 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
+          participants: string[];
         };
       };
       get_tags: {
@@ -318,26 +323,26 @@ export interface Database {
       };
       get_appointments_by_user_id: {
         Args: {
-          id: string
-        }
+          id: string;
+        };
         Returns: {
-          id: string
-          start_time: string,
-          end_time: string,
-          owner_id: string,
-          location: string,
-          title: string,
-          description: string,
-          tags: number[],
-          images: string[],
-          pending_user_id: string[],
-          accept_user_id: string[],
-          reject_user_id: string[],
-          username: string,
-          image: string,
-          participant_number: number
-        }
-      }
+          id: string;
+          start_time: string;
+          end_time: string;
+          owner_id: string;
+          location: string;
+          title: string;
+          description: string;
+          tags: number[];
+          images: string[];
+          pending_user_id: string[];
+          accept_user_id: string[];
+          reject_user_id: string[];
+          username: string;
+          image: string;
+          participant_number: number;
+        };
+      };
     };
     Enums: {
       [_ in never]: never;
