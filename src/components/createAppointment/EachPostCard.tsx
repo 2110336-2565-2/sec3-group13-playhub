@@ -60,7 +60,7 @@ export default function EachPostCard(props: props) {
         />
         <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
           {/* post preview details start here */}
-          <Stack direction={"row"} spacing={2} marginBottom={2}>
+          <Stack direction={"column"} spacing={2} marginBottom={2}>
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.post.location}</span>
