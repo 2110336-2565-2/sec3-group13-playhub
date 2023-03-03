@@ -11,6 +11,7 @@ import { PagePaths } from "enum/pages";
 import { GetCurrentUserPosts } from "@/services/Posts";
 import { Grid } from "@mui/material";
 import EachPostCard from "@/components/createAppointment/EachPostCard";
+
 const MainLayout = {
   margin: "1vh 0 0 0",
   display: "flex",
@@ -20,37 +21,35 @@ const MainLayout = {
   flexDirection: "row",
   padding: "30px",
 };
+
 export default function ShowAppointment() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
-  // fetch post
   const [posts, setPosts] = useState<Post[] | null>(null);
-  useEffect(() => {
-    async function getPostData() {
-      if (!userStatus.user) return;
-      GetCurrentUserPosts(userStatus.user, supabaseClient)
-        .then((p) => {
-          setPosts(p);
-        })
-        .catch((err) => {
-          console.log(err);
-          return;
-        });
-    }
 
-    getPostData();
+  function handleClickCard(item: Post) {
+    router.push(PagePaths.createAppointment + "/" + item?.postId);
+  }
+
+  useEffect(() => {
+    if (!userStatus.user) return;
+    GetCurrentUserPosts(userStatus.user, supabaseClient)
+      .then((p) => {
+        setPosts(p);
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }, [userStatus.user, supabaseClient]);
-  //--userStatus handler
+
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
     router.push(PagePaths.login);
     return;
   }
-  if (posts == null) return <Loading />;
-  function handleClickCard(item: Post) {
-    router.push(PagePaths.createAppointment + "/" + item?.postId);
-  }
+  if (!posts) return <Loading />;
   return (
     <>
       <Navbar />
