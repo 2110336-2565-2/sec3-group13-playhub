@@ -97,6 +97,7 @@ export default function AdminVerifyDialog(props: props) {
                         <Box sx={{ width: "70%", margin: "auto" }}>
                             <TextField
                                 placeholder="เลขโดด 13 หลักเท่านั้น"
+                                autoFocus
                                 error={isError}
                                 value={nationalIDCard}
                                 onChange={handleNationalIDCardChange}
