@@ -23,6 +23,7 @@ import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { SignIn } from "@/services/User";
+import NormalTextField from "@/components/public/NormalTextField";
 
 // style
 const login_layout = {
@@ -123,25 +124,23 @@ export default function Home() {
 
           {/* Email TextField */}
           <Box sx={login_layout}>
-            <CommonTextField
-              label="Email"
+            <NormalTextField
+              placeholder="Email"
               value={email}
               handleValueChange={handleEmailChange}
               isErr={isSubmit && (emailErr.err || isSupabaseErr)}
               errMsg={emailErr.msg}
-              mediumSize={true}
             />
           </Box>
 
           {/* Password TextField */}
           <Box sx={login_layout}>
             <PasswordTextFeild
-              label="Password"
+              placeholder="Password"
               value={password}
               handleValueChange={handlePasswordChange}
               isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
               errMsg={passwordErr.msg}
-              mediumSize={true}
             />
           </Box>
 
