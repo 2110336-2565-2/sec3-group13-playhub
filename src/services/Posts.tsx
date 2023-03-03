@@ -2,8 +2,12 @@ import { Post, PostInfo } from "@/types/Post";
 import { User } from "@/types/User";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
-import dayjs from "dayjs";
-import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
+import dayjs, { Dayjs } from "dayjs";
+
+function dayjsWithoutTZ(date: string) : Dayjs {
+  const dateWithoutTZ = date.substring(0, date.indexOf("+"))
+  return dayjs(dateWithoutTZ);
+}
 
 export async function CreatePost(
   newPost: PostInfo,
@@ -31,8 +35,8 @@ export async function CreatePost(
     location: newPost.location,
     description: newPost.description,
     owner_id: newPost.userId,
-    start_time: newPost.startTime.toString(),
-    end_time: newPost.endTime.toString(),
+    start_time: newPost.startTime.format('MM/DD/YYYY HH:mm:ss'),
+    end_time: newPost.endTime.format('MM/DD/YYYY HH:mm:ss'),
     tags: newPost.tags.map((e) => e.id),
     images: images
   });
@@ -49,6 +53,7 @@ export async function UpdatePost(
   updatedPost: PostInfo,
   supabaseClient: SupabaseClient<Database>
 ): Promise<void> {
+  console.log(updatedPost)
   let images = [...originalImages];
   let index = 0;
   for (const image of originalImages) {
@@ -91,8 +96,8 @@ export async function UpdatePost(
     id: postId,
     title: updatedPost.title,
     location: updatedPost.location,
-    start_time: updatedPost.startTime.toString(),
-    end_time: updatedPost.endTime.toString(),
+    start_time: updatedPost.startTime.format('MM/DD/YYYY HH:mm:ss'),
+    end_time: updatedPost.endTime.format('MM/DD/YYYY HH:mm:ss'),
     description: updatedPost.description,
     tags: updatedPost.tags.map((e) => e.id),
     images: images
@@ -148,8 +153,8 @@ export async function GetCurrentUserPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time
+    startDateTime: dayjsWithoutTZ(post.start_time).format('DD/MM/YYYY hh:mm A'),
+    endDateTime: dayjsWithoutTZ(post.end_time).format('DD/MM/YYYY hh:mm A')
   }))
 }
 
@@ -171,8 +176,8 @@ export async function GetPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time
+    startDateTime: dayjsWithoutTZ(post.start_time).format('DD/MM/YYYY hh:mm A'),
+    endDateTime: dayjsWithoutTZ(post.end_time).format('DD/MM/YYYY hh:mm A')
   }))
 }
 
@@ -200,8 +205,8 @@ export async function GetPostByPostId(
     title: getPostDataResult.data[0].title,
     description: getPostDataResult.data[0].description,
     location: getPostDataResult.data[0].location,
-    startTime: dayjs(getPostDataResult.data[0].start_time),
-    endTime: dayjs(getPostDataResult.data[0].end_time),
+    startTime: dayjsWithoutTZ(getPostDataResult.data[0].start_time),
+    endTime: dayjsWithoutTZ(getPostDataResult.data[0].end_time),
     images: getPostDataResult.data[0].images,
     tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
       id: tag_ids[idx],

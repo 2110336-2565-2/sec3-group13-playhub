@@ -3,8 +3,8 @@ import type { AppProps } from "next/app";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 import { useState } from "react";
-import { createBrowserSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { SessionContextProvider } from '@supabase/auth-helpers-react';
+import { createBrowserSupabaseClient } from "@supabase/auth-helpers-nextjs";
+import { SessionContextProvider } from "@supabase/auth-helpers-react";
 import { UserStatusWrapper } from "supabase/user_context";
 
 const mainTheme = createTheme({
@@ -55,6 +55,15 @@ const mainTheme = createTheme({
         root: { boxShadow: "8px 8px 1px grey", borderRadius: "6px" },
       },
     },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          boxShadow: "8px 8px 1px grey",
+          border: "solid 4px",
+          borderRadius: "16px",
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
@@ -71,10 +80,10 @@ const mainTheme = createTheme({
           backgroundColor: "#ffa31a",
         },
         message: {
-          color: "black"
-        }
-      }
-    }
+          color: "black",
+        },
+      },
+    },
   },
 });
 
