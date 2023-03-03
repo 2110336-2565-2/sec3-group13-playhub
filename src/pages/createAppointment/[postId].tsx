@@ -79,6 +79,8 @@ export default function Home() {
   const [selectedParticipants, setSelectedParticipants] = useState<User[]>([]);
   const [participantCountError, setParticipantCountError] = useState<boolean>(false);
 
+  const postId = parseInt(router.query.postId as string);
+
   function handleClickBack() {
     router.back();
   }
@@ -94,8 +96,8 @@ export default function Home() {
       return;
     }
 
-    if (postInfo && availableParticipants) {
-      CreateAppointment(postInfo, selectedParticipants, supabaseClient)
+    if (postInfo) {
+      CreateAppointment(postId, postInfo, selectedParticipants, supabaseClient)
         .then(() => {
           // router.push(viewAppointment);
           return;
@@ -108,9 +110,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    if (!router.query.postId || !userStatus.user) return;
-
-    const postId = parseInt(router.query.postId as string);
+    if (!postId || !userStatus.user) return;
     GetPostByPostId(userStatus.user, postId, supabaseClient)
       .then((p) => {
         setPostInfo(p);
@@ -119,7 +119,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-  }, [supabaseClient, router.query.postId, userStatus.user]);
+  }, [supabaseClient, postId, userStatus.user]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {

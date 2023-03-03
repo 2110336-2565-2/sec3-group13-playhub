@@ -4,6 +4,7 @@ import { Database } from "supabase/db_types";
 import { PostInfo } from "../types/Post";
 
 export async function CreateAppointment(
+  postId: number,
   post: PostInfo,
   pending_partipants: User[],
   supabaseClient: SupabaseClient<Database>
@@ -22,6 +23,13 @@ export async function CreateAppointment(
 
   if (addAppointmentResult.error) {
     console.log(addAppointmentResult.error);
+    throw new Error("Something went wrong!!");
+  }
+
+  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", { id: postId });
+
+  if (deletePostResult.error) {
+    console.error(deletePostResult.error);
     throw new Error("Something went wrong!!");
   }
 }
