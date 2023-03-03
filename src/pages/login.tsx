@@ -6,11 +6,13 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 import { Link, Box, Typography, Stack, FormHelperText, Button, Card } from "@mui/material";
+import { grey } from "@mui/material/colors";
 
 import Loading from "@/components/public/Loading";
 import Logo from "@/components/public/Logo";
 import CommonTextField from "@/components/public/CommonTextField";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
+import Background from "@/components/public/Background";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 
 import {
@@ -21,8 +23,6 @@ import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { SignIn } from "@/services/User";
-import Background from "@/components/public/Background";
-import { grey } from "@mui/material/colors";
 
 // style
 const login_layout = {
@@ -166,7 +166,7 @@ export default function Home() {
               <Typography variant="body1">Sign Up</Typography>
             </Link>
 
-            <Link color="primary" href={PagePaths.register}>
+            <Link color="primary" href={PagePaths.requestResetPassword}>
               <Typography variant="body1">Forgot password?</Typography>
             </Link>
           </Box>
