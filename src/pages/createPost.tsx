@@ -147,7 +147,7 @@ export default function Home() {
     setIsSubmitDescription(true);
     setIsSubmitImages(true);
     if (isCreatingAllow) {
-      if(!userStatus.user?.userId || !startDate || !endDate) return ;
+      if (!userStatus.user?.userId || !startDate || !endDate) return;
       const newPost: PostInfo = {
         title: title,
         userId: userStatus.user?.userId,
@@ -180,6 +180,10 @@ export default function Home() {
   }
   if (userStatus.user.isAdmin) {
     router.push(PagePaths.adminHome + userStatus.user.userId);
+    return;
+  }
+  if (!userStatus.user.isVerified) {
+    router.push(PagePaths.home)
     return;
   }
   if (userStatus.isLoading || tagMenu.length == 0) return <Loading />;

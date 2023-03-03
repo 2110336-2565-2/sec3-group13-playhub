@@ -2,14 +2,14 @@ import { validation } from "@/types/Validation";
 import dayjs, { Dayjs } from "dayjs";
 import { CHAR_LIMIT, IMAGE_LIMIT } from "enum/inputLimit";
 
-const expression: RegExp =
+const regexEmail: RegExp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export function validateEmail(email: string): validation {
   if (email.trim().length === 0) {
     return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
   }
-  if (!expression.test(email)) {
+  if (!regexEmail.test(email)) {
     return { msg: "รูปแบบอีเมลไม่ถูกต้อง", err: true };
   }
   return { msg: "", err: false };
@@ -94,6 +94,37 @@ export function validateDateWithInterval(
     }
   }
   return { msg: "", err: false };
+}
+
+export function validateNationalIDCardNumber(nationalIDCardNumber: string): validation {
+  if (nationalIDCardNumber.length == 0) {
+    return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+  }
+
+  if (
+    nationalIDCardNumber.length != CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER ||
+    !RegExp(/\d{13}/).test(nationalIDCardNumber) ||
+    !checkLastDigit(nationalIDCardNumber)
+  ) {
+    return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
+  }
+  return { msg: "", err: false };
+
+  // --- Lemma Function ---
+  function checkLastDigit(nationalIDCardNumber: string): boolean {
+    //firstStep: find place value
+    const firstStep: number = nationalIDCardNumber
+      .slice(0, 12)
+      .split("")
+      .reduce((total, str, currentIndex) => total + (13 - currentIndex) * parseInt(str), 0);
+
+    const secondStep: number = firstStep % 11;
+    const thirdStep: number = (11 - secondStep) % 10;
+    if (thirdStep !== parseInt(nationalIDCardNumber[12])) {
+      return false;
+    }
+    return true;
+  }
 }
 
 export function validateConfirmPassword(password: string, confirmPassword: string): validation {
