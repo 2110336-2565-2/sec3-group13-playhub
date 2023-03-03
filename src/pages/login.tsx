@@ -2,18 +2,10 @@ import { useContext, useState } from "react";
 
 import { NextRouter, useRouter } from "next/router";
 
-import { AuthResponse } from "@supabase/supabase-js";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
-import {
-  Link,
-  Box,
-  Typography,
-  Stack,
-  FormHelperText,
-  Button,
-} from "@mui/material";
+import { Link, Box, Typography, Stack, FormHelperText, Button, Card } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Logo from "@/components/public/Logo";
@@ -29,6 +21,8 @@ import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { SignIn } from "@/services/User";
+import Background from "@/components/public/Background";
+import { grey } from "@mui/material/colors";
 
 // style
 const login_layout = {
@@ -50,10 +44,7 @@ export default function Home() {
 
   // error about variables
   const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validateTextField(
-    password,
-    CHAR_LIMIT.MIN_PASSWORD
-  );
+  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
   const isSupabaseErr: boolean =
     (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg: string = isLoginCredErr
@@ -64,26 +55,26 @@ export default function Home() {
     setIsSubmit(true);
 
     // sign in via supabase
-    SignIn(email, password, supabaseClient).then(() => {
-      // route to post feed page
-      router.push(PagePaths.home);
-    }).catch((err) => {
-      // in case : cannot find user using inputed email and password
-      if (err == "Error: " + SUPABASE_LOGIN_CREDENTIALS_ERROR) {
-        setIsLoginCredErr(true);
-        console.log("wrong email or password");
-        return;
-      }
+    SignIn(email, password, supabaseClient)
+      .then(() => {
+        // route to post feed page
+        router.push(PagePaths.home);
+      })
+      .catch((err) => {
+        // in case : cannot find user using inputed email and password
+        if (err == "Error: " + SUPABASE_LOGIN_CREDENTIALS_ERROR) {
+          setIsLoginCredErr(true);
+          console.log("wrong email or password");
+          return;
+        }
 
-      // in case : user has not validate email yet
-      if (
-        err == "Error: " + SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR
-      ) {
-        setIsValidateErr(true);
-        console.log("You have not validate your email yet");
-        return;
-      }
-    })
+        // in case : user has not validate email yet
+        if (err == "Error: " + SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR) {
+          setIsValidateErr(true);
+          console.log("You have not validate your email yet");
+          return;
+        }
+      });
     return;
   }
 
@@ -113,60 +104,74 @@ export default function Home() {
     return;
   }
   return (
-    <Stack
-      component={Box}
-      spacing={3}
-      alignItems="center"
-      justifyContent="center"
-      style={{ minHeight: "100vh" }}
-    >
-      <Logo width={119} height={119} />
+    <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
+      <Background />
+      <Card
+        sx={{
+          width: "45vw",
+          minWidth: "300px",
+          minHeight: "200px",
 
-      {/* Email TextField */}
-      <Box sx={login_layout}>
-        <CommonTextField
-          label="Email"
-          value={email}
-          handleValueChange={handleEmailChange}
-          isErr={isSubmit && (emailErr.err || isSupabaseErr)}
-          errMsg={emailErr.msg}
-          mediumSize={true}
-        />
-      </Box>
+          paddingTop: "6vh",
+          paddingBottom: "6vh",
 
-      {/* Password TextField */}
-      <Box sx={login_layout}>
-        <PasswordTextFeild
-          label="Password"
-          value={password}
-          handleValueChange={handlePasswordChange}
-          isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
-          errMsg={passwordErr.msg}
-          mediumSize={true}
-        />
-      </Box>
+          backgroundColor: grey[300],
+        }}
+      >
+        <Stack component={Box} spacing={3} alignItems="center" justifyContent="center">
+          <Logo width={119} height={119} />
 
-      {/* Login Error Message */}
-      {isSubmit && isSupabaseErr && (
-        <Box sx={login_layout} display="flex">
-          <FormHelperText error>
-            <Typography variant="body1">{supabaseErrMsg}</Typography>
-          </FormHelperText>
-        </Box>
-      )}
+          {/* Email TextField */}
+          <Box sx={login_layout}>
+            <CommonTextField
+              label="Email"
+              value={email}
+              handleValueChange={handleEmailChange}
+              isErr={isSubmit && (emailErr.err || isSupabaseErr)}
+              errMsg={emailErr.msg}
+              mediumSize={true}
+            />
+          </Box>
 
-      {/* Login Button */}
-      <Button variant="contained" onClick={handleSubmit}>
-        Login
-      </Button>
+          {/* Password TextField */}
+          <Box sx={login_layout}>
+            <PasswordTextFeild
+              label="Password"
+              value={password}
+              handleValueChange={handlePasswordChange}
+              isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
+              errMsg={passwordErr.msg}
+              mediumSize={true}
+            />
+          </Box>
 
-      {/* Link go to register page */}
-      <Box sx={login_layout} display="flex">
-        <Typography variant="body1">Create account{"\u00A0"}</Typography>
-        <Link color="primary" underline="hover" href={PagePaths.register}>
-          <Typography variant="body1">here</Typography>
-        </Link>
-      </Box>
+          {/* Login Error Message */}
+          {isSubmit && isSupabaseErr && (
+            <Box sx={login_layout} display="flex">
+              <FormHelperText error>
+                <Typography variant="body1">{supabaseErrMsg}</Typography>
+              </FormHelperText>
+            </Box>
+          )}
+
+          {/* Login Button */}
+          <Button variant="contained" onClick={handleSubmit}>
+            Login
+          </Button>
+
+          {/* Link go to register page */}
+          <Box sx={{ ...login_layout, minWidth: "290px" }} display="flex">
+            <Typography variant="body1">New here?{"\u00A0"}</Typography>
+            <Link color="primary" href={PagePaths.register} sx={{ flexGrow: 1 }}>
+              <Typography variant="body1">Sign Up</Typography>
+            </Link>
+
+            <Link color="primary" href={PagePaths.register}>
+              <Typography variant="body1">Forgot password?</Typography>
+            </Link>
+          </Box>
+        </Stack>
+      </Card>
     </Stack>
   );
 }
