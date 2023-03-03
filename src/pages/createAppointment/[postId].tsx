@@ -9,70 +9,71 @@ import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import { PagePaths } from "enum/pages";
 import { GetPostByPostId } from "@/services/Posts";
+import { CreateAppointment } from "@/services/Appointments";
 import LeftCard from "@/components/createAppointment/LeftCard";
 import RightCard from "@/components/createAppointment/RightCard";
 import { User } from "@/types/User";
 import { PostInfo } from "@/types/Post";
 
-const mockParticipants: User[] = [
-  {
-    userId: "id1",
-    username: "เสี่ยโอ",
-    sex: "male",
-    birthdate: "28-07-1959",
-    description: "เจ้าชู้\nชอบขับเครื่องบินไปเที่ยว\nมีแฟนหลายคนเยอะ",
-    image: "https://i.im.ge/2023/02/28/77PS0P.download.jpg",
-    email: "siaO@gmail.com",
-    isAdmin: false,
-  },
-  {
-    userId: "id2",
-    username: "เสี่ยที",
-    sex: "male",
-    birthdate: "12-05-1990",
-    description: "แองกรี้เบิร์ด",
-    image: "https://i.im.ge/2023/02/28/77fcLJ.EWwNZFtXsAA7Iw9.jpg",
-    email: "siaT@gmail.com",
-    isAdmin: false,
-  },
-  {
-    userId: "id3",
-    username: "Monk God",
-    sex: "female",
-    birthdate: "30-10-1980",
-    description: "รวย",
-    image: null,
-    email: "MonkGod@gmail.com",
-    isAdmin: false,
-  },
-  {
-    userId: "id4",
-    username: "อุบลราชธานี",
-    sex: "male",
-    birthdate: "14-04-1999",
-    description: "ชอบเล่นติ๊กต๊อก",
-    image: null,
-    email: "Ubon@gmail.com",
-    isAdmin: false,
-  },
-  {
-    userId: "id5",
-    username: "ไอบอด",
-    sex: "male",
-    birthdate: "05-12-1900",
-    description: "ชอบเล่นเกมยิงปืน",
-    image: null,
-    email: "Ibod@hotmail.com",
-    isAdmin: false,
-  },
-];
+// const mockParticipants: User[] = [
+//   {
+//     userId: "id1",
+//     username: "เสี่ยโอ",
+//     sex: "male",
+//     birthdate: "28-07-1959",
+//     description: "เจ้าชู้\nชอบขับเครื่องบินไปเที่ยว\nมีแฟนหลายคนเยอะ",
+//     image: "https://i.im.ge/2023/02/28/77PS0P.download.jpg",
+//     email: "siaO@gmail.com",
+//     isAdmin: false,
+//   },
+//   {
+//     userId: "id2",
+//     username: "เสี่ยที",
+//     sex: "male",
+//     birthdate: "12-05-1990",
+//     description: "แองกรี้เบิร์ด",
+//     image: "https://i.im.ge/2023/02/28/77fcLJ.EWwNZFtXsAA7Iw9.jpg",
+//     email: "siaT@gmail.com",
+//     isAdmin: false,
+//   },
+//   {
+//     userId: "id3",
+//     username: "Monk God",
+//     sex: "female",
+//     birthdate: "30-10-1980",
+//     description: "รวย",
+//     image: null,
+//     email: "MonkGod@gmail.com",
+//     isAdmin: false,
+//   },
+//   {
+//     userId: "id4",
+//     username: "อุบลราชธานี",
+//     sex: "male",
+//     birthdate: "14-04-1999",
+//     description: "ชอบเล่นติ๊กต๊อก",
+//     image: null,
+//     email: "Ubon@gmail.com",
+//     isAdmin: false,
+//   },
+//   {
+//     userId: "id5",
+//     username: "ไอบอด",
+//     sex: "male",
+//     birthdate: "05-12-1900",
+//     description: "ชอบเล่นเกมยิงปืน",
+//     image: null,
+//     email: "Ibod@hotmail.com",
+//     isAdmin: false,
+//   },
+// ];
 
 export default function Home() {
   const router = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
   const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
-  const [availableParticipants, setAvailableParticipants] = useState<User[]>(mockParticipants);
+  const [availableParticipants, setAvailableParticipants] = useState<User[] | null>(null);
   const [selectedParticipants, setSelectedParticipants] = useState<User[]>([]);
   const [participantCountError, setParticipantCountError] = useState<boolean>(false);
 
@@ -86,16 +87,27 @@ export default function Home() {
   }
 
   function onSubmit() {
-    // do something amazing
     if (selectedParticipants.length == 0) {
       setParticipantCountError(true);
       return;
     }
-    console.log("submit");
+
+    if (postInfo && availableParticipants) {
+      CreateAppointment(
+        postInfo,
+        availableParticipants,
+        selectedParticipants,
+        supabaseClient
+      ).catch((err) => {
+        console.log(err);
+        return;
+      });
+    }
   }
 
   useEffect(() => {
     if (!router.query.postId || !userStatus.user) return;
+
     const postId = parseInt(router.query.postId as string);
     GetPostByPostId(userStatus.user, postId, supabaseClient)
       .then((p) => {
@@ -112,7 +124,7 @@ export default function Home() {
     router.push(PagePaths.login);
     return;
   }
-  if (!postInfo) return <Loading />;
+  if (!postInfo || !availableParticipants) return <Loading />;
   return (
     <>
       <Navbar />
