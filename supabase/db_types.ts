@@ -167,6 +167,7 @@ export interface Database {
     Functions: {
       create_appointment: {
         Args: {
+          postId: number;
           title: string;
           location: string;
           description: string;

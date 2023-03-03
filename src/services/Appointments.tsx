@@ -10,6 +10,7 @@ export async function CreateAppointment(
   supabaseClient: SupabaseClient<Database>
 ) {
   const addAppointmentResult = await supabaseClient.rpc("create_appointment", {
+    postId: postId,
     title: post.title,
     location: post.location,
     description: post.description,
@@ -23,13 +24,6 @@ export async function CreateAppointment(
 
   if (addAppointmentResult.error) {
     console.log(addAppointmentResult.error);
-    throw new Error("Something went wrong!!");
-  }
-
-  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", { id: postId });
-
-  if (deletePostResult.error) {
-    console.error(deletePostResult.error);
     throw new Error("Something went wrong!!");
   }
 }
