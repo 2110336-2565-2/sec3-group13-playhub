@@ -53,7 +53,7 @@ export default function Verify() {
 
                 <Box>
                     <Typography gutterBottom variant="h1">Verify แล้วได้อะไร</Typography>
-                    <Typography component="div" variant="body2">1. ท่านจะสามารถสร้างกิจกรรมเพื่อหาเพื่อนๆมาร่วมสนุกกับท่านได้</Typography>
+                    <Typography component="div" variant="body2">1. ท่านจะสามารถสร้างกิจกรรมเพื่อหาเพื่อน ๆ มาร่วมสนุกกับท่านได้</Typography>
                     <Typography component="div" variant="body2">2. ท่านจะได้รับเครื่องหมายยืนยันตัวตนสุดเท่ในหน้าโปรไฟล์ของท่าน</Typography>
                 </Box>
 
