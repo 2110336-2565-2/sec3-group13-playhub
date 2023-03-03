@@ -1,13 +1,13 @@
 import BorderWithShadow from "../public/BorderWithShadow";
 import React from "react";
 import { Dayjs } from "dayjs";
-import { AppointmentDetailHeader } from "@/types/Appointment";
 import { CardContent, Grid, Stack, Typography, Box } from "@mui/material";
 import TagComponent from "../public/TagComponent";
 import FloatTextField from "../public/FloatTextField";
+import { PostInfo } from "@/types/Post";
 
 type props = {
-  leftSideData: AppointmentDetailHeader;
+  postInfo: PostInfo;
   isUnClick: boolean;
 };
 
@@ -27,7 +27,7 @@ export default function LeftCard(props: props) {
             <Box>
               <FloatTextField
                 header={"Title"}
-                value={props.leftSideData.title}
+                value={props.postInfo.title}
                 isErr={false}
                 errMsg={""}
                 isMultiLine={false}
@@ -38,7 +38,7 @@ export default function LeftCard(props: props) {
             <Box>
               <FloatTextField
                 header={"Location"}
-                value={props.leftSideData.location}
+                value={props.postInfo.location}
                 isErr={false}
                 errMsg={""}
                 isMultiLine={false}
@@ -51,9 +51,9 @@ export default function LeftCard(props: props) {
                 header={"Date & Time"}
                 value={
                   props !== null
-                    ? formatDateTime(props.leftSideData.startDateTime) +
+                    ? formatDateTime(props.postInfo.startTime) +
                       " - " +
-                      formatDateTime(props.leftSideData.endDateTime)
+                      formatDateTime(props.postInfo.endTime)
                     : ""
                 }
                 isErr={false}
@@ -68,7 +68,7 @@ export default function LeftCard(props: props) {
                 Tag
               </Typography>
               <Grid container spacing={1}>
-                {props.leftSideData.tags.map((e, index) => (
+                {props.postInfo.tags.map((e, index) => (
                   <Grid item key={"t" + index}>
                     <TagComponent message={e.name}></TagComponent>
                   </Grid>
@@ -79,7 +79,7 @@ export default function LeftCard(props: props) {
             <Box>
               <FloatTextField
                 header={"Description"}
-                value={props.leftSideData.description}
+                value={props.postInfo.description}
                 isErr={false}
                 errMsg={""}
                 isMultiLine={true}

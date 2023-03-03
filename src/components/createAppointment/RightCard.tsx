@@ -1,61 +1,20 @@
 import Image from "next/image";
 import BorderWithShadow from "../public/BorderWithShadow";
 import AddParticipant from "./AddParticipant";
-import React from "react";
-import { AppointmentDetail } from "@/types/Appointment";
 import { CardContent, Grid, Stack, Typography, Box, Button } from "@mui/material";
-import { useEffect, useState, useContext } from "react";
-import Loading from "../public/Loading";
-import { useRouter } from "next/router";
-import { userContext } from "supabase/user_context";
-import { PagePaths } from "enum/pages";
 import { User } from "@/types/User";
 
 type props = {
-  rightSideData: AppointmentDetail;
-  /*sendParticipant: User[];
-  sendIsSubmit: Boolean;*/ //for you
+  images: string[];
+  availableParticipants: User[];
+  selectedParticipants: User[];
+  onSubmit: () => void;
+  participantCountError: boolean;
+  // eslint-disable-next-line no-unused-vars
+  handleParticipantsChange: (participants: User[]) => void;
 };
+
 export default function RightCard(props: props) {
-  const router = useRouter();
-  const userStatus = useContext(userContext);
-
-  const [participant, setParticipant] = useState<User[]>(props.rightSideData.acceptParticipants);
-  const participantError: boolean = participant.length === 0;
-  const [avaliableParticipant, setAvaliableParticipant] = useState<User[]>(
-    props.rightSideData.pendingParticipants
-  );
-
-  function handleparticipant(newComer: User[]): void {
-    setParticipant(newComer);
-    //setIsSubmitTags(false);
-  }
-
-  useEffect(() => {
-    setAvaliableParticipant(props.rightSideData.acceptParticipants);
-  }, [props.rightSideData.acceptParticipants]);
-
-  if (userStatus.isLoading) return <Loading />;
-  if (!userStatus.user) {
-    router.push(PagePaths.login);
-    return null;
-  }
-  if (userStatus.user.isAdmin) {
-    router.push(PagePaths.adminHome + userStatus.user.userId);
-    return null;
-  }
-  if (userStatus.isLoading) return <Loading />;
-
-  function handleSubmit() {
-    if (!participantError) {
-      /*
-      ??? Please do this ???
-      check participant first  then send submittatus(isSubmit) and participant to [createAppointment].tsx
-      
-      */
-    }
-  }
-
   return (
     <>
       <BorderWithShadow>
@@ -71,7 +30,7 @@ export default function RightCard(props: props) {
                 Image
               </Typography>
               <Grid container spacing={1}>
-                {props.rightSideData.images.map((e, index) => (
+                {props.images.map((e, index) => (
                   <Grid item key={"i" + index}>
                     <Image src={e} alt="location" width={150} height={150} />
                   </Grid>
@@ -83,10 +42,10 @@ export default function RightCard(props: props) {
               <AddParticipant
                 header="Select Participants"
                 note="(เลือกอย่างน้อย 1 คน)"
-                value={participant}
-                handleValueChange={handleparticipant}
-                menuValue={avaliableParticipant}
-                isErr={participantError}
+                value={props.selectedParticipants}
+                handleValueChange={props.handleParticipantsChange}
+                menuValue={props.availableParticipants}
+                isErr={props.participantCountError}
                 errMsg="(เลือกอย่างน้อย 1 คน)"
               />
             </Box>
@@ -94,7 +53,7 @@ export default function RightCard(props: props) {
               <Button
                 variant="contained"
                 style={{ position: "absolute", bottom: 0 }}
-                onClick={handleSubmit}
+                onClick={props.onSubmit}
               >
                 Create
               </Button>
