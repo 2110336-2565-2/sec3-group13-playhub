@@ -109,7 +109,7 @@ export default function Home() {
       <Background />
       <Card
         sx={{
-          width: "45vw",
+          width: "50vw",
           minWidth: "300px",
           minHeight: "200px",
 

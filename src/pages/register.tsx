@@ -174,17 +174,17 @@ export default function Home() {
       <Background />
       <Card
         sx={{
-          width: "45vw",
+          width: "50vw",
           minWidth: "300px",
           minHeight: "200px",
 
-          paddingTop: "3vh",
-          paddingBottom: "3vh",
+          paddingTop: "2vh",
+          paddingBottom: "1vh",
 
           backgroundColor: grey[300],
         }}
       >
-        <Stack spacing={3} alignItems="center" justifyContent="center">
+        <Stack spacing={0} alignItems="center" justifyContent="center">
           <Box>
             <Logo width={119} height={119} />
             <Typography variant="h1">Sign Up</Typography>
