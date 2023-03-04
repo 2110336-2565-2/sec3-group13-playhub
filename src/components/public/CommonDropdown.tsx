@@ -64,6 +64,17 @@ export default function CommonDropdown(props: props) {
                       </Typography>
                     )
               }
+              MenuProps={{
+                sx: { mt: `-${1.4 * 10 * props.items.length + 10}px` },
+                anchorOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+                transformOrigin: {
+                  vertical: "bottom",
+                  horizontal: "left",
+                },
+              }}
               inputProps={{
                 sx: {
                   textAlign: "center",
