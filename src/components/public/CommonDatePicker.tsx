@@ -3,6 +3,7 @@ import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Dayjs } from "dayjs";
+import InputLabel from "@mui/material/InputLabel";
 
 type props = {
   header?: string;
@@ -34,22 +35,24 @@ export default function CommonDatePicker(props: props) {
               renderInput={(params) => (
                 <TextField
                   {...params}
+                  value={props.value}
                   placeholder={props.placeHolder}
                   error={props.isErr}
                   sx={{ backgroundColor: "#ffffff" }}
                   fullWidth
+                  inputProps={{
+                    ...params.inputProps,
+                    sx: {
+                      textAlign: "center",
+                      "&::placeholder": {
+                        textAlign: "center",
+                      },
+                    },
+                  }}
                 />
               )}
               disableFuture
               InputProps={{
-                inputProps: {
-                  style: {
-                    textAlign: "center",
-                    "&::placeholder": {
-                      textAlign: "center",
-                    },
-                  },
-                },
                 startAdornment: (
                   <InputAdornment position="start">
                     <CalendarTodayIcon
