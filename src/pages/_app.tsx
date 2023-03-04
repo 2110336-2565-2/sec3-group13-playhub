@@ -32,11 +32,11 @@ const mainTheme = createTheme({
       fontWeight: 800,
     },
     body1: {
-      fontSize: 20,
+      fontSize: 18,
       fontWeight: 600,
     },
     body2: {
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: 600,
     },
   },
@@ -45,7 +45,7 @@ const mainTheme = createTheme({
       styleOverrides: {
         root: {
           margin: 0,
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: 600,
         },
       },
@@ -110,8 +110,8 @@ const mainTheme = createTheme({
           border: "3px black solid",
 
           textTransform: "none",
-          fontSize: 20,
-          fontWeight: 750,
+          fontSize: 18,
+          fontWeight: 600,
 
           padding: "4px 64px",
         },
