@@ -119,55 +119,47 @@ export default function Home() {
           backgroundColor: grey[300],
         }}
       >
-        <Stack component={Box} spacing={3} alignItems="center" justifyContent="center">
+        <Stack spacing={3} alignItems="center" justifyContent="center">
           <Logo width={119} height={119} />
-
-          {/* Email TextField */}
-          <Box sx={login_layout}>
-            <NormalTextField
-              placeholder="Email"
-              icon={Icons.mail}
-              value={email}
-              handleValueChange={handleEmailChange}
-              isErr={isSubmit && (emailErr.err || isSupabaseErr)}
-              errMsg={emailErr.msg}
-            />
-          </Box>
-
-          {/* Password TextField */}
-          <Box sx={login_layout}>
-            <PasswordTextFeild
-              placeholder="Password"
-              value={password}
-              handleValueChange={handlePasswordChange}
-              isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
-              errMsg={passwordErr.msg}
-            />
-          </Box>
-
-          {/* Login Error Message */}
-          {isSubmit && isSupabaseErr && (
-            <Box sx={login_layout} display="flex">
-              <FormHelperText error>
-                <Typography variant="body1">{supabaseErrMsg}</Typography>
-              </FormHelperText>
+          <Stack spacing={0} alignItems="center" justifyContent="center">
+            {/* Email TextField */}
+            <Box sx={login_layout}>
+              <NormalTextField
+                placeholder="Email"
+                icon={Icons.mail}
+                value={email}
+                handleValueChange={handleEmailChange}
+                isErr={isSubmit && (emailErr.err || isSupabaseErr)}
+                errMsg={emailErr.msg}
+              />
             </Box>
-          )}
 
-          {/* Login Button */}
-          <Button variant="contained" onClick={handleSubmit}>
-            Login
-          </Button>
+            {/* Password TextField */}
+            <Box sx={login_layout}>
+              <PasswordTextFeild
+                placeholder="Password"
+                value={password}
+                handleValueChange={handlePasswordChange}
+                isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
+                errMsg={passwordErr.msg || supabaseErrMsg}
+              />
+            </Box>
+
+            {/* Login Button */}
+            <Button variant="contained" onClick={handleSubmit}>
+              Login
+            </Button>
+          </Stack>
 
           {/* Link go to register page */}
           <Box sx={{ ...login_layout, minWidth: "290px" }} display="flex">
-            <Typography variant="body1">New here?{"\u00A0"}</Typography>
+            <Typography variant="body2">New here?{"\u00A0"}</Typography>
             <Link color="primary" href={PagePaths.register} sx={{ flexGrow: 1 }}>
-              <Typography variant="body1">Sign Up</Typography>
+              <Typography variant="body2">Sign Up</Typography>
             </Link>
 
             <Link color="primary" href={PagePaths.requestResetPassword}>
-              <Typography variant="body1">Forgot password?</Typography>
+              <Typography variant="body2">Forgot password?</Typography>
             </Link>
           </Box>
         </Stack>
