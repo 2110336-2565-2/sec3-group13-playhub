@@ -6,7 +6,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Avatar, IconButton, Chip, Typography, Stack } from "@mui/material";
+import { Avatar, IconButton, Chip, Typography, Stack, Card } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -27,7 +27,7 @@ const profile_layout = {
   width: "30vw",
   minWidth: "200px",
 };
-const avatar = { width: 200, height: 200 };
+const avatar = { width: 200, height: 200, border: "4px black solid" };
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -51,78 +51,109 @@ export default function Home() {
     return;
   }
 
+  function displayGenderIcon(gender: string) {
+    if (gender === Gender.male) {
+      return <MaleIcon />;
+    } else if (gender === Gender.female) {
+      return <FemaleIcon />;
+    } else if (gender === Gender.others) {
+      return <TransgenderIcon />;
+    } else {
+      return <div></div>;
+    }
+  }
+
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
     router.push(PagePaths.login);
     return;
   }
   if (userStatus.user.isAdmin) {
-    router.push(PagePaths.adminProfile + router.query.user_id)
+    router.push(PagePaths.adminProfile + router.query.user_id);
     return;
   }
   if (!targetUserData) return <Loading />;
   if (targetUserData.isAdmin) {
-    router.push(PagePaths.home + userStatus.user.userId)
-    return
+    router.push(PagePaths.home + userStatus.user.userId);
+    return;
   }
   return (
     <>
       <Suspense fallback={<Loading />}>
         <Navbar />
-        <Stack
-          spacing={2}
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: "90vh" }}
-        >
-          <Typography variant="h1" align="center" sx={profile_layout}>
-            {targetUserData.username}
-          </Typography>
-          {router.query.user_id === userStatus.user.userId && (
-            <Typography variant="body1" align="center" sx={profile_layout}>
-              {targetUserData.email}
-            </Typography>
-          )}
-          <Avatar
-            sx={avatar}
-            alt="Profile picture"
-            src={targetUserData.image as string}
-          />
-          {targetUserData.isVerified &&
-            <VerifyChip />
-          }
-          <Stack direction="row" spacing={1}>
-            <Chip
-              icon={
-                targetUserData.sex === Gender.male ? (
-                  <MaleIcon />
-                ) : targetUserData.sex === Gender.female ? (
-                  <FemaleIcon />
-                ) : targetUserData.sex === Gender.others ? (
-                  <TransgenderIcon />
-                ) : (
-                  <div></div>
-                )
-              }
-              label={targetUserData.sex}
-            />
-            <Chip icon={<CakeIcon />} label={targetUserData.birthdate} />
-          </Stack>
+        <Stack alignItems="center">
+          <Card
+            sx={{
+              width: "50vw",
+              minWidth: "300px",
 
-          {targetUserData.description.split("\n").map((row) => (
-            <Typography
-              variant="body1"
-              sx={{ ...profile_layout, wordBreak: "break-word" }}
-              key={row}
-            >
-              {row}
-            </Typography>
-          ))}
-          {router.query.user_id === userStatus.user.userId && (
-            <IconButton onClick={handleEditProfile}>
-              <EditIcon />
-            </IconButton>
-          )}
+              marginTop: "3vh",
+              marginBottom: "3vh",
+
+              paddingTop: "10vh",
+              paddingBottom: "15vh",
+            }}
+          >
+            <Stack spacing={3} alignItems="center" justifyContent="center">
+              <Typography variant="h1" align="center" sx={profile_layout}>
+                {targetUserData.username}
+              </Typography>
+
+              {router.query.user_id === userStatus.user.userId && (
+                <Typography
+                  variant="body1"
+                  align="center"
+                  sx={{ ...profile_layout, fontWeight: 500 }}
+                >
+                  {targetUserData.email}
+                </Typography>
+              )}
+
+              <Avatar sx={avatar} alt="Profile picture" src={targetUserData.image as string} />
+
+              <Stack spacing={1.5} alignItems="center" justifyContent="center">
+                {targetUserData.isVerified && <VerifyChip />}
+                <Chip
+                  icon={displayGenderIcon(targetUserData.sex)}
+                  label={targetUserData.sex}
+                  sx={{
+                    border: "2px black solid",
+                    boxShadow: "4px 4px 1px grey",
+                    "& .MuiChip-icon": {
+                      color: "black",
+                    },
+                  }}
+                />
+                <Chip
+                  icon={<CakeIcon />}
+                  label={targetUserData.birthdate}
+                  sx={{
+                    border: "2px black solid",
+                    boxShadow: "4px 4px 1px grey",
+                    "& .MuiChip-icon": {
+                      color: "black",
+                    },
+                  }}
+                />
+              </Stack>
+              <Stack spacing={0}>
+                {`" ${targetUserData.description} "`.split("\n").map((row, index) => (
+                  <Typography
+                    variant="body1"
+                    sx={{ maxWidth: "20vw", wordBreak: "break-word", textAlign: "center" }}
+                    key={index}
+                  >
+                    {row}
+                  </Typography>
+                ))}
+              </Stack>
+              {router.query.user_id === userStatus.user.userId && (
+                <IconButton onClick={handleEditProfile}>
+                  <EditIcon color="secondary" />
+                </IconButton>
+              )}
+            </Stack>
+          </Card>
         </Stack>
       </Suspense>
     </>
