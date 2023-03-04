@@ -27,17 +27,17 @@ const mainTheme = createTheme({
   typography: {
     fontFamily: "LINESeed",
     h1: {
-      fontSize: 20,
+      fontSize: 30,
       textAlign: "center",
       fontWeight: 800,
     },
     body1: {
-      fontSize: 16,
-      fontWeight: 700,
+      fontSize: 20,
+      fontWeight: 600,
     },
     body2: {
-      fontSize: 14,
-      fontWeight: 650,
+      fontSize: 16,
+      fontWeight: 600,
     },
   },
   components: {
@@ -45,8 +45,8 @@ const mainTheme = createTheme({
       styleOverrides: {
         root: {
           margin: 0,
-          fontSize: 14,
-          fontWeight: 650,
+          fontSize: 16,
+          fontWeight: 600,
         },
       },
     },
@@ -109,10 +109,11 @@ const mainTheme = createTheme({
           borderRadius: "15px",
           border: "3px black solid",
 
-          fontSize: 16,
-          fontWeight: 800,
+          textTransform: "none",
+          fontSize: 20,
+          fontWeight: 750,
 
-          padding: "10px 64px",
+          padding: "4px 64px",
         },
       },
     },
