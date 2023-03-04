@@ -139,7 +139,6 @@ export async function GetCurrentUserPosts(
     location: post.location,
     startDateTime: post.start_time,
     endDateTime: post.end_time,
-    participants: post.participants,
   }));
 }
 
@@ -161,7 +160,6 @@ export async function GetPosts(supabaseClient: SupabaseClient<Database>): Promis
     location: post.location,
     startDateTime: post.start_time,
     endDateTime: post.end_time,
-    participants: post.participants,
   }));
 }
 
@@ -193,7 +191,41 @@ export async function GetPostByPostId(
       id: tag_ids[idx],
       name: tag_name[idx],
     })),
-    participants: getPostDataResult.data[0].participants,
   };
   return postData;
+}
+
+export async function GetPostWithParticipantsByPostId(
+  postId: number,
+  supabaseClient: SupabaseClient<Database>
+): Promise<Post> {
+  const getPostDataResult = await supabaseClient.rpc("get_post_with_participants_by_post_id", {
+    id: postId,
+  });
+  if (getPostDataResult.error || !getPostDataResult.data) {
+    console.log(getPostDataResult.error);
+    throw new Error("Cant get posts data");
+  }
+  const postData = getPostDataResult.data[0];
+  return {
+    postId: postData.id,
+    title: postData.title,
+    ownerId: postData.owner_id,
+    ownerName: postData.owner_name,
+    ownerProfilePic: postData.owner_profile,
+    tags: postData.tags.map((e) => e.name),
+    description: postData.description,
+    image: postData.images,
+    location: postData.location,
+    startDateTime: postData.start_time,
+    endDateTime: postData.end_time,
+    participants: postData.participants.map((e) => ({
+      id: e.id,
+      username: e.username,
+      sex: e.sex,
+      isVerified: e.is_verified,
+      birthdate: e.birthdate,
+      description: e.description,
+    })),
+  };
 }
