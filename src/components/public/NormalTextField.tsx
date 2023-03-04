@@ -1,4 +1,12 @@
-import { Box, FormHelperText, InputAdornment, Stack, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  FormHelperText,
+  Icon,
+  InputAdornment,
+  Stack,
+  TextField,
+  Typography,
+} from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 
 type props = {
@@ -43,6 +51,11 @@ export default function NormalTextField(props: props) {
             startAdornment: (
               <InputAdornment position="start">
                 <EmailIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="start">
+                <Icon fontSize="large" />
               </InputAdornment>
             ),
           }}
