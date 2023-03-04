@@ -198,7 +198,7 @@ export async function GetPostByPostId(
 export async function GetPostWithParticipantsByPostId(
   postId: number,
   supabaseClient: SupabaseClient<Database>
-): Promise<Post> {
+): Promise<PostInfo> {
   const getPostDataResult = await supabaseClient.rpc("get_post_with_participants_by_post_id", {
     id: postId,
   });
@@ -208,17 +208,14 @@ export async function GetPostWithParticipantsByPostId(
   }
   const postData = getPostDataResult.data[0];
   return {
-    postId: postData.id,
     title: postData.title,
-    ownerId: postData.owner_id,
-    ownerName: postData.owner_name,
-    ownerProfilePic: postData.owner_profile,
-    tags: postData.tags.map((e) => e.name),
+    userId: postData.owner_id,
+    tags: postData.tags,
     description: postData.description,
-    image: postData.images,
+    images: postData.images,
     location: postData.location,
-    startDateTime: postData.start_time,
-    endDateTime: postData.end_time,
+    startTime: dayjs(postData.start_time),
+    endTime: dayjs(postData.end_time),
     participants: postData.participants.map((e) => ({
       id: e.id,
       username: e.username,
