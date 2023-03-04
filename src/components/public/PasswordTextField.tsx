@@ -36,47 +36,55 @@ export default function PasswordTextFeild(props: props) {
   return (
     <>
       <Stack spacing={1}>
-        <Typography variant="body1">{props?.header}</Typography>
-        <TextField
-          sx={{ backgroundColor: "#ffffff" }}
-          fullWidth
-          placeholder={props.placeholder}
-          value={props.value}
-          error={props.isErr}
-          onChange={props.handleValueChange}
-          type={showPassword ? "text" : "password"}
-          inputProps={{
-            sx: {
-              textAlign: "center",
-              "&::placeholder": {
+        <Box>
+          <Typography variant="body1">{props?.header}</Typography>
+          <TextField
+            sx={{ backgroundColor: "#ffffff" }}
+            fullWidth
+            placeholder={props.placeholder}
+            value={props.value}
+            error={props.isErr}
+            onChange={props.handleValueChange}
+            type={showPassword ? "text" : "password"}
+            inputProps={{
+              sx: {
                 textAlign: "center",
+                "&::placeholder": {
+                  textAlign: "center",
+                },
               },
-            },
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <LockIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton onClick={handleClickShowPassword} edge="end">
-                  {showPassword ? (
-                    <VisibilityOffIcon
-                      fontSize="large"
-                      color={props.isErr ? "error" : "secondary"}
-                    />
-                  ) : (
-                    <VisibilityIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
-                  )}
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <LockIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    {showPassword ? (
+                      <VisibilityOffIcon
+                        fontSize="large"
+                        color={props.isErr ? "error" : "secondary"}
+                      />
+                    ) : (
+                      <VisibilityIcon
+                        fontSize="large"
+                        color={props.isErr ? "error" : "secondary"}
+                      />
+                    )}
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
         <Box sx={helperText}>
-          <FormHelperText error>{props.isErr && props.errMsg}</FormHelperText>
+          <FormHelperText error>
+            {props.isErr && props.errMsg}
+            {"\u00A0"}
+          </FormHelperText>
         </Box>
       </Stack>
     </>

@@ -48,42 +48,47 @@ export default function CommonDropdown(props: props) {
   return (
     <>
       <Stack spacing={1}>
-        <Typography variant="body1">{props.header}</Typography>
-        <FormControl error={props.isErr} sx={{ backgroundColor: "#ffffff" }} fullWidth>
-          <Select
-            value={props.value}
-            onChange={props.handleValueChange}
-            displayEmpty
-            renderValue={
-              props.value !== ""
-                ? () => <Typography lineHeight={1.4}>{props.value}</Typography>
-                : () => (
-                    <Typography lineHeight={1.4} color={grey[400]}>
-                      {props.placeHolder}
-                    </Typography>
-                  )
-            }
-            inputProps={{
-              sx: {
-                textAlign: "center",
-                "&::placeholder": {
+        <Box>
+          <Typography variant="body1">{props.header}</Typography>
+          <FormControl error={props.isErr} sx={{ backgroundColor: "#ffffff" }} fullWidth>
+            <Select
+              value={props.value}
+              onChange={props.handleValueChange}
+              displayEmpty
+              renderValue={
+                props.value !== ""
+                  ? () => <Typography lineHeight={1.4}>{props.value}</Typography>
+                  : () => (
+                      <Typography lineHeight={1.4} color={grey[400]}>
+                        {props.placeHolder}
+                      </Typography>
+                    )
+              }
+              inputProps={{
+                sx: {
                   textAlign: "center",
+                  "&::placeholder": {
+                    textAlign: "center",
+                  },
                 },
-              },
-            }}
-            startAdornment={
-              <InputAdornment position="start">{displayGenderIcon(props.value)}</InputAdornment>
-            }
-          >
-            {props.items.map((item) => (
-              <MenuItem key={item} value={item}>
-                {item}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+              }}
+              startAdornment={
+                <InputAdornment position="start">{displayGenderIcon(props.value)}</InputAdornment>
+              }
+            >
+              {props.items.map((item) => (
+                <MenuItem key={item} value={item}>
+                  {item}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
         <Box sx={helperText}>
-          {props.isErr && <FormHelperText error>{props.errMsg}</FormHelperText>}
+          <FormHelperText error>
+            {props.isErr && props.errMsg}
+            {"\u00A0"}
+          </FormHelperText>
         </Box>
       </Stack>
     </>

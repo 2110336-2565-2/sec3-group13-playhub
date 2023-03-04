@@ -23,42 +23,50 @@ export default function CommonDatePicker(props: props) {
   return (
     <>
       <Stack spacing={1}>
-        <Typography variant="body1">{props.header}</Typography>
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <MobileDatePicker
-            inputFormat="DD/MM/YYYY"
-            mask="__/__/____"
-            value={props.value}
-            onChange={props.handleValueChange}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                placeholder={props.placeHolder}
-                error={props.isErr}
-                sx={{ backgroundColor: "#ffffff" }}
-                fullWidth
-                inputProps={{
-                  sx: {
-                    textAlign: "center",
-                    "&::placeholder": {
+        <Box>
+          <Typography variant="body1">{props.header}</Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <MobileDatePicker
+              inputFormat="DD/MM/YYYY"
+              mask="__/__/____"
+              value={props.value}
+              onChange={props.handleValueChange}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder={props.placeHolder}
+                  error={props.isErr}
+                  sx={{ backgroundColor: "#ffffff" }}
+                  fullWidth
+                  inputProps={{
+                    sx: {
                       textAlign: "center",
+                      "&::placeholder": {
+                        textAlign: "center",
+                      },
                     },
-                  },
-                }}
-              />
-            )}
-            disableFuture
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <CalendarTodayIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </LocalizationProvider>
+                  }}
+                />
+              )}
+              disableFuture
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <CalendarTodayIcon
+                      fontSize="large"
+                      color={props.isErr ? "error" : "secondary"}
+                    />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </LocalizationProvider>
+        </Box>
         <Box sx={helperText}>
-          {props.isErr && <FormHelperText error>{props.errMsg}</FormHelperText>}
+          <FormHelperText error>
+            {props.isErr && props.errMsg}
+            {"\u00A0"}
+          </FormHelperText>
         </Box>
       </Stack>
     </>

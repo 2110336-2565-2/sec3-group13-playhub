@@ -42,38 +42,43 @@ export default function NormalTextField(props: props) {
   return (
     <>
       <Stack spacing={1}>
-        <Typography variant="body1">{props?.header}</Typography>
-        <TextField
-          sx={{ backgroundColor: "#ffffff" }}
-          fullWidth
-          placeholder={props.placeholder}
-          value={props.value}
-          error={props.isErr}
-          onChange={props.handleValueChange}
-          inputProps={{
-            sx: {
-              textAlign: "center",
-              "&::placeholder": {
+        <Box>
+          <Typography variant="body1">{props?.header}</Typography>
+          <TextField
+            sx={{ backgroundColor: "#ffffff" }}
+            fullWidth
+            placeholder={props.placeholder}
+            value={props.value}
+            error={props.isErr}
+            onChange={props.handleValueChange}
+            inputProps={{
+              sx: {
                 textAlign: "center",
+                "&::placeholder": {
+                  textAlign: "center",
+                },
               },
-            },
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">{displayStartIcon(props.icon)}</InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="start">
-                <Icon fontSize="large" />
-              </InputAdornment>
-            ),
-          }}
-        />
+            }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">{displayStartIcon(props.icon)}</InputAdornment>
+              ),
+              endAdornment: (
+                <InputAdornment position="start">
+                  <Icon fontSize="large" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Box>
         <Box sx={helperText}>
           <FormHelperText error={exceedChar}>
             {props.char_limit && `${props.value.length}/${props.char_limit}`}
           </FormHelperText>
-          <FormHelperText error>{props.isErr && props.errMsg}</FormHelperText>
+          <FormHelperText error>
+            {props.isErr && props.errMsg}
+            {"\u00A0"}
+          </FormHelperText>
         </Box>
       </Stack>
     </>
