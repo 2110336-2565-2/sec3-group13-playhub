@@ -10,7 +10,6 @@ import { grey } from "@mui/material/colors";
 
 import Loading from "@/components/public/Loading";
 import Logo from "@/components/public/Logo";
-import CommonTextField from "@/components/public/CommonTextField";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import Background from "@/components/public/Background";
 import { validateEmail, validateTextField } from "@/utilities/validation";
