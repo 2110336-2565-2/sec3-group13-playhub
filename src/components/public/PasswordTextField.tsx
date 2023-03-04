@@ -14,13 +14,12 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 type props = {
   header?: string;
-  label?: string;
   placeholder?: string;
   value: string;
   handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   isErr: boolean;
   errMsg: string;
-  mediumSize?: boolean;
+  name?: string;
 };
 
 const helperText = {
@@ -39,6 +38,7 @@ export default function PasswordTextFeild(props: props) {
         <Box>
           <Typography variant="body1">{props?.header}</Typography>
           <TextField
+            name={props.name}
             sx={{ backgroundColor: "#ffffff" }}
             fullWidth
             placeholder={props.placeholder}
