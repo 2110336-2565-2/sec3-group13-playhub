@@ -13,7 +13,14 @@ export type Post = {
   location: string;
   startDateTime: string;
   endDateTime: string;
-  participants: string[];
+  participants?: {
+    id: string;
+    username: string;
+    sex: string;
+    isVerified: boolean;
+    birthdate: string;
+    description: string;
+  }[];
 };
 
 export type PostInfo = {
@@ -25,7 +32,14 @@ export type PostInfo = {
   images: string[];
   startTime: Dayjs;
   endTime: Dayjs;
-  participants: string[];
+  participants?: {
+    id: string;
+    username: string;
+    sex: string;
+    isVerified: boolean;
+    birthdate: string;
+    description: string;
+  }[];
 };
 
 // export const emptyPost: Post = {
