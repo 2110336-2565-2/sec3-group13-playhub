@@ -74,6 +74,11 @@ export default function CommonDropdown(props: props) {
                   vertical: "bottom",
                   horizontal: "left",
                 },
+                MenuListProps: {
+                  style: {
+                    padding: 0,
+                  },
+                },
               }}
               inputProps={{
                 sx: {
@@ -88,7 +93,7 @@ export default function CommonDropdown(props: props) {
               }
             >
               {props.items.map((item) => (
-                <MenuItem key={item} value={item}>
+                <MenuItem key={item} value={item} divider style={{ justifyContent: "center" }}>
                   {item}
                 </MenuItem>
               ))}
