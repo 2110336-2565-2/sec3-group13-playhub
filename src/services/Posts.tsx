@@ -226,6 +226,7 @@ export async function GetPostWithParticipantsByPostId(
       isVerified: e.is_verified,
       birthdate: e.birthdate,
       description: e.description,
+      image: e.image,
     })),
   };
 }

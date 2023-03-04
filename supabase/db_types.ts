@@ -366,6 +366,7 @@ export interface Database {
             is_verified: boolean;
             birthdate: string;
             description: string;
+            image: string;
           }[];
         };
       };

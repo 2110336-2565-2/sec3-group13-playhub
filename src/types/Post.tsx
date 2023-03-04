@@ -20,6 +20,7 @@ export type Post = {
     isVerified: boolean;
     birthdate: string;
     description: string;
+    image: string;
   }[];
 };
 
@@ -39,6 +40,7 @@ export type PostInfo = {
     isVerified: boolean;
     birthdate: string;
     description: string;
+    image: string;
   }[];
 };
 
