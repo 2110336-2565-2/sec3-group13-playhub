@@ -31,6 +31,11 @@ const mainTheme = createTheme({
       textAlign: "center",
       fontWeight: 800,
     },
+    h2: {
+      fontSize: 24,
+      textAlign: "center",
+      fontWeight: 800,
+    },
     body1: {
       fontSize: 18,
       fontWeight: 600,
