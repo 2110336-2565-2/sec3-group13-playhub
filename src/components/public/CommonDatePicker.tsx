@@ -38,18 +38,18 @@ export default function CommonDatePicker(props: props) {
                   error={props.isErr}
                   sx={{ backgroundColor: "#ffffff" }}
                   fullWidth
-                  inputProps={{
-                    sx: {
-                      textAlign: "center",
-                      "&::placeholder": {
-                        textAlign: "center",
-                      },
-                    },
-                  }}
                 />
               )}
               disableFuture
               InputProps={{
+                inputProps: {
+                  style: {
+                    textAlign: "center",
+                    "&::placeholder": {
+                      textAlign: "center",
+                    },
+                  },
+                },
                 startAdornment: (
                   <InputAdornment position="start">
                     <CalendarTodayIcon
