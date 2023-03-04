@@ -74,7 +74,24 @@ const mainTheme = createTheme({
     },
     MuiFormControl: {
       styleOverrides: {
-        root: { boxShadow: "8px 8px 1px grey", borderRadius: "6px" },
+        root: {
+          boxShadow: "8px 8px 1px grey",
+          borderRadius: "15px",
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderRadius: "15px",
+              border: "3px #000000 solid",
+            },
+            "&:hover fieldset": {
+              borderRadius: "15px",
+              border: "3px #ffa31a solid",
+            },
+            "&.Mui-focused fieldset": {
+              borderRadius: "15px",
+              border: "3px #ffa31a solid",
+            },
+          },
+        },
       },
     },
     MuiCard: {
