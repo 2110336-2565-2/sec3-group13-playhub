@@ -233,7 +233,6 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
-          participants: string[];
         };
       };
       get_posts: {
@@ -251,7 +250,6 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
-          participants: string[];
         };
       };
       get_posts_by_user_id: {
@@ -271,7 +269,6 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
-          participants: string[];
         };
       };
       get_tags: {
@@ -341,6 +338,35 @@ export interface Database {
           username: string;
           image: string;
           participant_number: number;
+        };
+      };
+      get_post_with_participants_by_post_id: {
+        Args: {
+          id: number;
+        };
+        Returns: {
+          id: number;
+          title: string;
+          description: string;
+          owner_id: string;
+          owner_name: string;
+          owner_profile: string;
+          location: string;
+          start_time: string;
+          end_time: string;
+          tags: {
+            id: number;
+            name: string;
+          }[];
+          images: string[];
+          participants: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+          }[];
         };
       };
     };
