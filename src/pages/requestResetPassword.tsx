@@ -7,13 +7,14 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
 import Background from "@/components/public/Background";
-import EmailTextField from "@/components/requestResetPassword/EmailTextField";
 import { validateEmail } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 import Loading from "@/components/public/Loading";
 import { RequestResetPassword } from "@/services/Password";
+import NormalTextField from "@/components/public/NormalTextField";
+import { Icons } from "enum/icons";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -38,13 +39,15 @@ export default function Home() {
     if (!isEmailErr.err) {
       // reset password end point goes here
       setIsRequesting(true);
-      RequestResetPassword(email, supabaseClient).then(() => {
-        router.push(PagePaths.successRequestResetPassword)
-      }).catch((err) => {
-        setIsRequesting(false);
-        console.log(err)
-        return
-      })
+      RequestResetPassword(email, supabaseClient)
+        .then(() => {
+          router.push(PagePaths.successRequestResetPassword);
+        })
+        .catch((err) => {
+          setIsRequesting(false);
+          console.log(err);
+          return;
+        });
     }
   }
 
@@ -68,11 +71,12 @@ export default function Home() {
           <Stack spacing={3} alignItems="center" justifyContent="center">
             <Stack spacing={2} alignItems="center" justifyContent="center">
               {/* header text */}
-              <Typography variant="h1">Enter your email to get reset password link!</Typography>
+              <Typography variant="h2">Enter your email to get reset password link!</Typography>
 
               {/* email textfield */}
               <Box sx={{ width: "30vw", minWidth: "250px" }}>
-                <EmailTextField
+                <NormalTextField
+                  icon={Icons.mail}
                   placeholder="e.g. playhub@mail.com"
                   value={email}
                   handleValueChange={handleEmailChange}

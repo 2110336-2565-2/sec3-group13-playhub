@@ -35,7 +35,7 @@ export default function Home() {
               style={{ width: "6vw", minWidth: "90px", height: "6vw", minHeight: "90px" }}
             />
 
-            <Typography variant="h1">Your password is successfully reset!</Typography>
+            <Typography variant="h2">Your password is successfully reset!</Typography>
 
             <Box display="flex">
               <Typography variant="body1">Click{"\u00A0"}</Typography>

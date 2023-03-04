@@ -8,7 +8,7 @@ import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 
 import Background from "@/components/public/Background";
-import PasswordTextField from "@/components/resetPassword/PasswordTextField";
+import PasswordTextField from "@/components/public/PasswordTextField";
 import { validateConfirmNewPassword } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
@@ -77,6 +77,7 @@ export default function Home() {
       router.push(PagePaths.requestResetPassword);
     }
   }, [router]);
+
   if (!canResetPassword) return <Loading />;
   return (
     <>
@@ -100,7 +101,7 @@ export default function Home() {
             alignItems="center"
             justifyContent="center"
           >
-            <Typography variant="h1">Reset Password</Typography>
+            <Typography variant="h2">Reset Password</Typography>
 
             <Box sx={{ width: "20vw", minWidth: "250px" }}>
               <PasswordTextField
@@ -109,23 +110,18 @@ export default function Home() {
                 value={newPassword.password}
                 handleValueChange={handlePasswordChange}
                 isErr={isSubmit && arePasswordsErr.err}
+                errMsg=""
               />
-            </Box>
 
-            <Stack spacing={1} sx={{ width: "20vw", minWidth: "250px" }}>
               <PasswordTextField
                 name="confirmPassword"
                 placeholder="Comfirm New Password"
                 value={newPassword.confirmPassword}
                 handleValueChange={handlePasswordChange}
                 isErr={isSubmit && arePasswordsErr.err}
+                errMsg={arePasswordsErr.msg}
               />
-
-              <FormHelperText error>
-                {isSubmit && arePasswordsErr.err && arePasswordsErr.msg}
-                {"\u00A0"}
-              </FormHelperText>
-            </Stack>
+            </Box>
 
             <Button variant="contained" onClick={handleSubmit}>
               Reset Password
