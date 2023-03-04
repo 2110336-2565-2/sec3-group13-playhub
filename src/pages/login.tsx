@@ -23,6 +23,7 @@ import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { SignIn } from "@/services/User";
 import NormalTextField from "@/components/public/NormalTextField";
+import { Icons } from "enum/icons";
 
 // style
 const login_layout = {
@@ -125,6 +126,7 @@ export default function Home() {
           <Box sx={login_layout}>
             <NormalTextField
               placeholder="Email"
+              icon={Icons.mail}
               value={email}
               handleValueChange={handleEmailChange}
               isErr={isSubmit && (emailErr.err || isSupabaseErr)}

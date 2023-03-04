@@ -25,6 +25,7 @@ import { CreateUser } from "@/services/User";
 import Background from "@/components/public/Background";
 import { grey } from "@mui/material/colors";
 import NormalTextField from "@/components/public/NormalTextField";
+import { Icons } from "enum/icons";
 
 // style
 const register_layout = {
@@ -192,6 +193,7 @@ export default function Home() {
           <Box style={register_layout}>
             <NormalTextField
               header="Username"
+              icon={Icons.edit}
               placeholder="Display Name"
               value={displayName}
               handleValueChange={handleDisplayNameChange}
@@ -204,6 +206,7 @@ export default function Home() {
           <Box style={{ ...register_layout, marginTop: 0 }}>
             <NormalTextField
               header="Email"
+              icon={Icons.mail}
               placeholder="Email"
               value={email}
               handleValueChange={handleEmailChange}
