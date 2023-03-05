@@ -1,5 +1,5 @@
 export enum editProfileHeader {
-  displayName = "Display Name",
+  username = "Username",
   description = "Description",
   gender = "Gender",
 }
