@@ -16,9 +16,11 @@ import {
   Box,
   Link,
   IconButton,
+  Card,
 } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import CloseIcon from "@mui/icons-material/Close";
 import CancelIcon from "@mui/icons-material/Cancel";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
@@ -36,20 +38,22 @@ import { PagePaths } from "enum/pages";
 
 import Loading from "@/components/public/Loading";
 import { UpdateProfile } from "@/services/Profile";
+import NormalTextField from "@/components/public/NormalTextField";
+import { Icons } from "enum/icons";
+import DescriptionTextField from "@/components/public/DescriptionTextField";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
 
-  const avatar = { width: 200, height: 200 };
+  const avatar = { width: 200, height: 200, border: "4px black solid" };
   const overlayIcon = {
     position: "absolute",
     color: "black",
     opacity: "0.5",
   };
   const editInfoContainer = {
-    width: "50vw",
-    margin: "3vh 0 0 0",
+    width: "40vw",
   };
 
   const router: NextRouter = useRouter();
@@ -60,6 +64,7 @@ export default function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [originalImage, setOriginalImage] = useState<string | null>(null);
 
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(true);
   const [isPressSubmit, setIsPressSubmit] = useState<boolean>(false);
   const [fileImage, setFileImage] = useState<File | null>(null);
   const [isImageUpload, setIsImageUpload] = useState<boolean>(false);
@@ -96,12 +101,13 @@ export default function Home() {
       showImageUploadError.err
     );
     if (readyToSubmit) {
-      UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient).then(() => {
-        router.push(PagePaths.profile + "/" + userStatus.user?.userId);
-      }).catch((err) => {
-        console.log(err);
-      }
-      )
+      UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient)
+        .then(() => {
+          router.push(PagePaths.profile + "/" + userStatus.user?.userId);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       console.log("Something went wrong");
     }
@@ -146,6 +152,10 @@ export default function Home() {
     return;
   }
 
+  function handleOpenModal(): void {
+    setIsOpenModal(true);
+  }
+
   useEffect(() => {
     if (userStatus.isLoading || !userStatus.user) return;
     getProfile(userStatus.user);
@@ -159,94 +169,112 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Link onClick={handleGoBack}>
+      {/* <Link onClick={handleGoBack}>
         <ArrowBackIcon
           fontSize="large"
           sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
         />
-      </Link>
-      <Stack
-        spacing={2}
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: "80vh", marginBottom: "10vh" }}
-      >
-        <CancelIcon
-          onClick={handleCancelImageChip}
-          color={showImageUploadError.err ? "error" : "secondary"}
-          sx={{ position: "relative", top: "70px", left: "80px", zIndex: "1" }}
-          fontSize="large"
-          cursor="pointer"
-        />
+      </Link> */}
+      <Stack alignItems="center">
+        <Card
+          sx={{
+            width: "50vw",
+            minWidth: "300px",
 
-        <Avatar alt="Anya" sx={avatar}>
-          {image && (
-            <Image
-              src={image}
-              alt="Upload avatar"
-              width={200}
-              height={200}
-              style={
-                !isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }
-              }
-            />
-          )}
-          <IconButton
-            sx={overlayIcon}
-            aria-label="upload picture"
-            component="label"
-          >
-            <input
-              onChange={handleImageChange}
-              hidden
-              accept="image/*"
-              type="file"
-            />
-            <CameraAltIcon sx={{ fontSize: "100px" }} />
-          </IconButton>
-        </Avatar>
-        {showImageUploadError.err && (
-          <Typography align="center" variant="body1" color="error">
-            {showImageUploadError.msg}
-          </Typography>
-        )}
+            marginTop: "3vh",
+            marginBottom: "3vh",
 
-        <Box style={editInfoContainer}>
-          <CommonTextField
-            header={editProfileHeader.displayName}
-            value={displayName}
-            handleValueChange={handleDisplayNameChange}
-            char_limit={CHAR_LIMIT.MAX_DISPLAY_NAME}
-            isErr={isPressSubmit && displayNameErr.err}
-            errMsg={displayNameErr.msg}
-          />
-
-          <CommonTextField
-            header={editProfileHeader.description}
-            value={description}
-            handleValueChange={handleDescChange}
-            isMultiLine={true}
-            char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
-            isErr={isPressSubmit && descriptionErr.err}
-            errMsg={descriptionErr.msg}
-          />
-
-          <Box style={{ width: "18vw" }}>
-            <CommonDropdown
-              header={editProfileHeader.gender}
-              value={gender}
-              handleValueChange={handleSelectChange}
-              items={Object.values(Gender)}
-            />
+            paddingBottom: "2vh",
+          }}
+        >
+          <Box display="flex">
+            <Box sx={{ flexGrow: 1 }}></Box>
+            <IconButton onClick={handleOpenModal}>
+              <CloseIcon fontSize="large" color="secondary" />
+            </IconButton>
           </Box>
-        </Box>
+          <Stack
+            spacing={2}
+            sx={{ marginTop: "-40px" }}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <IconButton
+              onClick={handleCancelImageChip}
+              color="secondary"
+              style={{
+                padding: 0,
+                backgroundColor: "black",
+                position: "relative",
+                top: "70px",
+                left: "80px",
+                zIndex: "1",
+              }}
+            >
+              <CloseIcon color={showImageUploadError.err ? "error" : "primary"} fontSize="medium" />
+            </IconButton>
 
-        <Button variant="contained" onClick={editProfileBtnOnClick}>
-          SAVE
-        </Button>
-        <Typography variant="body1" color="warning.main">
-          ท่านต้องกด SAVE เพื่อบันทึกข้อมูลใหม่
-        </Typography>
+            <Avatar alt="Anya" sx={avatar}>
+              {image && (
+                <Image
+                  src={image}
+                  alt="Upload avatar"
+                  width={200}
+                  height={200}
+                  style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
+                />
+              )}
+              <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
+                <input onChange={handleImageChange} hidden accept="image/*" type="file" />
+                <CameraAltIcon sx={{ fontSize: "100px" }} />
+              </IconButton>
+            </Avatar>
+            {showImageUploadError.err && (
+              <Typography align="center" variant="body1" color="error">
+                {showImageUploadError.msg}
+              </Typography>
+            )}
+
+            <Box style={editInfoContainer}>
+              <NormalTextField
+                header={editProfileHeader.username}
+                icon={Icons.edit}
+                placeholder="Display Name"
+                value={displayName}
+                handleValueChange={handleDisplayNameChange}
+                char_limit={CHAR_LIMIT.MAX_DISPLAY_NAME}
+                isErr={isPressSubmit && displayNameErr.err}
+                errMsg={displayNameErr.msg}
+              />
+
+              <DescriptionTextField
+                header={editProfileHeader.description}
+                placeholder="Tell Us More About Yourself!"
+                value={description}
+                handleValueChange={handleDescChange}
+                char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
+                isErr={isPressSubmit && descriptionErr.err}
+                errMsg={descriptionErr.msg}
+              />
+
+              <Box style={{ width: "18vw" }}>
+                <CommonDropdown
+                  header={editProfileHeader.gender}
+                  value={gender}
+                  handleValueChange={handleSelectChange}
+                  items={Object.values(Gender)}
+                />
+              </Box>
+            </Box>
+
+            <Button variant="contained" onClick={editProfileBtnOnClick}>
+              Save
+            </Button>
+            <Typography variant="body2" color="warning.main">
+              ท่านต้องกด Save เพื่อบันทึกข้อมูลใหม่
+            </Typography>
+          </Stack>
+        </Card>
       </Stack>
     </>
   );
