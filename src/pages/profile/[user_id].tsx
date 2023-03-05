@@ -143,7 +143,7 @@ export default function Home() {
                 {`" ${targetUserData.description} "`.split("\n").map((row, index) => (
                   <Typography
                     variant="body1"
-                    sx={{ maxWidth: "20vw", wordBreak: "break-word", textAlign: "center" }}
+                    sx={{ maxWidth: "30vw", wordBreak: "break-word", textAlign: "center" }}
                     key={index}
                   >
                     {row}
