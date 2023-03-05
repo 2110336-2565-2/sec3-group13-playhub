@@ -10,6 +10,7 @@ import { Avatar, IconButton, Chip, Typography, Stack, Card } from "@mui/material
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import CakeIcon from "@mui/icons-material/Cake";
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -58,6 +59,8 @@ export default function Home() {
       return <FemaleIcon />;
     } else if (gender === Gender.others) {
       return <TransgenderIcon />;
+    } else if (gender === Gender.prefersNotToSay) {
+      return <FavoriteIcon />;
     } else {
       return <div></div>;
     }
