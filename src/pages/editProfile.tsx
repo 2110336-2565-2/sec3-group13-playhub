@@ -41,6 +41,7 @@ import { UpdateProfile } from "@/services/Profile";
 import NormalTextField from "@/components/public/NormalTextField";
 import { Icons } from "enum/icons";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
+import VerifyDialog from "@/components/profile/VerifyDialog";
 
 export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
@@ -64,7 +65,7 @@ export default function Home() {
   const [image, setImage] = useState<string | null>(null);
   const [originalImage, setOriginalImage] = useState<string | null>(null);
 
-  const [isOpenModal, setIsOpenModal] = useState<boolean>(true);
+  const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
   const [isPressSubmit, setIsPressSubmit] = useState<boolean>(false);
   const [fileImage, setFileImage] = useState<File | null>(null);
   const [isImageUpload, setIsImageUpload] = useState<boolean>(false);
@@ -153,7 +154,11 @@ export default function Home() {
   }
 
   function handleOpenModal(): void {
-    setIsOpenModal(true);
+    setIsVerifyModalShow(true);
+  }
+
+  function handleCloseModal(): void {
+    setIsVerifyModalShow(false);
   }
 
   useEffect(() => {
@@ -276,6 +281,7 @@ export default function Home() {
           </Stack>
         </Card>
       </Stack>
+      <VerifyDialog openModal={isVerifyModalShow} handleCloseModal={handleCloseModal} />
     </>
   );
 }
