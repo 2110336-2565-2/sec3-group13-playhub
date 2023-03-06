@@ -13,13 +13,13 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 
 type props = {
+  name?: string;
   header?: string;
-  placeholder?: string;
+  placeholder: string;
   value: string;
   handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
   isErr: boolean;
   errMsg: string;
-  name?: string;
 };
 
 const helperText = {
@@ -43,8 +43,8 @@ export default function PasswordTextFeild(props: props) {
             fullWidth
             placeholder={props.placeholder}
             value={props.value}
-            error={props.isErr}
             onChange={props.handleValueChange}
+            error={props.isErr}
             type={showPassword ? "text" : "password"}
             inputProps={{
               sx: {

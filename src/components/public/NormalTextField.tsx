@@ -12,6 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Icons } from "enum/icons";
 
 type props = {
+  name?: string;
   header?: string;
   icon: string;
   placeholder: string;
@@ -45,6 +46,7 @@ export default function NormalTextField(props: props) {
         <Box>
           <Typography variant="body1">{props?.header}</Typography>
           <TextField
+            name={props.name}
             sx={{ backgroundColor: "#ffffff" }}
             fullWidth
             placeholder={props.placeholder}
