@@ -16,7 +16,6 @@ export default function Background() {
 
           backgroundImage: backgroungUrl,
           backgroundRepeat: "no-repeat",
-          // backgroundPosition: "center center",
           backgroundSize: "cover",
           backgroundAttachment: "fixed",
         }}
