@@ -1,34 +1,54 @@
 import { useContext, useState } from "react";
-
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
-
-import { Link, Box, Typography, Stack, FormHelperText, Button, Card } from "@mui/material";
-import { grey } from "@mui/material/colors";
-
-import Loading from "@/components/public/Loading";
-import Logo from "@/components/public/Logo";
-import PasswordTextFeild from "@/components/public/PasswordTextField";
-import Background from "@/components/public/Background";
-import { validateEmail, validateTextField } from "@/utilities/validation";
-
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
 } from "@/constants/supabase";
+import { Link, Box, Typography, Stack, Button, Card } from "@mui/material";
+import { grey } from "@mui/material/colors";
+
+import Loading from "@/components/public/Loading";
+import Background from "@/components/public/Background";
+import Logo from "@/components/public/Logo";
+import NormalTextField from "@/components/public/NormalTextField";
+import PasswordTextFeild from "@/components/public/PasswordTextField";
+import { validateEmail, validateTextField } from "@/utilities/validation";
+
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
-import { SignIn } from "@/services/User";
-import NormalTextField from "@/components/public/NormalTextField";
 import { Icons } from "enum/icons";
 
-// style
-const login_layout = {
-  width: "23vw",
-  minWidth: "260px",
+import { SignIn } from "@/services/User";
+
+type LoginInput = {
+  email: string;
+  password: string;
+};
+
+type LoginSubmit = {
+  email: boolean;
+  password: boolean;
+};
+
+const LoginStyle = {
+  Card: {
+    width: "50vw",
+    minWidth: "310px",
+    minHeight: "200px",
+
+    paddingTop: "6vh",
+    paddingBottom: "6vh",
+
+    backgroundColor: grey[300],
+  },
+  TextField: {
+    width: "23vw",
+    minWidth: "290px",
+  },
 };
 
 export default function Home() {
@@ -36,16 +56,20 @@ export default function Home() {
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient();
 
-  // state about variables
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [input, setInput] = useState<LoginInput>({
+    email: "",
+    password: "",
+  });
+  const [state, setState] = useState<LoginSubmit>({
+    email: false,
+    password: false,
+  });
   const [isLoginCredErr, setIsLoginCredErr] = useState<boolean>(false);
   const [isValidateErr, setIsValidateErr] = useState<boolean>(false);
 
   // error about variables
-  const emailErr: validation = validateEmail(email);
-  const passwordErr: validation = validateTextField(password, CHAR_LIMIT.MIN_PASSWORD);
+  const emailErr: validation = validateEmail(input.email);
+  const passwordErr: validation = validateTextField(input.password, CHAR_LIMIT.MIN_PASSWORD);
   const isSupabaseErr: boolean =
     (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg: string = isLoginCredErr
@@ -53,10 +77,13 @@ export default function Home() {
     : "โปรดทำการยืนยันอีเมล";
 
   async function handleSubmit() {
-    setIsSubmit(true);
+    setState({
+      email: true,
+      password: true,
+    });
 
     // sign in via supabase
-    SignIn(email, password, supabaseClient)
+    SignIn(input.email, input.password, supabaseClient)
       .then(() => {
         // route to post feed page
         router.push(PagePaths.home);
@@ -79,21 +106,11 @@ export default function Home() {
     return;
   }
 
-  function handleEmailChange(
+  function handleInputChange(
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void {
-    setEmail(event.target.value);
-    setIsSubmit(false);
-    // reset error
-    setIsLoginCredErr(false);
-    setIsValidateErr(false);
-  }
-
-  function handlePasswordChange(
-    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
-    setPassword(event.target.value);
-    setIsSubmit(false);
+    setState({ ...state, [event.target.name]: false });
+    setInput({ ...input, [event.target.name]: event.target.value });
     // reset error
     setIsLoginCredErr(false);
     setIsValidateErr(false);
@@ -107,40 +124,31 @@ export default function Home() {
   return (
     <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
       <Background />
-      <Card
-        sx={{
-          width: "50vw",
-          minWidth: "300px",
-          minHeight: "200px",
-
-          paddingTop: "6vh",
-          paddingBottom: "6vh",
-
-          backgroundColor: grey[300],
-        }}
-      >
+      <Card sx={LoginStyle.Card}>
         <Stack spacing={3} alignItems="center" justifyContent="center">
           <Logo width={119} height={119} />
           <Stack spacing={0} alignItems="center" justifyContent="center">
             {/* Email TextField */}
-            <Box sx={login_layout}>
+            <Box sx={LoginStyle.TextField}>
               <NormalTextField
+                name="email"
                 placeholder="Email"
                 icon={Icons.mail}
-                value={email}
-                handleValueChange={handleEmailChange}
-                isErr={isSubmit && (emailErr.err || isSupabaseErr)}
+                value={input.email}
+                handleValueChange={handleInputChange}
+                isErr={state.email && (emailErr.err || isSupabaseErr)}
                 errMsg={emailErr.msg}
               />
             </Box>
 
             {/* Password TextField */}
-            <Box sx={login_layout}>
+            <Box sx={LoginStyle.TextField}>
               <PasswordTextFeild
+                name="password"
                 placeholder="Password"
-                value={password}
-                handleValueChange={handlePasswordChange}
-                isErr={isSubmit && (passwordErr.err || isSupabaseErr)}
+                value={input.password}
+                handleValueChange={handleInputChange}
+                isErr={state.password && (passwordErr.err || isSupabaseErr)}
                 errMsg={passwordErr.msg || supabaseErrMsg}
               />
             </Box>
@@ -152,7 +160,7 @@ export default function Home() {
           </Stack>
 
           {/* Link go to register page */}
-          <Box sx={{ ...login_layout, minWidth: "290px" }} display="flex">
+          <Box sx={LoginStyle.TextField} display="flex">
             <Typography variant="body2">New here?{"\u00A0"}</Typography>
             <Link color="primary" href={PagePaths.register} sx={{ flexGrow: 1 }}>
               <Typography variant="body2">Sign Up</Typography>

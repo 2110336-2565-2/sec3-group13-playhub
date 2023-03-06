@@ -1,20 +1,11 @@
 import { useEffect, useState, useContext, ChangeEvent } from "react";
 import { Dayjs } from "dayjs";
-
 import { useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-
-import {
-  Grid,
-  Typography,
-  Button,
-  FormHelperText,
-  Stack,
-  Box,
-} from "@mui/material";
+import { Grid, Typography, Button, FormHelperText, Stack, Box } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
@@ -23,26 +14,42 @@ import CommonDateTimePicker from "@/components/public/CommonDateTimePicker";
 import Tags from "@/components/createPost/Tags";
 import GoogleMap from "@/components/createPost/searchMaps";
 import PictureList from "@/components/createPost/pictureList";
+import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
 
 import { Tag } from "@/types/Tag";
+import { PostInfo } from "@/types/Post";
+import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
 import { CHAR_LIMIT } from "enum/inputLimit";
 
-import {
-  validateDate,
-  validateDateWithInterval,
-  validateTextField,
-} from "@/utilities/validation";
-import { validation } from "@/types/Validation";
-import { GetAllTags, GetTagsByPost } from "@/services/Tags";
-import { PostInfo } from "@/types/Post";
+import { GetAllTags } from "@/services/Tags";
 import { GetPostByPostId, UpdatePost } from "@/services/Posts";
 
-//style
-const editPostLayout = {
-  width: "35vw",
-  minWidth: "300px",
-  margin: "2vh 0 0 0",
+type EditPostInput = {
+  title: string;
+  location: string;
+  startDate: Dayjs | null;
+  endDate: Dayjs | null;
+  tags: Tag[];
+  description: string;
+  images: string[];
+};
+
+type EditPostSubmit = {
+  title: boolean;
+  location: boolean;
+  date: boolean;
+  tags: boolean;
+  description: boolean;
+  images: boolean;
+};
+
+const EditPostStyle = {
+  TextField: {
+    width: "35vw",
+    minWidth: "300px",
+    margin: "2vh 0 0 0",
+  },
 };
 
 export default function Home() {
@@ -50,127 +57,118 @@ export default function Home() {
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
 
-  // input variables
-  const [title, setTitle] = useState<string>("");
-  const [location, setLocation] = useState<string>("");
-  const [startDate, setStartDate] = useState<Dayjs | null>(null);
-  const [endDate, setEndDate] = useState<Dayjs | null>(null);
-  const [tags, setTags] = useState<Tag[]>([]);
-  const [description, setDescription] = useState<string>("");
-  const [images, setImages] = useState<string[]>([]);
+  const [input, setInput] = useState<EditPostInput>({
+    title: "",
+    location: "",
+    startDate: null,
+    endDate: null,
+    tags: [],
+    description: "",
+    images: [],
+  });
+  const [state, setState] = useState<EditPostSubmit>({
+    title: false,
+    location: false,
+    date: false,
+    tags: false,
+    description: false,
+    images: false,
+  });
+
   const [originalImages, setOriginalImages] = useState<string[]>([]);
   const [loadingData, setLoadingData] = useState<boolean>(true);
 
-  // all selectable tags offered
   const [tagMenu, setTagMenu] = useState<Tag[]>([]);
-
-  // submit variables
-  const [isSubmitTitle, setIsSubmitTitle] = useState<boolean>(false);
-  const [isSubmitLocation, setIsSubmitLocation] = useState<boolean>(false);
-  const [isSubmitDate, setIsSubmitDate] = useState<boolean>(false);
-  const [isSubmitTags, setIsSubmitTags] = useState<boolean>(false);
-  const [isSubmitDescription, setIsSubmitDescription] =
-    useState<boolean>(false);
-  const [isSubmitImages, setIsSubmitImages] = useState<boolean>(false);
 
   // error variables
   const titleError: validation = validateTextField(
-    title,
+    input.title,
     CHAR_LIMIT.MIN_TITLE,
     CHAR_LIMIT.MAX_TITLE
   );
-  const locationError: boolean = location.trim() === "";
-  const startDateError: validation = validateDate(startDate);
-  const endDateError: validation = validateDateWithInterval(startDate, endDate);
-  const tagsError: boolean = tags.length === 0;
+  const locationError: boolean = input.location.trim() === "";
+  const startDateError: validation = validateDate(input.startDate);
+  const endDateError: validation = validateDateWithInterval(input.startDate, input.endDate);
+  const tagsError: boolean = input.tags.length === 0;
   const descriptionError: validation = validateTextField(
-    description,
+    input.description,
     CHAR_LIMIT.MIN_DESCRIPTION,
     CHAR_LIMIT.MAX_DESCRIPTION
   );
   const imagesError: boolean = false;
 
-  const isEditingAllow: boolean = !(
-    titleError.err ||
-    locationError ||
-    startDateError.err ||
-    endDateError.err ||
-    tagsError ||
-    descriptionError.err ||
-    imagesError
-  );
-
   const postId = parseInt(router.query.post_id as string);
 
   // input field change
-  function handleTitleChange(
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
-    setTitle(event.target.value);
-    setIsSubmitTitle(false);
+  function handleTextFieldChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+    setState({ ...state, [event.target.name]: false });
+    setInput({ ...input, [event.target.name]: event.target.value });
   }
 
   function handleLocationChange(newLocation: string): void {
-    setLocation(newLocation);
-    setIsSubmitLocation(false);
+    setState({ ...state, location: false });
+    setInput({ ...input, location: newLocation });
   }
 
   function handleStartDateChange(newStartDate: Dayjs | null): void {
-    setStartDate(newStartDate);
-    setIsSubmitDate(false);
+    setState({ ...state, date: false });
+    setInput({ ...input, startDate: newStartDate });
   }
 
   function handleEndDateChange(newEndDate: Dayjs | null): void {
-    setEndDate(newEndDate);
-    setIsSubmitDate(false);
+    setState({ ...state, date: false });
+    setInput({ ...input, endDate: newEndDate });
   }
 
   function handleTagsChange(newTags: Tag[]): void {
-    setTags(newTags);
-    setIsSubmitTags(false);
-  }
-
-  function handleDescriptionChange(
-    event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
-  ): void {
-    setDescription(event.target.value);
-    setIsSubmitDescription(false);
+    setState({ ...state, tags: false });
+    setInput({ ...input, tags: newTags });
   }
 
   function handleImagesChange(newImages: string[]): void {
-    setImages(newImages);
-    setIsSubmitImages(false);
+    setState({ ...state, images: false });
+    setInput({ ...input, images: newImages });
   }
 
   const handleSubmit = async () => {
-    if (!userStatus.user || !startDate || !endDate) return;
-    // set submission
-    setIsSubmitTitle(true);
-    setIsSubmitLocation(true);
-    setIsSubmitDate(true);
-    setIsSubmitTags(true);
-    setIsSubmitDescription(true);
-    setIsSubmitImages(true);
+    if (!userStatus.user || !input.startDate || !input.endDate) return;
+    setState({
+      title: true,
+      location: true,
+      date: true,
+      tags: true,
+      description: true,
+      images: true,
+    });
+
+    const isEditingAllow: boolean = !(
+      titleError.err ||
+      locationError ||
+      startDateError.err ||
+      endDateError.err ||
+      tagsError ||
+      descriptionError.err ||
+      imagesError
+    );
     if (isEditingAllow) {
       const updatedPost: PostInfo = {
-        title: title,
+        title: input.title,
         userId: userStatus.user.userId,
-        location: location,
-        tags: tags,
-        description: description,
-        images: images,
-        startTime: startDate,
-        endTime: endDate,
+        location: input.location,
+        tags: input.tags,
+        description: input.description,
+        images: input.images,
+        startTime: input.startDate,
+        endTime: input.endDate,
       };
       UpdatePost(postId, originalImages, updatedPost, supabaseClient)
         .then(() => {
           router.push(PagePaths.myPosts);
-        }).catch(
-          (err) => {
-            console.log(err);
-            return;
-          }
-        );
+        })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
   };
 
@@ -185,19 +183,22 @@ export default function Home() {
       if (!postId || !userStatus.user) return;
       GetPostByPostId(userStatus.user, postId, supabaseClient)
         .then((p) => {
-          setTitle(p.title);
-          setDescription(p.description);
-          setLocation(p.location);
-          setStartDate(p.startTime);
-          setEndDate(p.endTime);
-          setImages(p.images);
+          setInput({
+            title: p.title,
+            location: p.description,
+            startDate: p.startTime,
+            endDate: p.endTime,
+            tags: p.tags,
+            description: p.description,
+            images: p.images,
+          });
           setOriginalImages(p.images);
-          setTags(p.tags);
           setLoadingData(false);
-        }).catch((err) => {
-          console.log(err)
-          return
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
     getPostData();
   }, [supabaseClient, router.query.post_id]);
@@ -207,15 +208,10 @@ export default function Home() {
     return;
   }
   if (!userStatus.user.isVerified) {
-    router.push(PagePaths.home)
+    router.push(PagePaths.home);
     return;
   }
-  if (
-    tagMenu.length == 0 ||
-    userStatus.isLoading ||
-    loadingData
-  )
-    return <Loading />;
+  if (tagMenu.length == 0 || userStatus.isLoading || loadingData) return <Loading />;
   return (
     <>
       <Navbar />
@@ -227,36 +223,36 @@ export default function Home() {
         margin="0 0 2vh 0"
       >
         {/* Page header */}
-        <Box sx={editPostLayout}>
+        <Box sx={EditPostStyle.TextField}>
           <Typography variant="h1">Edit post</Typography>
         </Box>
 
         {/* Post title */}
-        <Box sx={editPostLayout}>
+        <Box sx={EditPostStyle.TextField}>
           <CommonTextField
             header="Title"
             placeholder="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
-            value={title}
-            handleValueChange={handleTitleChange}
+            value={input.title}
+            handleValueChange={handleTextFieldChange}
             char_limit={CHAR_LIMIT.MAX_TITLE}
-            isErr={isSubmitTitle && titleError.err}
+            isErr={state.title && titleError.err}
             errMsg={titleError.msg}
           />
         </Box>
 
         {/* Location */}
-        <Box sx={editPostLayout}>
+        <Box sx={EditPostStyle.TextField}>
           <Typography variant="body1">Location</Typography>
           <Stack spacing={2}>
-            <GoogleMap onChange={handleLocationChange} initialValue={location} />
-            {isSubmitLocation && locationError && (
+            <GoogleMap onChange={handleLocationChange} initialValue={input.location} />
+            {state.location && locationError && (
               <FormHelperText error>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
             )}
           </Stack>
         </Box>
 
         {/* Date time */}
-        <Box sx={editPostLayout}>
+        <Box sx={EditPostStyle.TextField}>
           <Typography variant="body1">Date time</Typography>
           <Grid container columnSpacing={2}>
             {/* Start date */}
@@ -264,9 +260,9 @@ export default function Home() {
               <CommonDateTimePicker
                 header="Start"
                 placeHolder="xx / xx / xxxx xx.xx xx"
-                value={startDate}
+                value={input.startDate}
                 handleValueChange={handleStartDateChange}
-                isErr={isSubmitDate && startDateError.err}
+                isErr={state.date && startDateError.err}
                 errMsg={startDateError.msg}
               />
             </Grid>
@@ -276,9 +272,9 @@ export default function Home() {
               <CommonDateTimePicker
                 header="End"
                 placeHolder="xx / xx / xxxx xx.xx xx"
-                value={endDate}
+                value={input.endDate}
                 handleValueChange={handleEndDateChange}
-                isErr={isSubmitDate && endDateError.err}
+                isErr={state.date && endDateError.err}
                 errMsg={endDateError.msg}
               />
             </Grid>
@@ -286,38 +282,38 @@ export default function Home() {
         </Box>
 
         {/* Tags */}
-        <Box sx={editPostLayout}>
+        <Box sx={EditPostStyle.TextField}>
           <Tags
             header="Tag"
             note="(เลือกได้สูงสุด 5 Tags)"
-            value={tags}
+            value={input.tags}
             handleValueChange={handleTagsChange}
             menuValue={tagMenu}
-            isErr={isSubmitTags && tagsError}
+            isErr={state.tags && tagsError}
             errMsg="กรุณาใส่อย่างน้อย 1 tag"
           />
         </Box>
 
         {/* Description */}
-        <Box sx={editPostLayout}>
+        <Box sx={EditPostStyle.TextField}>
           <CommonTextField
             header="Description"
             placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
-            value={description}
-            handleValueChange={handleDescriptionChange}
+            value={input.description}
+            handleValueChange={handleTextFieldChange}
             char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
             isMultiLine={true}
-            isErr={isSubmitDescription && descriptionError.err}
+            isErr={state.description && descriptionError.err}
             errMsg={descriptionError.msg}
           />
         </Box>
 
         {/* Image list */}
-        <Box sx={editPostLayout}>
+        <Box sx={EditPostStyle.TextField}>
           <PictureList
             header="Image"
             note="(Optional, เลือกได้สูงสุด 3 รูป)"
-            imgs={images}
+            imgs={input.images}
             stateChanger={handleImagesChange}
             // st={setImgErrState}
             isErr={true}

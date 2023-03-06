@@ -1,12 +1,10 @@
 import { useState, useContext, useEffect } from "react";
-
 import { NextRouter, useRouter } from "next/router";
 import Image from "next/image";
 
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-
 import {
   Typography,
   Button,
@@ -14,20 +12,20 @@ import {
   Avatar,
   Stack,
   Box,
-  Link,
   IconButton,
   Card,
 } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CloseIcon from "@mui/icons-material/Close";
-import CancelIcon from "@mui/icons-material/Cancel";
 
 import { editProfileHeader } from "public/locales/editProfileHeader";
 
+import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import CommonTextField from "@/components/public/CommonTextField";
+import NormalTextField from "@/components/public/NormalTextField";
 import CommonDropdown from "@/components/public/CommonDropdown";
+import DescriptionTextField from "@/components/public/DescriptionTextField";
+import VerifyDialog from "@/components/profile/VerifyDialog";
 import { validateImage, validateTextField } from "@/utilities/validation";
 
 import { User } from "@/types/User";
@@ -35,29 +33,49 @@ import { validation } from "@/types/Validation";
 import { Gender } from "enum/gender";
 import { CHAR_LIMIT } from "enum/inputLimit";
 import { PagePaths } from "enum/pages";
-
-import Loading from "@/components/public/Loading";
-import { UpdateProfile } from "@/services/Profile";
-import NormalTextField from "@/components/public/NormalTextField";
 import { Icons } from "enum/icons";
-import DescriptionTextField from "@/components/public/DescriptionTextField";
-import VerifyDialog from "@/components/profile/VerifyDialog";
 
-export default function Home() {
-  const supabaseClient = useSupabaseClient<Database>();
-  const userStatus = useContext(userContext);
+import { UpdateProfile } from "@/services/Profile";
 
-  const avatar = { width: 200, height: 200, border: "4px black solid" };
-  const overlayIcon = {
+type EditProfileInput = {
+  image: string | null;
+  displayName: string;
+  description: string;
+  gender: string;
+};
+
+const EditProfileStyle = {
+  Avatar: {
+    width: 200,
+    height: 200,
+    border: "4px black solid",
+  },
+  DeletePictureButton: {
     position: "absolute",
     color: "black",
     opacity: "0.5",
-  };
-  const editInfoContainer = {
-    width: "40vw",
-  };
+  },
+  Card: {
+    width: "50vw",
+    minWidth: "300px",
 
+    marginTop: "3vh",
+    marginBottom: "3vh",
+
+    paddingBottom: "2vh",
+  },
+  TextField: {
+    width: "40vw",
+  },
+  HalfTextField: {
+    width: "18vw",
+  },
+};
+
+export default function Home() {
   const router: NextRouter = useRouter();
+  const supabaseClient = useSupabaseClient<Database>();
+  const userStatus = useContext(userContext);
 
   const [displayName, setDisplayName] = useState<string>("");
   const [gender, setGender] = useState<string>("");
@@ -148,11 +166,6 @@ export default function Home() {
     setGender(event.target.value as string);
   };
 
-  function handleGoBack(): void {
-    router.push(PagePaths.profile + "/" + userStatus.user?.username);
-    return;
-  }
-
   function handleOpenModal(): void {
     setIsVerifyModalShow(true);
   }
@@ -174,24 +187,8 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      {/* <Link onClick={handleGoBack}>
-        <ArrowBackIcon
-          fontSize="large"
-          sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
-        />
-      </Link> */}
       <Stack alignItems="center">
-        <Card
-          sx={{
-            width: "50vw",
-            minWidth: "300px",
-
-            marginTop: "3vh",
-            marginBottom: "3vh",
-
-            paddingBottom: "2vh",
-          }}
-        >
+        <Card sx={EditProfileStyle.Card}>
           <Box display="flex">
             <Box sx={{ flexGrow: 1 }}></Box>
             <IconButton onClick={handleOpenModal}>
@@ -219,7 +216,7 @@ export default function Home() {
               <CloseIcon color={showImageUploadError.err ? "error" : "primary"} fontSize="medium" />
             </IconButton>
 
-            <Avatar alt="Anya" sx={avatar}>
+            <Avatar alt="Anya" sx={EditProfileStyle.Avatar}>
               {image && (
                 <Image
                   src={image}
@@ -229,7 +226,11 @@ export default function Home() {
                   style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
                 />
               )}
-              <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
+              <IconButton
+                sx={EditProfileStyle.DeletePictureButton}
+                aria-label="upload picture"
+                component="label"
+              >
                 <input onChange={handleImageChange} hidden accept="image/*" type="file" />
                 <CameraAltIcon sx={{ fontSize: "100px" }} />
               </IconButton>
@@ -240,7 +241,7 @@ export default function Home() {
               </Typography>
             )}
 
-            <Box style={editInfoContainer}>
+            <Box style={EditProfileStyle.TextField}>
               <NormalTextField
                 header={editProfileHeader.username}
                 icon={Icons.edit}
@@ -262,7 +263,7 @@ export default function Home() {
                 errMsg={descriptionErr.msg}
               />
 
-              <Box style={{ width: "18vw" }}>
+              <Box style={EditProfileStyle.HalfTextField}>
                 <CommonDropdown
                   header={editProfileHeader.gender}
                   value={gender}

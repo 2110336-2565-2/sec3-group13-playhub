@@ -1,12 +1,10 @@
 import { useContext, useEffect, useState } from "react";
-
 import { NextRouter, useRouter } from "next/router";
 import Link from "next/link";
 
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-
 import { Box, Fab, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -16,6 +14,7 @@ import MyPostCard from "@/components/post/MyPostCard";
 
 import { Post } from "@/types/Post";
 import { PagePaths } from "enum/pages";
+
 import { GetCurrentUserPosts } from "@/services/Posts";
 
 export default function Home() {
@@ -26,10 +25,7 @@ export default function Home() {
   const [posts, setPosts] = useState<Post[] | null>(null);
 
   function handleDeletePost(toDeletePost: Post): void {
-    setPosts(
-      (posts) =>
-        posts && posts.filter((post) => post.postId !== toDeletePost.postId)
-    );
+    setPosts((posts) => posts && posts.filter((post) => post.postId !== toDeletePost.postId));
   }
 
   useEffect(() => {
@@ -38,10 +34,11 @@ export default function Home() {
       GetCurrentUserPosts(userStatus.user, supabaseClient)
         .then((p) => {
           setPosts(p);
-        }).catch((err) => {
-          console.log(err)
-          return
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
 
     getPostData();
@@ -74,7 +71,7 @@ export default function Home() {
           </Box>
         ))}
       </Stack>
-      {userStatus.user.isVerified &&
+      {userStatus.user.isVerified && (
         <Link href={"createPost"} color="inherit">
           <Fab
             color="primary"
@@ -84,7 +81,7 @@ export default function Home() {
             <AddIcon />
           </Fab>
         </Link>
-      }
+      )}
     </>
   );
 }

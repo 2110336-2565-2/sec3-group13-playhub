@@ -1,36 +1,50 @@
-import { useContext, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { NextRouter, useRouter } from "next/router";
-import { Box, Button, Card, FormHelperText, Stack, Typography } from "@mui/material";
+import { Box, Button, Card, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { userContext } from "supabase/user_context";
 
+import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
 import PasswordTextField from "@/components/public/PasswordTextField";
 import { validateConfirmNewPassword } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
 import { PagePaths } from "enum/pages";
-import Loading from "@/components/public/Loading";
+
 import { ResetPassword } from "@/services/Password";
 
-type ResetPassword = {
+type ResetPasswordInput = {
   password: string;
   confirmPassword: string;
+};
+
+const ResetPasswordStyle = {
+  Card: {
+    width: "45vw",
+    minWidth: "300px",
+    minHeight: "200px",
+
+    backgroundColor: grey[300],
+  },
+  TextField: {
+    width: "20vw",
+    minWidth: "250px",
+  },
 };
 
 export default function Home() {
   const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
-  const userStatus = useContext(userContext);
   const [canResetPassword, setCanResetPassword] = useState(false);
 
-  const [newPassword, setNewPassword] = useState<ResetPassword>({
+  const [newPassword, setNewPassword] = useState<ResetPasswordInput>({
     password: "",
     confirmPassword: "",
   });
+
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const [isRequesting, setIsRequesting] = useState<boolean>(false);
 
@@ -84,15 +98,7 @@ export default function Home() {
       {isRequesting && <Loading />}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
-        <Card
-          sx={{
-            width: "45vw",
-            minWidth: "300px",
-            minHeight: "200px",
-
-            backgroundColor: grey[300],
-          }}
-        >
+        <Card sx={ResetPasswordStyle.Card}>
           <Stack
             spacing={3}
             sx={{
@@ -103,7 +109,7 @@ export default function Home() {
           >
             <Typography variant="h2">Reset Password</Typography>
 
-            <Box sx={{ width: "20vw", minWidth: "250px" }}>
+            <Box sx={ResetPasswordStyle.TextField}>
               <PasswordTextField
                 name="password"
                 placeholder="New Password"
