@@ -4,7 +4,7 @@ import { grey } from "@mui/material/colors";
 
 import Background from "@/components/public/Background";
 
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 
 export default function Home() {
   return (
@@ -40,7 +40,7 @@ export default function Home() {
 
           <Box display="flex" justifyContent="center">
             <Typography variant="body2">Didn’t receive link? Click{"\u00A0"}</Typography>
-            <Link color="primary" underline="hover" href={PagePaths.requestResetPassword}>
+            <Link color="primary" underline="hover" href={PAGE_PATHS.REQUEST_RESET_PASSWORD}>
               <Typography variant="body2">here</Typography>
             </Link>
             <Typography variant="body2">{"\u00A0"}to resend</Typography>

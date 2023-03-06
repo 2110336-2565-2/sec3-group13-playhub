@@ -21,8 +21,8 @@ import { grey } from "@mui/material/colors";
 
 import Logo from "@/components/public/Logo";
 
-import { PagePaths } from "enum/pages";
-import { NavbarPages } from "enum/navbar";
+import { PAGE_PATHS } from "enum/PAGES";
+import { NAVBAR_PAGES } from "enum/NAVBAR";
 import { SignOut } from "@/services/User";
 
 export default function Navbar() {
@@ -37,18 +37,20 @@ export default function Navbar() {
   };
 
   const routeToHome = (): void => {
-    router.push(PagePaths.home);
+    router.push(PAGE_PATHS.HOME);
     return;
   };
 
   async function handleSignOut() {
-    SignOut(supabaseClient).then(() => {
-      router.push(PagePaths.login);
-      return;
-    }).catch((err) => {
-      console.log(err);
-      return;
-    })
+    SignOut(supabaseClient)
+      .then(() => {
+        router.push(PAGE_PATHS.LOGIN);
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }
 
   return (
@@ -60,23 +62,20 @@ export default function Navbar() {
           </IconButton>
           <Box sx={{ flexGrow: 1 }}>
             <IconButton color="inherit" disableRipple onClick={routeToHome}>
-              <Typography variant="body1">{NavbarPages.home}</Typography>
+              <Typography variant="body1">{NAVBAR_PAGES.HOME}</Typography>
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
-            {userStatus.user && (
-              userStatus.user.image ? (
+            {userStatus.user &&
+              (userStatus.user.image ? (
                 <Avatar
                   alt="Profile picture"
                   src={userStatus.user.image}
                   sx={{ bgcolor: grey[50] }}
                 />
               ) : (
-                <Avatar
-                  alt="Profile picture"
-                />
-              )
-            )}
+                <Avatar alt="Profile picture" />
+              ))}
           </IconButton>
           <Menu
             sx={{ mt: "40px" }}
@@ -93,28 +92,30 @@ export default function Navbar() {
             onClose={handleClose}
           >
             <MenuItem key={1}>
-              <Link href={PagePaths.profile + userStatus.user?.userId}>
+              <Link href={PAGE_PATHS.MY_PROFILE + userStatus.user?.userId}>
                 <Box alignContent={"center"}>
-                  <Typography variant="body1">{NavbarPages.profile}</Typography>
+                  <Typography variant="body1">{NAVBAR_PAGES.PROFILE}</Typography>
                 </Box>
               </Link>
             </MenuItem>
             <MenuItem key={2}>
-              <Link href={PagePaths.myPosts}>
-                <Typography variant="body1">{NavbarPages.myPost}</Typography>
+              <Link href={PAGE_PATHS.MY_POSTS}>
+                <Typography variant="body1">{NAVBAR_PAGES.MY_POST}</Typography>
               </Link>
             </MenuItem>
-            {!userStatus.user?.isVerified &&
+            {!userStatus.user?.isVerified && (
               <MenuItem key={3}>
-                <Link href={PagePaths.verify}>
-                  <Typography variant="body1" color="primary">{NavbarPages.verify}</Typography>
+                <Link href={PAGE_PATHS.VERIFY}>
+                  <Typography variant="body1" color="primary">
+                    {NAVBAR_PAGES.VERIFY}
+                  </Typography>
                 </Link>
               </MenuItem>
-            }
+            )}
             <MenuItem key={4}>
               <Box onClick={handleSignOut}>
                 <Typography variant="body1" color="error">
-                  {NavbarPages.logout}
+                  {NAVBAR_PAGES.LOGOUT}
                 </Typography>
               </Box>
             </MenuItem>

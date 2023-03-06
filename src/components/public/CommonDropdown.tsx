@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import { Gender } from "enum/gender";
+import { GENDER } from "enum/GENDER";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -34,11 +34,11 @@ const helperText = {
 
 export default function CommonDropdown(props: props) {
   function displayGenderIcon(gender: string) {
-    if (gender === Gender.male) {
+    if (gender === GENDER.MALE) {
       return <MaleIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
-    } else if (gender === Gender.female) {
+    } else if (gender === GENDER.FEMALE) {
       return <FemaleIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
-    } else if (gender === Gender.others) {
+    } else if (gender === GENDER.OTHERS) {
       return <TransgenderIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
     } else {
       return <FavoriteIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;

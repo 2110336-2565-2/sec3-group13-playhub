@@ -18,9 +18,9 @@ import PasswordTextFeild from "@/components/public/PasswordTextField";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
-import { PagePaths } from "enum/pages";
-import { CHAR_LIMIT } from "enum/inputLimit";
-import { Icons } from "enum/icons";
+import { PAGE_PATHS } from "enum/PAGES";
+import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
+import { ICONS } from "enum/ICONS";
 
 import { SignIn } from "@/services/User";
 
@@ -86,7 +86,7 @@ export default function Home() {
     SignIn(input.email, input.password, supabaseClient)
       .then(() => {
         // route to post feed page
-        router.push(PagePaths.home);
+        router.push(PAGE_PATHS.HOME);
       })
       .catch((err) => {
         // in case : cannot find user using inputed email and password
@@ -118,7 +118,7 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading />;
   if (userStatus.user) {
-    router.push(PagePaths.home);
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   return (
@@ -133,7 +133,7 @@ export default function Home() {
               <NormalTextField
                 name="email"
                 placeholder="Email"
-                icon={Icons.mail}
+                icon={ICONS.MAIL}
                 value={input.email}
                 handleValueChange={handleInputChange}
                 isErr={state.email && (emailErr.err || isSupabaseErr)}
@@ -162,11 +162,11 @@ export default function Home() {
           {/* Link go to register page */}
           <Box sx={LoginStyle.TextField} display="flex">
             <Typography variant="body2">New here?{"\u00A0"}</Typography>
-            <Link color="primary" href={PagePaths.register} sx={{ flexGrow: 1 }}>
+            <Link color="primary" href={PAGE_PATHS.REGISTER} sx={{ flexGrow: 1 }}>
               <Typography variant="body2">Sign Up</Typography>
             </Link>
 
-            <Link color="primary" href={PagePaths.requestResetPassword}>
+            <Link color="primary" href={PAGE_PATHS.REQUEST_RESET_PASSWORD}>
               <Typography variant="body2">Forgot password?</Typography>
             </Link>
           </Box>

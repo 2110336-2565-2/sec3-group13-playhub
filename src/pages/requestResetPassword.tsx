@@ -12,8 +12,8 @@ import NormalTextField from "@/components/public/NormalTextField";
 import { validateEmail } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
-import { PagePaths } from "enum/pages";
-import { Icons } from "enum/icons";
+import { PAGE_PATHS } from "enum/PAGES";
+import { ICONS } from "enum/ICONS";
 
 import { RequestResetPassword } from "@/services/Password";
 
@@ -59,7 +59,7 @@ export default function Home() {
       setIsRequesting(true);
       RequestResetPassword(email, supabaseClient)
         .then(() => {
-          router.push(PagePaths.successRequestResetPassword);
+          router.push(PAGE_PATHS.SUCCESS_REQUEST_RESET_PASSWORD);
         })
         .catch((err) => {
           setIsRequesting(false);
@@ -83,7 +83,7 @@ export default function Home() {
               {/* email textfield */}
               <Box sx={RequestResetPasswordStyle.TextField}>
                 <NormalTextField
-                  icon={Icons.mail}
+                  icon={ICONS.MAIL}
                   placeholder="e.g. playhub@mail.com"
                   value={email}
                   handleValueChange={handleEmailChange}

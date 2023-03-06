@@ -19,8 +19,8 @@ import { validateDate, validateDateWithInterval, validateTextField } from "@/uti
 import { Tag } from "@/types/Tag";
 import { PostInfo } from "@/types/Post";
 import { validation } from "@/types/Validation";
-import { PagePaths } from "enum/pages";
-import { CHAR_LIMIT } from "enum/inputLimit";
+import { PAGE_PATHS } from "enum/PAGES";
+import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 
 import { GetAllTags } from "@/services/Tags";
 import { GetPostByPostId, UpdatePost } from "@/services/Posts";
@@ -163,7 +163,7 @@ export default function Home() {
       };
       UpdatePost(postId, originalImages, updatedPost, supabaseClient)
         .then(() => {
-          router.push(PagePaths.myPosts);
+          router.push(PAGE_PATHS.MY_POSTS);
         })
         .catch((err) => {
           console.log(err);
@@ -204,11 +204,11 @@ export default function Home() {
   }, [supabaseClient, router.query.post_id]);
 
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   if (!userStatus.user.isVerified) {
-    router.push(PagePaths.home);
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   if (tagMenu.length == 0 || userStatus.isLoading || loadingData) return <Loading />;

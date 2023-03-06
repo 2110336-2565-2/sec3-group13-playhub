@@ -9,8 +9,6 @@ import {
   CardHeader,
   CardContent,
   CardActions,
-  Grow,
-  Button,
   IconButton,
   Grid,
   Stack,
@@ -31,7 +29,7 @@ import DeletePostDialog from "@/components/post/DeletePostDialog";
 import { Post } from "../../types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
 import { DeletePost } from "@/services/Posts";
 
@@ -59,8 +57,7 @@ type props = {
 export default function PostCard(props: props) {
   const router: NextRouter = useRouter();
 
-  const [openDeletePostModal, setOpenDeletePostModal] =
-    useState<boolean>(false);
+  const [openDeletePostModal, setOpenDeletePostModal] = useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
   const [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
 
@@ -71,19 +68,21 @@ export default function PostCard(props: props) {
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   async function handleDelete() {
-    DeletePost(props.post.postId, supabaseClient).then(() => {
-      props.handleDeletePost(props.post);
-      handleCloseDeletePostModal();
-    }).catch((err) => {
-      console.log(err);
-      return;
-    })
+    DeletePost(props.post.postId, supabaseClient)
+      .then(() => {
+        props.handleDeletePost(props.post);
+        handleCloseDeletePostModal();
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }
 
   function handleEditPost() {
     console.log("The post is edited");
     // edit post end-point
-    router.push(PagePaths.editPost + props.post.postId);
+    router.push(PAGE_PATHS.EDIT_POST + props.post.postId);
   }
 
   return (
@@ -101,7 +100,7 @@ export default function PostCard(props: props) {
           avatar={
             <IconButton
               onClick={() => {
-                router.push(PagePaths.profile + props.post.ownerId);
+                router.push(PAGE_PATHS.MY_PROFILE + props.post.ownerId);
               }}
               sx={{ padding: 0 }}
             >
@@ -123,11 +122,7 @@ export default function PostCard(props: props) {
                   <IconButton size="large" onClick={handleEditPost}>
                     <EditIcon />
                   </IconButton>
-                  <IconButton
-                    size="large"
-                    color="error"
-                    onClick={handleOpenDeletePostModal}
-                  >
+                  <IconButton size="large" color="error" onClick={handleOpenDeletePostModal}>
                     <DeleteOutlineIcon />
                   </IconButton>
                 </>
@@ -135,15 +130,9 @@ export default function PostCard(props: props) {
             </>
           }
         />
-        <CardContent
-          style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}
-        >
+        <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
           {/* post preview details start here */}
-          <Stack
-            direction={!hiddenPostDetail ? "row" : "column"}
-            spacing={2}
-            marginBottom={2}
-          >
+          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>{props.post.location}</span>
@@ -173,10 +162,7 @@ export default function PostCard(props: props) {
           </Grid>
 
           {/* post preview details end here */}
-          <Collapse
-            in={!hiddenPostDetail}
-            sx={{ marginTop: 2, marginBottom: 1 }}
-          >
+          <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2, marginBottom: 1 }}>
             {/* post hidden details start here */}
             {props.post.description.split("\n").map((row) => (
               <Typography key={row}>{row}</Typography>

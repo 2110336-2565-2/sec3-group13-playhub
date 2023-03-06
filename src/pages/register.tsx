@@ -18,10 +18,10 @@ import CommonDatePicker from "@/components/public/CommonDatePicker";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
-import { Gender } from "enum/gender";
-import { CHAR_LIMIT } from "enum/inputLimit";
-import { PagePaths } from "enum/pages";
-import { Icons } from "enum/icons";
+import { GENDER } from "enum/GENDER";
+import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
+import { PAGE_PATHS } from "enum/PAGES";
+import { ICONS } from "enum/ICONS";
 
 import { CreateUser } from "@/services/User";
 
@@ -161,7 +161,7 @@ export default function Home() {
         supabaseClient
       )
         .then(() => {
-          router.push(PagePaths.login);
+          router.push(PAGE_PATHS.LOGIN);
         })
         .catch((err) => {
           if (err.message == "User already registered") {
@@ -178,7 +178,7 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading />;
   if (userStatus.user) {
-    router.push(PagePaths.home);
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   return (
@@ -195,7 +195,7 @@ export default function Home() {
             <NormalTextField
               name="displayName"
               header="Username"
-              icon={Icons.edit}
+              icon={ICONS.EDIT}
               placeholder="Display Name"
               value={input.displayName}
               handleValueChange={handleTextFieldChange}
@@ -209,7 +209,7 @@ export default function Home() {
             <NormalTextField
               name="email"
               header="Email"
-              icon={Icons.mail}
+              icon={ICONS.MAIL}
               placeholder="Email"
               value={input.email}
               handleValueChange={handleTextFieldChange}
@@ -250,7 +250,7 @@ export default function Home() {
                   placeHolder="Gender"
                   value={input.gender}
                   handleValueChange={handleGenderChange}
-                  items={Object.values(Gender)}
+                  items={Object.values(GENDER)}
                   isErr={state.gender && isEmptyGender}
                   errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
                 />

@@ -18,8 +18,6 @@ import {
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { editProfileHeader } from "public/locales/editProfileHeader";
-
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
 import NormalTextField from "@/components/public/NormalTextField";
@@ -30,10 +28,10 @@ import { validateImage, validateTextField } from "@/utilities/validation";
 
 import { User } from "@/types/User";
 import { validation } from "@/types/Validation";
-import { Gender } from "enum/gender";
-import { CHAR_LIMIT } from "enum/inputLimit";
-import { PagePaths } from "enum/pages";
-import { Icons } from "enum/icons";
+import { GENDER } from "enum/GENDER";
+import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
+import { PAGE_PATHS } from "enum/PAGES";
+import { ICONS } from "enum/ICONS";
 
 import { UpdateProfile } from "@/services/Profile";
 
@@ -122,7 +120,7 @@ export default function Home() {
     if (readyToSubmit) {
       UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient)
         .then(() => {
-          router.push(PagePaths.profile + "/" + userStatus.user?.userId);
+          router.push(PAGE_PATHS.MY_PROFILE + "/" + userStatus.user?.userId);
         })
         .catch((err) => {
           console.log(err);
@@ -181,7 +179,7 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   return (
@@ -243,8 +241,8 @@ export default function Home() {
 
             <Box style={EditProfileStyle.TextField}>
               <NormalTextField
-                header={editProfileHeader.username}
-                icon={Icons.edit}
+                header="Username"
+                icon={ICONS.EDIT}
                 placeholder="Display Name"
                 value={displayName}
                 handleValueChange={handleDisplayNameChange}
@@ -254,7 +252,7 @@ export default function Home() {
               />
 
               <DescriptionTextField
-                header={editProfileHeader.description}
+                header="Description"
                 placeholder="Tell Us More About Yourself!"
                 value={description}
                 handleValueChange={handleDescChange}
@@ -265,10 +263,10 @@ export default function Home() {
 
               <Box style={EditProfileStyle.HalfTextField}>
                 <CommonDropdown
-                  header={editProfileHeader.gender}
+                  header="Gender"
                   value={gender}
                   handleValueChange={handleSelectChange}
-                  items={Object.values(Gender)}
+                  items={Object.values(GENDER)}
                 />
               </Box>
             </Box>

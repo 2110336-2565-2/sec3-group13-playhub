@@ -1,15 +1,4 @@
-import {
-  Box,
-  FormHelperText,
-  Icon,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
-import EditIcon from "@mui/icons-material/Edit";
-import { Icons } from "enum/icons";
+import { Box, FormHelperText, Stack, TextField, Typography } from "@mui/material";
 
 type props = {
   header: string;

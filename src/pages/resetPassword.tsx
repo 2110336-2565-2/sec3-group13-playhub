@@ -12,7 +12,7 @@ import PasswordTextField from "@/components/public/PasswordTextField";
 import { validateConfirmNewPassword } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 
 import { ResetPassword } from "@/services/Password";
 
@@ -68,7 +68,7 @@ export default function Home() {
       setIsRequesting(true);
       ResetPassword(newPassword.password, supabaseClient)
         .then(() => {
-          router.push(PagePaths.successResetPassword);
+          router.push(PAGE_PATHS.SUCCESS_RESET_PASSWORD);
         })
         .catch((err) => {
           setIsRequesting(false);
@@ -88,7 +88,7 @@ export default function Home() {
 
   useEffect(() => {
     if (router.asPath.indexOf("access_token") == -1) {
-      router.push(PagePaths.requestResetPassword);
+      router.push(PAGE_PATHS.REQUEST_RESET_PASSWORD);
     }
   }, [router]);
 

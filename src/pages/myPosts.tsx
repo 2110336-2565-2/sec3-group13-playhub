@@ -13,7 +13,7 @@ import Navbar from "@/components/public/Navbar";
 import MyPostCard from "@/components/post/MyPostCard";
 
 import { Post } from "@/types/Post";
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 
 import { GetCurrentUserPosts } from "@/services/Posts";
 
@@ -46,7 +46,7 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   if (posts == null) return <Loading />;

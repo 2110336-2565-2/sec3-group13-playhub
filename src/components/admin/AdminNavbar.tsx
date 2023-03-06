@@ -18,8 +18,8 @@ import { grey } from "@mui/material/colors";
 
 import Logo from "@/components/public/Logo";
 
-import { PagePaths } from "enum/pages";
-import { NavbarPages } from "enum/navbar";
+import { PAGE_PATHS } from "enum/PAGES";
+import { NAVBAR_PAGES } from "enum/NAVBAR";
 import { SignOut } from "@/services/User";
 
 export default function AdminNavbar() {
@@ -35,18 +35,20 @@ export default function AdminNavbar() {
   };
 
   const routeToHome = (): void => {
-    router.push(PagePaths.home);
+    router.push(PAGE_PATHS.HOME);
     return;
   };
 
   async function handleSignOut() {
-    SignOut(supabaseClient).then(() => {
-      router.push(PagePaths.login);
-      return;
-    }).catch((err) => {
-      console.log(err);
-      return;
-    })
+    SignOut(supabaseClient)
+      .then(() => {
+        router.push(PAGE_PATHS.LOGIN);
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }
 
   return (
@@ -58,7 +60,7 @@ export default function AdminNavbar() {
           </IconButton>
           <Box sx={{ flexGrow: 1 }}>
             <IconButton color="inherit" disableRipple onClick={routeToHome}>
-              <Typography variant="body1">{NavbarPages.home}</Typography>
+              <Typography variant="body1">{NAVBAR_PAGES.HOME}</Typography>
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
@@ -85,13 +87,8 @@ export default function AdminNavbar() {
             onClose={handleClose}
           >
             <MenuItem>
-              <Link
-                textAlign="center"
-                color="error"
-                underline="none"
-                onClick={handleSignOut}
-              >
-                <Typography variant="body1">{NavbarPages.logout}</Typography>
+              <Link textAlign="center" color="error" underline="none" onClick={handleSignOut}>
+                <Typography variant="body1">{NAVBAR_PAGES.LOGOUT}</Typography>
               </Link>
             </MenuItem>
           </Menu>

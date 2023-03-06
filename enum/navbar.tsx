@@ -1,7 +1,7 @@
-export enum NavbarPages {
-  home = "Home",
-  myPost = "My Post",
-  profile = "Profile",
-  logout = "Logout",
-  verify = "Verify"
+export enum NAVBAR_PAGES {
+  HOME = "Home",
+  MY_POST = "My Post",
+  PROFILE = "Profile",
+  LOGOUT = "Logout",
+  VERIFY = "Verify",
 }

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import EditIcon from "@mui/icons-material/Edit";
-import { Icons } from "enum/icons";
+import { ICONS } from "enum/ICONS";
 
 type props = {
   name?: string;
@@ -33,9 +33,9 @@ export default function NormalTextField(props: props) {
   const exceedChar: boolean = props.char_limit ? props.value.length > props.char_limit : false;
 
   function displayStartIcon(iconName: string) {
-    if (iconName === Icons.mail) {
+    if (iconName === ICONS.MAIL) {
       return <EmailIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
-    } else if (iconName === Icons.edit) {
+    } else if (iconName === ICONS.EDIT) {
       return <EditIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
     }
   }

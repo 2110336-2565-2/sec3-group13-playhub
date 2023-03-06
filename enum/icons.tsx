@@ -1,4 +1,4 @@
-export enum Icons {
-  mail = "Mail",
-  edit = "Edit",
+export enum ICONS {
+  MAIL = "Mail",
+  EDIT = "Edit",
 }

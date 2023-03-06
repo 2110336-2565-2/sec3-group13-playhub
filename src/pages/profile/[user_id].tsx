@@ -17,8 +17,8 @@ import Loading from "@/components/public/Loading";
 import VerifyChip from "@/components/profile/VerifyChip";
 
 import { User } from "@/types/User";
-import { PagePaths } from "enum/pages";
-import { Gender } from "enum/gender";
+import { PAGE_PATHS } from "enum/PAGES";
+import { GENDER } from "enum/GENDER";
 import { GetUserByUserId } from "@/services/User";
 
 const MyProfileStyle = {
@@ -68,18 +68,18 @@ export default function Home() {
   }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
 
   function handleEditProfile(): void {
-    router.push(PagePaths.editProfile);
+    router.push(PAGE_PATHS.EDIT_PROFILE);
     return;
   }
 
   function displayGenderIcon(gender: string) {
-    if (gender === Gender.male) {
+    if (gender === GENDER.MALE) {
       return <MaleIcon />;
-    } else if (gender === Gender.female) {
+    } else if (gender === GENDER.FEMALE) {
       return <FemaleIcon />;
-    } else if (gender === Gender.others) {
+    } else if (gender === GENDER.OTHERS) {
       return <TransgenderIcon />;
-    } else if (gender === Gender.prefersNotToSay) {
+    } else if (gender === GENDER.PREFERS_NOT_TO_SAY) {
       return <FavoriteIcon />;
     } else {
       return <div></div>;
@@ -88,16 +88,16 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   if (userStatus.user.isAdmin) {
-    router.push(PagePaths.adminProfile + router.query.user_id);
+    router.push(PAGE_PATHS.ADMIN_PROFILE + router.query.user_id);
     return;
   }
   if (!targetUserData) return <Loading />;
   if (targetUserData.isAdmin) {
-    router.push(PagePaths.home + userStatus.user.userId);
+    router.push(PAGE_PATHS.HOME + userStatus.user.userId);
     return;
   }
   return (

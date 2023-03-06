@@ -7,7 +7,7 @@ import {
   DialogTitle,
   Typography,
 } from "@mui/material";
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
 
 type props = {
@@ -19,7 +19,7 @@ export default function DeletePostDialog(props: props) {
   const router: NextRouter = useRouter();
 
   function handleGoBackToMyProfile() {
-    router.push(PagePaths.profile);
+    router.push(PAGE_PATHS.MY_PROFILE);
   }
 
   return (

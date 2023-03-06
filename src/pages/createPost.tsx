@@ -18,8 +18,8 @@ import { validateDate, validateDateWithInterval, validateTextField } from "@/uti
 
 import { validation } from "@/types/Validation";
 import { Tag } from "@/types/Tag";
-import { PagePaths } from "enum/pages";
-import { CHAR_LIMIT } from "enum/inputLimit";
+import { PAGE_PATHS } from "enum/PAGES";
+import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 
 import { GetAllTags } from "@/services/Tags";
 import { CreatePost } from "@/services/Posts";
@@ -157,7 +157,7 @@ export default function Home() {
       };
       CreatePost(newPost, supabaseClient)
         .then(() => {
-          router.push(PagePaths.myPosts);
+          router.push(PAGE_PATHS.MY_POSTS);
         })
         .catch((err) => {
           console.log(err);
@@ -174,15 +174,15 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   if (userStatus.user.isAdmin) {
-    router.push(PagePaths.adminHome + userStatus.user.userId);
+    router.push(PAGE_PATHS.ADMIN_HOME + userStatus.user.userId);
     return;
   }
   if (!userStatus.user.isVerified) {
-    router.push(PagePaths.home);
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   if (userStatus.isLoading || tagMenu.length == 0) return <Loading />;
