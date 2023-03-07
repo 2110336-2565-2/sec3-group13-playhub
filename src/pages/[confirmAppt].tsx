@@ -10,6 +10,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import ConfirmApptDialog from "@/components/appointment/ConfirmApptDialog";
+import { PagePaths } from "enum/pages";
 
 export default function Home() {
   const router = useRouter();
@@ -37,7 +38,7 @@ export default function Home() {
     <>
       <Navbar />
       <Box display="flex" paddingBottom="40px">
-        <Link>
+        <Link href={PagePaths.selectApptToConfirm}>
           <ArrowBackIcon
             fontSize="large"
             sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
@@ -82,10 +83,12 @@ export default function Home() {
           choice={choice}
           onConfirm={() => {
             if (choice === "accept") {
-              // do somthing
+              // do sth
+              router.push("selectApptToConfirm");
             }
             if (choice === "reject") {
-              // do shoething
+              // do sth
+              router.push("selectApptToConfirm");
             }
           }}
         />
