@@ -11,6 +11,7 @@ export enum PagePaths {
   profile = "/profile/", // subfix : username
   editProfile = "/editProfile",
   selectApptToConfirm = "/selectApptToConfirm",
+  confirmAppt = "/confirmAppt/", //suffix : appointmentId
 
   // admin
   adminHome = "/admin/", // subfix : user_id
