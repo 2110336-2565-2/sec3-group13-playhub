@@ -9,11 +9,12 @@ import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
+import ConfirmApptDialog from "@/components/appointment/ConfirmApptDialog";
 
 export default function Home() {
   const router = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
-  const [appointment, setAppointment] = useState<AppointmentDetail | null>(null);
+  const [appointment, setAppointment] = useState<AppointmentDetail | null>();
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
@@ -28,6 +29,8 @@ export default function Home() {
         return;
       });
   }, [supabaseClient, appointmentId]);
+
+  const [choice, setChoice] = useState<"accept" | "reject" | null>(null);
 
   if (!appointment) return <Loading />;
   return (
@@ -47,16 +50,46 @@ export default function Home() {
       <Box display="flex" justifyContent="center" padding="40px">
         <AppointmentParticipantCard appointmentDetail={appointment} />
       </Box>
-      <Box display="flex" justifyContent="center" padding="40px">
+      <Box display="flex" justifyContent="center" padding="40px" gap={5}>
         <Grid item xs={6}>
-          <Button variant="contained">ACCEPT</Button>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setChoice("accept");
+            }}
+          >
+            ACCEPT
+          </Button>
         </Grid>
         <Grid item xs={6}>
-          <Button variant="contained" color="secondary">
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => {
+              setChoice("reject");
+            }}
+          >
             REJECT
           </Button>
         </Grid>
       </Box>
+      {choice && (
+        <ConfirmApptDialog
+          openModal={true}
+          handleCloseModal={() => {
+            setChoice(null);
+          }}
+          choice={choice}
+          onConfirm={() => {
+            if (choice === "accept") {
+              // do somthing
+            }
+            if (choice === "reject") {
+              // do shoething
+            }
+          }}
+        />
+      )}
     </>
   );
 }
