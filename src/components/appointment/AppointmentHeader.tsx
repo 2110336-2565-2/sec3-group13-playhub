@@ -12,7 +12,8 @@ const textinBox = {
   display: "inline-flex",
   height: '50px',
   alignItems: 'center',
-  paddingLeft: '8px'
+  paddingLeft: '8px',
+  fontSize: "18px"
 }
 const chipsStyle = {
   minWidth: 100,
@@ -32,24 +33,24 @@ export default function AppointmentHeader(props: props) {
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Title</Typography>
       <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
-        <Typography variant='h6' sx={textinBox}>{props.detailHeader.title}</Typography>
+        <Typography variant='body1' sx={textinBox}>{props.detailHeader.title}</Typography>
       </Card>
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Location</Typography>
       <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
-        <Typography variant='h6' sx={textinBox}>
+        <Typography variant='body1' sx={textinBox}>
           <LocationOnIcon fontSize="large" />
-          <span style={{ marginLeft: '16px' }}>{props.detailHeader.location}</span>
+          <span style={{ marginLeft: '8px' }}>{props.detailHeader.location}</span>
         </Typography>
       </Card>
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Date & Time</Typography>
       <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
-        <Typography variant='h6' sx={textinBox}>
+        <Typography variant='body1' sx={textinBox}>
           <CalendarTodayIcon fontSize="large" />
-          <span style={{ marginLeft: '16px' }}>{props.detailHeader.startDateTime.format('DD/MM/YYYY HH:mm A')} - {props.detailHeader.endDateTime.format('DD/MM/YYYY HH:mm A')}</span>
+          <span style={{ marginLeft: '8px' }}>{props.detailHeader.startDateTime.format('DD/MM/YYYY HH:mm A')} - {props.detailHeader.endDateTime.format('DD/MM/YYYY HH:mm A')}</span>
         </Typography>
       </Card>
     </Box>
@@ -71,7 +72,7 @@ export default function AppointmentHeader(props: props) {
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Description</Typography>
       <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
-        <Typography variant='h6' sx={{ ...textinBox, display: null, padding: '8px', height: '200px', whiteSpace: "pre-line" }}>
+        <Typography variant='body1' sx={{ ...textinBox, display: null, padding: '8px', height: '200px', whiteSpace: "pre-line" }}>
           {props.detailHeader.description}
         </Typography>
       </Card>

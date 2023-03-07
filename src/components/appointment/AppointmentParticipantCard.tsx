@@ -40,7 +40,7 @@ export default function AppointmentParticipantCard(props: props) {
                 <Grid container spacing={1}>
                   {props.appointmentDetail.images.map((e, index) => (
                     <Grid item key={'i' + index}>
-                      <Image src={e} alt="Appointment_Image" width={150} height={150} />
+                      <Image src={e} alt="Appointment_Image" width={140} height={140} />
                     </Grid>
                   ))}
                 </Grid>
