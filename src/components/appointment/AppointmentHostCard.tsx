@@ -26,16 +26,17 @@ export default function AppointmentHostCard(props: props) {
         <CardContent>
           <Stack spacing="12px" sx={{ padding: "20px", height: "100%" }}>
             <AppointmentHeader detailHeader={props.appointmentDetail.detailHeader} isHost={true} />
-            <Box >
-              <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Image</Typography>
-              <Grid container spacing={1}>
-                {props.appointmentDetail.images.map((e, index) => (
-                  <Grid item key={'i' + index}>
-                    <Image src={e} alt="location" width={150} height={150} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
+            {props.appointmentDetail.images.length > 0 &&
+              (<Box >
+                <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Image</Typography>
+                <Grid container spacing={1}>
+                  {props.appointmentDetail.images.map((e, index) => (
+                    <Grid item key={'i' + index}>
+                      <Image src={e} alt="Appointment_Image" width={150} height={150} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>)}
           </Stack>
         </CardContent>
       </BorderWithShadow>

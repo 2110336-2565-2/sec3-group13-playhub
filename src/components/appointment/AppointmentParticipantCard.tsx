@@ -34,16 +34,17 @@ export default function AppointmentParticipantCard(props: props) {
       <BorderWithShadow>
         <CardContent>
           <Stack spacing="12px" sx={{ padding: "20px" }}>
-            <Box >
-              <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Image</Typography>
-              <Grid container spacing={1}>
-                {props.appointmentDetail.images.map((e, index) => (
-                  <Grid item key={'i' + index}>
-                    <Image src={e} alt="location" width={150} height={150} />
-                  </Grid>
-                ))}
-              </Grid>
-            </Box>
+            {props.appointmentDetail.images.length > 0 &&
+              (<Box >
+                <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Image</Typography>
+                <Grid container spacing={1}>
+                  {props.appointmentDetail.images.map((e, index) => (
+                    <Grid item key={'i' + index}>
+                      <Image src={e} alt="Appointment_Image" width={150} height={150} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>)}
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>Number of Participant : {props.appointmentDetail.participantAmount}</Typography>
             <Box >
               <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Participant List :</Typography>
