@@ -13,18 +13,20 @@ import { PagePaths } from "enum/pages";
 import Loading from "@/components/public/Loading";
 import { userContext } from "supabase/user_context";
 
-const isHost = true;
 export default function Home() {
   const router = useRouter();
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>(null);
-  const [isHost, setIsHost] = useState<boolean | null>(null)
+  const [isHost, setIsHost] = useState<boolean | null>(null);
+  const [isParticipant, setIsParticipant] = useState<boolean | null>(null);
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
+    if (!appointmentId || !userStatus.user) return;
     GetAppointmentsByAppointmentId(appointmentId, supabaseClient).then((appointment) => {
       setIsHost(userStatus.user?.userId == appointment?.ownerId);
+      setIsParticipant(appointment?.acceptParticipants.includes(userStatus.user?.username as string))
       setAppointment(appointment);
     }).catch((err) => {
       console.log(err)
@@ -37,7 +39,6 @@ export default function Home() {
     router.push(PagePaths.myAppointments);
     return;
   }
-
   if (!appointment) return <Loading />
   return <>
     <Navbar />
