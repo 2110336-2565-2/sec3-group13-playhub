@@ -40,6 +40,7 @@ export default function Home() {
     return;
   }
   if (!appointment) return <Loading />
+  if (!isParticipant) return handleGoBack()
   return <>
     <Navbar />
     <Box
