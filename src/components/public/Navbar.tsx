@@ -98,11 +98,13 @@ export default function Navbar() {
                 </Box>
               </Link>
             </MenuItem>
-            <MenuItem key={2}>
-              <Link href={PAGE_PATHS.MY_POSTS}>
-                <Typography variant="body1">{NAVBAR_PAGES.MY_POST}</Typography>
-              </Link>
-            </MenuItem>
+            {userStatus.user?.isVerified &&
+              <MenuItem key={2}>
+                <Link href={PAGE_PATHS.MY_POSTS}>
+                  <Typography variant="body1">{NAVBAR_PAGES.MY_POST}</Typography>
+                </Link>
+              </MenuItem>
+            }
             {!userStatus.user?.isVerified && (
               <MenuItem key={3}>
                 <Link href={PAGE_PATHS.VERIFY}>
