@@ -1,28 +1,32 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Navbar from "@/components/public/Navbar";
 import { Typography, Box, Link, Button, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AppointmentParticipantCard from "@/components/appointment/AppointmentParticipantCard";
 import { AppointmentDetail } from "@/types/Appointment";
-import { GetAppointmentsByAppointmentId } from "@/services/Appointments";
+import {
+  AcceptAppointment,
+  GetAppointmentsByAppointmentId,
+  RejectAppointment,
+} from "@/services/Appointments";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import ConfirmApptDialog from "@/components/appointment/ConfirmApptDialog";
 import { PagePaths } from "enum/pages";
+import { userContext } from "supabase/user_context";
 
 export default function Home() {
   const router = useRouter();
+  const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
-    console.log(appointmentId);
     GetAppointmentsByAppointmentId(appointmentId, supabaseClient)
       .then((appointment) => {
-        console.log(appointment);
         setAppointment(appointment);
       })
       .catch((err) => {
@@ -33,7 +37,7 @@ export default function Home() {
 
   const [choice, setChoice] = useState<"accept" | "reject" | null>(null);
 
-  if (!appointment) return <Loading />;
+  if (!appointment || !userStatus.user) return <Loading />;
   return (
     <>
       <Navbar />
@@ -82,12 +86,24 @@ export default function Home() {
           }}
           choice={choice}
           onConfirm={() => {
-            if (choice === "accept") {
+            if (choice === "accept" && userStatus.user) {
               // do sth
+              AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
+                (err) => {
+                  console.log(err);
+                  return;
+                }
+              );
               router.push(PagePaths.selectApptToConfirm);
             }
-            if (choice === "reject") {
+            if (choice === "reject" && userStatus.user) {
               // do sth
+              RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
+                (err) => {
+                  console.log(err);
+                  return;
+                }
+              );
               router.push(PagePaths.selectApptToConfirm);
             }
           }}

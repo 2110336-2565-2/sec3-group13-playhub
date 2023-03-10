@@ -26,7 +26,6 @@ export default function Home() {
 
     GetAppointmentsByUserIdWhichPending(userStatus.user.userId, supabaseClient)
       .then((appointment) => {
-        console.log(appointment);
         setAppointments(appointment);
       })
       .catch((err) => {
