@@ -26,9 +26,11 @@ export default function RightCard(props: props) {
           >
             {/* Image  */}
             <Box>
-              <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>
-                Image
-              </Typography>
+              {props.images.length != 0 && (
+                <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>
+                  Image
+                </Typography>
+              )}
               <Grid container spacing={1}>
                 {props.images.map((e, index) => (
                   <Grid item key={"i" + index}>
@@ -39,27 +41,52 @@ export default function RightCard(props: props) {
             </Box>
             {/* AddParticipant */}
             <Box>
-              <AddParticipant
-                header="Select Participants"
-                note="(เลือกอย่างน้อย 1 คน)"
-                value={props.selectedParticipants}
-                handleValueChange={props.handleParticipantsChange}
-                menuValue={props.availableParticipants}
-                isErr={props.participantCountError}
-                errMsg="(เลือกอย่างน้อย 1 คน)"
-              />
-            </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Button
-                variant="contained"
-                style={{ position: "absolute", bottom: 0 }}
-                onClick={props.onSubmit}
-              >
-                Create
-              </Button>
+              <Box display="flex" flexDirection="column">
+                <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>
+                  Select Participants
+                  {"\u00A0"}
+                </Typography>
+                <Typography variant="subtitle2" sx={{ color: "grey" }}>
+                  (เลือกอย่างน้อย 1 คน)
+                </Typography>
+              </Box>
+              {props.availableParticipants.length == 0 ? (
+                <Box display="flex">
+                  {props.availableParticipants.length == 0 && (
+                    <Typography
+                      variant="h6"
+                      sx={{ fontWeight: "bold", marginBottom: "4px", color: "red" }}
+                    >
+                      ยังไม่มีผู้สนใจกิจกรรมนี้
+                    </Typography>
+                  )}
+                </Box>
+              ) : (
+                <AddParticipant
+                  //header="Select Participants"
+                  //note="(เลือกอย่างน้อย 1 คน)"
+                  value={props.selectedParticipants}
+                  handleValueChange={props.handleParticipantsChange}
+                  menuValue={props.availableParticipants}
+                  isErr={props.participantCountError}
+                  errMsg="(กรุณาเลือกอย่างน้อย 1 คน)"
+                />
+              )}
             </Box>
           </Stack>
         </CardContent>
+        {props.selectedParticipants.length > 0 ? (
+          <Box
+            sx={{ position: "relative", bottom: 50 }}
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Button variant="contained" onClick={props.onSubmit}>
+              Create
+            </Button>
+          </Box>
+        ) : null}
       </BorderWithShadow>
     </>
   );
