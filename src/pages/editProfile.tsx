@@ -42,6 +42,13 @@ type EditProfileInput = {
   gender: string;
 };
 
+type EditProfileSubmit = {
+  image: boolean;
+  displayName: boolean;
+  description: boolean;
+  gender: boolean;
+};
+
 const EditProfileStyle = {
   Avatar: {
     width: 200,
@@ -75,10 +82,18 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
 
-  const [displayName, setDisplayName] = useState<string>("");
-  const [gender, setGender] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [image, setImage] = useState<string | null>(null);
+  const [input, setInput] = useState<EditProfileInput>({
+    image: null,
+    displayName: "",
+    description: "",
+    gender: "",
+  });
+  const [state, setState] = useState<EditProfileSubmit>({
+    image: false,
+    displayName: false,
+    description: false,
+    gender: false,
+  });
   const [originalImage, setOriginalImage] = useState<string | null>(null);
 
   const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
@@ -91,21 +106,23 @@ export default function Home() {
   });
 
   const displayNameErr: validation = validateTextField(
-    displayName,
+    input.displayName,
     CHAR_LIMIT.MIN_DISPLAY_NAME,
     CHAR_LIMIT.MAX_DISPLAY_NAME
   );
   const descriptionErr: validation = validateTextField(
-    description,
+    input.description,
     CHAR_LIMIT.MIN_DESCRIPTION,
     CHAR_LIMIT.MAX_DESCRIPTION
   );
 
   const getProfile = async (User: User) => {
-    setDisplayName(User.username);
-    setDescription(User.description);
-    setGender(User.sex);
-    setImage(User.image);
+    setInput({
+      displayName: User.username,
+      description: User.description,
+      gender: User.sex,
+      image: User.image,
+    });
     setOriginalImage(User.image);
   };
 
@@ -118,7 +135,14 @@ export default function Home() {
       showImageUploadError.err
     );
     if (readyToSubmit) {
-      UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient)
+      UpdateProfile(
+        input.displayName,
+        input.gender,
+        input.description,
+        fileImage,
+        userStatus.user,
+        supabaseClient
+      )
         .then(() => {
           router.push(PAGE_PATHS.MY_PROFILE + "/" + userStatus.user?.userId);
         })
@@ -132,7 +156,7 @@ export default function Home() {
 
   const handleImageChange = (event: any): void => {
     const tempFile = event.target.files[0];
-    setImage(URL.createObjectURL(tempFile));
+    setInput({ ...input, image: URL.createObjectURL(tempFile) });
     const imgErrMsg = validateImage(tempFile.type, tempFile.size);
     setShowImageUploadError(imgErrMsg);
     setIsImageUpload(true);
@@ -144,24 +168,24 @@ export default function Home() {
   const handleCancelImageChip = (): void => {
     setIsImageUpload(false);
     setShowImageUploadError({ msg: "", err: false });
-    setImage(originalImage);
+    setInput({ ...input, image: originalImage });
     setFileImage(null);
   };
 
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
-    setDisplayName(event.target.value);
+    setInput({ ...input, displayName: event.target.value });
     setIsPressSubmit(false);
   };
   const handleDescChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
-    setDescription(event.target.value);
+    setInput({ ...input, description: event.target.value });
     setIsPressSubmit(false);
   };
   const handleSelectChange = (event: SelectChangeEvent): void => {
-    setGender(event.target.value as string);
+    setInput({ ...input, gender: event.target.value as string });
   };
 
   function handleOpenModal(): void {
@@ -215,9 +239,9 @@ export default function Home() {
             </IconButton>
 
             <Avatar alt="Anya" sx={EditProfileStyle.Avatar}>
-              {image && (
+              {input.image && (
                 <Image
-                  src={image}
+                  src={input.image}
                   alt="Upload avatar"
                   width={200}
                   height={200}
@@ -244,7 +268,7 @@ export default function Home() {
                 header="Username"
                 icon={ICONS.EDIT}
                 placeholder="Display Name"
-                value={displayName}
+                value={input.displayName}
                 handleValueChange={handleDisplayNameChange}
                 char_limit={CHAR_LIMIT.MAX_DISPLAY_NAME}
                 isErr={isPressSubmit && displayNameErr.err}
@@ -254,7 +278,7 @@ export default function Home() {
               <DescriptionTextField
                 header="Description"
                 placeholder="Tell Us More About Yourself!"
-                value={description}
+                value={input.description}
                 handleValueChange={handleDescChange}
                 char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
                 isErr={isPressSubmit && descriptionErr.err}
@@ -264,7 +288,7 @@ export default function Home() {
               <Box style={EditProfileStyle.HalfTextField}>
                 <CommonDropdown
                   header="Gender"
-                  value={gender}
+                  value={input.gender}
                   handleValueChange={handleSelectChange}
                   items={Object.values(GENDER)}
                 />

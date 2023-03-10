@@ -1,3 +1,5 @@
+import { useContext } from "react";
+import { userContext } from "supabase/user_context";
 import {
   Box,
   Button,
@@ -17,9 +19,10 @@ type props = {
 
 export default function DeletePostDialog(props: props) {
   const router: NextRouter = useRouter();
+  const userStatus = useContext(userContext);
 
   function handleGoBackToMyProfile() {
-    router.push(PAGE_PATHS.MY_PROFILE);
+    router.push(PAGE_PATHS.MY_PROFILE + userStatus.user?.userId);
   }
 
   return (
