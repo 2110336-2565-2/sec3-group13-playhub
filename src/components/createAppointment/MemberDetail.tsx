@@ -15,7 +15,7 @@ const profile_layout = {
   minWidth: "200px",
 };
 const stack_design = {
-  width: "250px",
+  width: "400px",
   height: "50%",
   boxSizing: "border-box",
   background: "#FFFFFF",
