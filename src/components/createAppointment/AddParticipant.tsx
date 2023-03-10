@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import {
-  Box,
   Button,
   Chip,
   Container,
@@ -12,15 +11,14 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
-import { grey } from "@mui/material/colors";
 import { User } from "@/types/User";
 import MemberDetail from "./MemberDetail";
 //impot React from "react"
 import React from "react";
 
 type props = {
-  header?: string;
-  note?: string;
+  //header?: string;
+  //note?: string;
   value: User[];
   // eslint-disable-next-line no-unused-vars
   handleValueChange: (tags: User[]) => void;
@@ -38,20 +36,21 @@ export default function AddParticipant(props: props) {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    const userNames: string[] = props.value.map((tag) => {
-      return tag.username;
+    const userId: string[] = props.value.map((tag) => {
+      return tag.userId;
     });
-    setMenuItems(props.menuValue.filter((tag) => !userNames.includes(tag.username)));
-  }, []);
+    setMenuItems(props.menuValue.filter((tag) => !userId.includes(tag.userId)));
+  }, [props.value, props.menuValue]);
 
   const handleDeleteTag = (toDeleteTag: User) => () => {
     // Update displyed tags (delete)
-    props.handleValueChange(props.value.filter((tag) => tag.username !== toDeleteTag.username));
+    props.handleValueChange(props.value.filter((tag) => tag.userId !== toDeleteTag.userId));
     // Update menu item (insert)
     setMenuItems([...menuItems, toDeleteTag].sort((a, b) => (a.username > b.username ? 1 : -1)));
   };
 
   const handleAddTag = (toAddLabel: User) => {
+    //console.log("Click UID ", toAddLabel);
     // Update displyed tags (insert)F
     props.handleValueChange([...props.value, toAddLabel]);
     // Update menu item (delete)
@@ -90,15 +89,6 @@ export default function AddParticipant(props: props) {
 
   return (
     <>
-      <Box display="flex">
-        <Typography variant="body1">
-          {props.header}
-          {"\u00A0"}
-        </Typography>
-        <Typography variant="body1" sx={{ color: grey[500] }}>
-          {props.note}
-        </Typography>
-      </Box>
       <Container disableGutters style={{ position: "relative", minHeight: "50vh" }}>
         {/* Selected tags */}
         {props.value.map((tag) => {
