@@ -1,8 +1,7 @@
 import { Appointment } from "@/types/Appointment";
-import { Avatar, CardContent, CardHeader, IconButton, Stack, Typography } from "@mui/material";
+import { Card, Avatar, CardContent, CardHeader, IconButton, Stack, Typography } from "@mui/material";
 import { PagePaths } from "enum/pages";
 import router from "next/router";
-import BorderWithShadow from "../public/BorderWithShadow";
 
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -12,7 +11,7 @@ type props = {
     appointment: Appointment;
 };
 export default function AppointmentCard(props: props) {
-    return <BorderWithShadow>
+    return <Card sx={{ width: "100%" }}>
         <CardHeader
             avatar={
                 <IconButton
@@ -56,5 +55,5 @@ export default function AppointmentCard(props: props) {
                 </Typography>
             </Stack>
         </CardContent>
-    </BorderWithShadow>;
+    </Card>;
 }

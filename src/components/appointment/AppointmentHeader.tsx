@@ -1,12 +1,8 @@
 import { AppointmentDetailHeader } from "@/types/Appointment";
-import { CardContent, Card, Grid, Stack, Typography, Box, Chip } from "@mui/material";
+import { Card, Grid, Typography, Box, Chip } from "@mui/material";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
-const textboxShadow = {
-  border: "solid 4px",
-  borderRadius: "16px",
-};
 const textinBox = {
   display: "inline-flex",
   height: '50px',
@@ -30,13 +26,13 @@ export default function AppointmentHeader(props: props) {
   return <>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Title</Typography>
-      <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
+      <Card sx={{ width: "100%", bgcolor: props.isHost ? '#9797971A' : null }}>
         <Typography variant='body1' sx={textinBox}>{props.detailHeader.title}</Typography>
       </Card>
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Location</Typography>
-      <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
+      <Card sx={{ bgcolor: props.isHost ? '#9797971A' : null }}>
         <Typography variant='body1' sx={textinBox}>
           <LocationOnIcon fontSize="large" />
           <span style={{ marginLeft: '8px' }}>{props.detailHeader.location}</span>
@@ -45,7 +41,7 @@ export default function AppointmentHeader(props: props) {
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Date & Time</Typography>
-      <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
+      <Card sx={{ width: "100%", bgcolor: props.isHost ? '#9797971A' : null }}>
         <Typography variant='body1' sx={textinBox}>
           <CalendarTodayIcon fontSize="large" />
           <span style={{ marginLeft: '8px' }}>{props.detailHeader.startDateTime.format('DD/MM/YYYY HH:mm A')} - {props.detailHeader.endDateTime.format('DD/MM/YYYY HH:mm A')}</span>
@@ -69,7 +65,7 @@ export default function AppointmentHeader(props: props) {
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Description</Typography>
-      <Card sx={{ ...textboxShadow, bgcolor: props.isHost ? '#9797971A' : null }}>
+      <Card sx={{ bgcolor: props.isHost ? '#9797971A' : null }}>
         <Typography variant='body1' sx={{ ...textinBox, display: null, padding: '8px', height: '200px', whiteSpace: "pre-line" }}>
           {props.detailHeader.description}
         </Typography>

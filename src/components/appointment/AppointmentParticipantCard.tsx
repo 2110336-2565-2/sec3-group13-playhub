@@ -1,7 +1,6 @@
 import { AppointmentDetail } from "@/types/Appointment";
-import { CardContent, Grid, Stack, Typography, Box, Chip } from "@mui/material";
+import { Card, CardContent, Grid, Stack, Typography, Box, Chip } from "@mui/material";
 import Image from "next/image";
-import BorderWithShadow from "../public/BorderWithShadow";
 import AppointmentHeader from "./AppointmentHeader";
 
 const chipsStyle = {
@@ -21,16 +20,16 @@ export default function AppointmentParticipantCard(props: props) {
     width="80vw"
   >
     <Grid item xs={12} md={6} style={{ display: "flex" }}>
-      <BorderWithShadow>
+      <Card sx={{ width: "100%" }}>
         <CardContent>
           <Stack spacing="12px" sx={{ padding: "20px" }}>
             <AppointmentHeader detailHeader={props.appointmentDetail.detailHeader} isHost={false} />
           </Stack>
         </CardContent>
-      </BorderWithShadow>
+      </Card>
     </Grid>
     <Grid item xs={12} md={6} style={{ display: "flex" }} >
-      <BorderWithShadow>
+      <Card sx={{ width: "100%" }}>
         <CardContent>
           <Stack spacing="12px" sx={{ padding: "20px" }}>
             {props.appointmentDetail.images.length > 0 &&
@@ -72,7 +71,7 @@ export default function AppointmentParticipantCard(props: props) {
             </Box>
           </Stack>
         </CardContent>
-      </BorderWithShadow>
+      </Card>
     </Grid>
   </Grid>
 }
