@@ -1,6 +1,5 @@
 import AppointmentCard from "@/components/appointment/AppointmentCard";
 import Navbar from "@/components/public/Navbar";
-import { GetAppointmentsByUserId } from "@/services/Appointments";
 import { Appointment } from "@/types/Appointment";
 import { Typography, Grid, Box } from "@mui/material";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -9,6 +8,7 @@ import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import { NextRouter, useRouter } from "next/router";
 import { PagePaths } from "enum/pages";
+import { GetAppointmentsByUserIdWhichPending } from "@/services/Appointments";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -24,7 +24,7 @@ export default function Home() {
   useEffect(() => {
     if (!userStatus.user) return;
 
-    GetAppointmentsByUserId(userStatus.user.userId, supabaseClient)
+    GetAppointmentsByUserIdWhichPending(userStatus.user.userId, supabaseClient)
       .then((appointment) => {
         console.log(appointment);
         setAppointments(appointment);

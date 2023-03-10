@@ -105,13 +105,16 @@ export async function GetAppointmentsByAppointmentId(
   };
 }
 
-export async function GetAppointmentsByUserId(
+export async function GetAppointmentsByUserIdWhichPending(
   userId: string,
   supabaseClient: SupabaseClient<Database>
 ): Promise<Appointment[]> {
-  const getAppointmentsResult = await supabaseClient.rpc("get_appointments_by_user_id", {
-    id: userId,
-  });
+  const getAppointmentsResult = await supabaseClient.rpc(
+    "get_appointments_by_user_id_which_pending",
+    {
+      id: userId,
+    }
+  );
 
   if (getAppointmentsResult.error) {
     console.log(getAppointmentsResult.error);
