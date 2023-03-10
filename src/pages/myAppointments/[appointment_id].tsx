@@ -39,7 +39,8 @@ export default function Home() {
     router.push(PagePaths.myAppointments);
     return;
   }
-  if (!appointment) return <Loading />
+
+  if (!appointment || userStatus.isLoading) return <Loading />
   if (!isParticipant) return handleGoBack()
   return <>
     <Navbar />

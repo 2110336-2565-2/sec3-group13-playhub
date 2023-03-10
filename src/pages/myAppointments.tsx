@@ -9,6 +9,7 @@ import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import { NextRouter, useRouter } from "next/router";
 import { PagePaths } from "enum/pages";
+import Loading from "@/components/public/Loading";
 
 export default function Home() {
     const router: NextRouter = useRouter();
@@ -33,6 +34,7 @@ export default function Home() {
 
     }, [supabaseClient, userStatus.user]);
 
+    if (userStatus.isLoading) return <Loading />;
     return <>
         <Navbar />
         <Typography paddingTop="40px" variant="h4" align="center">My Appointments</Typography>
