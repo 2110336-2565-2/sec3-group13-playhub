@@ -15,6 +15,8 @@ import {
   Stack,
   Chip,
   Snackbar,
+  Grow,
+  Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
@@ -141,11 +143,11 @@ export default function PostCard(props: props) {
         <CardActions style={{ padding: "4px 8px" }}>
           <Box sx={{ flexGrow: 1 }}></Box>
 
-          {/* <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
+          <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
             <Button onClick={() => setOpenSnackBar(true)} variant="contained">
               Join
             </Button>
-          </Grow> */}
+          </Grow>
 
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
             <ArrowDownwardIcon />
@@ -154,12 +156,6 @@ export default function PostCard(props: props) {
       </Card>
 
       {/* Comfirm Delete Dialog */}
-      <Snackbar
-        open={openSnackBar}
-        autoHideDuration={5000}
-        message="ได้เวลาสนุกแล้วสิ"
-        onClose={() => setOpenSnackBar(false)}
-      />
       <Snackbar
         open={openSnackBar}
         autoHideDuration={5000}
