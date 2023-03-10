@@ -6,7 +6,6 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 const textboxShadow = {
   border: "solid 4px",
   borderRadius: "16px",
-  boxShadow: "8px 8px #BFBFBF",
 };
 const textinBox = {
   display: "inline-flex",
@@ -22,7 +21,6 @@ const chipsStyle = {
   fontWeight: 'bold',
   border: "black solid 4px",
   borderRadius: "16px",
-  boxShadow: "4px 4px #BFBFBF",
 }
 type props = {
   detailHeader: AppointmentDetailHeader,

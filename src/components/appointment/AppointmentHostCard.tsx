@@ -11,7 +11,6 @@ const chipsStyle = {
   fontWeight: 'bold',
   border: "black solid 4px",
   borderRadius: "16px",
-  boxShadow: "4px 4px #BFBFBF",
 }
 type props = {
   appointmentDetail: AppointmentDetail,

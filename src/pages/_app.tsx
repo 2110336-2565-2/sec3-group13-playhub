@@ -50,6 +50,20 @@ const mainTheme = createTheme({
         },
       },
     },
+    MuiCard: {
+      styleOverrides: {
+        root: {
+          boxShadow: "8px 8px 1px #BFBFBF",
+        },
+      },
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          boxShadow: "4px 4px #BFBFBF",
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
