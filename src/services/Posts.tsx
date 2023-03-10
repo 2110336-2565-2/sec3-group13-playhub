@@ -217,13 +217,15 @@ export async function GetPostWithParticipantsByPostId(
     startTime: dayjs(postData.start_time),
     endTime: dayjs(postData.end_time),
     participants: postData.participants.map((e) => ({
-      id: e.id,
+      userId: e.id,
       username: e.username,
       sex: e.sex,
       isVerified: e.is_verified,
       birthdate: e.birthdate,
       description: e.description,
       image: e.image,
+      email: "",
+      isAdmin: false,
     })),
   };
 }
