@@ -1,14 +1,15 @@
 import { AppointmentDetailHeader } from "@/types/Appointment";
-import { Card, Grid, Typography, Box, Chip } from "@mui/material";
+import { Grid, Typography, Box, Chip } from "@mui/material";
+import InputAdornment from '@mui/material/InputAdornment';
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import TextField from "@mui/material/TextField";
 
-const textinBox = {
-  display: "inline-flex",
-  height: '50px',
-  alignItems: 'center',
-  paddingLeft: '8px',
-  fontSize: "18px"
+const textBox = {
+  border: "solid 4px",
+  borderRadius: "16px",
+  boxShadow: "8px 8px 1px #BFBFBF",
+  "& .MuiInputBase-input.Mui-disabled": { WebkitTextFillColor: "#000000" }
 }
 const chipsStyle = {
   minWidth: 100,
@@ -26,27 +27,42 @@ export default function AppointmentHeader(props: props) {
   return <>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Title</Typography>
-      <Card sx={{ width: "100%", bgcolor: props.isHost ? '#9797971A' : null }}>
-        <Typography variant='body1' sx={textinBox}>{props.detailHeader.title}</Typography>
-      </Card>
+      <TextField disabled value={props.detailHeader.title}
+        sx={{
+          ...textBox, bgcolor: props.isHost ? '#9797971A' : null, width: "100%",
+        }}
+        InputProps={{ style: { fontSize: "18px" } }}
+      />
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Location</Typography>
-      <Card sx={{ bgcolor: props.isHost ? '#9797971A' : null }}>
-        <Typography variant='body1' sx={textinBox}>
-          <LocationOnIcon fontSize="large" />
-          <span style={{ marginLeft: '8px' }}>{props.detailHeader.location}</span>
-        </Typography>
-      </Card>
+      <TextField disabled multiline value={props.detailHeader.location}
+        sx={{
+          ...textBox, bgcolor: props.isHost ? '#9797971A' : null, width: "100%",
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <LocationOnIcon fontSize="large" />
+            </InputAdornment>
+          ), style: { fontSize: "18px", paddingLeft: '8px' }
+        }}
+      />
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Date & Time</Typography>
-      <Card sx={{ width: "100%", bgcolor: props.isHost ? '#9797971A' : null }}>
-        <Typography variant='body1' sx={textinBox}>
-          <CalendarTodayIcon fontSize="large" />
-          <span style={{ marginLeft: '8px' }}>{props.detailHeader.startDateTime.format('DD/MM/YYYY HH:mm A')} - {props.detailHeader.endDateTime.format('DD/MM/YYYY HH:mm A')}</span>
-        </Typography>
-      </Card>
+      <TextField disabled value={`${props.detailHeader.startDateTime.format('DD/MM/YYYY HH:mm A')} - ${props.detailHeader.endDateTime.format('DD/MM/YYYY HH:mm A')}`}
+        sx={{
+          ...textBox, bgcolor: props.isHost ? '#9797971A' : null, width: "100%",
+        }}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <CalendarTodayIcon fontSize="large" />
+            </InputAdornment>
+          ), style: { fontSize: "18px", paddingLeft: '8px' }
+        }}
+      />
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Tag</Typography>
@@ -65,11 +81,12 @@ export default function AppointmentHeader(props: props) {
     </Box>
     <Box>
       <Typography variant="h5" sx={{ fontWeight: "bold", marginBottom: "4px" }}>Description</Typography>
-      <Card sx={{ bgcolor: props.isHost ? '#9797971A' : null }}>
-        <Typography variant='body1' sx={{ ...textinBox, display: null, padding: '8px', height: '200px', whiteSpace: "pre-line" }}>
-          {props.detailHeader.description}
-        </Typography>
-      </Card>
+      <TextField disabled multiline value={props.detailHeader.description} rows={8}
+        sx={{
+          ...textBox, bgcolor: props.isHost ? '#9797971A' : null, width: "100%"
+        }}
+        InputProps={{ style: { fontSize: "18px", padding: '8px', whiteSpace: "pre-line" } }}
+      />
     </Box>
   </>
 }
