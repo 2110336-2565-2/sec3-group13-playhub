@@ -68,8 +68,8 @@ export default function EachPostCard(props: props) {
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>
-                {dayjs(props.post.startDateTime).format("dddd D MMMM YYYY h.mm A")} -{" "}
-                {dayjs(props.post.endDateTime).format("dddd D MMMM YYYY h.mm A")}
+                {dayjs(props.post.startDateTime).format("DD/MM/YYYY h.mm A")} -{" "}
+                {dayjs(props.post.endDateTime).format("DD/MM/YYYY h.mm A")}
               </span>
             </Typography>
           </Stack>
