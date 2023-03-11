@@ -22,22 +22,30 @@ export default function Home() {
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();
+  const [isParticipant, setIsParticipant] = useState<boolean | null>(null);
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
     GetAppointmentsByAppointmentId(appointmentId, supabaseClient)
       .then((appointment) => {
         setAppointment(appointment);
+        setIsParticipant(
+          appointment.pendingParticipants.includes(userStatus.user?.username as string)
+        );
       })
       .catch((err) => {
         console.log(err);
         return;
       });
-  }, [supabaseClient, appointmentId]);
+  }, [supabaseClient, appointmentId, userStatus.user]);
 
   const [choice, setChoice] = useState<"accept" | "reject" | null>(null);
 
   if (!appointment || !userStatus.user) return <Loading />;
+  if (!isParticipant) {
+    router.push(PagePaths.selectApptToConfirm);
+    return;
+  }
   return (
     <>
       <Navbar />
