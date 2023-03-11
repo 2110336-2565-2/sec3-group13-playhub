@@ -1,6 +1,7 @@
 export enum NavbarPages {
-    home = "Home",
-    myPost = "My Post",
-    profile = "Profile",
-    logout = "Logout",
-  }
+  home = "Home",
+  myPost = "My Post",
+  profile = "Profile",
+  myAppointments = "My Appointments",
+  logout = "Logout",
+}
