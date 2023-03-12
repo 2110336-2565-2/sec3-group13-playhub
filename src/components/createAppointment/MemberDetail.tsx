@@ -35,7 +35,8 @@ export default function MemberDetail(props: props) {
           spacing={2}
           alignItems="center"
           justifyContent="center"
-          sx={{ /*margin: "10px"*/ padding: "30px", ...stack_design }}
+          borderRadius=" 15px"
+          sx={{ padding: "30px", ...stack_design }}
         >
           <Typography variant="h1" align="center" sx={profile_layout}>
             {props.value.username}
@@ -65,7 +66,12 @@ export default function MemberDetail(props: props) {
           {props.value.description.split("\n").map((row) => (
             <Typography
               variant="body1"
-              sx={{ ...profile_layout, wordBreak: "break-word", textAlign: "center" }}
+              sx={{
+                ...profile_layout,
+                wordBreak: "break-word",
+                textAlign: "center",
+                padding: "0 10 0 10",
+              }}
               key={row}
             >
               {row}
