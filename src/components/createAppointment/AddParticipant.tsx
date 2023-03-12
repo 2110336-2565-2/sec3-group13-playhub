@@ -8,6 +8,8 @@ import {
   MenuItem,
   Typography,
   Popover,
+  Box,
+  Paper,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
@@ -28,6 +30,11 @@ type props = {
   isErr: boolean;
   errMsg: string;
 };
+
+/*const PopoverStyle = {
+  borderRadius: "50px",
+  pointerEvents: "none",
+};*/
 
 export default function AddParticipant(props: props) {
   //---- Menu item
@@ -151,13 +158,11 @@ export default function AddParticipant(props: props) {
           sx={{
             pointerEvents: "none",
           }}
+          //style={PopoverStyle}
           open={popopen}
           anchorEl={popanchorEl}
           onClose={handlePopoverClose}
-          anchorOrigin={{
-            vertical: "top",
-            horizontal: "right",
-          }}
+          anchorOrigin={{ vertical: "top", horizontal: "right" }}
           transformOrigin={{
             vertical: "bottom",
             horizontal: "left",
