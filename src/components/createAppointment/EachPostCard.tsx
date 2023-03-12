@@ -63,7 +63,7 @@ export default function EachPostCard(props: props) {
           <Stack direction={"column"} spacing={2} marginBottom={2}>
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>{props.post.location.slice(0, 80)}</span>
+              <span style={{ marginLeft: 8 }}>{props.post.location.slice(0, 60)}</span>
             </Typography>
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
