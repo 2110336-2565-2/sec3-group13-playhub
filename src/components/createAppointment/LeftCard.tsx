@@ -43,6 +43,8 @@ export default function LeftCard(props: props) {
                 errMsg={""}
                 isMultiLine={false}
                 isUnClick={props.isUnClick}
+                isLogo={true}
+                isLocate={true}
               />
             </Box>
             {/*  DateTime */}
@@ -60,6 +62,8 @@ export default function LeftCard(props: props) {
                 errMsg={""}
                 isMultiLine={false}
                 isUnClick={props.isUnClick}
+                isLogo={true}
+                isCal={true}
               />
             </Box>
             {/*  Tag */}

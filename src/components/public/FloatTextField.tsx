@@ -1,4 +1,6 @@
-import { Box, FormHelperText, TextField, Typography } from "@mui/material";
+import { Box, FormHelperText, TextField, Typography, InputAdornment } from "@mui/material";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 type props = {
   header?: string;
   label?: string;
@@ -11,6 +13,9 @@ type props = {
   errMsg: string;
   mediumSize?: boolean;
   isUnClick?: boolean;
+  isLogo?: boolean;
+  isCal?: boolean;
+  isLocate?: boolean;
 };
 
 const helperText = {
@@ -46,6 +51,13 @@ export default function FloatTextField(props: props) {
         rows={props.isMultiLine ? lines : 1}
         fullWidth
         size={props.mediumSize ? "medium" : "small"}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              {props.isLogo ? props.isLocate ? <LocationOnIcon /> : <CalendarTodayIcon /> : null}
+            </InputAdornment>
+          ),
+        }}
       />
       <Box sx={helperText}>
         <FormHelperText error={exceedChar}>
