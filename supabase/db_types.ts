@@ -310,6 +310,20 @@ export interface Database {
           is_exist_national_id: boolean;
         };
       };
+      add_participant_id_to_post_id: {
+        Args: {
+          user_id: string;
+          post_id: number;
+        };
+        Returns: undefined;
+      };
+      remove_participant_id_from_post_id: {
+        Args: {
+          user_id: string;
+          post_id: number;
+        };
+        Returns: undefined;
+      };
     };
     Enums: {
       [_ in never]: never;
