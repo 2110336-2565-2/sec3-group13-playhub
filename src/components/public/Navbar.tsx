@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-
+import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import Link from "next/link";
 
