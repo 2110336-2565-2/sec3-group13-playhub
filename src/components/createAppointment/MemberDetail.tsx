@@ -11,14 +11,11 @@ type props = {
 };
 
 const profile_layout = {
-  width: "50vw",
   minWidth: "200px",
 };
 const stack_design = {
   padding: "30px",
   width: "400px",
-  height: "50%",
-  boxSizing: "border-box",
 };
 
 const avatar = { width: 120, height: 120 };
@@ -53,20 +50,22 @@ export default function MemberDetail(props: props) {
             <Chip icon={<CakeIcon />} label={props.value.birthdate} />
           </Stack>
 
-          {props.value.description.split("\n").map((row) => (
-            <Typography
-              variant="body1"
-              sx={{
-                ...profile_layout,
-                wordBreak: "break-word",
-                textAlign: "center",
-                padding: "0 10 0 10",
-              }}
-              key={row}
-            >
-              {row}
-            </Typography>
-          ))}
+          <Stack>
+            {props.value.description.split("\n").map((row) => (
+              <Typography
+                variant="body1"
+                sx={{
+                  ...profile_layout,
+                  wordBreak: "break-word",
+                  textAlign: "center",
+                  padding: "0 10 0 10",
+                }}
+                key={row}
+              >
+                {row}
+              </Typography>
+            ))}
+          </Stack>
         </Stack>
       )}
     </>
