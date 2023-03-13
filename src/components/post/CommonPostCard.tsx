@@ -81,16 +81,26 @@ export default function PostCard(props: props) {
     }
   }, [])
 
-  async function joinPost(): Promise<void> {
+  function joinPost(): void {
     if (!props.userId) return;
     if (!isUserJoin) {
-      await AddParticipantToPost(props.userId, props.post.postId, supabaseClient)
-      setOpenSnackBar({ msg: `Join ${props.post.title} !`, isShow: true })
-      setIsUserJoin(true)
+      AddParticipantToPost(props.userId, props.post.postId, supabaseClient)
+        .then(() => {
+          setOpenSnackBar({ msg: `Join ${props.post.title} !`, isShow: true })
+          setIsUserJoin(true)
+        }).catch((err) => {
+          console.log(err)
+          return;
+        })
     } else {
-      await RemoveParticipantFromPost(props.userId, props.post.postId, supabaseClient)
-      setOpenSnackBar({ msg: `Cancel ${props.post.title} !`, isShow: true })
-      setIsUserJoin(false)
+      RemoveParticipantFromPost(props.userId, props.post.postId, supabaseClient)
+        .then(() => {
+          setOpenSnackBar({ msg: `Cancel ${props.post.title} !`, isShow: true })
+          setIsUserJoin(false)
+        }).catch((err) => {
+          console.log(err)
+          return;
+        })
     }
   }
 
