@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import Image from "next/image";
 import {
@@ -26,6 +26,9 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import { Post } from "../../types/Post";
 import { PagePaths } from "enum/pages";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { AddParticipantToPost, RemoveParticipantFromPost } from "@/services/Participant";
+import { Database } from "supabase/db_types";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -43,13 +46,53 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 
 type props = {
   post: Post;
+  userId: string | undefined;
 };
+
+type snackBar = {
+  msg: string;
+  isShow: boolean;
+}
 
 export default function PostCard(props: props) {
   const router: NextRouter = useRouter();
+  const supabaseClient = useSupabaseClient<Database>();
+
+  const [isUserJoin, setIsUserJoin] = useState<boolean>(false)
   const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
-  const [openSnackBar, setOpenSnackBar] = useState<boolean>(false);
+  const [openSnackBar, setOpenSnackBar] = useState<snackBar>({ msg: "", isShow: false });
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
+
+  function hasJoined(): boolean {
+    if (!props.post.participants) return false
+    for (let i = 0; i < props.post.participants.length; i++) {
+      if (props.post.participants[i].userId === props.userId) {
+        return true
+      }
+    }
+    return false
+  }
+
+  useEffect(() => {
+    if (hasJoined()) {
+      setIsUserJoin(true)
+    } else {
+      setIsUserJoin(false)
+    }
+  }, [])
+
+  async function joinPost(): Promise<void> {
+    if (!props.userId) return;
+    if (!isUserJoin) {
+      await AddParticipantToPost(props.userId, props.post.postId, supabaseClient)
+      setOpenSnackBar({ msg: `Join ${props.post.title}`, isShow: true })
+      setIsUserJoin(true)
+    } else {
+      await RemoveParticipantFromPost(props.userId, props.post.postId, supabaseClient)
+      setOpenSnackBar({ msg: `Cancel ${props.post.title}`, isShow: true })
+      setIsUserJoin(false)
+    }
+  }
 
   return (
     <>
@@ -144,8 +187,8 @@ export default function PostCard(props: props) {
           <Box sx={{ flexGrow: 1 }}></Box>
 
           <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
-            <Button onClick={() => setOpenSnackBar(true)} variant="contained">
-              Join
+            <Button onClick={() => joinPost()} variant="contained">
+              {!isUserJoin ? "Join" : "Cancel"}
             </Button>
           </Grow>
 
@@ -157,10 +200,10 @@ export default function PostCard(props: props) {
 
       {/* Comfirm Delete Dialog */}
       <Snackbar
-        open={openSnackBar}
+        open={openSnackBar.isShow}
         autoHideDuration={5000}
-        message="ได้เวลาสนุกแล้วสิ"
-        onClose={() => setOpenSnackBar(false)}
+        message={openSnackBar.msg}
+        onClose={() => setOpenSnackBar({ msg: "", isShow: false })}
       />
     </>
   );
