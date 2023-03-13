@@ -17,7 +17,7 @@ function formatDateTime(datetime: Dayjs | null): string {
   }
   return "";
 }
-export default function LeftCard(props: props) {
+export default function PostInfoCard(props: props) {
   return (
     <>
       <BorderWithShadow>

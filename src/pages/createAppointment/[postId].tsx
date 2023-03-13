@@ -10,7 +10,7 @@ import Loading from "@/components/public/Loading";
 import { PagePaths } from "enum/pages";
 import { GetPostWithParticipantsByPostId } from "@/services/Posts";
 import { CreateAppointment } from "@/services/Appointments";
-import LeftCard from "@/components/createAppointment/LeftCard";
+import PostInfoCard from "@/components/createAppointment/PostInfoCard";
 import PostImageAndParticipantCard from "@/components/createAppointment/PostImageAndParticipantCard";
 import { User } from "@/types/User";
 import { PostInfo } from "@/types/Post";
@@ -102,9 +102,9 @@ export default function Home() {
       {/*  Left and Right Card */}
       <Box display="flex" justifyContent="center" padding="40px">
         <Grid container spacing="40px" width="80vw">
-          {/*  Left Card */}
+          {/*  PostInfoCard */}
           <Grid item xs={12} md={6} style={{ display: "flex" }}>
-            <LeftCard postInfo={postInfo} isUnClick={true} />
+            <PostInfoCard postInfo={postInfo} isUnClick={true} />
           </Grid>
           {/* PostImageAndParticipantCard */}
           <Grid item xs={12} md={6} style={{ display: "flex" }}>
