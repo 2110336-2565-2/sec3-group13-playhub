@@ -56,7 +56,12 @@ export default function MemberDetail(props: props) {
           {props.value.description.split("\n").map((row) => (
             <Typography
               variant="body1"
-              sx={{ ...profile_layout, wordBreak: "break-word", textAlign: "center" }}
+              sx={{
+                ...profile_layout,
+                wordBreak: "break-word",
+                textAlign: "center",
+                padding: "0 10 0 10",
+              }}
               key={row}
             >
               {row}
