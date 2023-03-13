@@ -173,22 +173,25 @@ export async function GetPosts(supabaseClient: SupabaseClient<Database>): Promis
 
 export async function GetPostsWithParticipants(
   supabaseClient: SupabaseClient<Database>
-): Promise<PostInfo[]> {
+): Promise<Post[]> {
   const getAllUserPostResult = await supabaseClient.rpc("get_posts_with_participants");
   if (getAllUserPostResult.error) {
     console.log(getAllUserPostResult.error);
     throw new Error(SUPABASE_CONNECTING_ERROR);
   }
-  return getAllUserPostResult.data.map((postData) => ({
-    title: postData.title,
-    userId: postData.owner_id,
-    tags: postData.tags,
-    description: postData.description,
-    images: postData.images,
-    location: postData.location,
-    startTime: dayjs(postData.start_time),
-    endTime: dayjs(postData.end_time),
-    participants: postData.participants.map((e) => ({
+  return getAllUserPostResult.data.map((post) => ({
+    postId: post.id,
+    title: post.title,
+    ownerId: post.owner_id,
+    ownerName: post.owner_name,
+    ownerProfilePic: post.owner_profile,
+    tags: post.tags.map((tag) => tag.name),
+    description: post.description,
+    image: post.images,
+    location: post.location,
+    startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
+    participants: post.participants.map((e) => ({
       userId: e.id,
       username: e.username,
       sex: e.sex,
