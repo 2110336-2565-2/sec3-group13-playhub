@@ -60,7 +60,7 @@ export default function Home() {
       .then((p) => {
         setPostInfo(p);
         if (!p.participants) return;
-        setAvailableParticipants(p.participants)
+        setAvailableParticipants(p.participants.filter((e) => e.userId != userStatus.user?.userId));
       })
       .catch((err) => {
         console.log(err);

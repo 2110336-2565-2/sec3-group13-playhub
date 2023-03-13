@@ -82,13 +82,11 @@ export default function RightCard(props: props) {
           justifyContent="center"
           alignItems="center"
         >
-          <Button
-            variant="contained"
-            onClick={props.onSubmit}
-            disabled={props.selectedParticipants.length == 0}
-          >
-            Create
-          </Button>
+          {props.availableParticipants.length > 0 && (
+            <Button variant="contained" onClick={props.onSubmit}>
+              Create
+            </Button>
+          )}
         </Box>
       </BorderWithShadow>
     </>
