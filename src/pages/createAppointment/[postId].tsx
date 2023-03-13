@@ -11,7 +11,7 @@ import { PagePaths } from "enum/pages";
 import { GetPostWithParticipantsByPostId } from "@/services/Posts";
 import { CreateAppointment } from "@/services/Appointments";
 import LeftCard from "@/components/createAppointment/LeftCard";
-import PostInfoCard from "@/components/createAppointment/PostInfoCard";
+import PostImageAndParticipantCard from "@/components/createAppointment/PostImageAndParticipantCard";
 import { User } from "@/types/User";
 import { PostInfo } from "@/types/Post";
 
@@ -106,9 +106,9 @@ export default function Home() {
           <Grid item xs={12} md={6} style={{ display: "flex" }}>
             <LeftCard postInfo={postInfo} isUnClick={true} />
           </Grid>
-          {/*  Right Card */}
+          {/* PostImageAndParticipantCard */}
           <Grid item xs={12} md={6} style={{ display: "flex" }}>
-            <PostInfoCard
+            <PostImageAndParticipantCard
               images={postInfo.images}
               availableParticipants={availableParticipants}
               selectedParticipants={selectedParticipants}
