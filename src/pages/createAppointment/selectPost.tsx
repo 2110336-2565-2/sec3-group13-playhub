@@ -29,7 +29,7 @@ export default function ShowAppointment() {
   const [posts, setPosts] = useState<Post[] | null>(null);
 
   function handleClickCard(item: Post) {
-    router.push(PagePaths.createAppointment + "/" + item?.postId);
+    router.push(PagePaths.createAppointment + "/" + item.postId);
   }
 
   useEffect(() => {
