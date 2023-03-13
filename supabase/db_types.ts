@@ -275,6 +275,7 @@ export interface Database {
           is_enabled: boolean;
           image: string;
           rating_score: number;
+          is_verified: boolean;
         };
       };
       update_post_by_post_id: {
@@ -342,6 +343,15 @@ export interface Database {
           username: string;
           image: string;
           participant_number: number;
+        };
+      };
+      update_user_national_id_by_user_id: {
+        Args: {
+          id: string;
+          national_id: string;
+        };
+        Returns: {
+          is_exist_national_id: boolean;
         };
       };
     };

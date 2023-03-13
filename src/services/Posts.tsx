@@ -2,7 +2,13 @@ import { Post, PostInfo } from "@/types/Post";
 import { User } from "@/types/User";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
-import dayjs from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
+import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
+
+function dayjsWithoutTZ(date: string): Dayjs {
+  const dateWithoutTZ = date.substring(0, date.indexOf("+"))
+  return dayjs(dateWithoutTZ);
+}
 
 export async function CreatePost(
   newPost: PostInfo,
@@ -30,15 +36,15 @@ export async function CreatePost(
     location: newPost.location,
     description: newPost.description,
     owner_id: newPost.userId,
-    start_time: newPost.startTime.toString(),
-    end_time: newPost.endTime.toString(),
+    start_time: newPost.startTime.format('MM/DD/YYYY HH:mm:ss'),
+    end_time: newPost.endTime.format('MM/DD/YYYY HH:mm:ss'),
     tags: newPost.tags.map((e) => e.id),
     images: images
   });
 
   if (addPostResult.error) {
     console.log(addPostResult.error);
-    throw new Error("Something went wrong!!");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 }
 
@@ -48,6 +54,7 @@ export async function UpdatePost(
   updatedPost: PostInfo,
   supabaseClient: SupabaseClient<Database>
 ): Promise<void> {
+  console.log(updatedPost)
   let images = [...originalImages];
   let index = 0;
   for (const image of originalImages) {
@@ -58,7 +65,7 @@ export async function UpdatePost(
         .remove([deleteImage]);
       if (deleteImageResult.error) {
         console.log(deleteImageResult.error);
-        throw new Error("Something went wrong!!");
+        throw new Error(SUPABASE_CONNECTING_ERROR);
       }
       images.splice(images.findIndex((value, index) => image == value));
     }
@@ -76,7 +83,7 @@ export async function UpdatePost(
         .upload(filePath, uploadImageFile);
       if (uploadImageResult.error != null) {
         console.log(uploadImageResult.error);
-        throw new Error("Something went wrong!!");
+        throw new Error(SUPABASE_CONNECTING_ERROR);
       }
 
       const getImageURLResult = supabaseClient.storage
@@ -90,8 +97,8 @@ export async function UpdatePost(
     id: postId,
     title: updatedPost.title,
     location: updatedPost.location,
-    start_time: updatedPost.startTime.toString(),
-    end_time: updatedPost.endTime.toString(),
+    start_time: updatedPost.startTime.format('MM/DD/YYYY HH:mm:ss'),
+    end_time: updatedPost.endTime.format('MM/DD/YYYY HH:mm:ss'),
     description: updatedPost.description,
     tags: updatedPost.tags.map((e) => e.id),
     images: images
@@ -104,26 +111,26 @@ export async function UpdatePost(
 
   if (updatePostResult.error) {
     console.log(updatePostResult.error);
-    throw new Error("Something went wrong!!");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 }
 
 export async function DeletePost(
   id: number,
   supabaseClient: SupabaseClient<Database>
-) : Promise <void> {
-  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {id});
+): Promise<void> {
+  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", { id });
 
   if (deletePostResult.error) {
     console.error(deletePostResult.error);
-    throw new Error("Something went wrong!!");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 }
 
 export async function GetCurrentUserPosts(
   user: User,
   supabaseClient: SupabaseClient<Database>
-) : Promise<Post[]> {
+): Promise<Post[]> {
   const getAllUserPostResult = await supabaseClient.rpc(
     "get_posts_by_user_id",
     {
@@ -132,10 +139,10 @@ export async function GetCurrentUserPosts(
   );
   if (getAllUserPostResult.error) {
     console.log(getAllUserPostResult.error);
-    throw new Error("Cant get posts data");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 
-  if (!getAllUserPostResult.data) throw new Error("Cant get posts data");;
+  if (!getAllUserPostResult.data) throw new Error(SUPABASE_CONNECTING_ERROR);;
 
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
@@ -147,8 +154,8 @@ export async function GetCurrentUserPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time
+    startDateTime: dayjsWithoutTZ(post.start_time).format('DD/MM/YYYY hh:mm A'),
+    endDateTime: dayjsWithoutTZ(post.end_time).format('DD/MM/YYYY hh:mm A')
   }))
 }
 
@@ -156,10 +163,10 @@ export async function GetPosts(
   supabaseClient: SupabaseClient<Database>
 ): Promise<Post[]> {
   const getAllUserPostResult = await supabaseClient.rpc("get_posts");
-    if (getAllUserPostResult.error) {
-      console.log(getAllUserPostResult.error);
-      throw new Error("Cant get posts data");
-    }
+  if (getAllUserPostResult.error) {
+    console.log(getAllUserPostResult.error);
+    throw new Error(SUPABASE_CONNECTING_ERROR);
+  }
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
     title: post.title,
@@ -170,8 +177,8 @@ export async function GetPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time
+    startDateTime: dayjsWithoutTZ(post.start_time).format('DD/MM/YYYY hh:mm A'),
+    endDateTime: dayjsWithoutTZ(post.end_time).format('DD/MM/YYYY hh:mm A')
   }))
 }
 
@@ -179,7 +186,7 @@ export async function GetPostByPostId(
   user: User,
   postId: number,
   supabaseClient: SupabaseClient<Database>
-) : Promise<PostInfo> {
+): Promise<PostInfo> {
   const getPostDataResult = await supabaseClient.rpc(
     "get_post_by_post_id",
     {
@@ -188,7 +195,7 @@ export async function GetPostByPostId(
   );
   if (getPostDataResult.error || !getPostDataResult.data) {
     console.log(getPostDataResult.error);
-    throw new Error("Cant get posts data");
+    throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 
   let tag_name = [...getPostDataResult.data[0].tag_names].sort()
@@ -199,8 +206,8 @@ export async function GetPostByPostId(
     title: getPostDataResult.data[0].title,
     description: getPostDataResult.data[0].description,
     location: getPostDataResult.data[0].location,
-    startTime: dayjs(getPostDataResult.data[0].start_time),
-    endTime: dayjs(getPostDataResult.data[0].end_time),
+    startTime: dayjsWithoutTZ(getPostDataResult.data[0].start_time),
+    endTime: dayjsWithoutTZ(getPostDataResult.data[0].end_time),
     images: getPostDataResult.data[0].images,
     tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
       id: tag_ids[idx],

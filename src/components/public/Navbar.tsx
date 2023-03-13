@@ -99,16 +99,28 @@ export default function Navbar() {
                 </Box>
               </Link>
             </MenuItem>
-            <MenuItem key={2}>
-              <Link href={PagePaths.myPosts}>
-                <Typography variant="body1">{NavbarPages.myPost}</Typography>
-              </Link>
-            </MenuItem>
+
             <MenuItem key={3}>
               <Link href={PagePaths.myAppointments}>
                 <Typography variant="body1">{NavbarPages.myAppointments}</Typography>
               </Link>
             </MenuItem>
+
+            {userStatus.user?.isVerified &&
+              <MenuItem key={2}>
+                <Link href={PagePaths.myPosts}>
+                  <Typography variant="body1">{NavbarPages.myPost}</Typography>
+                </Link>
+              </MenuItem>
+            }
+            {!userStatus.user?.isVerified &&
+              <MenuItem key={3}>
+                <Link href={PagePaths.verify}>
+                  <Typography variant="body1" color="primary">{NavbarPages.verify}</Typography>
+                </Link>
+              </MenuItem>
+            }
+
             <MenuItem key={4}>
               <Box onClick={handleSignOut}>
                 <Typography variant="body1" color="error">
