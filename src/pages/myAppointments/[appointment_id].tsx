@@ -41,6 +41,7 @@ export default function Home() {
   }
 
   if (!appointment || userStatus.isLoading) return <Loading />
+  if (!userStatus.user) router.push(PagePaths.login)
   if (!isParticipant) return handleGoBack()
   return <>
     <Navbar />
