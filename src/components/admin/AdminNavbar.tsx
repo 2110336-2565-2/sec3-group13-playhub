@@ -39,14 +39,16 @@ export default function AdminNavbar() {
     return;
   };
 
-  async function handleSignOut() {
-    SignOut(supabaseClient).then(() => {
-      router.push(PagePaths.login);
-      return;
-    }).catch((err) => {
-      console.log(err);
-      return;
-    })
+  function handleSignOut() {
+    SignOut(supabaseClient)
+      .then(() => {
+        router.push(PagePaths.login);
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }
 
   return (
@@ -85,12 +87,7 @@ export default function AdminNavbar() {
             onClose={handleClose}
           >
             <MenuItem>
-              <Link
-                textAlign="center"
-                color="error"
-                underline="none"
-                onClick={handleSignOut}
-              >
+              <Link textAlign="center" color="error" underline="none" onClick={handleSignOut}>
                 <Typography variant="body1">{NavbarPages.logout}</Typography>
               </Link>
             </MenuItem>

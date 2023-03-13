@@ -78,6 +78,7 @@ export interface Database {
           start_time: string;
           tags: number[];
           title: string;
+          participants: string[];
         };
         Insert: {
           description?: string | null;
@@ -89,6 +90,7 @@ export interface Database {
           start_time: string;
           tags: number[];
           title: string;
+          participants: string[];
         };
         Update: {
           description?: string | null;
@@ -100,6 +102,7 @@ export interface Database {
           start_time?: string;
           tags?: number[];
           title?: string;
+          participants?: string[];
         };
       };
       tag: {
@@ -162,6 +165,21 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
+      create_appointment: {
+        Args: {
+          postid: number;
+          title: string;
+          location: string;
+          description: string;
+          tags: number[];
+          start_time: string;
+          end_time: string;
+          pending_user_id: string[];
+          images: string[];
+          owner_id: string;
+        };
+        Returns: undefined;
+      };
       create_post: {
         Args: {
           title: string;
@@ -384,6 +402,36 @@ export interface Database {
           username: string;
           image: string;
           participant_number: number;
+        };
+      };
+      get_post_with_participants_by_post_id: {
+        Args: {
+          id: number;
+        };
+        Returns: {
+          id: number;
+          title: string;
+          description: string;
+          owner_id: string;
+          owner_name: string;
+          owner_profile: string;
+          location: string;
+          start_time: string;
+          end_time: string;
+          tags: {
+            id: number;
+            name: string;
+          }[];
+          images: string[];
+          participants: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+            image: string | null;
+          }[];
         };
       };
       get_appointments_by_user_id_which_pending: {

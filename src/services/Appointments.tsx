@@ -1,7 +1,36 @@
+import { User } from "@/types/User";
+import { PostInfo } from "../types/Post";
 import { Appointment, AppointmentDetail, AppointmentDetailHeader } from "@/types/Appointment";
 import { SupabaseClient } from "@supabase/supabase-js";
 import dayjs from "dayjs";
 import { Database } from "supabase/db_types";
+
+export async function CreateAppointment(
+  postId: number,
+  post: PostInfo,
+  pending_partipants: User[],
+  supabaseClient: SupabaseClient<Database>
+): Promise<void> {
+  const addAppointmentResult = await supabaseClient.rpc("create_appointment", {
+    postid: postId,
+    title: post.title,
+    location: post.location,
+    description: post.description,
+    tags: post.tags.map((e) => e.id),
+    start_time: post.startTime.toString(),
+    end_time: post.endTime.toString(),
+    pending_user_id: pending_partipants.map((p) => p.userId),
+    images: post.images,
+    owner_id: post.userId,
+  });
+
+  if (addAppointmentResult.error) {
+    console.log(addAppointmentResult.error);
+    throw new Error("Something went wrong!!");
+  }
+
+  return;
+}
 
 export async function AcceptAppointment(
   appointmentId: number,

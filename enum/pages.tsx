@@ -13,6 +13,7 @@ export enum PagePaths {
   selectApptToConfirm = "/selectApptToConfirm",
   confirmAppt = "/confirmAppt/", //suffix : appointmentId
   myAppointments = "/myAppointments/", // suffix : appointmentId
+  createAppointment = "/createAppointment", // subfix : postId
   verify = "/verify",
   resetPassword = "/resetPassword",
   successResetPassword = "/successResetPassword",
