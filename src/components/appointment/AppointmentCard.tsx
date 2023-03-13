@@ -39,19 +39,19 @@ export default function AppointmentCard(props: props) {
             <Stack spacing="4px">
                 <Typography display="inline-flex">
                     <LocationOnIcon fontSize="medium" />
-                    <span style={{ marginLeft: 8 }}>{props.appointment.location}</span>
+                    <Typography style={{ marginLeft: 8 }}>{props.appointment.location}</Typography>
                 </Typography>
                 <Typography display="inline-flex">
                     <CalendarTodayIcon fontSize="medium" />
-                    <span style={{ marginLeft: 8 }}>
+                    <Typography style={{ marginLeft: 8 }}>
                         {props.appointment.startDateTime.format('DD/MM/YYYY HH:mm A')} - {props.appointment.endDateTime.format('DD/MM/YYYY HH:mm A')}
-                    </span>
+                    </Typography>
                 </Typography>
                 <Typography display="inline-flex">
                     <PersonIcon fontSize="medium" />
-                    <span style={{ marginLeft: 8 }}>
+                    <Typography style={{ marginLeft: 8 }}>
                         Number of Participant : {props.appointment.participantAmount}
-                    </span>
+                    </Typography>
                 </Typography>
             </Stack>
         </CardContent>
