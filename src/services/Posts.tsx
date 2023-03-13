@@ -3,8 +3,9 @@ import { User } from "@/types/User";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 import dayjs, { Dayjs } from "dayjs";
+import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
 
-function dayjsWithoutTZ(date: string) : Dayjs {
+function dayjsWithoutTZ(date: string): Dayjs {
   const dateWithoutTZ = date.substring(0, date.indexOf("+"))
   return dayjs(dateWithoutTZ);
 }
@@ -117,8 +118,8 @@ export async function UpdatePost(
 export async function DeletePost(
   id: number,
   supabaseClient: SupabaseClient<Database>
-) : Promise <void> {
-  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {id});
+): Promise<void> {
+  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", { id });
 
   if (deletePostResult.error) {
     console.error(deletePostResult.error);
@@ -129,7 +130,7 @@ export async function DeletePost(
 export async function GetCurrentUserPosts(
   user: User,
   supabaseClient: SupabaseClient<Database>
-) : Promise<Post[]> {
+): Promise<Post[]> {
   const getAllUserPostResult = await supabaseClient.rpc(
     "get_posts_by_user_id",
     {
@@ -162,10 +163,10 @@ export async function GetPosts(
   supabaseClient: SupabaseClient<Database>
 ): Promise<Post[]> {
   const getAllUserPostResult = await supabaseClient.rpc("get_posts");
-    if (getAllUserPostResult.error) {
-      console.log(getAllUserPostResult.error);
-      throw new Error(SUPABASE_CONNECTING_ERROR);
-    }
+  if (getAllUserPostResult.error) {
+    console.log(getAllUserPostResult.error);
+    throw new Error(SUPABASE_CONNECTING_ERROR);
+  }
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
     title: post.title,
@@ -185,7 +186,7 @@ export async function GetPostByPostId(
   user: User,
   postId: number,
   supabaseClient: SupabaseClient<Database>
-) : Promise<PostInfo> {
+): Promise<PostInfo> {
   const getPostDataResult = await supabaseClient.rpc(
     "get_post_by_post_id",
     {
