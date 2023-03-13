@@ -46,15 +46,13 @@ export default function Home() {
       setIsCreatingAppointment(true);
       CreateAppointment(postId, postInfo, selectedParticipants, supabaseClient)
         .then(() => {
-          // router.push(PagePaths.myAppointments);
+          router.push(PagePaths.myAppointments);
           return;
         })
         .catch((err) => {
           console.log(err);
+          setIsCreatingAppointment(false);
           return;
-        })
-        .finally(() => {
-          setIsCreatingAppointment(true);
         });
     }
   }

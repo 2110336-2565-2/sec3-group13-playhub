@@ -8,9 +8,9 @@ export async function CreateAppointment(
   post: PostInfo,
   pending_partipants: User[],
   supabaseClient: SupabaseClient<Database>
-) {
+): Promise<void> {
   const addAppointmentResult = await supabaseClient.rpc("create_appointment", {
-    postId: postId,
+    postid: postId,
     title: post.title,
     location: post.location,
     description: post.description,
@@ -26,4 +26,6 @@ export async function CreateAppointment(
     console.log(addAppointmentResult.error);
     throw new Error("Something went wrong!!");
   }
+
+  return;
 }
