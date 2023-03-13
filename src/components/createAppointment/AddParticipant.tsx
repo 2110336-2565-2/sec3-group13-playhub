@@ -13,31 +13,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { User } from "@/types/User";
 import MemberDetail from "./MemberDetail";
-//impot React from "react"
 import React from "react";
 
 type props = {
-  //header?: string;
-  //note?: string;
   value: User[];
   // eslint-disable-next-line no-unused-vars
   handleValueChange: (tags: User[]) => void;
-  //I will leave it error because when i commented code below is error.Please help me fix
-  //for you to handle when value(menuItems) changed (I copy from createPost/Tags.tsx)
   menuValue: User[];
   isErr: boolean;
   errMsg: string;
 };
 
-/*const PopoverStyle = {
-  borderRadius: "50px",
-  pointerEvents: "none",
-};*/
-
 export default function AddParticipant(props: props) {
-  //---- Menu item
-  const [menuItems, setMenuItems] = useState<User[]>([]); // Keep value of who is selected
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null); //anchorEl for Add participant button
+  const [menuItems, setMenuItems] = useState<User[]>([]);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
   useEffect(() => {
@@ -48,40 +37,31 @@ export default function AddParticipant(props: props) {
   }, [props.value, props.menuValue]);
 
   const handleDeleteTag = (toDeleteTag: User) => () => {
-    // Update displyed tags (delete)
     props.handleValueChange(props.value.filter((tag) => tag.userId !== toDeleteTag.userId));
-    // Update menu item (insert)
     setMenuItems([...menuItems, toDeleteTag].sort((a, b) => (a.username > b.username ? 1 : -1)));
   };
 
   const handleAddTag = (toAddLabel: User) => {
-    //console.log("Click UID ", toAddLabel);
-    // Update displyed tags (insert)F
     props.handleValueChange([...props.value, toAddLabel]);
-    // Update menu item (delete)
     setMenuItems((menuItems) =>
       menuItems.filter((menuItem) => menuItem.userId !== toAddLabel.userId)
     );
-    //Close DropDown(MenuItem) also for prevent obsecure
     setHoveredMenuItem(null);
     setpopAnchorEl(null);
-    // Close menu
     handleCloseMenu();
     handlePopoverClose();
   };
 
-  // Menu handle function
   const handleOpenMenu = (event: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget);
   };
   const handleCloseMenu = (): void => {
     setAnchorEl(null);
   };
-  //--For Dropdown(MenuItem)
-  const [hoveredMenuItem, setHoveredMenuItem] = useState<User | null>(null);
-  const [popanchorEl, setpopAnchorEl] = useState<null | HTMLElement>(null); //popanchorEl for MenuItem(each dropdown component)
 
-  // Popover handle functions
+  const [hoveredMenuItem, setHoveredMenuItem] = useState<User | null>(null);
+  const [popanchorEl, setpopAnchorEl] = useState<null | HTMLElement>(null);
+
   const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>, menuItem: User) => {
     setHoveredMenuItem(menuItem);
     setpopAnchorEl(event.currentTarget);
