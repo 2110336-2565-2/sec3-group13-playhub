@@ -1,8 +1,15 @@
 import { Appointment } from "@/types/Appointment";
-import { Avatar, CardContent, CardHeader, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Card,
+  Avatar,
+  CardContent,
+  CardHeader,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { PagePaths } from "enum/pages";
 import router from "next/router";
-import BorderWithShadow from "../public/BorderWithShadow";
 
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -13,7 +20,7 @@ type props = {
 };
 export default function AppointmentCard(props: props) {
   return (
-    <BorderWithShadow>
+    <Card sx={{ width: "100%", height: "220px" }}>
       <CardHeader
         avatar={
           <IconButton
@@ -38,23 +45,32 @@ export default function AppointmentCard(props: props) {
         <Stack spacing="4px">
           <Typography display="inline-flex">
             <LocationOnIcon fontSize="medium" />
-            <span style={{ marginLeft: 8 }}>{props.appointment.location}</span>
+            <Typography
+              style={{
+                marginLeft: 8,
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+            >
+              {props.appointment.location}
+            </Typography>
           </Typography>
           <Typography display="inline-flex">
             <CalendarTodayIcon fontSize="medium" />
-            <span style={{ marginLeft: 8 }}>
+            <Typography style={{ marginLeft: 8 }}>
               {props.appointment.startDateTime.format("DD/MM/YYYY HH:mm A")} -{" "}
               {props.appointment.endDateTime.format("DD/MM/YYYY HH:mm A")}
-            </span>
+            </Typography>
           </Typography>
           <Typography display="inline-flex">
             <PersonIcon fontSize="medium" />
-            <span style={{ marginLeft: 8 }}>
+            <Typography style={{ marginLeft: 8 }}>
               Number of Participant : {props.appointment.participantAmount}
-            </span>
+            </Typography>
           </Typography>
         </Stack>
       </CardContent>
-    </BorderWithShadow>
+    </Card>
   );
 }

@@ -1,7 +1,6 @@
 import { AppointmentDetail } from "@/types/Appointment";
-import { CardContent, Grid, Stack, Typography, Box, Chip } from "@mui/material";
+import { Card, CardContent, Grid, Stack, Typography, Box, Chip } from "@mui/material";
 import Image from "next/image";
-import BorderWithShadow from "../public/BorderWithShadow";
 import AppointmentHeader from "./AppointmentHeader";
 
 const chipsStyle = {
@@ -11,7 +10,6 @@ const chipsStyle = {
   fontWeight: "bold",
   border: "black solid 4px",
   borderRadius: "16px",
-  boxShadow: "4px 4px #BFBFBF",
 };
 type props = {
   appointmentDetail: AppointmentDetail;
@@ -20,7 +18,7 @@ export default function AppointmentParticipantCard(props: props) {
   return (
     <Grid container spacing="40px" width="80vw">
       <Grid item xs={12} md={6} style={{ display: "flex" }}>
-        <BorderWithShadow>
+        <Card sx={{ width: "100%" }}>
           <CardContent>
             <Stack spacing="12px" sx={{ padding: "20px" }}>
               <AppointmentHeader
@@ -29,10 +27,10 @@ export default function AppointmentParticipantCard(props: props) {
               />
             </Stack>
           </CardContent>
-        </BorderWithShadow>
+        </Card>
       </Grid>
       <Grid item xs={12} md={6} style={{ display: "flex" }}>
-        <BorderWithShadow>
+        <Card sx={{ width: "100%" }}>
           <CardContent>
             <Stack spacing="12px" sx={{ padding: "20px" }}>
               {props.appointmentDetail.images.length > 0 && (
@@ -43,7 +41,7 @@ export default function AppointmentParticipantCard(props: props) {
                   <Grid container spacing={1}>
                     {props.appointmentDetail.images.map((e, index) => (
                       <Grid item key={"i" + index}>
-                        <Image src={e} alt="Appointment_Image" width={150} height={150} />
+                        <Image src={e} alt="Appointment_Image" width={140} height={140} />
                       </Grid>
                     ))}
                   </Grid>
@@ -76,7 +74,7 @@ export default function AppointmentParticipantCard(props: props) {
               </Box>
             </Stack>
           </CardContent>
-        </BorderWithShadow>
+        </Card>
       </Grid>
     </Grid>
   );
