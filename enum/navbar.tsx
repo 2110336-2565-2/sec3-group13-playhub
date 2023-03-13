@@ -4,5 +4,7 @@ export enum NavbarPages {
   profile = "Profile",
   myAppointments = "My Appointments",
   logout = "Logout",
-  verify = "Verify"
+  verify = "Verify",
+  selectPost = "Post",
+  selectAppointment = "Appointment"
 }

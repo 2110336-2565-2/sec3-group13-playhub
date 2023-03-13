@@ -40,6 +40,16 @@ export default function Navbar() {
     return;
   };
 
+  const routeToSelectPost = (): void => {
+    router.push(PagePaths.createAppointment)
+    return;
+  }
+
+  const routeToSelectAppointment = (): void => {
+    router.push(PagePaths.selectApptToConfirm)
+    return;
+  }
+
   async function handleSignOut() {
     SignOut(supabaseClient).then(() => {
       router.push(PagePaths.login);
@@ -60,6 +70,16 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1 }}>
             <IconButton color="inherit" disableRipple onClick={routeToHome}>
               <Typography variant="body1">{NavbarPages.home}</Typography>
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 0.075 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToSelectPost}>
+              <Typography variant="body1">{NavbarPages.selectPost}</Typography>
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 0.05 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToSelectAppointment}>
+              <Typography variant="body1">{NavbarPages.selectAppointment}</Typography>
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
