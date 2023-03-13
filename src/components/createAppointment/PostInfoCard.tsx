@@ -14,7 +14,7 @@ type props = {
   handleParticipantsChange: (participants: User[]) => void;
 };
 
-export default function RightCard(props: props) {
+export default function PostInfoCard(props: props) {
   return (
     <>
       <BorderWithShadow>

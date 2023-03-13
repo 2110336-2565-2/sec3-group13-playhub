@@ -11,7 +11,7 @@ import { PagePaths } from "enum/pages";
 import { GetPostWithParticipantsByPostId } from "@/services/Posts";
 import { CreateAppointment } from "@/services/Appointments";
 import LeftCard from "@/components/createAppointment/LeftCard";
-import RightCard from "@/components/createAppointment/RightCard";
+import PostInfoCard from "@/components/createAppointment/PostInfoCard";
 import { User } from "@/types/User";
 import { PostInfo } from "@/types/Post";
 
@@ -23,6 +23,7 @@ export default function Home() {
   const [availableParticipants, setAvailableParticipants] = useState<User[] | null>(null);
   const [selectedParticipants, setSelectedParticipants] = useState<User[]>([]);
   const [participantCountError, setParticipantCountError] = useState<boolean>(false);
+  const [isCreatingAppointment, setIsCreatingAppointment] = useState<boolean>(false);
 
   const postId = parseInt(router.query.postId as string);
 
@@ -42,14 +43,18 @@ export default function Home() {
     }
 
     if (postInfo) {
+      setIsCreatingAppointment(true);
       CreateAppointment(postId, postInfo, selectedParticipants, supabaseClient)
         .then(() => {
-          // router.push(viewAppointment);
+          // router.push(PagePaths.myAppointments);
           return;
         })
         .catch((err) => {
           console.log(err);
           return;
+        })
+        .finally(() => {
+          setIsCreatingAppointment(true);
         });
     }
   }
@@ -77,6 +82,7 @@ export default function Home() {
   return (
     <>
       <Navbar />
+      {isCreatingAppointment && <Loading />}
       {/*  ArrowBackIcon */}
       <Box display="flex" paddingBottom="40px">
         <Link>
@@ -102,7 +108,7 @@ export default function Home() {
           </Grid>
           {/*  Right Card */}
           <Grid item xs={12} md={6} style={{ display: "flex" }}>
-            <RightCard
+            <PostInfoCard
               images={postInfo.images}
               availableParticipants={availableParticipants}
               selectedParticipants={selectedParticipants}
