@@ -72,12 +72,12 @@ export default function Navbar() {
               <Typography variant="body1">{NavbarPages.home}</Typography>
             </IconButton>
           </Box>
-          <Box sx={{ flexGrow: 0.075 }}>
+          <Box sx={{ flexGrow: 0.02 }}>
             <IconButton color="inherit" disableRipple onClick={routeToSelectPost}>
               <Typography variant="body1">{NavbarPages.selectPost}</Typography>
             </IconButton>
           </Box>
-          <Box sx={{ flexGrow: 0.05 }}>
+          <Box sx={{ flexGrow: 0.02 }}>
             <IconButton color="inherit" disableRipple onClick={routeToSelectAppointment}>
               <Typography variant="body1">{NavbarPages.selectAppointment}</Typography>
             </IconButton>
