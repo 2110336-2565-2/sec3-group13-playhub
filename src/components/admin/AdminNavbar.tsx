@@ -39,7 +39,7 @@ export default function AdminNavbar() {
     return;
   };
 
-  async function handleSignOut() {
+  function handleSignOut() {
     SignOut(supabaseClient)
       .then(() => {
         router.push(PagePaths.login);
