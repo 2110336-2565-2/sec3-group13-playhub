@@ -50,6 +50,10 @@ export default function Home() {
     router.push(PagePaths.login);
     return;
   }
+  if (!userStatus.user.isVerified) {
+    router.push(PagePaths.home)
+    return;
+  }
   if (posts == null) return <Loading />;
   return (
     <>
@@ -72,15 +76,17 @@ export default function Home() {
           </Box>
         ))}
       </Stack>
-      <Link href={"createPost"} color="inherit">
-        <Fab
-          color="primary"
-          aria-label="add"
-          sx={{ position: "fixed", right: "20px", bottom: "20px" }}
-        >
-          <AddIcon />
-        </Fab>
-      </Link>
+      {userStatus.user.isVerified &&
+        <Link href={"createPost"} color="inherit">
+          <Fab
+            color="primary"
+            aria-label="add"
+            sx={{ position: "fixed", right: "20px", bottom: "20px" }}
+          >
+            <AddIcon />
+          </Fab>
+        </Link>
+      }
     </>
   );
 }

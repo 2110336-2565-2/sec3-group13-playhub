@@ -163,14 +163,14 @@ export default function Home() {
         endTime: endDate,
       };
       UpdatePost(postId, originalImages, updatedPost, supabaseClient)
-      .then(() => {
-        router.push(PagePaths.myPosts);
-      }).catch(
-        (err) => {
-          console.log(err);
-          return;
-        }
-      );
+        .then(() => {
+          router.push(PagePaths.myPosts);
+        }).catch(
+          (err) => {
+            console.log(err);
+            return;
+          }
+        );
     }
   };
 
@@ -184,25 +184,32 @@ export default function Home() {
     async function getPostData() {
       if (!postId || !userStatus.user) return;
       GetPostByPostId(userStatus.user, postId, supabaseClient)
-      .then((p) => {
-        setTitle(p.title);
-        setDescription(p.description);
-        setLocation(p.location);
-        setStartDate(p.startTime);
-        setEndDate(p.endTime);
-        setImages(p.images);
-        setOriginalImages(p.images);
-        setTags(p.tags);
-        setLoadingData(false);
-      }).catch((err) => {
-        console.log(err)
-        return
-      })
+        .then((p) => {
+          setTitle(p.title);
+          setDescription(p.description);
+          setLocation(p.location);
+          setStartDate(p.startTime);
+          setEndDate(p.endTime);
+          setImages(p.images);
+          setOriginalImages(p.images);
+          setTags(p.tags);
+          setLoadingData(false);
+        }).catch((err) => {
+          console.log(err)
+          return
+        })
     }
     getPostData();
   }, [supabaseClient, router.query.post_id]);
 
-
+  if (!userStatus.user) {
+    router.push(PagePaths.login);
+    return;
+  }
+  if (!userStatus.user.isVerified) {
+    router.push(PagePaths.home)
+    return;
+  }
   if (
     tagMenu.length == 0 ||
     userStatus.isLoading ||
@@ -241,7 +248,7 @@ export default function Home() {
         <Box sx={editPostLayout}>
           <Typography variant="body1">Location</Typography>
           <Stack spacing={2}>
-            <GoogleMap onChange={handleLocationChange} initialValue={location}/>
+            <GoogleMap onChange={handleLocationChange} initialValue={location} />
             {isSubmitLocation && locationError && (
               <FormHelperText error>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
             )}

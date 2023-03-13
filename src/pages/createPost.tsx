@@ -171,6 +171,10 @@ export default function Home() {
     router.push(PagePaths.adminHome + userStatus.user.userId);
     return;
   }
+  if (!userStatus.user.isVerified) {
+    router.push(PagePaths.home)
+    return;
+  }
   if (userStatus.isLoading || tagMenu.length == 0) return <Loading />;
   return (
     <>
