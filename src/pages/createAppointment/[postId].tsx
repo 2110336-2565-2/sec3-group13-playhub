@@ -67,15 +67,17 @@ export default function Home() {
       })
       .catch((err) => {
         console.log(err);
+        router.push(PagePaths.createAppointment);
         return;
       });
-  }, [supabaseClient, postId, userStatus.user]);
+  }, [supabaseClient, postId, userStatus.user, router]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
     router.push(PagePaths.login);
     return;
   }
+
   if (!postInfo || !availableParticipants) return <Loading />;
   return (
     <>
