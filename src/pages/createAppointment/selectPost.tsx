@@ -10,7 +10,7 @@ import { Post } from "@/types/Post";
 import { PagePaths } from "enum/pages";
 import { GetCurrentUserPosts } from "@/services/Posts";
 import { Grid } from "@mui/material";
-import EachPostCard from "@/components/createAppointment/EachPostCard";
+import CreateAppointmentPostCard from "@/components/createAppointment/CreateAppointmentPostCard";
 
 const MainLayout = {
   margin: "1vh 0 0 0",
@@ -59,12 +59,12 @@ export default function ShowAppointment() {
           Select Post To Create Appointment
         </Typography>
       </Box>
-      {/*  EachPostCard */}
+      {/*  CreateAppointmentPostCard */}
       <Grid container spacing={2} sx={MainLayout}>
         {posts.map((item, index) => (
           <Grid item xs={6} key={index}>
             <Box onClick={() => handleClickCard(item)}>
-              <EachPostCard post={item} isLeft={index % 2 == 0} />
+              <CreateAppointmentPostCard post={item} isLeft={index % 2 == 0} />
             </Box>
           </Grid>
         ))}

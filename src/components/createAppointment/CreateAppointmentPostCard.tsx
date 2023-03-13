@@ -32,7 +32,7 @@ type props = {
   //handleDeletePost: (toDeletePost: Post) => void;
   isLeft: Boolean;
 };
-export default function EachPostCard(props: props) {
+export default function CreateAppointmentPostCard(props: props) {
   const router: NextRouter = useRouter();
   return (
     <>
