@@ -85,11 +85,11 @@ export default function PostCard(props: props) {
     if (!props.userId) return;
     if (!isUserJoin) {
       await AddParticipantToPost(props.userId, props.post.postId, supabaseClient)
-      setOpenSnackBar({ msg: `Join ${props.post.title}`, isShow: true })
+      setOpenSnackBar({ msg: `Join ${props.post.title} !`, isShow: true })
       setIsUserJoin(true)
     } else {
       await RemoveParticipantFromPost(props.userId, props.post.postId, supabaseClient)
-      setOpenSnackBar({ msg: `Cancel ${props.post.title}`, isShow: true })
+      setOpenSnackBar({ msg: `Cancel ${props.post.title} !`, isShow: true })
       setIsUserJoin(false)
     }
   }
