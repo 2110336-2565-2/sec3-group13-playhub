@@ -169,8 +169,6 @@ export default function AddParticipant(props: props) {
           PaperProps={{
             style: {
               borderRadius: "15px",
-              paddingLeft: "30px",
-              paddingRight: "30px",
               border: "1px solid rgba(0, 0, 0, 0.2)",
             },
           }}
