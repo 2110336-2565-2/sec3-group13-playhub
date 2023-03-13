@@ -4,8 +4,10 @@ import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 import dayjs, { Dayjs } from "dayjs";
 
-function dayjsWithoutTZ(date: string) : Dayjs {
-  const dateWithoutTZ = date.substring(0, date.indexOf("+"))
+const SUPABASE_CONNECTING_ERROR = "Something went wrong!!";
+
+function dayjsWithoutTZ(date: string): Dayjs {
+  const dateWithoutTZ = date.substring(0, date.indexOf("+"));
   return dayjs(dateWithoutTZ);
 }
 
@@ -23,9 +25,7 @@ export async function CreatePost(
       .from("locationimage")
       .upload(filePath, fileBlob);
     if (uploadResult.error) return;
-    const imageUrlResult = supabaseClient.storage
-      .from("locationimage")
-      .getPublicUrl(filePath);
+    const imageUrlResult = supabaseClient.storage.from("locationimage").getPublicUrl(filePath);
     images.push(imageUrlResult.data.publicUrl);
     index += 1;
   }
@@ -35,10 +35,10 @@ export async function CreatePost(
     location: newPost.location,
     description: newPost.description,
     owner_id: newPost.userId,
-    start_time: newPost.startTime.format('MM/DD/YYYY HH:mm:ss'),
-    end_time: newPost.endTime.format('MM/DD/YYYY HH:mm:ss'),
+    start_time: newPost.startTime.format("MM/DD/YYYY HH:mm:ss"),
+    end_time: newPost.endTime.format("MM/DD/YYYY HH:mm:ss"),
     tags: newPost.tags.map((e) => e.id),
-    images: images
+    images: images,
   });
 
   if (addPostResult.error) {
@@ -53,7 +53,7 @@ export async function UpdatePost(
   updatedPost: PostInfo,
   supabaseClient: SupabaseClient<Database>
 ): Promise<void> {
-  console.log(updatedPost)
+  console.log(updatedPost);
   let images = [...originalImages];
   let index = 0;
   for (const image of originalImages) {
@@ -66,7 +66,7 @@ export async function UpdatePost(
         console.log(deleteImageResult.error);
         throw new Error(SUPABASE_CONNECTING_ERROR);
       }
-      images.splice(images.findIndex((value, index) => image == value));
+      images.splice(images.findIndex((value) => image == value));
     }
     index += 1;
   }
@@ -85,9 +85,7 @@ export async function UpdatePost(
         throw new Error(SUPABASE_CONNECTING_ERROR);
       }
 
-      const getImageURLResult = supabaseClient.storage
-        .from("locationimage")
-        .getPublicUrl(filePath);
+      const getImageURLResult = supabaseClient.storage.from("locationimage").getPublicUrl(filePath);
       images.push(getImageURLResult.data.publicUrl);
     }
   }
@@ -96,17 +94,14 @@ export async function UpdatePost(
     id: postId,
     title: updatedPost.title,
     location: updatedPost.location,
-    start_time: updatedPost.startTime.format('MM/DD/YYYY HH:mm:ss'),
-    end_time: updatedPost.endTime.format('MM/DD/YYYY HH:mm:ss'),
+    start_time: updatedPost.startTime.format("MM/DD/YYYY HH:mm:ss"),
+    end_time: updatedPost.endTime.format("MM/DD/YYYY HH:mm:ss"),
     description: updatedPost.description,
     tags: updatedPost.tags.map((e) => e.id),
-    images: images
+    images: images,
   };
 
-  const updatePostResult = await supabaseClient.rpc(
-    "update_post_by_post_id",
-    sendData
-  );
+  const updatePostResult = await supabaseClient.rpc("update_post_by_post_id", sendData);
 
   if (updatePostResult.error) {
     console.log(updatePostResult.error);
@@ -117,8 +112,8 @@ export async function UpdatePost(
 export async function DeletePost(
   id: number,
   supabaseClient: SupabaseClient<Database>
-) : Promise <void> {
-  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", {id});
+): Promise<void> {
+  const deletePostResult = await supabaseClient.rpc("delete_post_by_post_id", { id });
 
   if (deletePostResult.error) {
     console.error(deletePostResult.error);
@@ -129,19 +124,16 @@ export async function DeletePost(
 export async function GetCurrentUserPosts(
   user: User,
   supabaseClient: SupabaseClient<Database>
-) : Promise<Post[]> {
-  const getAllUserPostResult = await supabaseClient.rpc(
-    "get_posts_by_user_id",
-    {
-      id: user.userId,
-    }
-  );
+): Promise<Post[]> {
+  const getAllUserPostResult = await supabaseClient.rpc("get_posts_by_user_id", {
+    id: user.userId,
+  });
   if (getAllUserPostResult.error) {
     console.log(getAllUserPostResult.error);
     throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 
-  if (!getAllUserPostResult.data) throw new Error(SUPABASE_CONNECTING_ERROR);;
+  if (!getAllUserPostResult.data) throw new Error(SUPABASE_CONNECTING_ERROR);
 
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
@@ -153,19 +145,17 @@ export async function GetCurrentUserPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: dayjsWithoutTZ(post.start_time).format('DD/MM/YYYY hh:mm A'),
-    endDateTime: dayjsWithoutTZ(post.end_time).format('DD/MM/YYYY hh:mm A')
-  }))
+    startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
+  }));
 }
 
-export async function GetPosts(
-  supabaseClient: SupabaseClient<Database>
-): Promise<Post[]> {
+export async function GetPosts(supabaseClient: SupabaseClient<Database>): Promise<Post[]> {
   const getAllUserPostResult = await supabaseClient.rpc("get_posts");
-    if (getAllUserPostResult.error) {
-      console.log(getAllUserPostResult.error);
-      throw new Error(SUPABASE_CONNECTING_ERROR);
-    }
+  if (getAllUserPostResult.error) {
+    console.log(getAllUserPostResult.error);
+    throw new Error(SUPABASE_CONNECTING_ERROR);
+  }
   return getAllUserPostResult.data.map((post) => ({
     postId: post.id,
     title: post.title,
@@ -176,29 +166,57 @@ export async function GetPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: dayjsWithoutTZ(post.start_time).format('DD/MM/YYYY hh:mm A'),
-    endDateTime: dayjsWithoutTZ(post.end_time).format('DD/MM/YYYY hh:mm A')
-  }))
+    startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
+  }));
+}
+
+export async function GetPostsWithParticipants(
+  supabaseClient: SupabaseClient<Database>
+): Promise<PostInfo[]> {
+  const getAllUserPostResult = await supabaseClient.rpc("get_posts_with_participants");
+  if (getAllUserPostResult.error) {
+    console.log(getAllUserPostResult.error);
+    throw new Error(SUPABASE_CONNECTING_ERROR);
+  }
+  return getAllUserPostResult.data.map((postData) => ({
+    title: postData.title,
+    userId: postData.owner_id,
+    tags: postData.tags,
+    description: postData.description,
+    images: postData.images,
+    location: postData.location,
+    startTime: dayjs(postData.start_time),
+    endTime: dayjs(postData.end_time),
+    participants: postData.participants.map((e) => ({
+      userId: e.id,
+      username: e.username,
+      sex: e.sex,
+      isVerified: e.is_verified,
+      birthdate: e.birthdate,
+      description: e.description,
+      image: e.image,
+      email: "",
+      isAdmin: false,
+    })),
+  }));
 }
 
 export async function GetPostByPostId(
   user: User,
   postId: number,
   supabaseClient: SupabaseClient<Database>
-) : Promise<PostInfo> {
-  const getPostDataResult = await supabaseClient.rpc(
-    "get_post_by_post_id",
-    {
-      id: postId,
-    }
-  );
+): Promise<PostInfo> {
+  const getPostDataResult = await supabaseClient.rpc("get_post_by_post_id", {
+    id: postId,
+  });
   if (getPostDataResult.error || !getPostDataResult.data) {
     console.log(getPostDataResult.error);
     throw new Error(SUPABASE_CONNECTING_ERROR);
   }
 
-  let tag_name = [...getPostDataResult.data[0].tag_names].sort()
-  let tag_ids = [...getPostDataResult.data[0].tags].sort()
+  let tag_name = [...getPostDataResult.data[0].tag_names].sort();
+  let tag_ids = [...getPostDataResult.data[0].tags].sort();
 
   const postData: PostInfo = {
     userId: user.userId,
@@ -210,8 +228,8 @@ export async function GetPostByPostId(
     images: getPostDataResult.data[0].images,
     tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
       id: tag_ids[idx],
-      name: tag_name[idx]
-    }))
-  }
+      name: tag_name[idx],
+    })),
+  };
   return postData;
 }
