@@ -35,7 +35,7 @@ export default function Home() {
       });
   }, [supabaseClient, userStatus.user]);
 
-  if (userStatus.isLoading) return <Loading />;
+  if (userStatus.isLoading || !appointments) return <Loading />;
   if (!userStatus.user) {
     router.push(PagePaths.login);
     return;
