@@ -1,5 +1,6 @@
 import { Dayjs } from "dayjs";
 import { Tag } from "./Tag";
+import { User } from "./User";
 
 export type Post = {
   postId: number;
@@ -13,6 +14,7 @@ export type Post = {
   location: string;
   startDateTime: string;
   endDateTime: string;
+  participants?: User[];
 };
 
 export type PostInfo = {
@@ -24,6 +26,7 @@ export type PostInfo = {
   images: string[];
   startTime: Dayjs;
   endTime: Dayjs;
+  participants?: User[];
 };
 
 // export const emptyPost: Post = {

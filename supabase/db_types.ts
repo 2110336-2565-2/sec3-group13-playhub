@@ -234,6 +234,36 @@ export interface Database {
           images: string[];
         };
       };
+      get_posts_with_participants: {
+        Args: {
+          id: number;
+        };
+        Returns: {
+          id: number;
+          title: string;
+          description: string;
+          owner_id: string;
+          owner_name: string;
+          owner_profile: string;
+          location: string;
+          start_time: string;
+          end_time: string;
+          tags: {
+            id: number;
+            name: string;
+          }[];
+          images: string[];
+          participants: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+            image: string | null;
+          }[];
+        };
+      };
       get_posts_by_user_id: {
         Args: {
           id: string;
@@ -353,6 +383,20 @@ export interface Database {
         Returns: {
           is_exist_national_id: boolean;
         };
+      };
+      add_participant_id_to_post_id: {
+        Args: {
+          user_id: string;
+          post_id: number;
+        };
+        Returns: undefined;
+      };
+      remove_participant_id_from_post_id: {
+        Args: {
+          user_id: string;
+          post_id: number;
+        };
+        Returns: undefined;
       };
     };
     Enums: {
