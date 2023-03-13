@@ -156,8 +156,8 @@ export default function AddParticipant(props: props) {
           sx={{
             pointerEvents: "none",
           }}
-          //style={PopoverStyle}
           open={popopen}
+          transitionDuration={0}
           anchorEl={popanchorEl}
           onClose={handlePopoverClose}
           anchorOrigin={{ vertical: "top", horizontal: "right" }}
