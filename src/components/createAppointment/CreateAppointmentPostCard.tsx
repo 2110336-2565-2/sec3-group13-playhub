@@ -1,7 +1,7 @@
 import {
   Typography,
   Avatar,
-  Card,
+  Box,
   CardHeader,
   CardContent,
   IconButton,
@@ -15,28 +15,17 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Post } from "../../types/Post";
 import { PagePaths } from "enum/pages";
 import { NextRouter, useRouter } from "next/router";
-const styles = {
-  //boxSizing: "border-box",//padding: "0 0 20px 0",
-  position: "static",
-  background: "#FFFFFF",
-  border: "5px solid #000000",
-  boxShadow: "10px 10px 1px rgba(0, 0, 0, 0.25)",
-  borderRadius: "30px",
-  width: "60%",
-  flexDirection: "row",
-  padding: "0 0 50px 0",
-};
+import BorderWithShadow from "../public/BorderWithShadow";
 
 type props = {
   post: Post;
-  //handleDeletePost: (toDeletePost: Post) => void;
-  isLeft: Boolean;
 };
+
 export default function CreateAppointmentPostCard(props: props) {
   const router: NextRouter = useRouter();
   return (
-    <>
-      <Card sx={[styles, { float: props.isLeft ? "right" : "left" }]}>
+    <BorderWithShadow>
+      <Box sx={{ width: "100%", height: "300px" }}>
         <CardHeader
           avatar={
             <IconButton
@@ -54,9 +43,8 @@ export default function CreateAppointmentPostCard(props: props) {
           }
           title={props.post.title}
           subheader={props.post.ownerName}
-          titleTypographyProps={{ fontWeight: "700", fontSize: "32px" }}
+          titleTypographyProps={{ variant: "h5" }}
           subheaderTypographyProps={{ fontWeight: "400", fontSize: "16px" }}
-          //action={}
         />
         <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
           {/* post preview details start here */}
@@ -81,7 +69,7 @@ export default function CreateAppointmentPostCard(props: props) {
             ))}
           </Grid>
         </CardContent>
-      </Card>
-    </>
+      </Box>
+    </BorderWithShadow>
   );
 }

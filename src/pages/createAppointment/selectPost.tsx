@@ -12,16 +12,6 @@ import { GetCurrentUserPosts } from "@/services/Posts";
 import { Grid } from "@mui/material";
 import CreateAppointmentPostCard from "@/components/createAppointment/CreateAppointmentPostCard";
 
-const MainLayout = {
-  margin: "1vh 0 0 0",
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  width: "100%",
-  flexDirection: "row",
-  padding: "30px",
-};
-
 export default function ShowAppointment() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
@@ -53,23 +43,20 @@ export default function ShowAppointment() {
   return (
     <>
       <Navbar />
-      {/*  Title */}
-      <Box sx={MainLayout}>
-        <Typography variant="h1" sx={{ fontWeight: "700", fontSize: "40px" }}>
-          Select Post To Create Appointment
-        </Typography>
+      <Typography paddingTop="40px" variant="h4" align="center">
+        Select Post To Create Appointment
+      </Typography>
+      <Box display="flex" justifyContent="center" padding="40px">
+        <Grid container spacing="40px" width="80vw">
+          {posts.map((item, index) => (
+            <Grid item xs={12} md={6} key={index}>
+              <Box onClick={() => handleClickCard(item)}>
+                <CreateAppointmentPostCard post={item} />
+              </Box>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
-      {/*  CreateAppointmentPostCard */}
-      <Grid container spacing={2} sx={MainLayout}>
-        {posts.map((item, index) => (
-          <Grid item xs={6} key={index}>
-            <Box onClick={() => handleClickCard(item)}>
-              <CreateAppointmentPostCard post={item} isLeft={index % 2 == 0} />
-            </Box>
-          </Grid>
-        ))}
-        {posts.length % 2 != 0 ? <Grid item xs={6}></Grid> : null}
-      </Grid>
     </>
   );
 }
