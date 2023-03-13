@@ -30,3 +30,4 @@ export type AppointmentDetailHeader = {
   tags: string[];
   description: string;
 };
+

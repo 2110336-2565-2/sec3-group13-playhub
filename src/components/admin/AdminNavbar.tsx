@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";

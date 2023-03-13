@@ -1,17 +1,33 @@
 import { validation } from "@/types/Validation";
 import dayjs, { Dayjs } from "dayjs";
-import { IMAGE_LIMIT } from "enum/inputLimit";
+import { CHAR_LIMIT, IMAGE_LIMIT } from "enum/inputLimit";
 
-const expression: RegExp =
+const regexEmail: RegExp =
   /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export function validateEmail(email: string): validation {
-  if (email.length === 0) {
+  if (email.trim().length === 0) {
     return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
   }
-  if (!expression.test(email)) {
+  if (!regexEmail.test(email)) {
     return { msg: "รูปแบบอีเมลไม่ถูกต้อง", err: true };
   }
+  return { msg: "", err: false };
+}
+
+export function validatePassword(password: string): validation {
+  // check contain space (starting, between, ending)
+  if (password.includes(" ")) {
+    return { msg: "รหัสผ่านไม่สามารถประกอบด้วยช่องว่าง", err: true };
+  }
+  // check empty & check min char
+  if (password.length < CHAR_LIMIT.MIN_PASSWORD) {
+    return {
+      msg: `รหัสผ่านต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัวอักษร`,
+      err: true,
+    };
+  }
+
   return { msg: "", err: false };
 }
 
@@ -64,8 +80,7 @@ export function validateDateWithInterval(
   if (startDate) {
     if (endDate) {
       if (startDate >= endDate) {
-        const displayStartDate: string =
-          dayjs(startDate).format("DD/MM/YYYY hh:mm a");
+        const displayStartDate: string = dayjs(startDate).format("DD/MM/YYYY hh:mm a");
         return {
           msg: `กรุณาเลือกวันที่และเวลา หลังจาก ${displayStartDate}`,
           err: true,
@@ -77,6 +92,70 @@ export function validateDateWithInterval(
         err: true,
       };
     }
+  }
+  return { msg: "", err: false };
+}
+
+export function validateNationalIDCardNumber(nationalIDCardNumber: string): validation {
+  if (nationalIDCardNumber.length == 0) {
+    return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+  }
+
+  if (
+    nationalIDCardNumber.length != CHAR_LIMIT.MAX_NATIONAL_ID_CARD_NUMBER ||
+    !RegExp(/\d{13}/).test(nationalIDCardNumber) ||
+    !checkLastDigit(nationalIDCardNumber)
+  ) {
+    return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
+  }
+  return { msg: "", err: false };
+
+  // --- Lemma Function ---
+  function checkLastDigit(nationalIDCardNumber: string): boolean {
+    //firstStep: find place value
+    const firstStep: number = nationalIDCardNumber
+      .slice(0, 12)
+      .split("")
+      .reduce((total, str, currentIndex) => total + (13 - currentIndex) * parseInt(str), 0);
+
+    const secondStep: number = firstStep % 11;
+    const thirdStep: number = (11 - secondStep) % 10;
+    if (thirdStep !== parseInt(nationalIDCardNumber[12])) {
+      return false;
+    }
+    return true;
+  }
+}
+
+export function validateConfirmPassword(password: string, confirmPassword: string): validation {
+  const passwordErr: validation = validatePassword(password);
+
+  if (passwordErr.err) {
+    return passwordErr;
+  }
+  if (password !== confirmPassword) {
+    return {
+      msg: "Password และ Confirm Password ต้องเหมือนกัน",
+      err: true,
+    };
+  }
+  return { msg: "", err: false };
+}
+
+export function validateConfirmNewPassword(
+  newPassword: string,
+  confirmNewPassword: string
+): validation {
+  const newPasswordErr: validation = validatePassword(newPassword);
+
+  if (newPasswordErr.err) {
+    return newPasswordErr;
+  }
+  if (newPassword !== confirmNewPassword) {
+    return {
+      msg: "New Password และ Confirm New Password ต้องเหมือนกัน",
+      err: true,
+    };
   }
   return { msg: "", err: false };
 }

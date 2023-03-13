@@ -9,6 +9,8 @@ export enum CHAR_LIMIT {
 
   MIN_TITLE = 1,
   MAX_TITLE = 500,
+
+  MAX_NATIONAL_ID_CARD_NUMBER = 13
 }
 
 export enum TAG_LIMIT {

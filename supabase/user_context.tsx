@@ -1,10 +1,7 @@
 import { UserStatus } from "@/types/User";
 import { ScriptProps } from "next/script";
 import { createContext, useState, useEffect } from "react";
-import {
-  useSessionContext,
-  useSupabaseClient,
-} from "@supabase/auth-helpers-react";
+import { useSessionContext, useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "./db_types";
 import { useRouter } from "next/router";
 
@@ -36,28 +33,23 @@ export const UserStatusWrapper = (prop: ScriptProps) => {
         setUserStatus({ user: null, isLoading: false });
         return;
       }
-      setUserStatus({ user: {
-        userId: userData.data[0].id,
-        username: userData.data[0].username,
-        email: userData.data[0].email,
-        birthdate: userData.data[0].birthdate,
-        sex: userData.data[0].sex,
-        description: userData.data[0].description,
-        image: userData.data[0].image,
-        isAdmin: userData.data[0].is_admin
-      }, isLoading: false });
+      setUserStatus({
+        user: {
+          userId: userData.data[0].id,
+          username: userData.data[0].username,
+          email: userData.data[0].email,
+          birthdate: userData.data[0].birthdate,
+          sex: userData.data[0].sex,
+          description: userData.data[0].description,
+          image: userData.data[0].image,
+          isAdmin: userData.data[0].is_admin,
+          isVerified: userData.data[0].is_verified,
+        },
+        isLoading: false,
+      });
     }
     getUserData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    sessionContext.isLoading,
-    supabaseClient,
-    router.pathname,
-  ]);
-
-  return (
-    <userContext.Provider value={userStatus}>
-      {prop.children}
-    </userContext.Provider>
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionContext.isLoading, supabaseClient, router.pathname]);
+  return <userContext.Provider value={userStatus}>{prop.children}</userContext.Provider>;
 };
