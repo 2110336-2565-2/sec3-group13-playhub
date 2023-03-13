@@ -9,6 +9,7 @@ import { userContext } from "supabase/user_context";
 import { NextRouter, useRouter } from "next/router";
 import { PagePaths } from "enum/pages";
 import { GetAppointmentsByUserIdWhichPending } from "@/services/Appointments";
+import Loading from "@/components/public/Loading";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -34,6 +35,11 @@ export default function Home() {
       });
   }, [supabaseClient, userStatus.user]);
 
+  if (userStatus.isLoading) return <Loading />;
+  if (!userStatus.user) {
+    router.push(PagePaths.login);
+    return;
+  }
   return (
     <>
       <Navbar />

@@ -41,9 +41,13 @@ export default function Home() {
 
   const [choice, setChoice] = useState<"accept" | "reject" | null>(null);
 
-  if (!appointment || !userStatus.user) return <Loading />;
+  if (!appointment || userStatus.isLoading) return <Loading />;
   if (!isParticipant) {
     router.push(PagePaths.selectApptToConfirm);
+    return;
+  }
+  if (!userStatus.user) {
+    router.push(PagePaths.login);
     return;
   }
   return (
@@ -95,7 +99,6 @@ export default function Home() {
           choice={choice}
           onConfirm={() => {
             if (choice === "accept" && userStatus.user) {
-              // do sth
               AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
                 (err) => {
                   console.log(err);
@@ -105,7 +108,6 @@ export default function Home() {
               router.push(PagePaths.selectApptToConfirm);
             }
             if (choice === "reject" && userStatus.user) {
-              // do sth
               RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
                 (err) => {
                   console.log(err);
