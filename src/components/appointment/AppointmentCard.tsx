@@ -11,7 +11,7 @@ type props = {
     appointment: Appointment;
 };
 export default function AppointmentCard(props: props) {
-    return <Card sx={{ width: "100%" }}>
+    return <Card sx={{ width: "100%", height: "220px" }}>
         <CardHeader
             avatar={
                 <IconButton
