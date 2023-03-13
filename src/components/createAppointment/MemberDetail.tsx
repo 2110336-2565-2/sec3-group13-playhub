@@ -15,7 +15,7 @@ const profile_layout = {
 };
 const stack_design = {
   padding: "30px",
-  width: "400px",
+  width: "300px",
 };
 
 const avatar = { width: 120, height: 120 };
@@ -31,7 +31,11 @@ export default function MemberDetail(props: props) {
           <Typography variant="body1" align="center" sx={profile_layout}>
             {props.value.email}
           </Typography>
-          <Avatar sx={avatar} alt="Profile picture" src={props.value.image as string} />
+          {props.value.image ? (
+            <Avatar sx={avatar} alt="Profile picture" src={props.value.image} />
+          ) : (
+            <Avatar sx={avatar} alt="Profile picture" />
+          )}
           <Stack direction="row" spacing={1}>
             <Chip
               icon={
