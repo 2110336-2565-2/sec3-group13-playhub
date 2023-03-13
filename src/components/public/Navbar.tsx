@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-
+import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import Link from "next/link";
 
@@ -99,19 +98,29 @@ export default function Navbar() {
                 </Box>
               </Link>
             </MenuItem>
+
             <MenuItem key={2}>
-              <Link href={PagePaths.myPosts}>
-                <Typography variant="body1">{NavbarPages.myPost}</Typography>
+              <Link href={PagePaths.myAppointments}>
+                <Typography variant="body1">{NavbarPages.myAppointments}</Typography>
               </Link>
             </MenuItem>
-            {!userStatus.user?.isVerified &&
+
+            {userStatus.user?.isVerified &&
               <MenuItem key={3}>
+                <Link href={PagePaths.myPosts}>
+                  <Typography variant="body1">{NavbarPages.myPost}</Typography>
+                </Link>
+              </MenuItem>
+            }
+            {!userStatus.user?.isVerified &&
+              <MenuItem key={4}>
                 <Link href={PagePaths.verify}>
                   <Typography variant="body1" color="primary">{NavbarPages.verify}</Typography>
                 </Link>
               </MenuItem>
             }
-            <MenuItem key={4}>
+
+            <MenuItem key={5}>
               <Box onClick={handleSignOut}>
                 <Typography variant="body1" color="error">
                   {NavbarPages.logout}

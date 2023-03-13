@@ -3,8 +3,7 @@ import { User } from "@/types/User";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 import dayjs, { Dayjs } from "dayjs";
-
-const SUPABASE_CONNECTING_ERROR = "Something went wrong!!";
+import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
 
 function dayjsWithoutTZ(date: string): Dayjs {
   const dateWithoutTZ = date.substring(0, date.indexOf("+"));

@@ -140,8 +140,8 @@ export default function AdminPostCard(props: props) {
             </Typography>
           </Stack>
           <Grid container spacing={1}>
-            {props.post.tags.map((e) => (
-              <Grid item>
+            {props.post.tags.map((e, index) => (
+              <Grid item key={index}>
                 <Chip
                   label={e}
                   variant="outlined"
@@ -166,8 +166,8 @@ export default function AdminPostCard(props: props) {
               <Typography key={row}>{row}</Typography>
             ))}
             <Grid container spacing={2}>
-              {props.post.image.map((e) => (
-                <Grid item>
+              {props.post.image.map((e, index) => (
+                <Grid item key={index}>
                   <Image src={e} alt="location" width={300} height={350} />
                 </Grid>
               ))}
