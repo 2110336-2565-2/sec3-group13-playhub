@@ -39,7 +39,11 @@ export default function AppointmentCard(props: props) {
             <Stack spacing="4px">
                 <Typography display="inline-flex">
                     <LocationOnIcon fontSize="medium" />
-                    <Typography style={{ marginLeft: 8 }}>{props.appointment.location}</Typography>
+                    <Typography style={{
+                        marginLeft: 8, textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                    }}>{props.appointment.location}</Typography>
                 </Typography>
                 <Typography display="inline-flex">
                     <CalendarTodayIcon fontSize="medium" />
