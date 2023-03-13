@@ -75,18 +75,21 @@ export default function RightCard(props: props) {
             </Box>
           </Stack>
         </CardContent>
-        {props.selectedParticipants.length > 0 ? (
-          <Box
-            sx={{ position: "relative", bottom: 50 }}
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
+
+        <Box
+          sx={{ position: "relative", bottom: 50 }}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Button
+            variant="contained"
+            onClick={props.onSubmit}
+            disabled={props.selectedParticipants.length == 0}
           >
-            <Button variant="contained" onClick={props.onSubmit}>
-              Create
-            </Button>
-          </Box>
-        ) : null}
+            Create
+          </Button>
+        </Box>
       </BorderWithShadow>
     </>
   );
