@@ -163,6 +163,14 @@ export default function AddParticipant(props: props) {
             horizontal: "left",
           }}
           disableRestoreFocus
+          PaperProps={{
+            style: {
+              borderRadius: "15px",
+              paddingLeft: "30px",
+              paddingRight: "30px",
+              border: "1px solid rgba(0, 0, 0, 0.2)",
+            },
+          }}
         >
           {<MemberDetail value={hoveredMenuItem} />}
         </Popover>

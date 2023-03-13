@@ -15,28 +15,19 @@ const profile_layout = {
   minWidth: "200px",
 };
 const stack_design = {
+  padding: "30px",
   width: "400px",
   height: "50%",
   boxSizing: "border-box",
-  background: "#FFFFFF",
-  border: "1px solid rgba(0, 0, 0, 0.2)",
-  borderRadius: " 15px",
 };
 
 const avatar = { width: 120, height: 120 };
 
 export default function MemberDetail(props: props) {
-  /*const [text, setText] = useState<string>("");
-  setText(props.value.description);*/
   return (
     <>
       {props.value && (
-        <Stack
-          spacing={2}
-          alignItems="center"
-          justifyContent="center"
-          sx={{ /*margin: "10px"*/ padding: "30px", ...stack_design }}
-        >
+        <Stack spacing={2} alignItems="center" justifyContent="center" sx={{ ...stack_design }}>
           <Typography variant="h1" align="center" sx={profile_layout}>
             {props.value.username}
           </Typography>
