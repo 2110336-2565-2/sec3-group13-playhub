@@ -62,9 +62,9 @@ const mainTheme = createTheme({
       styleOverrides: {
         root: {
           boxShadow: "4px 4px #BFBFBF",
-         };
-       };
-     };
+        },
+      },
+    },
 
     MuiTextField: {
       styleOverrides: {
