@@ -72,16 +72,20 @@ export default function Navbar() {
               <Typography variant="body1">{NavbarPages.home}</Typography>
             </IconButton>
           </Box>
-          <Box sx={{ flexGrow: 0.02 }}>
-            <IconButton color="inherit" disableRipple onClick={routeToSelectPost}>
-              <Typography variant="body1">{NavbarPages.selectPost}</Typography>
-            </IconButton>
-          </Box>
-          <Box sx={{ flexGrow: 0.02 }}>
-            <IconButton color="inherit" disableRipple onClick={routeToSelectAppointment}>
-              <Typography variant="body1">{NavbarPages.selectAppointment}</Typography>
-            </IconButton>
-          </Box>
+          {userStatus.user?.isVerified &&
+            <>
+              <Box sx={{ flexGrow: 0.02 }}>
+                <IconButton color="inherit" disableRipple onClick={routeToSelectPost}>
+                  <Typography variant="body1">{NavbarPages.selectPost}</Typography>
+                </IconButton>
+              </Box>
+              <Box sx={{ flexGrow: 0.02 }}>
+                <IconButton color="inherit" disableRipple onClick={routeToSelectAppointment}>
+                  <Typography variant="body1">{NavbarPages.selectAppointment}</Typography>
+                </IconButton>
+              </Box>
+            </>
+          }
           <IconButton onClick={handleMenu}>
             {userStatus.user && (
               userStatus.user.image ? (
@@ -119,11 +123,13 @@ export default function Navbar() {
               </Link>
             </MenuItem>
 
-            <MenuItem key={2}>
-              <Link href={PagePaths.myAppointments}>
-                <Typography variant="body1">{NavbarPages.myAppointments}</Typography>
-              </Link>
-            </MenuItem>
+            {userStatus.user?.isVerified &&
+              <MenuItem key={2}>
+                <Link href={PagePaths.myAppointments}>
+                  <Typography variant="body1">{NavbarPages.myAppointments}</Typography>
+                </Link>
+              </MenuItem>
+            }
 
             {userStatus.user?.isVerified &&
               <MenuItem key={3}>
