@@ -19,7 +19,6 @@ export enum PagePaths {
   successResetPassword = "/successResetPassword",
   requestResetPassword = "/requestResetPassword",
   successRequestResetPassword = "/successRequestResetPassword",
-
   // admin
   adminHome = "/admin/", // subfix : user_id
   adminProfile = "/admin/profile/" // subfix : user_id
