@@ -276,6 +276,7 @@ export default function Home() {
               />
 
               <DescriptionTextField
+                name="description"
                 header="Description"
                 placeholder="Tell Us More About Yourself!"
                 value={input.description}
