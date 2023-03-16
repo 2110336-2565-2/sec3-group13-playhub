@@ -1,6 +1,8 @@
-import { Box, FormHelperText, Stack, TextField, Typography } from "@mui/material";
+import { Box, FormHelperText, InputAdornment, Stack, TextField, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
 
 type props = {
+  name?: string;
   header: string;
   placeholder: string;
   value: string;
@@ -25,14 +27,22 @@ export default function NormalTextField(props: props) {
         <Box>
           <Typography variant="body1">{props?.header}</Typography>
           <TextField
+            name={props.name}
             sx={{ backgroundColor: "#ffffff" }}
             fullWidth
             multiline
-            rows={4}
+            rows={6}
             placeholder={props.placeholder}
             value={props.value}
             error={props.isErr}
             onChange={props.handleValueChange}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end" style={{ display: "flex", flexDirection: "column" }}>
+                  <EditIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
+                </InputAdornment>
+              ),
+            }}
           />
         </Box>
         <Box sx={helperText}>
