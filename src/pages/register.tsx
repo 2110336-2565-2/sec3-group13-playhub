@@ -11,9 +11,9 @@ import { grey } from "@mui/material/colors";
 import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
 import Logo from "@/components/public/Logo";
-import NormalTextField from "@/components/public/NormalTextField";
+import NormalTextField from "@/components/public/CommonTextField";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
-import CommonDropdown from "@/components/public/CommonDropdown";
+import CommonDropdown from "@/components/public/GenderDropdown";
 import CommonDatePicker from "@/components/public/CommonDatePicker";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 
@@ -24,7 +24,7 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
 import { CreateUser } from "@/services/User";
-import NormalButton from "@/components/public/NormalButton";
+import NormalButton from "@/components/public/CommonButton";
 
 type RegisterInput = {
   displayName: string;

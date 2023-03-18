@@ -15,7 +15,7 @@ import { validation } from "@/types/Validation";
 import { PAGE_PATHS } from "enum/PAGES";
 
 import { ResetPassword } from "@/services/Password";
-import NormalButton from "@/components/public/NormalButton";
+import NormalButton from "@/components/public/CommonButton";
 
 type ResetPasswordInput = {
   password: string;

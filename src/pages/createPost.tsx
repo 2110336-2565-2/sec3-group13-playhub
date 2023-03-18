@@ -5,15 +5,13 @@ import { useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Grid, Typography, Button, FormHelperText, Stack, Box, Card } from "@mui/material";
+import { Typography, Button, Stack, Box, Card } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import NormalTextField from "@/components/public/NormalTextField";
-import CommonTextField from "@/components/public/CommonTextField";
+import NormalTextField from "@/components/public/CommonTextField";
 import CommonDateTimePicker from "@/components/post/CommonDateTimePicker";
-import Tags from "@/components/createPost/Tags";
-import GoogleMap from "@/components/createPost/searchMaps";
+import Tags from "@/components/post/SelectTags";
 import PictureList from "@/components/createPost/pictureList";
 import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
 
@@ -291,6 +289,7 @@ export default function Home() {
                   char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
                   isErr={state.description && descriptionError.err}
                   errMsg={descriptionError.msg}
+                  height={9}
                 />
               </Box>
 

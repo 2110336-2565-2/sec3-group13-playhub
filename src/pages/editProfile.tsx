@@ -20,8 +20,8 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import NormalTextField from "@/components/public/NormalTextField";
-import CommonDropdown from "@/components/public/CommonDropdown";
+import NormalTextField from "@/components/public/CommonTextField";
+import CommonDropdown from "@/components/public/GenderDropdown";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import VerifyDialog from "@/components/profile/VerifyDialog";
 import { validateImage, validateTextField } from "@/utilities/validation";
@@ -34,7 +34,7 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
 import { UpdateProfile } from "@/services/Profile";
-import NormalButton from "@/components/public/NormalButton";
+import NormalButton from "@/components/public/CommonButton";
 
 type EditProfileInput = {
   image: string | null;

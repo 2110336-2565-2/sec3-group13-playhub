@@ -3,7 +3,7 @@ import { userContext } from "supabase/user_context";
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { PAGE_PATHS } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
-import NormalButton from "../public/NormalButton";
+import NormalButton from "../public/CommonButton";
 import { COLOR } from "enum/COLOR";
 
 type props = {

@@ -8,7 +8,7 @@ import { Database } from "supabase/db_types";
 
 import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
-import NormalTextField from "@/components/public/NormalTextField";
+import NormalTextField from "@/components/public/CommonTextField";
 import { validateEmail } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
@@ -16,7 +16,7 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
 import { RequestResetPassword } from "@/services/Password";
-import NormalButton from "@/components/public/NormalButton";
+import NormalButton from "@/components/public/CommonButton";
 
 const RequestResetPasswordStyle = {
   Card: {
