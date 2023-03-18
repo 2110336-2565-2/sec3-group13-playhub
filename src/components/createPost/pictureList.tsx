@@ -1,18 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import CancelIcon from "@mui/icons-material/Cancel";
 import AddIcon from "@mui/icons-material/Add";
 import { Box, Container, FormHelperText, IconButton, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 import { IMAGE_LIMIT } from "enum/INPUT_LIMIT";
+import CloseIcon from "@mui/icons-material/Close";
 
 // style
 const image_layout = {
-  width: "10vw",
-  minWidth: "140px",
-  height: "10vw",
-  minHeight: "140px",
+  width: "7vw",
+  minWidth: "120px",
+  height: "7vw",
+  minHeight: "120px",
 };
 
 const addIcon_layout = {
@@ -54,7 +54,7 @@ export default function PictureList(props: props) {
         file.type.startsWith("image/")
       );
 
-      if (selfilesarr.length + images.length > 3) {
+      if (selfilesarr.length + images.length > IMAGE_LIMIT.MAX_IMAGE) {
         //alert("more than 3");
         // props.st(true);
         return;
@@ -76,7 +76,7 @@ export default function PictureList(props: props) {
 
   return (
     <>
-      <Box display="flex">
+      <Box display="flex" alignItems="end">
         <Typography variant="body1">
           {props.header}
           {"\u00A0"}
@@ -87,50 +87,64 @@ export default function PictureList(props: props) {
       </Box>
 
       <Container disableGutters>
-        <ImageList variant="woven" cols={Math.min(3, images.length + 2)} gap={10}>
+        <ImageList
+          sx={{
+            width: "29vw",
+            height: "32vh",
+            minWidth: "250px",
+            minHeight: "320px",
+            alignContent: "start",
+          }}
+          variant="woven"
+          cols={3}
+          gap={5}
+        >
           {images.map((image, index) => {
             // const imageErr :validation = validateImage(image.type, image.size);
             return (
               <>
                 <Stack>
-                  <Box key={index} sx={image_layout}>
-                    <ImageListItem cols={1}>
-                      <IconButton
-                        color="error"
-                        sx={{
-                          position: "absolute",
-                          top: 0,
-                          right: 0,
-                          padding: 0,
-                        }}
-                        onClick={() => deletePicture(index)}
-                      >
-                        <CancelIcon />
-                      </IconButton>
-                      <img alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
-                    </ImageListItem>
-                  </Box>
+                  <ImageListItem
+                    key={index}
+                    sx={image_layout}
+                    style={{ marginTop: "10px" }}
+                    cols={1}
+                  >
+                    <IconButton
+                      onClick={() => deletePicture(index)}
+                      color="secondary"
+                      style={{
+                        padding: 0,
+                        backgroundColor: "black",
+                        position: "absolute",
+                        top: -10,
+                        right: -10,
+                        zIndex: "1",
+                      }}
+                    >
+                      <CloseIcon fontSize="small" color="primary" />
+                    </IconButton>
+                    <img alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
+                  </ImageListItem>
                   {false && <FormHelperText error>{props.errMsg}</FormHelperText>}
                 </Stack>
               </>
             );
           })}
           {images.length < IMAGE_LIMIT.MAX_IMAGE && (
-            <Box key={4} sx={image_layout}>
-              <ImageListItem cols={1}>
-                <IconButton
-                  color="secondary"
-                  sx={{
-                    borderRadius: 0,
-                    border: "2px dashed black",
-                    ...image_layout,
-                  }}
-                  onClick={handleClick}
-                >
-                  <AddIcon style={addIcon_layout} />
-                </IconButton>
-              </ImageListItem>
-            </Box>
+            <ImageListItem key={7} sx={image_layout} style={{ marginTop: "12px" }} cols={1}>
+              <IconButton
+                color="secondary"
+                sx={{
+                  borderRadius: 0,
+                  border: "2px dashed black",
+                  ...image_layout,
+                }}
+                onClick={handleClick}
+              >
+                <AddIcon style={addIcon_layout} />
+              </IconButton>
+            </ImageListItem>
           )}
         </ImageList>
       </Container>
