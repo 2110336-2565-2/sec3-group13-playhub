@@ -1,16 +1,10 @@
 import { useContext } from "react";
 import { userContext } from "supabase/user_context";
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
 import { PAGE_PATHS } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
+import NormalButton from "../public/NormalButton";
+import { COLOR } from "enum/COLOR";
 
 type props = {
   openModal: boolean;
@@ -48,12 +42,8 @@ export default function DeletePostDialog(props: props) {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="inherit" onClick={handleGoBackToMyProfile}>
-            Quit
-          </Button>
-          <Button variant="contained" color="primary" onClick={props.handleCloseModal}>
-            Continue Editing
-          </Button>
+          <NormalButton label="Quit" color={COLOR.NATURAL} onClick={handleGoBackToMyProfile} />
+          <NormalButton label="Continue Editing" onClick={props.handleCloseModal} />
         </DialogActions>
       </Dialog>
     </>
