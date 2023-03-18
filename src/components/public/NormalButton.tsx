@@ -2,6 +2,7 @@ import { Button } from "@mui/material";
 
 type props = {
   label: string;
+  onClick: (event: React.MouseEvent<HTMLElement>) => void;
   color?: string;
 };
 
@@ -19,6 +20,7 @@ export default function NormalButton(props: props) {
           padding: "4px 10px",
           minWidth: "180px",
         }}
+        onClick={props.onClick}
       >
         {props.label}
       </Button>
