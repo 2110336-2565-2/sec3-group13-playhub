@@ -20,7 +20,7 @@ export enum TAG_LIMIT {
 
 export enum IMAGE_LIMIT {
   MIN_IMAGE = 0,
-  MAX_IMAGE = 3,
+  MAX_IMAGE = 6,
 
   // 1MB = 1_000_000 bytes
   MAX_IMAGE_SIZE = 1_000_000,
