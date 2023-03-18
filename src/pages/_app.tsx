@@ -108,20 +108,6 @@ const mainTheme = createTheme({
         },
       },
     },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: "15px",
-          border: "3px black solid",
-
-          textTransform: "none",
-          fontSize: 18,
-          fontWeight: 600,
-
-          padding: "4px 64px",
-        },
-      },
-    },
     MuiSnackbarContent: {
       styleOverrides: {
         root: {
