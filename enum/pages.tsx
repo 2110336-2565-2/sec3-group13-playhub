@@ -6,6 +6,7 @@ export enum PAGE_PATHS {
   // require auth <-> exist userStatus
   HOME = "/",
   MY_POSTS = "/myPosts",
+  POST = "/post/", // subfix : postId
   EDIT_POST = "/editPost/", // subfix : postId
   CREATE_POST = "/createPost",
   MY_PROFILE = "/profile/", // subfix : user_id
