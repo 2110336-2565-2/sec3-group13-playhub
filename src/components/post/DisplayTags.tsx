@@ -1,4 +1,3 @@
-import { Tag } from "@/types/Tag";
 import { Chip, Grid } from "@mui/material";
 import Typography from "@mui/material/Typography";
 
