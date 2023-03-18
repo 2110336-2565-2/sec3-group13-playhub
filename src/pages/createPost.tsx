@@ -5,11 +5,10 @@ import { useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Typography, Button, Stack, Box, Card, IconButton } from "@mui/material";
+import { Typography, Stack, Box, Card, IconButton } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import CommonTextField from "@/components/public/CommonTextField";
 import CommonDateTimePicker from "@/components/post/CommonDateTimePicker";
 import Tags from "@/components/post/SelectTags";
 import PictureList from "@/components/post/ImageList";
@@ -28,6 +27,7 @@ import DescriptionTextField from "@/components/public/DescriptionTextField";
 import LocationTextField from "@/components/post/LocationTextField";
 import CommonButton from "@/components/public/CommonButton";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import TitleTextField from "@/components/post/TitleTextField";
 
 type CreatePostInput = {
   title: string;
@@ -52,7 +52,6 @@ const CreatePostStyle = {
   TextField: {
     width: "28vw",
     minWidth: "250px",
-    // margin: "2vh 0 0 0",
   },
   Card: {
     width: "30vw",
@@ -222,14 +221,14 @@ export default function Home() {
             <Stack spacing={0} alignItems="center" justifyContent="center">
               {/* Post title */}
               <Box style={CreatePostStyle.TextField}>
-                <CommonTextField
+                <TitleTextField
                   name="title"
                   header="Title"
                   icon={ICONS.EDIT}
                   placeholder="This is Post Title"
                   value={input.title}
                   handleValueChange={handleTextFieldChange}
-                  char_limit={100}
+                  char_limit={CHAR_LIMIT.MAX_TITLE}
                   isErr={state.title && titleError.err}
                   errMsg={titleError.msg}
                 />
