@@ -36,13 +36,6 @@ export default function NormalTextField(props: props) {
             value={props.value}
             error={props.isErr}
             onChange={props.handleValueChange}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end" style={{ display: "flex", flexDirection: "column" }}>
-                  <EditIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />
-                </InputAdornment>
-              ),
-            }}
           />
         </Box>
         <Box sx={helperText}>
