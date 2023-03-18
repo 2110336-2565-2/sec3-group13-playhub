@@ -266,7 +266,7 @@ export default function Home() {
               <Box sx={CreatePostStyle.TextField}>
                 <Tags
                   header="Tag"
-                  note="(เลือกได้สูงสุด 5 Tags)"
+                  note="(Maximum 5 Tags)"
                   value={input.tags}
                   handleValueChange={handleTagsChange}
                   menuValue={tagMenu}
@@ -289,7 +289,7 @@ export default function Home() {
                   char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
                   isErr={state.description && descriptionError.err}
                   errMsg={descriptionError.msg}
-                  height={9}
+                  height={8}
                 />
               </Box>
 
@@ -297,7 +297,7 @@ export default function Home() {
               <Box sx={CreatePostStyle.TextField}>
                 <PictureList
                   header="Image"
-                  note="(Optional, เลือกได้สูงสุด 3 รูป)"
+                  note="(Optional, Maximum 6 Images)"
                   imgs={input.images}
                   stateChanger={handleImagesChange}
                   // st={setImgErrState}
