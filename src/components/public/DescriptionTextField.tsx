@@ -10,7 +10,7 @@ type props = {
   char_limit: number;
   isErr: boolean;
   errMsg: string;
-  row?: number;
+  height?: number;
 };
 
 const helperText = {
@@ -21,7 +21,7 @@ const helperText = {
 
 export default function NormalTextField(props: props) {
   const exceedChar: boolean = props.char_limit ? props.value.length > props.char_limit : false;
-  const row: number = props.row ? props.row : 4;
+  const row: number = props.height ? props.height : 4;
 
   return (
     <>
