@@ -11,6 +11,8 @@ export default function NormalButton(props: props) {
   function generateColor() {
     if (props.color === COLOR.NATURAL) {
       return "inherit";
+    } else if (props.color === COLOR.ERROR) {
+      return "error";
     }
     return "primary";
   }
