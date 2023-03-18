@@ -20,7 +20,7 @@ import CloseIcon from "@mui/icons-material/Close";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import NormalTextField from "@/components/public/CommonTextField";
+import CommonTextField from "@/components/public/CommonTextField";
 import CommonDropdown from "@/components/public/GenderDropdown";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import VerifyDialog from "@/components/profile/VerifyDialog";
@@ -265,7 +265,7 @@ export default function Home() {
             )}
 
             <Box style={EditProfileStyle.TextField}>
-              <NormalTextField
+              <CommonTextField
                 header="Username"
                 icon={ICONS.EDIT}
                 placeholder="Display Name"

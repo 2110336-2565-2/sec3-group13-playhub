@@ -11,7 +11,7 @@ import { grey } from "@mui/material/colors";
 import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
 import Logo from "@/components/public/Logo";
-import NormalTextField from "@/components/public/CommonTextField";
+import CommonTextField from "@/components/public/CommonTextField";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import CommonDropdown from "@/components/public/GenderDropdown";
 import CommonDatePicker from "@/components/public/CommonDatePicker";
@@ -193,7 +193,7 @@ export default function Home() {
           </Box>
 
           <Box style={RegisterStyle.TextField}>
-            <NormalTextField
+            <CommonTextField
               name="displayName"
               header="Username"
               icon={ICONS.EDIT}
@@ -207,7 +207,7 @@ export default function Home() {
           </Box>
 
           <Box style={RegisterStyle.TextField}>
-            <NormalTextField
+            <CommonTextField
               name="email"
               header="Email"
               icon={ICONS.MAIL}

@@ -9,7 +9,7 @@ import { Typography, Button, Stack, Box, Card, IconButton } from "@mui/material"
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import NormalTextField from "@/components/public/CommonTextField";
+import CommonTextField from "@/components/public/CommonTextField";
 import CommonDateTimePicker from "@/components/post/CommonDateTimePicker";
 import Tags from "@/components/post/SelectTags";
 import PictureList from "@/components/post/ImageList";
@@ -58,12 +58,7 @@ const CreatePostStyle = {
     width: "30vw",
     minWidth: "300px",
     height: "70vh",
-
-    // marginTop: "3vh",
-    // marginBottom: "3vh",
-
     paddingTop: "2vh",
-    // paddingBottom: "15vh",
   },
 };
 
@@ -227,7 +222,7 @@ export default function Home() {
             <Stack spacing={0} alignItems="center" justifyContent="center">
               {/* Post title */}
               <Box style={CreatePostStyle.TextField}>
-                <NormalTextField
+                <CommonTextField
                   name="title"
                   header="Title"
                   icon={ICONS.EDIT}

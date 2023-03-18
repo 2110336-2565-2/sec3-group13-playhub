@@ -13,7 +13,7 @@ import { grey } from "@mui/material/colors";
 import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
 import Logo from "@/components/public/Logo";
-import NormalTextField from "@/components/public/CommonTextField";
+import CommonTextField from "@/components/public/CommonTextField";
 import PasswordTextFeild from "@/components/public/PasswordTextField";
 import { validateEmail, validateTextField } from "@/utilities/validation";
 
@@ -131,7 +131,7 @@ export default function Home() {
           <Stack spacing={0} alignItems="center" justifyContent="center">
             {/* Email TextField */}
             <Box sx={LoginStyle.TextField}>
-              <NormalTextField
+              <CommonTextField
                 name="email"
                 placeholder="Email"
                 icon={ICONS.MAIL}
