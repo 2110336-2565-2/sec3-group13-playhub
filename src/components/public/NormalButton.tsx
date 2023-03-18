@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import { COLOR } from "enum/COLOR";
 
 type props = {
   label: string;
@@ -7,6 +8,13 @@ type props = {
 };
 
 export default function NormalButton(props: props) {
+  function generateColor() {
+    if (props.color === COLOR.NATURAL) {
+      return "inherit";
+    }
+    return "primary";
+  }
+
   return (
     <>
       <Button
@@ -20,6 +28,7 @@ export default function NormalButton(props: props) {
           padding: "4px 10px",
           minWidth: "180px",
         }}
+        color={generateColor()}
         onClick={props.onClick}
       >
         {props.label}
