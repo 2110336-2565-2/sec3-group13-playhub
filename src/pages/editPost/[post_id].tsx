@@ -5,14 +5,13 @@ import { useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Grid, Typography, Button, FormHelperText, Stack, Box } from "@mui/material";
+import { Typography, Stack, Box, Card, IconButton } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import CommonTextField from "@/components/public/CommonTextField";
-import CommonDateTimePicker from "@/components/public/CommonDateTimePicker";
+import CommonDateTimePicker from "@/components/post/CommonDateTimePicker";
 import Tags from "@/components/post/SelectTags";
-import GoogleMap from "@/components/createPost/searchMaps";
+import LocationTextField from "@/components/post/LocationTextField";
 import PictureList from "@/components/post/ImageList";
 import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
 
@@ -24,6 +23,11 @@ import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 
 import { GetAllTags } from "@/services/Tags";
 import { GetPostByPostId, UpdatePost } from "@/services/Posts";
+import { ICONS } from "enum/ICONS";
+import DescriptionTextField from "@/components/public/DescriptionTextField";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import CommonButton from "@/components/public/CommonButton";
+import TitleTextField from "@/components/post/TitleTextField";
 
 type EditPostInput = {
   title: string;
@@ -46,9 +50,14 @@ type EditPostSubmit = {
 
 const EditPostStyle = {
   TextField: {
-    width: "35vw",
+    width: "28vw",
+    minWidth: "250px",
+  },
+  Card: {
+    width: "30vw",
     minWidth: "300px",
-    margin: "2vh 0 0 0",
+    height: "70vh",
+    paddingTop: "2vh",
   },
 };
 
@@ -172,6 +181,10 @@ export default function Home() {
     }
   };
 
+  function backToMyPost(): void {
+    router.push(PAGE_PATHS.MY_POSTS);
+  }
+
   useEffect(() => {
     GetAllTags(supabaseClient)
       .then((allTags) => setTagMenu(allTags))
@@ -185,7 +198,7 @@ export default function Home() {
         .then((p) => {
           setInput({
             title: p.title,
-            location: p.description,
+            location: p.location,
             startDate: p.startTime,
             endDate: p.endTime,
             tags: p.tags,
@@ -215,116 +228,124 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Stack
-        spacing={2}
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: "100vh" }}
-        margin="0 0 2vh 0"
+
+      <IconButton
+        onClick={backToMyPost}
+        style={{ position: "absolute", top: 86, left: 20, zIndex: "1" }}
       >
+        <ArrowBackIcon fontSize="large" color="secondary" />
+      </IconButton>
+
+      <Stack spacing={4} alignItems="center">
         {/* Page header */}
-        <Box sx={EditPostStyle.TextField}>
+        <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Edit post</Typography>
         </Box>
 
-        {/* Post title */}
-        <Box sx={EditPostStyle.TextField}>
-          <CommonTextField
-            header="Title"
-            placeholder="เช่น หาเพื่อนไปเที่ยวบอร์ดเกม"
-            value={input.title}
-            handleValueChange={handleTextFieldChange}
-            char_limit={CHAR_LIMIT.MAX_TITLE}
-            isErr={state.title && titleError.err}
-            errMsg={titleError.msg}
-          />
-        </Box>
+        <Stack spacing={5} direction="row">
+          <Card sx={EditPostStyle.Card}>
+            <Stack spacing={0} alignItems="center" justifyContent="center">
+              {/* Post title */}
+              <Box style={EditPostStyle.TextField}>
+                <TitleTextField
+                  name="title"
+                  header="Title"
+                  icon={ICONS.EDIT}
+                  placeholder="This is Post Title"
+                  value={input.title}
+                  handleValueChange={handleTextFieldChange}
+                  char_limit={CHAR_LIMIT.MAX_TITLE}
+                  isErr={state.title && titleError.err}
+                  errMsg={titleError.msg}
+                />
+              </Box>
 
-        {/* Location */}
-        <Box sx={EditPostStyle.TextField}>
-          <Typography variant="body1">Location</Typography>
-          <Stack spacing={2}>
-            <GoogleMap onChange={handleLocationChange} initialValue={input.location} />
-            {state.location && locationError && (
-              <FormHelperText error>ช่องนี้ไม่สามารถเว้นว่างได้</FormHelperText>
-            )}
-          </Stack>
-        </Box>
+              {/* Location */}
+              <Box sx={EditPostStyle.TextField}>
+                <LocationTextField
+                  header="Location"
+                  placeholder="Enter Location"
+                  initialValue={input.location}
+                  onChange={handleLocationChange}
+                  isErr={state.location && locationError}
+                  errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
+                />
+              </Box>
 
-        {/* Date time */}
-        <Box sx={EditPostStyle.TextField}>
-          <Typography variant="body1">Date time</Typography>
-          <Grid container columnSpacing={2}>
-            {/* Start date */}
-            <Grid item xs={6}>
-              <CommonDateTimePicker
-                header="Start"
-                placeHolder="xx / xx / xxxx xx.xx xx"
-                value={input.startDate}
-                handleValueChange={handleStartDateChange}
-                isErr={state.date && startDateError.err}
-                errMsg={startDateError.msg}
-              />
-            </Grid>
+              {/* Start date */}
+              <Box sx={EditPostStyle.TextField}>
+                <Typography variant="body1">Date time</Typography>
+                <CommonDateTimePicker
+                  header="Start"
+                  placeHolder="e.g. 28/ 02 / 2023 11.00 AM or click on the icon"
+                  value={input.startDate}
+                  handleValueChange={handleStartDateChange}
+                  isErr={state.date && startDateError.err}
+                  errMsg={startDateError.msg}
+                />
+              </Box>
 
-            {/* End date */}
-            <Grid item xs={6}>
-              <CommonDateTimePicker
-                header="End"
-                placeHolder="xx / xx / xxxx xx.xx xx"
-                value={input.endDate}
-                handleValueChange={handleEndDateChange}
-                isErr={state.date && endDateError.err}
-                errMsg={endDateError.msg}
-              />
-            </Grid>
-          </Grid>
-        </Box>
+              {/* End date */}
+              <Box sx={EditPostStyle.TextField}>
+                <CommonDateTimePicker
+                  header="End"
+                  placeHolder="e.g. 28 / 02 / 2023 01.00 PM or click on the icon"
+                  value={input.endDate}
+                  handleValueChange={handleEndDateChange}
+                  isErr={state.date && endDateError.err}
+                  errMsg={endDateError.msg}
+                />
+              </Box>
 
-        {/* Tags */}
-        <Box sx={EditPostStyle.TextField}>
-          <Tags
-            header="Tag"
-            note="(เลือกได้สูงสุด 5 Tags)"
-            value={input.tags}
-            handleValueChange={handleTagsChange}
-            menuValue={tagMenu}
-            isErr={state.tags && tagsError}
-            errMsg="กรุณาใส่อย่างน้อย 1 tag"
-          />
-        </Box>
+              {/* Tags */}
+              <Box sx={EditPostStyle.TextField}>
+                <Tags
+                  header="Tag"
+                  note="(Maximum 5 Tags)"
+                  value={input.tags}
+                  handleValueChange={handleTagsChange}
+                  menuValue={tagMenu}
+                  isErr={state.tags && tagsError}
+                  errMsg="กรุณาใส่อย่างน้อย 1 tag"
+                />
+              </Box>
+            </Stack>
+          </Card>
+          <Card sx={EditPostStyle.Card}>
+            <Stack spacing={0} alignItems="center" justifyContent="center">
+              {/* Description */}
+              <Box sx={EditPostStyle.TextField}>
+                <DescriptionTextField
+                  name="description"
+                  header="Description"
+                  placeholder="Enter Description Here"
+                  value={input.description}
+                  handleValueChange={handleTextFieldChange}
+                  char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
+                  isErr={state.description && descriptionError.err}
+                  errMsg={descriptionError.msg}
+                  height={8}
+                />
+              </Box>
 
-        {/* Description */}
-        <Box sx={EditPostStyle.TextField}>
-          <CommonTextField
-            header="Description"
-            placeholder="เช่น มาเที่ยวกันเลย ร้านบอร์ดเกมแถวรัชดา"
-            value={input.description}
-            handleValueChange={handleTextFieldChange}
-            char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
-            isMultiLine={true}
-            isErr={state.description && descriptionError.err}
-            errMsg={descriptionError.msg}
-          />
-        </Box>
+              {/* Image list */}
+              <Box sx={EditPostStyle.TextField}>
+                <PictureList
+                  header="Image"
+                  note="(Optional, Maximum 6 Images)"
+                  imgs={input.images}
+                  stateChanger={handleImagesChange}
+                  // st={setImgErrState}
+                  isErr={true}
+                  errMsg="เลือกรูปภาพได้ไม่เกิน 3 รูป"
+                />
+              </Box>
+            </Stack>
+          </Card>
+        </Stack>
 
-        {/* Image list */}
-        <Box sx={EditPostStyle.TextField}>
-          <PictureList
-            header="Image"
-            note="(Optional, เลือกได้สูงสุด 3 รูป)"
-            imgs={input.images}
-            stateChanger={handleImagesChange}
-            // st={setImgErrState}
-            isErr={true}
-            errMsg="เลือกรูปภาพได้ไม่เกิน 3 รูป"
-          />
-        </Box>
-
-        {/* Create post button */}
-        <Button variant="contained" onClick={handleSubmit}>
-          Update Post
-        </Button>
+        {/* Edit post button */}
+        <CommonButton label="Save" onClick={handleSubmit} />
       </Stack>
     </>
   );
