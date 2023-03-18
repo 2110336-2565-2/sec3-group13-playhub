@@ -157,14 +157,6 @@ export default function LocationTextField(props: props) {
                       />
                     </InputAdornment>
                   ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <CalendarTodayIcon
-                        fontSize="large"
-                        color={props.isErr ? "error" : "secondary"}
-                      />
-                    </InputAdornment>
-                  ),
                 }}
               />
             )}
