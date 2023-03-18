@@ -10,6 +10,7 @@ type props = {
   char_limit: number;
   isErr: boolean;
   errMsg: string;
+  row?: number;
 };
 
 const helperText = {
@@ -20,6 +21,7 @@ const helperText = {
 
 export default function NormalTextField(props: props) {
   const exceedChar: boolean = props.char_limit ? props.value.length > props.char_limit : false;
+  const row: number = props.row ? props.row : 4;
 
   return (
     <>
@@ -31,7 +33,7 @@ export default function NormalTextField(props: props) {
             sx={{ backgroundColor: "#ffffff" }}
             fullWidth
             multiline
-            rows={6}
+            rows={row}
             placeholder={props.placeholder}
             value={props.value}
             error={props.isErr}
