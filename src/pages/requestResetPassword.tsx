@@ -16,6 +16,7 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
 import { RequestResetPassword } from "@/services/Password";
+import NormalButton from "@/components/public/NormalButton";
 
 const RequestResetPasswordStyle = {
   Card: {
@@ -94,9 +95,7 @@ export default function Home() {
             </Stack>
 
             {/* send link button */}
-            <Button variant="contained" onClick={handleSubmit}>
-              Send Link!
-            </Button>
+            <NormalButton label="Send Link!" onClick={handleSubmit} />
           </Stack>
         </Card>
       </Stack>

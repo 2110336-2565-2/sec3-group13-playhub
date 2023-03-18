@@ -15,6 +15,7 @@ import { validation } from "@/types/Validation";
 import { PAGE_PATHS } from "enum/PAGES";
 
 import { ResetPassword } from "@/services/Password";
+import NormalButton from "@/components/public/NormalButton";
 
 type ResetPasswordInput = {
   password: string;
@@ -129,9 +130,7 @@ export default function Home() {
               />
             </Box>
 
-            <Button variant="contained" onClick={handleSubmit}>
-              Reset Password
-            </Button>
+            <NormalButton label="Reset Password" onClick={handleSubmit} />
           </Stack>
         </Card>
       </Stack>
