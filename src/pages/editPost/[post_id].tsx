@@ -13,7 +13,7 @@ import CommonTextField from "@/components/public/CommonTextField";
 import CommonDateTimePicker from "@/components/public/CommonDateTimePicker";
 import Tags from "@/components/post/SelectTags";
 import GoogleMap from "@/components/createPost/searchMaps";
-import PictureList from "@/components/createPost/pictureList";
+import PictureList from "@/components/post/ImageList";
 import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
 
 import { Tag } from "@/types/Tag";
