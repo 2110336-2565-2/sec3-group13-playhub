@@ -147,6 +147,7 @@ export default function LocationTextField(props: props) {
                 {...params}
                 placeholder={props.placeholder}
                 fullWidth
+                error={props.isErr}
                 InputProps={{
                   ...params.InputProps,
                   startAdornment: (
