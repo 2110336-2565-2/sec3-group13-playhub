@@ -5,7 +5,7 @@ import Link from "next/link";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Box, Fab, Stack, Typography } from "@mui/material";
+import { Box, Fab, Grid, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import Loading from "@/components/public/Loading";
@@ -23,10 +23,6 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
 
   const [posts, setPosts] = useState<Post[] | null>(null);
-
-  function handleDeletePost(toDeletePost: Post): void {
-    setPosts((posts) => posts && posts.filter((post) => post.postId !== toDeletePost.postId));
-  }
 
   useEffect(() => {
     async function getPostData() {
@@ -53,24 +49,26 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <Stack
-        spacing="40px"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-          flexDirection: "column",
-          padding: "30px",
-        }}
-      >
-        <Typography variant="h1">My post</Typography>
 
-        {posts.map((item, index) => (
-          <Box width="60vw" key={index}>
-            <MyPostCard post={item} handleDeletePost={handleDeletePost} />
-          </Box>
-        ))}
+      <Stack spacing={4} alignItems="center">
+        {/* Page header */}
+        <Box sx={{ marginTop: "3vh" }}>
+          <Typography variant="h1">My post</Typography>
+        </Box>
+        <Grid
+          container
+          justifyContent="space-between"
+          rowSpacing={6}
+          style={{ width: "80vw", marginTop: -6 }}
+        >
+          {posts.map((item, index) => (
+            <Grid item key={index} xs={5.75}>
+              <MyPostCard post={item} />
+            </Grid>
+          ))}
+        </Grid>
       </Stack>
+
       {userStatus.user.isVerified && (
         <Link href={"createPost"} color="inherit">
           <Fab
