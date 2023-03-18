@@ -5,14 +5,14 @@ import { useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Typography, Button, Stack, Box, Card } from "@mui/material";
+import { Typography, Button, Stack, Box, Card, IconButton } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
 import NormalTextField from "@/components/public/CommonTextField";
 import CommonDateTimePicker from "@/components/post/CommonDateTimePicker";
 import Tags from "@/components/post/SelectTags";
-import PictureList from "@/components/createPost/pictureList";
+import PictureList from "@/components/post/ImageList";
 import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
@@ -26,6 +26,8 @@ import { PostInfo } from "@/types/Post";
 import { ICONS } from "enum/ICONS";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import LocationTextField from "@/components/post/LocationTextField";
+import CommonButton from "@/components/public/CommonButton";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 type CreatePostInput = {
   title: string;
@@ -60,7 +62,7 @@ const CreatePostStyle = {
     // marginTop: "3vh",
     // marginBottom: "3vh",
 
-    paddingTop: "3vh",
+    paddingTop: "2vh",
     // paddingBottom: "15vh",
   },
 };
@@ -179,6 +181,10 @@ export default function Home() {
     }
   };
 
+  function backToMyPost(): void {
+    router.push(PAGE_PATHS.MY_POSTS);
+  }
+
   useEffect(() => {
     GetAllTags(supabaseClient)
       .then((allTags) => setTagMenu(allTags))
@@ -202,9 +208,17 @@ export default function Home() {
   return (
     <>
       <Navbar />
+
+      <IconButton
+        onClick={backToMyPost}
+        style={{ position: "absolute", top: 86, left: 20, zIndex: "1" }}
+      >
+        <ArrowBackIcon fontSize="large" color="secondary" />
+      </IconButton>
+
       <Stack spacing={4} alignItems="center">
         {/* Page header */}
-        <Box sx={{ marginTop: "4vh" }}>
+        <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Create post</Typography>
         </Box>
 
@@ -310,9 +324,7 @@ export default function Home() {
         </Stack>
 
         {/* Create post button */}
-        <Button variant="contained" onClick={handleSubmit}>
-          Create Post
-        </Button>
+        <CommonButton label="Create Post" onClick={handleSubmit} />
       </Stack>
     </>
   );
