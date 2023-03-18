@@ -24,6 +24,7 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
 import { CreateUser } from "@/services/User";
+import NormalButton from "@/components/public/NormalButton";
 
 type RegisterInput = {
   displayName: string;
@@ -269,9 +270,7 @@ export default function Home() {
             </Grid>
           </Box>
 
-          <Button variant="contained" onClick={handleCreateAccount}>
-            Create Account
-          </Button>
+          <NormalButton label="Create Account" onClick={handleCreateAccount} />
         </Stack>
       </Card>
     </Stack>
