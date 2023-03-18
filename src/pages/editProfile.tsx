@@ -34,6 +34,7 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
 import { UpdateProfile } from "@/services/Profile";
+import NormalButton from "@/components/public/NormalButton";
 
 type EditProfileInput = {
   image: string | null;
@@ -296,9 +297,7 @@ export default function Home() {
               </Box>
             </Box>
 
-            <Button variant="contained" onClick={editProfileBtnOnClick}>
-              Save
-            </Button>
+            <NormalButton label="Save" onClick={editProfileBtnOnClick} />
             <Typography variant="body2" color="warning.main">
               ท่านต้องกด Save เพื่อบันทึกข้อมูลใหม่
             </Typography>
