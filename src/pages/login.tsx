@@ -23,6 +23,7 @@ import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import { ICONS } from "enum/ICONS";
 
 import { SignIn } from "@/services/User";
+import NormalButton from "@/components/public/NormalButton";
 
 type LoginInput = {
   email: string;
@@ -154,9 +155,7 @@ export default function Home() {
             </Box>
 
             {/* Login Button */}
-            <Button variant="contained" onClick={handleSubmit}>
-              Login
-            </Button>
+            <NormalButton label="Login" onClick={handleSubmit} />
           </Stack>
 
           {/* Link go to register page */}
