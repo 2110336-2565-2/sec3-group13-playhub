@@ -63,7 +63,7 @@ export default function Tags(props: props) {
 
   return (
     <>
-      <Box display="flex">
+      <Box display="flex" alignItems="end">
         <Typography variant="body1">
           {props.header}
           {"\u00A0"}
@@ -83,7 +83,14 @@ export default function Tags(props: props) {
                   {tag.name}
                 </Typography>
               }
-              sx={{ m: "6px 1px" }}
+              style={{
+                borderRadius: "15px",
+                border: "2px black solid",
+                padding: "4px 8px",
+                margin: "6px 4px",
+                boxShadow: "4px 4px 1px grey",
+                maxHeight: "24px",
+              }}
               variant="outlined"
               size="small"
               deleteIcon={<CloseIcon />}
@@ -95,13 +102,20 @@ export default function Tags(props: props) {
         {/* Add tag button component */}
         {menuItems.length > 0 && props.value.length < TAG_LIMIT.MAX_TAG && (
           <Button
-            sx={{ padding: "6px 10px" }}
+            style={{
+              borderRadius: "15px",
+              border: "2px black solid",
+              padding: "4px 8px",
+              margin: "6px 4px",
+              boxShadow: "4px 4px 1px grey",
+              maxHeight: "24px",
+            }}
             size="small"
             startIcon={<AddIcon />}
             onClick={handleOpenMenu}
           >
             <Typography variant="body2" color="primary">
-              ADD TAG
+              ADD
             </Typography>
           </Button>
         )}
