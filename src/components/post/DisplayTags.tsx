@@ -8,7 +8,7 @@ type props = {
 export default function DisplayTags(props: props) {
   return (
     <>
-      <Grid container spacing={1}>
+      <Grid container spacing={1} style={{ marginLeft: -5 }}>
         {props.tags.map((tag, index) => (
           <Grid item key={index}>
             <Chip
