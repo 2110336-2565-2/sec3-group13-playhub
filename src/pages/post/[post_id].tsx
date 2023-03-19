@@ -187,7 +187,7 @@ export default function Home() {
                   <Box display="flex">
                     {post.participants?.length == 0 && (
                       <Typography variant="body1" color="error">
-                        ยังไม่มีผู้สนใจกิจกรรมนี้
+                        No one is interested in this activity yet.
                       </Typography>
                     )}
                   </Box>

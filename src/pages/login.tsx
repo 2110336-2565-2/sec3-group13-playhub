@@ -74,8 +74,8 @@ export default function Home() {
   const isSupabaseErr: boolean =
     (isLoginCredErr || isValidateErr) && !(emailErr.err || passwordErr.err);
   const supabaseErrMsg: string = isLoginCredErr
-    ? "อีเมลหรือรหัสผ่านไม่ถูกต้อง"
-    : "โปรดทำการยืนยันอีเมล";
+    ? "Email or Password is incorrect."
+    : "Please verify your email.";
 
   async function handleSubmit() {
     setState({

@@ -299,7 +299,7 @@ export default function Home() {
 
             <NormalButton label="Save" onClick={editProfileBtnOnClick} />
             <Typography variant="body2" color="warning.main">
-              ท่านต้องกด Save เพื่อบันทึกข้อมูลใหม่
+              Press Save button to save new information.
             </Typography>
           </Stack>
         </Card>

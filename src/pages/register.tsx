@@ -167,7 +167,7 @@ export default function Home() {
         .catch((err) => {
           if (err.message == "User already registered") {
             setIsEmailAlreadyUsed({
-              msg: "ชื่ออีเมลนี้มีผู้ใช้งานแล้ว",
+              msg: "This email already exists.",
               err: true,
             });
           }
@@ -239,7 +239,7 @@ export default function Home() {
               value={input.confirmPassword}
               handleValueChange={handleTextFieldChange}
               isErr={state.password && state.confirmPassword && !isValidConfirmPassword}
-              errMsg="Password และ Confirm Password ต้องเหมือนกัน"
+              errMsg="Password and Confirm Password must be match."
             />
           </Box>
 
@@ -253,7 +253,7 @@ export default function Home() {
                   handleValueChange={handleGenderChange}
                   items={Object.values(GENDER)}
                   isErr={state.gender && isEmptyGender}
-                  errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
+                  errMsg="This field cannot be blank."
                 />
               </Grid>
 
@@ -264,7 +264,7 @@ export default function Home() {
                   value={input.birthDate}
                   handleValueChange={handleBirthDateChange}
                   isErr={state.birthDate && isEmptyBirthDate}
-                  errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
+                  errMsg="This field cannot be blank."
                 />
               </Grid>
             </Grid>

@@ -241,7 +241,7 @@ export default function Home() {
                   placeholder="Enter Location"
                   onChange={handleLocationChange}
                   isErr={state.location && locationError}
-                  errMsg="ช่องนี้ไม่สามารถเว้นว่างได้"
+                  errMsg="This field cannot be blank."
                 />
               </Box>
 
@@ -279,7 +279,7 @@ export default function Home() {
                   handleValueChange={handleTagsChange}
                   menuValue={tagMenu}
                   isErr={state.tags && tagsError}
-                  errMsg="กรุณาใส่อย่างน้อย 1 tag"
+                  errMsg="You must insert at least 1 tag."
                 />
               </Box>
             </Stack>
@@ -310,7 +310,7 @@ export default function Home() {
                   stateChanger={handleImagesChange}
                   // st={setImgErrState}
                   isErr={true}
-                  errMsg="เลือกรูปภาพได้ไม่เกิน 3 รูป"
+                  errMsg="Cannot upload more than 6 images."
                 />
               </Box>
             </Stack>
