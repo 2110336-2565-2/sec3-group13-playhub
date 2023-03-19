@@ -78,6 +78,7 @@ export interface Database {
           start_time: string;
           tags: number[];
           title: string;
+          participants: string[];
         };
         Insert: {
           description?: string | null;
@@ -89,6 +90,7 @@ export interface Database {
           start_time: string;
           tags: number[];
           title: string;
+          participants: string[];
         };
         Update: {
           description?: string | null;
@@ -100,6 +102,7 @@ export interface Database {
           start_time?: string;
           tags?: number[];
           title?: string;
+          participants?: string[];
         };
       };
       tag: {
@@ -162,6 +165,21 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
+      create_appointment: {
+        Args: {
+          postid: number;
+          title: string;
+          location: string;
+          description: string;
+          tags: number[];
+          start_time: string;
+          end_time: string;
+          pending_user_id: string[];
+          images: string[];
+          owner_id: string;
+        };
+        Returns: undefined;
+      };
       create_post: {
         Args: {
           title: string;
@@ -234,6 +252,36 @@ export interface Database {
           images: string[];
         };
       };
+      get_posts_with_participants: {
+        Args: {
+          id: number;
+        };
+        Returns: {
+          id: number;
+          title: string;
+          description: string;
+          owner_id: string;
+          owner_name: string;
+          owner_profile: string;
+          location: string;
+          start_time: string;
+          end_time: string;
+          tags: {
+            id: number;
+            name: string;
+          }[];
+          images: string[];
+          participants: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+            image: string | null;
+          }[];
+        };
+      };
       get_posts_by_user_id: {
         Args: {
           id: string;
@@ -301,6 +349,135 @@ export interface Database {
         };
         Returns: undefined;
       };
+      update_accept_appointment_by_appointment_id: {
+        Args: {
+          id: number;
+          user_id: string;
+        };
+        Returns: undefined;
+      };
+      update_reject_appointment_by_appointment_id: {
+        Args: {
+          id: number;
+          user_id: string;
+        };
+        Returns: undefined;
+      };
+      get_appointments: {
+        Returns: {
+          id: string;
+          start_time: string;
+          end_time: string;
+          owner_id: string;
+          location: string;
+          title: string;
+          description: string;
+          tags: number[];
+          images: string[];
+          pending_user_id: string[];
+          accept_user_id: string[];
+          reject_user_id: string[];
+          username: string;
+          image: string;
+          participant_number: number;
+        };
+      };
+      get_appointments_by_user_id: {
+        Args: {
+          id: string;
+        };
+        Returns: {
+          id: string;
+          start_time: string;
+          end_time: string;
+          owner_id: string;
+          location: string;
+          title: string;
+          description: string;
+          tags: number[];
+          images: string[];
+          pending_user_id: string[];
+          accept_user_id: string[];
+          reject_user_id: string[];
+          username: string;
+          image: string;
+          participant_number: number;
+        };
+      };
+      get_post_with_participants_by_post_id: {
+        Args: {
+          id: number;
+        };
+        Returns: {
+          id: number;
+          title: string;
+          description: string;
+          owner_id: string;
+          owner_name: string;
+          owner_profile: string;
+          location: string;
+          start_time: string;
+          end_time: string;
+          tags: {
+            id: number;
+            name: string;
+          }[];
+          images: string[];
+          participants: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+            image: string | null;
+          }[];
+        };
+      };
+      get_appointments_by_user_id_which_pending: {
+        Args: {
+          id: string;
+        };
+        Return: {
+          id: string;
+          start_time: string;
+          end_time: string;
+          owner_id: string;
+          location: string;
+          title: string;
+          description: string;
+          tags: string[];
+          images: string[];
+          pending_user_names: string[];
+          accept_user_names: string[];
+          reject_user_names: string[];
+          username: string;
+          image: string;
+          participant_number: number;
+        };
+      };
+      get_appointments_by_appointment_id: {
+        Args: {
+          id: number;
+        };
+        Returns: {
+          id: string;
+          start_time: string;
+          end_time: string;
+          owner_id: string;
+          location: string;
+          title: string;
+          description: string;
+          tags: string[];
+          images: string[];
+          pending_user_names: string[];
+          accept_user_names: string[];
+          reject_user_names: string[];
+          username: string;
+          image: string;
+          participant_number: number;
+        };
+      };
       update_user_national_id_by_user_id: {
         Args: {
           id: string;
@@ -309,6 +486,20 @@ export interface Database {
         Returns: {
           is_exist_national_id: boolean;
         };
+      };
+      add_participant_id_to_post_id: {
+        Args: {
+          user_id: string;
+          post_id: number;
+        };
+        Returns: undefined;
+      };
+      remove_participant_id_from_post_id: {
+        Args: {
+          user_id: string;
+          post_id: number;
+        };
+        Returns: undefined;
       };
     };
     Enums: {

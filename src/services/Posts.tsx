@@ -194,10 +194,45 @@ export async function GetPostByPostId(
     startTime: dayjsWithoutTZ(getPostDataResult.data[0].start_time),
     endTime: dayjsWithoutTZ(getPostDataResult.data[0].end_time),
     images: getPostDataResult.data[0].images,
-    tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
+    tags: getPostDataResult.data[0].tag_names.map((_: any, idx: number) => ({
       id: tag_ids[idx],
       name: tag_name[idx],
     })),
   };
   return postData;
+}
+
+export async function GetPostWithParticipantsByPostId(
+  postId: number,
+  supabaseClient: SupabaseClient<Database>
+): Promise<PostInfo> {
+  const getPostDataResult = await supabaseClient.rpc("get_post_with_participants_by_post_id", {
+    id: postId,
+  });
+  if (getPostDataResult.error || !getPostDataResult.data) {
+    console.log(getPostDataResult.error);
+    throw new Error("Cant get posts data");
+  }
+  const postData = getPostDataResult.data[0];
+  return {
+    title: postData.title,
+    userId: postData.owner_id,
+    tags: postData.tags,
+    description: postData.description,
+    images: postData.images,
+    location: postData.location,
+    startTime: dayjs(postData.start_time),
+    endTime: dayjs(postData.end_time),
+    participants: postData.participants.map((e: any) => ({
+      userId: e.id,
+      username: e.username,
+      sex: e.sex,
+      isVerified: e.is_verified,
+      birthdate: e.birthdate,
+      description: e.description,
+      image: e.image,
+      email: "",
+      isAdmin: false,
+    })),
+  };
 }
