@@ -11,7 +11,7 @@ import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
 import CommonDateTimePicker from "@/components/post/CommonDateTimePicker";
 import Tags from "@/components/post/SelectTags";
-import PictureList from "@/components/post/ImageList";
+import PictureList from "@/components/post/SelectImages";
 import { validateDate, validateDateWithInterval, validateTextField } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
