@@ -1,11 +1,6 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Typography,
-} from "@mui/material";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { COLOR } from "enum/COLOR";
+import NormalButton from "../public/CommonButton";
 
 type props = {
   openModal: boolean;
@@ -23,20 +18,22 @@ export default function DeletePostDialog(props: props) {
         onClose={props.handleCloseModal}
       >
         <DialogTitle>
-          <Typography variant="h4">Are you sure?</Typography>
+          <Box display="flex">
+            <Typography variant="body1">Are you sure to{"\u00A0"}</Typography>
+            <Typography variant="body1" color="error">
+              delete
+            </Typography>
+            <Typography variant="body1">{"\u00A0"}this post ?</Typography>
+          </Box>
         </DialogTitle>
         <DialogContent dividers>
-          <Typography>
-            Do you really want to delete the post? This process cannot be undone.
+          <Typography variant="body2" color="error">
+            *This action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="inherit" onClick={props.handleCloseModal}>
-            cancel
-          </Button>
-          <Button variant="contained" color="error" onClick={props.deletePost}>
-            delete
-          </Button>
+          <NormalButton label="Delete" color={COLOR.ERROR} onClick={props.deletePost} />
+          <NormalButton label="Cancel" onClick={props.handleCloseModal} />
         </DialogActions>
       </Dialog>
     </>
