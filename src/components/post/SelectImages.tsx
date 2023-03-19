@@ -9,9 +9,9 @@ import CloseIcon from "@mui/icons-material/Close";
 
 // style
 const image_layout = {
-  width: "7vw",
+  width: "8.5vw",
   minWidth: "120px",
-  height: "7vw",
+  height: "8.5vw",
   minHeight: "120px",
 };
 
@@ -90,9 +90,9 @@ export default function PictureList(props: props) {
         <ImageList
           sx={{
             width: "29vw",
-            height: "32vh",
-            minWidth: "250px",
-            minHeight: "320px",
+            height: "37vh",
+            minWidth: "410px",
+            minHeight: "270px",
             alignContent: "start",
           }}
           variant="woven"
@@ -103,7 +103,7 @@ export default function PictureList(props: props) {
             // const imageErr :validation = validateImage(image.type, image.size);
             return (
               <>
-                <Stack>
+                <Stack justifySelf="start">
                   <ImageListItem
                     key={index}
                     sx={image_layout}
