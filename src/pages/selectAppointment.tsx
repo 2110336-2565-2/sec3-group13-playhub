@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import { NextRouter, useRouter } from "next/router";
-import { PagePaths } from "enum/PAGES";
+import { PAGE_PATHS } from "enum/PAGES";
 import { GetAppointmentsByUserIdWhichPending } from "@/services/Appointments";
 import Loading from "@/components/public/Loading";
 
@@ -19,7 +19,7 @@ export default function Home() {
   const userStatus = useContext(userContext);
 
   function handleCardClick(appointmentId: string): void {
-    router.push(PagePaths.confirmAppt + appointmentId);
+    router.push(PAGE_PATHS.CONFIRM_APPOINTMENT + appointmentId);
   }
 
   useEffect(() => {
@@ -37,7 +37,7 @@ export default function Home() {
 
   if (userStatus.isLoading || !appointments) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   return (
