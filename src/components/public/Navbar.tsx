@@ -111,7 +111,7 @@ export default function Navbar() {
             onClose={handleClose}
           >
             <MenuItem key={1}>
-              <Link href={PAGE_PATHS.MY_PROFILE + userStatus.user?.userId}>
+              <Link href={PAGE_PATHS.PROFILE + userStatus.user?.userId}>
                 <Box alignContent={"center"}>
                   <Typography variant="body1">{NAVBAR_PAGES.PROFILE}</Typography>
                 </Box>

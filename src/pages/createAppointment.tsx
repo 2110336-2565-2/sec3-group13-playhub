@@ -7,7 +7,7 @@ import { Box, Typography } from "@mui/material";
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
 import { Post } from "@/types/Post";
-import { PagePaths } from "enum/PAGES";
+import { PAGE_PATHS } from "enum/PAGES";
 import { GetCurrentUserPosts } from "@/services/Posts";
 import { Grid } from "@mui/material";
 import CreateAppointmentPostCard from "@/components/createAppointment/CreateAppointmentPostCard";
@@ -19,7 +19,7 @@ export default function ShowAppointment() {
   const [posts, setPosts] = useState<Post[] | null>(null);
 
   function handleClickCard(item: Post) {
-    router.push(PagePaths.createAppointment + "/" + item.postId);
+    router.push(PAGE_PATHS.CREATE_APPOINTMENT + "/" + item.postId);
   }
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function ShowAppointment() {
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   if (!posts) return <Loading />;

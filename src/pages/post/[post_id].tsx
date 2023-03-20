@@ -60,6 +60,10 @@ export default function Home() {
   const handleOpenDeletePostModal = (): void => setOpenDeletePostModal(true);
   const handleCloseDeletePostModal = (): void => setOpenDeletePostModal(false);
 
+  function handleCreateAppointment() {
+    router.push(PAGE_PATHS.CREATE_APPOINTMENT);
+  }
+
   function handleDelete() {
     DeletePost(Number(router.query.post_id), supabaseClient)
       .then(() => {
@@ -119,7 +123,7 @@ export default function Home() {
               avatar={
                 <IconButton
                   onClick={() => {
-                    router.push(PAGE_PATHS.MY_PROFILE + userStatus.user?.userId);
+                    router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
                   }}
                   sx={{ padding: 0 }}
                 >
@@ -213,9 +217,7 @@ export default function Home() {
           <CommonButton label="Edit Post" onClick={handleEditPost} />
           <CommonButton
             label="Create Appointment"
-            onClick={() => {
-              console.log("hih");
-            }}
+            onClick={handleCreateAppointment}
           />
         </Stack>
       </Stack>
