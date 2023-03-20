@@ -14,7 +14,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import ConfirmApptDialog from "@/components/appointment/ConfirmApptDialog";
-import { PagePaths } from "enum/PAGES";
+import { PAGE_PATHS } from "enum/PAGES";
 import { userContext } from "supabase/user_context";
 
 export default function Home() {
@@ -43,18 +43,18 @@ export default function Home() {
 
   if (!appointment || userStatus.isLoading) return <Loading />;
   if (!isParticipant) {
-    router.push(PagePaths.selectApptToConfirm);
+    router.push(PAGE_PATHS.SELECT_APPOINTMENT);
     return;
   }
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   return (
     <>
       <Navbar />
       <Box display="flex" paddingBottom="40px">
-        <Link href={PagePaths.selectApptToConfirm}>
+        <Link href={PAGE_PATHS.SELECT_APPOINTMENT}>
           <ArrowBackIcon
             fontSize="large"
             sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
@@ -105,7 +105,7 @@ export default function Home() {
                   return;
                 }
               );
-              router.push(PagePaths.selectApptToConfirm);
+              router.push(PAGE_PATHS.SELECT_APPOINTMENT);
             }
             if (choice === "reject" && userStatus.user) {
               RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
@@ -114,7 +114,7 @@ export default function Home() {
                   return;
                 }
               );
-              router.push(PagePaths.selectApptToConfirm);
+              router.push(PAGE_PATHS.SELECT_APPOINTMENT);
             }
           }}
         />
