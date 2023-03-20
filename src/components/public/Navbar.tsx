@@ -41,12 +41,12 @@ export default function Navbar() {
   };
 
   const routeToSelectPost = (): void => {
-    router.push(PagePaths.createAppointment)
+    router.push(PAGE_PATHS.CREATE_APPOINTMENT)
     return;
   }
 
   const routeToSelectAppointment = (): void => {
-    router.push(PagePaths.selectApptToConfirm)
+    router.push(PAGE_PATHS.SELECT_APPOINTMENT)
     return;
   }
 
@@ -76,12 +76,12 @@ export default function Navbar() {
           </Box>
           <Box sx={{ flexGrow: 0.02 }}>
             <IconButton color="inherit" disableRipple onClick={routeToSelectPost}>
-              <Typography variant="body1">{NavbarPages.selectPost}</Typography>
+              <Typography variant="body1">{NAVBAR_PAGES.POST}</Typography>
             </IconButton>
           </Box>
           <Box sx={{ flexGrow: 0.02 }}>
             <IconButton color="inherit" disableRipple onClick={routeToSelectAppointment}>
-              <Typography variant="body1">{NavbarPages.selectAppointment}</Typography>
+              <Typography variant="body1">{NAVBAR_PAGES.APPOINTMENT}</Typography>
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
