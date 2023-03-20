@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Post } from "../../types/Post";
-import { PagePaths } from "enum/pages";
+import { PagePaths } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
 import BorderWithShadow from "../public/BorderWithShadow";
 

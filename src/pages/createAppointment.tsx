@@ -7,7 +7,7 @@ import { Box, Typography } from "@mui/material";
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
 import { Post } from "@/types/Post";
-import { PagePaths } from "enum/pages";
+import { PagePaths } from "enum/PAGES";
 import { GetCurrentUserPosts } from "@/services/Posts";
 import { Grid } from "@mui/material";
 import CreateAppointmentPostCard from "@/components/createAppointment/CreateAppointmentPostCard";

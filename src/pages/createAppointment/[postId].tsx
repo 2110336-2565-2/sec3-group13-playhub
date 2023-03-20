@@ -7,7 +7,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
-import { PagePaths } from "enum/pages";
+import { PagePaths } from "enum/PAGES";
 import { GetPostWithParticipantsByPostId } from "@/services/Posts";
 import { CreateAppointment } from "@/services/Appointments";
 import PostInfoCard from "@/components/createAppointment/PostInfoCard";

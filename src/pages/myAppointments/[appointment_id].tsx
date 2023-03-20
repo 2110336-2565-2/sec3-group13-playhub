@@ -9,7 +9,7 @@ import { GetAppointmentsByAppointmentId } from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { PagePaths } from "enum/pages";
+import { PagePaths } from "enum/PAGES";
 import Loading from "@/components/public/Loading";
 import { userContext } from "supabase/user_context";
 

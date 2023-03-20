@@ -14,7 +14,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import ConfirmApptDialog from "@/components/appointment/ConfirmApptDialog";
-import { PagePaths } from "enum/pages";
+import { PagePaths } from "enum/PAGES";
 import { userContext } from "supabase/user_context";
 
 export default function Home() {

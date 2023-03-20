@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { PagePaths } from "enum/pages";
+import { PagePaths } from "enum/PAGES";
 import router from "next/router";
 
 import LocationOnIcon from "@mui/icons-material/LocationOn";

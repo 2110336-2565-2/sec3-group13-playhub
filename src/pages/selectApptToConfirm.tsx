@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { Database } from "supabase/db_types";
 import { userContext } from "supabase/user_context";
 import { NextRouter, useRouter } from "next/router";
-import { PagePaths } from "enum/pages";
+import { PagePaths } from "enum/PAGES";
 import { GetAppointmentsByUserIdWhichPending } from "@/services/Appointments";
 import Loading from "@/components/public/Loading";
 
