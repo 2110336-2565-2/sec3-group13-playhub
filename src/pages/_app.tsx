@@ -36,6 +36,14 @@ const mainTheme = createTheme({
       textAlign: "center",
       fontWeight: 800,
     },
+    h5: {
+      fontSize: 22,
+      fontWeight: 700,
+    },
+    h6: {
+      fontSize: 20,
+      fontWeight: 700,
+    },
     body1: {
       fontSize: 18,
       fontWeight: 600,
@@ -55,6 +63,14 @@ const mainTheme = createTheme({
         },
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          boxShadow: "4px 4px #BFBFBF",
+        },
+      },
+    },
+
     MuiTextField: {
       styleOverrides: {
         root: {

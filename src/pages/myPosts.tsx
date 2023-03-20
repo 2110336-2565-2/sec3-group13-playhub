@@ -45,6 +45,10 @@ export default function Home() {
     router.push(PAGE_PATHS.LOGIN);
     return;
   }
+  if (!userStatus.user.isVerified) {
+    router.push(PAGE_PATHS.HOME)
+    return;
+  }
   if (posts == null) return <Loading />;
   return (
     <>

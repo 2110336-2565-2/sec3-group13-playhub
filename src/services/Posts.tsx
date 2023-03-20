@@ -3,7 +3,7 @@ import { User } from "@/types/User";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";
 import dayjs, { Dayjs } from "dayjs";
-import { SUPABASE_CONNECTING_ERROR } from "../constants/supabase";
+import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
 
 function dayjsWithoutTZ(date: string): Dayjs {
   const dateWithoutTZ = date.substring(0, date.indexOf("+"));
@@ -65,7 +65,7 @@ export async function UpdatePost(
         console.log(deleteImageResult.error);
         throw new Error(SUPABASE_CONNECTING_ERROR);
       }
-      images.splice(images.findIndex((value, index) => image == value));
+      images.splice(images.findIndex((value) => image == value));
     }
     index += 1;
   }
@@ -144,8 +144,8 @@ export async function GetCurrentUserPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
-    endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
+    startDateTime: post.start_time,
+    endDateTime: post.end_time,
   }));
 }
 
@@ -165,8 +165,42 @@ export async function GetPosts(supabaseClient: SupabaseClient<Database>): Promis
     description: post.description,
     image: post.images,
     location: post.location,
+    startDateTime: post.start_time,
+    endDateTime: post.end_time,
+  }));
+}
+
+export async function GetPostsWithParticipants(
+  supabaseClient: SupabaseClient<Database>
+): Promise<Post[]> {
+  const getAllUserPostResult = await supabaseClient.rpc("get_posts_with_participants");
+  if (getAllUserPostResult.error) {
+    console.log(getAllUserPostResult.error);
+    throw new Error(SUPABASE_CONNECTING_ERROR);
+  }
+  return getAllUserPostResult.data.map((post) => ({
+    postId: post.id,
+    title: post.title,
+    ownerId: post.owner_id,
+    ownerName: post.owner_name,
+    ownerProfilePic: post.owner_profile,
+    tags: post.tags.map((tag: any) => tag.name),
+    description: post.description,
+    image: post.images,
+    location: post.location,
     startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
     endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
+    participants: post.participants.map((e: any) => ({
+      userId: e.id,
+      username: e.username,
+      sex: e.sex,
+      isVerified: e.is_verified,
+      birthdate: e.birthdate,
+      description: e.description,
+      image: e.image,
+      email: "",
+      isAdmin: false,
+    })),
   }));
 }
 

@@ -1,5 +1,4 @@
-import { useContext, useState } from "react";
-
+import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import Link from "next/link";
 
@@ -41,6 +40,16 @@ export default function Navbar() {
     return;
   };
 
+  const routeToSelectPost = (): void => {
+    router.push(PagePaths.createAppointment)
+    return;
+  }
+
+  const routeToSelectAppointment = (): void => {
+    router.push(PagePaths.selectApptToConfirm)
+    return;
+  }
+
   async function handleSignOut() {
     SignOut(supabaseClient)
       .then(() => {
@@ -63,6 +72,16 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 1 }}>
             <IconButton color="inherit" disableRipple onClick={routeToHome}>
               <Typography variant="body1">{NAVBAR_PAGES.HOME}</Typography>
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 0.02 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToSelectPost}>
+              <Typography variant="body1">{NavbarPages.selectPost}</Typography>
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 0.02 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToSelectAppointment}>
+              <Typography variant="body1">{NavbarPages.selectAppointment}</Typography>
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
@@ -98,23 +117,31 @@ export default function Navbar() {
                 </Box>
               </Link>
             </MenuItem>
-            {userStatus.user?.isVerified &&
-              <MenuItem key={2}>
+            <MenuItem key={2}>
+              <Link href={PAGE_PATHS.MY_APPOINTMENTS}>
+                <Typography variant="body1">{NAVBAR_PAGES.MY_APPOINTMENT}</Typography>
+              </Link>
+            </MenuItem>
+            {
+              userStatus.user?.isVerified &&
+              <MenuItem key={3}>
                 <Link href={PAGE_PATHS.MY_POSTS}>
                   <Typography variant="body1">{NAVBAR_PAGES.MY_POST}</Typography>
                 </Link>
               </MenuItem>
             }
-            {!userStatus.user?.isVerified && (
-              <MenuItem key={3}>
-                <Link href={PAGE_PATHS.VERIFY}>
-                  <Typography variant="body1" color="primary">
-                    {NAVBAR_PAGES.VERIFY}
-                  </Typography>
-                </Link>
-              </MenuItem>
-            )}
-            <MenuItem key={4}>
+            {
+              !userStatus.user?.isVerified && (
+                <MenuItem key={4}>
+                  <Link href={PAGE_PATHS.VERIFY}>
+                    <Typography variant="body1" color="primary">
+                      {NAVBAR_PAGES.VERIFY}
+                    </Typography>
+                  </Link>
+                </MenuItem>
+              )
+            }
+            <MenuItem key={5}>
               <Box onClick={handleSignOut}>
                 <Typography variant="body1" color="error">
                   {NAVBAR_PAGES.LOGOUT}
@@ -122,8 +149,8 @@ export default function Navbar() {
               </Box>
             </MenuItem>
           </Menu>
-        </Toolbar>
-      </AppBar>
+        </Toolbar >
+      </AppBar >
     </>
   );
 }
