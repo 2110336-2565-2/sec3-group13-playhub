@@ -25,6 +25,7 @@ import { ICONS } from "enum/ICONS";
 
 import { CreateUser } from "@/services/User";
 import NormalButton from "@/components/public/CommonButton";
+import { Container } from "@mui/system";
 
 type RegisterInput = {
   displayName: string;
@@ -48,7 +49,7 @@ const RegisterStyle = {
   Card: {
     width: "50vw",
     minWidth: "300px",
-    minHeight: "200px",
+    minHeight: "820px",
 
     paddingTop: "2vh",
     paddingBottom: "1vh",
@@ -184,7 +185,7 @@ export default function Home() {
   }
   return (
     <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
-      <Background />
+      <Background minHeight="850px" minWidth="320px" />
       <Card sx={RegisterStyle.Card}>
         <Stack spacing={0} alignItems="center" justifyContent="center">
           <Box>

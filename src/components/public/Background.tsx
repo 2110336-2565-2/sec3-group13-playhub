@@ -1,6 +1,11 @@
 import { Box } from "@mui/material";
 
-export default function Background() {
+type props = {
+  minHeight?: string;
+  minWidth?: string;
+}
+
+export default function Background(props: props) {
   const backgroungUrl: string =
     'url("https://yhvwtxoqpasglonyjmpe.supabase.co/storage/v1/object/public/locationimage/bg.JPG")';
 
@@ -11,6 +16,8 @@ export default function Background() {
           position: "absolute",
           width: "100vw",
           height: "100vh",
+          minHeight: props.minHeight,
+          minWidth: props.minWidth,
           zIndex: -9,
           opacity: 0.8,
 
@@ -25,6 +32,8 @@ export default function Background() {
           position: "absolute",
           width: "100vw",
           height: "100vh",
+          minHeight: props.minHeight,
+          minWidth: props.minWidth,
           zIndex: -9,
           opacity: 0.3,
 
