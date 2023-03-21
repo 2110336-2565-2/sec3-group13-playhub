@@ -5,7 +5,7 @@ import { Dayjs } from "dayjs";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Box, Stack, Button, SelectChangeEvent, Grid, Card, Typography } from "@mui/material";
+import { Box, Stack, SelectChangeEvent, Grid, Card, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 import Loading from "@/components/public/Loading";
@@ -25,7 +25,6 @@ import { ICONS } from "enum/ICONS";
 
 import { CreateUser } from "@/services/User";
 import NormalButton from "@/components/public/CommonButton";
-import { Container } from "@mui/system";
 
 type RegisterInput = {
   displayName: string;
