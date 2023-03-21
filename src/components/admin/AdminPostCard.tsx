@@ -91,7 +91,7 @@ export default function AdminPostCard(props: props) {
           avatar={
             <IconButton
               onClick={() => {
-                router.push(PAGE_PATHS.MY_PROFILE + props.post.ownerId);
+                router.push(PAGE_PATHS.PROFILE + props.post.ownerId);
               }}
               sx={{ padding: 0 }}
             >
