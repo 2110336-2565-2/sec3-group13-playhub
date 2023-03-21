@@ -21,6 +21,7 @@ export default function DisplayTags(props: props) {
               }
               variant="outlined"
               style={{
+                boxShadow: "0px 0px 0px",
                 padding: "5px 0px 5px 0px",
                 border: "3px solid lightgrey",
                 borderRadius: "4px",
