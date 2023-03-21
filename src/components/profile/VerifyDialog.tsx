@@ -1,10 +1,10 @@
 import { useContext } from "react";
 import { userContext } from "supabase/user_context";
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, Typography } from "@mui/material";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
 import { PAGE_PATHS } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
 import NormalButton from "../public/CommonButton";
-import { COLOR } from "enum/COLOR";
+import CloseIcon from "@mui/icons-material/Close";
 
 type props = {
   openModal: boolean;
@@ -28,13 +28,18 @@ export default function DeletePostDialog(props: props) {
         onClose={props.handleCloseModal}
       >
         <DialogTitle>
-          <Box display="flex">
-            <Typography variant="body1">Are you sure to{"\u00A0"}</Typography>
-            <Typography variant="body1" color="error">
-              quit
-            </Typography>
-            <Typography variant="body1">{"\u00A0"}edit profile ?</Typography>
-          </Box>
+          <Stack direction="row">
+            <Box display="flex" sx={{ flexGrow: 1, alignItems: "center" }}>
+              <Typography variant="body1">Are you sure to{"\u00A0"}</Typography>
+              <Typography variant="body1" color="error">
+                quit
+              </Typography>
+              <Typography variant="body1">{"\u00A0"}edit profile ?</Typography>
+            </Box>
+            <IconButton onClick={props.handleCloseModal} sx={{ padding: 0 }}>
+              <CloseIcon fontSize="large" color="secondary" />
+            </IconButton>
+          </Stack>
         </DialogTitle>
         <DialogContent dividers>
           <Typography variant="body2" color="error">
@@ -42,8 +47,8 @@ export default function DeletePostDialog(props: props) {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <NormalButton label="Quit" color={COLOR.NATURAL} onClick={handleGoBackToMyProfile} />
-          <NormalButton label="Continue Editing" onClick={props.handleCloseModal} />
+          <NormalButton label="Quit" onClick={handleGoBackToMyProfile} />
+          {/* <NormalButton label="Continue Editing" onClick={props.handleCloseModal} /> */}
         </DialogActions>
       </Dialog>
     </>
