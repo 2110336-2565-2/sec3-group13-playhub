@@ -29,6 +29,8 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { AddParticipantToPost, RemoveParticipantFromPost } from "@/services/Participant";
 import { Database } from "supabase/db_types";
+import CommonButton from "../public/CommonButton";
+import { COLOR } from "enum/COLOR";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -188,13 +190,13 @@ export default function PostCard(props: props) {
           <Box sx={{ flexGrow: 1 }}></Box>
 
           <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
-            <Button onClick={() => joinPost()} variant="contained">
-              {!isUserJoin ? "Join" : "Cancel"}
-            </Button>
+            <Box>
+              <CommonButton label={!isUserJoin ? "Join" : "Cancel"} onClick={() => joinPost()} color={!isUserJoin ? COLOR.PRIMARY : COLOR.NATURAL} />
+            </Box>
           </Grow>
 
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
-            <ArrowDownwardIcon />
+            <ArrowDownwardIcon color="secondary" />
           </ExpandMore>
         </CardActions>
       </Card>
