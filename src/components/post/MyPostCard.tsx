@@ -16,6 +16,7 @@ import { Post } from "../../types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
 import DisplayTags from "./DisplayTags";
+import dayjs from "dayjs";
 
 type props = {
   post: Post;
@@ -59,13 +60,14 @@ export default function PostCard(props: props) {
               {/* location */}
               <Typography variant="body1" display="inline-flex">
                 <LocationOnIcon fontSize="medium" />
-                <span style={{ marginLeft: 8 }}>{props.post.location}</span>
+                <Typography style={{ marginLeft: 8 }}>{props.post.location}</Typography>
               </Typography>
               {/* date */}
               <Typography variant="body1" display="inline-flex">
                 <CalendarTodayIcon fontSize="medium" />
                 <span style={{ marginLeft: 8 }}>
-                  {props.post.startDateTime} - {props.post.endDateTime}
+                  {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
+                  {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
                 </span>
               </Typography>
             </Stack>
