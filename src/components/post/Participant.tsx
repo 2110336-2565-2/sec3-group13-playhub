@@ -34,7 +34,7 @@ export default function Participant(props: props) {
   const [displayParticipantCard, setDisplayParticipantCard] = useState<HTMLElement | null>(null);
 
   function handleGoToParticipantProfile(): void {
-    router.push(PAGE_PATHS.MY_PROFILE + props.participant.userId);
+    router.push(PAGE_PATHS.PROFILE + props.participant.userId);
   }
 
   function handleOpenParticipantCard(event: React.MouseEvent<HTMLElement>): void {

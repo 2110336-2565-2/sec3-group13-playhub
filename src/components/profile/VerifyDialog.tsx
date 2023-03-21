@@ -16,7 +16,7 @@ export default function DeletePostDialog(props: props) {
   const userStatus = useContext(userContext);
 
   function handleGoBackToMyProfile() {
-    router.push(PAGE_PATHS.MY_PROFILE + userStatus.user?.userId);
+    router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
   }
 
   return (

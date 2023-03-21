@@ -145,7 +145,7 @@ export default function Home() {
         supabaseClient
       )
         .then(() => {
-          router.push(PAGE_PATHS.MY_PROFILE + "/" + userStatus.user?.userId);
+          router.push(PAGE_PATHS.PROFILE + "/" + userStatus.user?.userId);
         })
         .catch((err) => {
           console.log(err);
