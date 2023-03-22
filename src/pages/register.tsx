@@ -50,6 +50,9 @@ const RegisterStyle = {
     minWidth: "300px",
     minHeight: "820px",
 
+    marginTop: "20px",
+    marginBottom: "20px",
+
     paddingTop: "2vh",
     paddingBottom: "1vh",
 
@@ -183,8 +186,9 @@ export default function Home() {
     return;
   }
   return (
-    <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
-      <Background minHeight="850px" minWidth="320px" />
+    <Stack style={{ height: "100vh" }} alignItems="center">
+      <Background minHeight="900px" minWidth="320px" />
+      <Box sx={{ height: "120px" }}></Box>
       <Card sx={RegisterStyle.Card}>
         <Stack spacing={0} alignItems="center" justifyContent="center">
           <Box>
@@ -273,6 +277,7 @@ export default function Home() {
           <NormalButton label="Create Account" onClick={handleCreateAccount} />
         </Stack>
       </Card>
+      <Box sx={{ height: "120px" }}></Box>
     </Stack>
   );
 }
