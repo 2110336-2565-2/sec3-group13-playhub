@@ -31,6 +31,7 @@ export default function CreateAppointmentPostCard(props: props) {
             <IconButton
               onClick={() => {
                 router.push(PAGE_PATHS.PROFILE + props.post.ownerId);
+                return;
               }}
               sx={{ padding: 0 }}
             >

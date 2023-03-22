@@ -61,6 +61,7 @@ export default function Home() {
       RequestResetPassword(email, supabaseClient)
         .then(() => {
           router.push(PAGE_PATHS.SUCCESS_REQUEST_RESET_PASSWORD);
+          return;
         })
         .catch((err) => {
           setIsRequesting(false);

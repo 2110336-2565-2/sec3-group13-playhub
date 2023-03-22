@@ -27,6 +27,7 @@ export default function AppointmentCard(props: props) {
           <IconButton
             onClick={() => {
               router.push(PAGE_PATHS.PROFILE + props.appointment.ownerId);
+              return;
             }}
             sx={{ padding: "0px" }}
           >

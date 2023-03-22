@@ -166,6 +166,7 @@ export default function Home() {
       )
         .then(() => {
           router.push(PAGE_PATHS.LOGIN);
+          return;
         })
         .catch((err) => {
           if (err.message == "User already registered") {

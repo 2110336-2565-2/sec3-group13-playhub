@@ -123,6 +123,7 @@ export default function PostCard(props: props) {
             <IconButton
               onClick={() => {
                 router.push(PAGE_PATHS.PROFILE + props.post.ownerId);
+                return;
               }}
               sx={{ padding: 0 }}
             >

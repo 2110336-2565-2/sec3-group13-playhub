@@ -93,6 +93,7 @@ export default function AdminPostCard(props: props) {
             <IconButton
               onClick={() => {
                 router.push(PAGE_PATHS.PROFILE + props.post.ownerId);
+                return;
               }}
               sx={{ padding: 0 }}
             >

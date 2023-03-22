@@ -106,6 +106,7 @@ export default function Home() {
                 }
               );
               router.push(PAGE_PATHS.SELECT_APPOINTMENT);
+              return;
             }
             if (choice === "reject" && userStatus.user) {
               RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
@@ -115,6 +116,7 @@ export default function Home() {
                 }
               );
               router.push(PAGE_PATHS.SELECT_APPOINTMENT);
+              return;
             }
           }}
         />

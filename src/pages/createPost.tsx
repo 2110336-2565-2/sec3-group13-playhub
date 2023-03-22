@@ -168,6 +168,7 @@ export default function Home() {
       CreatePost(newPost, supabaseClient)
         .then(() => {
           router.push(PAGE_PATHS.MY_POSTS);
+          return;
         })
         .catch((err) => {
           console.log(err);
@@ -178,6 +179,7 @@ export default function Home() {
 
   function backToMyPost(): void {
     router.push(PAGE_PATHS.MY_POSTS);
+    return;
   }
 
   useEffect(() => {

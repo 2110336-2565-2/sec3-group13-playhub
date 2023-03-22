@@ -35,6 +35,7 @@ export default function Participant(props: props) {
 
   function handleGoToParticipantProfile(): void {
     router.push(PAGE_PATHS.PROFILE + props.participant.userId);
+    return;
   }
 
   function handleOpenParticipantCard(event: React.MouseEvent<HTMLElement>): void {

@@ -88,6 +88,7 @@ export default function Home() {
       .then(() => {
         // route to post feed page
         router.push(PAGE_PATHS.HOME);
+        return;
       })
       .catch((err) => {
         // in case : cannot find user using inputed email and password

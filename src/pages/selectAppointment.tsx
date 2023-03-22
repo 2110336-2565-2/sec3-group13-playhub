@@ -20,6 +20,7 @@ export default function Home() {
 
   function handleCardClick(appointmentId: string): void {
     router.push(PAGE_PATHS.CONFIRM_APPOINTMENT + appointmentId);
+    return;
   }
 
   useEffect(() => {

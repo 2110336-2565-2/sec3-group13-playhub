@@ -20,6 +20,7 @@ export default function Home() {
 
     function handleCardClick(appointmentId: string): void {
         router.push(PAGE_PATHS.MY_APPOINTMENTS + appointmentId);
+        return;
     }
 
     useEffect(() => {
@@ -35,7 +36,10 @@ export default function Home() {
     }, [supabaseClient, userStatus.user]);
 
     if (userStatus.isLoading) return <Loading />;
-    if (!userStatus.user) router.push(PAGE_PATHS.LOGIN)
+    if (!userStatus.user) {
+        router.push(PAGE_PATHS.LOGIN);
+        return;
+    }
     return <>
         <Navbar />
         <Typography paddingTop="40px" variant="h4" align="center">My Appointments</Typography>

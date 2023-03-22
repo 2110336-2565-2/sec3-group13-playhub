@@ -70,6 +70,7 @@ export default function Home() {
       ResetPassword(newPassword.password, supabaseClient)
         .then(() => {
           router.push(PAGE_PATHS.SUCCESS_RESET_PASSWORD);
+          return;
         })
         .catch((err) => {
           setIsRequesting(false);
@@ -90,6 +91,7 @@ export default function Home() {
   useEffect(() => {
     if (router.asPath.indexOf("access_token") == -1) {
       router.push(PAGE_PATHS.REQUEST_RESET_PASSWORD);
+      return;
     }
   }, [router]);
 

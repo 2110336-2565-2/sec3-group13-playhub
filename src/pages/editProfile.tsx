@@ -145,6 +145,7 @@ export default function Home() {
       )
         .then(() => {
           router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
+          return;
         })
         .catch((err) => {
           console.log(err);
@@ -198,6 +199,7 @@ export default function Home() {
 
   function handleGoBackToMyProfile() {
     router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
+    return;
   }
 
   useEffect(() => {

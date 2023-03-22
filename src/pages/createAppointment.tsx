@@ -20,6 +20,7 @@ export default function ShowAppointment() {
 
   function handleClickCard(item: Post) {
     router.push(PAGE_PATHS.CREATE_APPOINTMENT + item.postId);
+    return;
   }
 
   useEffect(() => {
