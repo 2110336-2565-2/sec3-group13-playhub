@@ -172,7 +172,7 @@ export default function Home() {
         startTime: input.startDate,
         endTime: input.endDate,
       };
-      UpdatePost(Number(router.query.post_id), originalImages, updatedPost, supabaseClient)
+      UpdatePost(parseInt(router.query.post_id as string), originalImages, updatedPost, supabaseClient)
         .then(() => {
           router.push(PAGE_PATHS.MY_POSTS);
           return;
@@ -204,9 +204,8 @@ export default function Home() {
   }, [supabaseClient]);
 
   useEffect(() => {
-    const postId = Number(router.query.post_id);
-    if (!postId || !userStatus.user) return;
-    GetPostByPostId(userStatus.user, postId, supabaseClient)
+    if (!parseInt(router.query.post_id as string) || !userStatus.user) return;
+    GetPostByPostId(userStatus.user, parseInt(router.query.post_id as string), supabaseClient)
       .then((p) => {
         setInput({
           title: p.title,
