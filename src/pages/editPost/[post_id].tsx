@@ -110,6 +110,8 @@ export default function Home() {
   );
   const imagesError: boolean = false;
 
+  const postId = parseInt(router.query.post_id as string);
+
   // input field change
   function handleTextFieldChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
     setState({ ...state, [event.target.name]: false });
@@ -172,7 +174,7 @@ export default function Home() {
         startTime: input.startDate,
         endTime: input.endDate,
       };
-      UpdatePost(Number(router.query.post_id), originalImages, updatedPost, supabaseClient)
+      UpdatePost(postId, originalImages, updatedPost, supabaseClient)
         .then(() => {
           router.push(PAGE_PATHS.MY_POSTS);
           return;
@@ -204,7 +206,6 @@ export default function Home() {
   }, [supabaseClient]);
 
   useEffect(() => {
-    const postId = Number(router.query.post_id);
     if (!postId || !userStatus.user) return;
     GetPostByPostId(userStatus.user, postId, supabaseClient)
       .then((p) => {
@@ -224,7 +225,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-  }, [supabaseClient, router.query.post_id, userStatus.user]);
+  }, [supabaseClient, postId, userStatus.user]);
 
   if (!userStatus.user) {
     router.push(PAGE_PATHS.LOGIN);

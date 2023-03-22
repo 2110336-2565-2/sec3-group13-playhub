@@ -59,6 +59,8 @@ export default function Home() {
   const [participants, setParticipants] = useState<User[]>([]);
   const [openDeletePostModal, setOpenDeletePostModal] = useState<boolean>(false);
 
+  const postId = parseInt(router.query.post_id as string);
+
   const handleOpenDeletePostModal = (): void => setOpenDeletePostModal(true);
   const handleCloseDeletePostModal = (): void => setOpenDeletePostModal(false);
 
@@ -68,7 +70,7 @@ export default function Home() {
   }
 
   function handleDelete() {
-    DeletePost(Number(router.query.post_id), supabaseClient)
+    DeletePost(postId, supabaseClient)
       .then(() => {
         handleCloseDeletePostModal();
         router.push(PAGE_PATHS.MY_POSTS);
@@ -92,7 +94,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!userStatus.user) return;
-    GetPostWithParticipantsByPostId(Number(router.query.post_id), supabaseClient)
+    GetPostWithParticipantsByPostId(postId, supabaseClient)
       .then((p) => {
         setPost(p);
         if (!p.participants) return;
@@ -102,7 +104,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-  }, [userStatus.user, router.query.post_id, supabaseClient]);
+  }, [userStatus.user, postId, supabaseClient]);
 
 
   if (userStatus.isLoading) return <Loading />;
