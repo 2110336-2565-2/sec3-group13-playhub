@@ -92,6 +92,7 @@ export default function Home() {
 
   const [tagMenu, setTagMenu] = useState<Tag[]>([]);
   const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
+  const postId: number = parseInt(router.query.post_id as string);
 
   // error variables
   const titleError: validation = validateTextField(
@@ -172,7 +173,7 @@ export default function Home() {
         startTime: input.startDate,
         endTime: input.endDate,
       };
-      UpdatePost(parseInt(router.query.post_id as string), originalImages, updatedPost, supabaseClient)
+      UpdatePost(postId, originalImages, updatedPost, supabaseClient)
         .then(() => {
           router.push(PAGE_PATHS.MY_POSTS);
           return;
@@ -204,8 +205,8 @@ export default function Home() {
   }, [supabaseClient]);
 
   useEffect(() => {
-    if (!parseInt(router.query.post_id as string) || !userStatus.user) return;
-    GetPostByPostId(userStatus.user, parseInt(router.query.post_id as string), supabaseClient)
+    if (!postId || !userStatus.user) return;
+    GetPostByPostId(userStatus.user, postId, supabaseClient)
       .then((p) => {
         setInput({
           title: p.title,
@@ -223,8 +224,9 @@ export default function Home() {
         console.log(err);
         return;
       });
-  }, [supabaseClient, router.query.post_id, userStatus.user]);
+  }, [supabaseClient, postId, userStatus.user]);
 
+  if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
     router.push(PAGE_PATHS.LOGIN);
     return;
