@@ -241,12 +241,10 @@ export default function Home() {
 
             <Avatar alt="Anya" sx={EditProfileStyle.Avatar}>
               {input.image && (
-                <Image
+                <Avatar
+                  sx={!isImageUpload ? { ...EditProfileStyle.Avatar, opacity: "0.5" } : { ...EditProfileStyle.Avatar, objectFit: "cover" }}
+                  alt="Profile picture"
                   src={input.image}
-                  alt="Upload avatar"
-                  width={200}
-                  height={200}
-                  style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
                 />
               )}
               <IconButton
