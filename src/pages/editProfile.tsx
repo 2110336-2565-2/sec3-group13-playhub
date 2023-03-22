@@ -35,6 +35,8 @@ import { ICONS } from "enum/ICONS";
 
 import { UpdateProfile } from "@/services/Profile";
 import NormalButton from "@/components/public/CommonButton";
+import CommonDialog from "@/components/public/CommonDialog";
+import { COLOR } from "enum/COLOR";
 
 type EditProfileInput = {
   image: string | null;
@@ -197,6 +199,10 @@ export default function Home() {
     setIsVerifyModalShow(false);
   }
 
+  function handleGoBackToMyProfile() {
+    router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
+  }
+
   useEffect(() => {
     if (userStatus.isLoading || !userStatus.user) return;
     getProfile(userStatus.user);
@@ -302,7 +308,16 @@ export default function Home() {
           </Stack>
         </Card>
       </Stack>
-      <VerifyDialog openModal={isVerifyModalShow} handleCloseModal={handleCloseModal} />
+
+      <CommonDialog
+        openModal={isVerifyModalShow}
+        handleCloseModal={handleCloseModal}
+        header={["Are you sure to", "quit", "edit profile ?"]}
+        content="*All changes would be discarded"
+        buttonLabel="Quit"
+        buttonColor={COLOR.PRIMARY}
+        buttonAction={handleGoBackToMyProfile}
+      />
     </>
   );
 }

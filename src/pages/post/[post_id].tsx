@@ -30,6 +30,7 @@ import DeletePostDialog from "@/components/post/DeletePostDialog";
 import { User } from "@/types/User";
 import Participant from "@/components/post/Participant";
 import Loading from "@/components/public/Loading";
+import CommonDialog from "@/components/public/CommonDialog";
 
 const PostStyle = {
   Card: {
@@ -231,10 +232,14 @@ export default function Home() {
         </Stack>
       </Stack>
 
-      <DeletePostDialog
+      <CommonDialog
         openModal={openDeletePostModal}
         handleCloseModal={handleCloseDeletePostModal}
-        deletePost={handleDelete}
+        header={["Are you sure to", "delete", "this post ?"]}
+        content="*This action cannot be undone."
+        buttonLabel="Delete"
+        buttonColor={COLOR.ERROR}
+        buttonAction={handleDelete}
       />
     </>
   );

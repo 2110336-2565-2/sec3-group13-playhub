@@ -28,6 +28,8 @@ import DescriptionTextField from "@/components/public/DescriptionTextField";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CommonButton from "@/components/public/CommonButton";
 import TitleTextField from "@/components/post/TitleTextField";
+import CommonDialog from "@/components/public/CommonDialog";
+import { COLOR } from "enum/COLOR";
 
 type EditPostInput = {
   title: string;
@@ -89,6 +91,7 @@ export default function Home() {
   const [loadingData, setLoadingData] = useState<boolean>(true);
 
   const [tagMenu, setTagMenu] = useState<Tag[]>([]);
+  const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
 
   // error variables
   const titleError: validation = validateTextField(
@@ -186,6 +189,14 @@ export default function Home() {
     router.push(PAGE_PATHS.MY_POSTS);
   }
 
+  function handleOpenModal(): void {
+    setIsVerifyModalShow(true);
+  }
+
+  function handleCloseModal(): void {
+    setIsVerifyModalShow(false);
+  }
+
   useEffect(() => {
     GetAllTags(supabaseClient)
       .then((allTags) => setTagMenu(allTags))
@@ -231,7 +242,7 @@ export default function Home() {
       <Navbar />
 
       <IconButton
-        onClick={backToMyPost}
+        onClick={handleOpenModal}
         style={{ position: "absolute", top: 86, left: 20, zIndex: "1" }}
       >
         <ArrowBackIcon fontSize="large" color="secondary" />
@@ -348,6 +359,16 @@ export default function Home() {
         {/* Edit post button */}
         <CommonButton label="Save" onClick={handleSubmit} />
       </Stack>
+
+      <CommonDialog
+        openModal={isVerifyModalShow}
+        handleCloseModal={handleCloseModal}
+        header={["Are you sure to", "quit", "edit post ?"]}
+        content="*All changes would be discarded"
+        buttonLabel="Quit"
+        buttonColor={COLOR.PRIMARY}
+        buttonAction={backToMyPost}
+      />
     </>
   );
 }
