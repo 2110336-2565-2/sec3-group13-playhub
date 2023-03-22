@@ -33,7 +33,7 @@ export default function Home() {
       return;
     })
 
-  }, [supabaseClient, appointmentId, userStatus.user?.userId]);
+  }, [supabaseClient, appointmentId, userStatus.user?.userId, userStatus.user]);
 
   function handleGoBack(): void {
     router.push(PAGE_PATHS.MY_APPOINTMENTS);

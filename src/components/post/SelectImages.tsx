@@ -6,6 +6,7 @@ import { Box, Container, FormHelperText, IconButton, Stack, Typography } from "@
 import { grey } from "@mui/material/colors";
 import { IMAGE_LIMIT } from "enum/INPUT_LIMIT";
 import CloseIcon from "@mui/icons-material/Close";
+import Image from "next/image";
 
 // style
 const image_layout = {
@@ -124,7 +125,7 @@ export default function PictureList(props: props) {
                     >
                       <CloseIcon fontSize="small" color="primary" />
                     </IconButton>
-                    <img alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
+                    <Image alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
                   </ImageListItem>
                   {false && <FormHelperText error>{props.errMsg}</FormHelperText>}
                 </Stack>

@@ -226,7 +226,7 @@ export default function Home() {
         });
     }
     getPostData();
-  }, [supabaseClient, router.query.post_id]);
+  }, [supabaseClient, router.query.post_id, postId, userStatus.user]);
 
   if (!userStatus.user) {
     router.push(PAGE_PATHS.LOGIN);

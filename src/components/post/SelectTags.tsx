@@ -35,7 +35,7 @@ export default function Tags(props: props) {
       return tag.name;
     });
     setMenuItems(props.menuValue.filter((tag) => !tagNames.includes(tag.name)));
-  }, []);
+  }, [props.menuValue, props.value]);
 
   const handleDeleteTag = (toDeleteTag: Tag) => () => {
     // Update displyed tags (delete)

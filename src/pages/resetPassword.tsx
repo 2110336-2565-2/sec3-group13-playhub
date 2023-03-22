@@ -85,7 +85,7 @@ export default function Home() {
         setCanResetPassword(true);
       }
     });
-  }, []);
+  }, [supabaseClient.auth]);
 
   useEffect(() => {
     if (router.asPath.indexOf("access_token") == -1) {

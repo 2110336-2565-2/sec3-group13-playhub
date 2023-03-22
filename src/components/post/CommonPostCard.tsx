@@ -74,13 +74,15 @@ export default function PostCard(props: props) {
     return false
   }
 
+  const isJoined: boolean = hasJoined();
+
   useEffect(() => {
-    if (hasJoined()) {
+    if (isJoined) {
       setIsUserJoin(true)
     } else {
       setIsUserJoin(false)
     }
-  }, [])
+  }, [isJoined])
 
   function joinPost(): void {
     if (!props.userId) return;

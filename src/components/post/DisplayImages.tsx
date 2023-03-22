@@ -1,4 +1,5 @@
 import { ImageList, ImageListItem, Stack } from "@mui/material";
+import Image from "next/image";
 
 type props = {
   images: string[];
@@ -34,7 +35,7 @@ export default function DisplayImages(props: props) {
                   style={{ marginTop: "10px" }}
                   cols={1}
                 >
-                  <img alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
+                  <Image alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
                 </ImageListItem>
               </Stack>
             </>
