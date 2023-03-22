@@ -84,6 +84,16 @@ export default function Navbar() {
               <Typography variant="body1">{NAVBAR_PAGES.APPOINTMENT}</Typography>
             </IconButton>
           </Box>
+          <Box sx={{ flexGrow: 0.02 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToSelectPost}>
+              <Typography variant="body1">{NavbarPages.selectPost}</Typography>
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 0.02 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToSelectAppointment}>
+              <Typography variant="body1">{NavbarPages.selectAppointment}</Typography>
+            </IconButton>
+          </Box>
           <IconButton onClick={handleMenu}>
             {userStatus.user &&
               (userStatus.user.image ? (
@@ -117,6 +127,7 @@ export default function Navbar() {
                 </Box>
               </Link>
             </MenuItem>
+
             <MenuItem key={2}>
               <Link href={PAGE_PATHS.MY_APPOINTMENTS}>
                 <Typography variant="body1">{NAVBAR_PAGES.MY_APPOINTMENT}</Typography>

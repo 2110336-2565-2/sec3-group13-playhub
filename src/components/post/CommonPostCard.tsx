@@ -191,15 +191,16 @@ export default function PostCard(props: props) {
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
             <ArrowDownwardIcon fontSize="large" color="secondary" />
           </ExpandMore>
-        </CardActions>
-      </Card>
+        </CardActions >
+      </Card >
 
       {/* Comfirm Delete Dialog */}
-      <Snackbar
+      < Snackbar
         open={openSnackBar.isShow}
         autoHideDuration={5000}
         message={openSnackBar.msg}
-        onClose={() => setOpenSnackBar({ msg: "", isShow: false })}
+        onClose={() => setOpenSnackBar({ msg: "", isShow: false })
+        }
       />
     </>
   );
