@@ -50,7 +50,7 @@ export default function Home() {
     return;
   }
   if (!userStatus.user.isVerified) {
-    router.push(PagePaths.home)
+    router.push(PAGE_PATHS.HOME)
     return;
   }
   if (posts == null) return <Loading />;
