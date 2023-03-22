@@ -125,7 +125,7 @@ export default function PictureList(props: props) {
                     >
                       <CloseIcon fontSize="small" color="primary" />
                     </IconButton>
-                    <Image alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
+                    <img alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
                   </ImageListItem>
                   {false && <FormHelperText error>{props.errMsg}</FormHelperText>}
                 </Stack>

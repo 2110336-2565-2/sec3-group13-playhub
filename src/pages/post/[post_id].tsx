@@ -64,6 +64,7 @@ export default function Home() {
 
   function handleCreateAppointment() {
     router.push(PAGE_PATHS.CREATE_APPOINTMENT);
+    return;
   }
 
   function handleDelete() {
@@ -71,6 +72,7 @@ export default function Home() {
       .then(() => {
         handleCloseDeletePostModal();
         router.push(PAGE_PATHS.MY_POSTS);
+        return;
       })
       .catch((err) => {
         console.log(err);
@@ -80,10 +82,12 @@ export default function Home() {
 
   function handleEditPost(): void {
     router.push(PAGE_PATHS.EDIT_POST + router.query.post_id);
+    return;
   }
 
   function backToMyPost(): void {
     router.push(PAGE_PATHS.MY_POSTS);
+    return;
   }
 
   useEffect(() => {
@@ -133,6 +137,7 @@ export default function Home() {
                 <IconButton
                   onClick={() => {
                     router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
+                    return;
                   }}
                   sx={{ padding: 0 }}
                 >

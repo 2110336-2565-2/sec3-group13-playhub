@@ -35,7 +35,7 @@ export default function DisplayImages(props: props) {
                   style={{ marginTop: "10px" }}
                   cols={1}
                 >
-                  <Image alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
+                  <img alt="Post_Image" src={image} style={{ objectFit: "contain" }} />
                 </ImageListItem>
               </Stack>
             </>
