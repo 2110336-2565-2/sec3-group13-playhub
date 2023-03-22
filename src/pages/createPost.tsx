@@ -57,6 +57,7 @@ const CreatePostStyle = {
     width: "30vw",
     minWidth: "300px",
     height: "70vh",
+    minHeight: "710px",
     paddingTop: "2vh",
   },
 };
