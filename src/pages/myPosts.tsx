@@ -78,9 +78,15 @@ export default function Home() {
           <Fab
             color="primary"
             aria-label="add"
-            sx={{ position: "fixed", right: "20px", bottom: "20px" }}
+            sx={{
+              position: "fixed",
+              right: "20px",
+              bottom: "20px",
+              borderRadius: "15px",
+              border: "3px #000000 solid",
+            }}
           >
-            <AddIcon />
+            <AddIcon fontSize="large" />
           </Fab>
         </Link>
       )}
