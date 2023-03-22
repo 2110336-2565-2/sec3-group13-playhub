@@ -15,8 +15,8 @@ import Navbar from "@/components/admin/AdminNavbar";
 import Loading from "@/components/public/Loading";
 
 import { User } from "@/types/User";
-import { PagePaths } from "enum/pages";
-import { Gender } from "enum/gender";
+import { PAGE_PATHS } from "enum/PAGES";
+import { GENDER } from "enum/GENDER";
 import { GetUserByUserId } from "@/services/User";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
 import VerifyChip from "@/components/profile/VerifyChip";
@@ -58,17 +58,17 @@ export default function AdminProfile() {
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   if (!userStatus.user.isAdmin) {
-    router.push(PagePaths.home);
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   if (!targetUserData) return <Loading />;
   if (targetUserData.isAdmin) {
-    router.push(PagePaths.adminHome + userStatus.user.userId)
-    return
+    router.push(PAGE_PATHS.ADMIN_HOME + userStatus.user.userId);
+    return;
   }
   return (
     <>
@@ -92,11 +92,11 @@ export default function AdminProfile() {
           <Stack direction="row" spacing={1}>
             <Chip
               icon={
-                targetUserData.sex === Gender.male ? (
+                targetUserData.sex === GENDER.MALE ? (
                   <MaleIcon />
-                ) : targetUserData.sex === Gender.female ? (
+                ) : targetUserData.sex === GENDER.FEMALE ? (
                   <FemaleIcon />
-                ) : targetUserData.sex === Gender.others ? (
+                ) : targetUserData.sex === GENDER.OTHERS ? (
                   <TransgenderIcon />
                 ) : (
                   <div></div>
@@ -116,7 +116,7 @@ export default function AdminProfile() {
               {row}
             </Typography>
           ))}
-          {!targetUserData.isVerified &&
+          {!targetUserData.isVerified && (
             <>
               <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
                 Verify
@@ -126,7 +126,7 @@ export default function AdminProfile() {
                 handleCloseModal={closeVerifyModal}
               />
             </>
-          }
+          )}
         </Stack>
       </Suspense>
     </>

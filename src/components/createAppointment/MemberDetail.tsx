@@ -4,7 +4,7 @@ import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import CakeIcon from "@mui/icons-material/Cake";
 import { User } from "@/types/User";
-import { Gender } from "enum/gender";
+import { GENDER } from "enum/GENDER";
 
 type props = {
   value: User | null;
@@ -39,11 +39,11 @@ export default function MemberDetail(props: props) {
           <Stack direction="row" spacing={1}>
             <Chip
               icon={
-                props.value.sex === Gender.male ? (
+                props.value.sex === GENDER.MALE ? (
                   <MaleIcon />
-                ) : props.value.sex === Gender.female ? (
+                ) : props.value.sex === GENDER.FEMALE ? (
                   <FemaleIcon />
-                ) : props.value.sex === Gender.others ? (
+                ) : props.value.sex === GENDER.OTHERS ? (
                   <TransgenderIcon />
                 ) : (
                   <div></div>

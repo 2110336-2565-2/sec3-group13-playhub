@@ -1,16 +1,16 @@
 import { validation } from "@/types/Validation";
 import dayjs, { Dayjs } from "dayjs";
-import { CHAR_LIMIT, IMAGE_LIMIT } from "enum/inputLimit";
+import { CHAR_LIMIT, IMAGE_LIMIT } from "enum/INPUT_LIMIT";
 
 const regexEmail: RegExp =
-  /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  /^(([^<>()\\[\]\\.,;:\s@"]+(\.[^<>()\\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export function validateEmail(email: string): validation {
   if (email.trim().length === 0) {
-    return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+    return { msg: "This field cannot be blank.", err: true };
   }
   if (!regexEmail.test(email)) {
-    return { msg: "รูปแบบอีเมลไม่ถูกต้อง", err: true };
+    return { msg: "Email format is invalid.", err: true };
   }
   return { msg: "", err: false };
 }
@@ -18,12 +18,12 @@ export function validateEmail(email: string): validation {
 export function validatePassword(password: string): validation {
   // check contain space (starting, between, ending)
   if (password.includes(" ")) {
-    return { msg: "รหัสผ่านไม่สามารถประกอบด้วยช่องว่าง", err: true };
+    return { msg: "Password cannot contain space.", err: true };
   }
   // check empty & check min char
   if (password.length < CHAR_LIMIT.MIN_PASSWORD) {
     return {
-      msg: `รหัสผ่านต้องมีตัวอักษรอย่างน้อย ${CHAR_LIMIT.MIN_PASSWORD} ตัวอักษร`,
+      msg: `Password must contain at least ${CHAR_LIMIT.MIN_PASSWORD} characters.`,
       err: true,
     };
   }
@@ -38,16 +38,16 @@ export function validateTextField(
 ): validation {
   if (input.length < minChar) {
     if (minChar == 1) {
-      return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+      return { msg: "This field cannot be blank.", err: true };
     } else {
       return {
-        msg: `ช่องนี้ต้องมีตัวอักษรอย่างน้อย ${minChar} ตัว`,
+        msg: `This field must contain at least ${minChar} characters.`,
         err: true,
       };
     }
   }
   if (input.length > maxChar) {
-    return { msg: `ช่องนี้มีตัวอักษรได้ไม่เกิน ${maxChar} ตัว`, err: true };
+    return { msg: `This field cannot exceed ${maxChar} characters.`, err: true };
   }
   return { msg: "", err: false };
 }
@@ -55,13 +55,13 @@ export function validateTextField(
 export function validateImage(fileType: string, fileSize: number): validation {
   if (["image/png", "image/jpg", "image/jpeg"].indexOf(fileType) === -1) {
     return {
-      msg: "นามสกุลไฟล์ที่อัปโหลดไม่ถูกต้อง (.jpeg หรือ .jpg หรือ .png เท่านั้น)",
+      msg: "File format not supported (.jpeg or .jpg or .png only)",
       err: true,
     };
   }
   if (fileSize > IMAGE_LIMIT.MAX_IMAGE_SIZE) {
     return {
-      msg: `ขนาดไฟล์จะต้องไม่เกิน ${IMAGE_LIMIT.MAX_IMAGE_SIZE / 1_000_000} MB`,
+      msg: `File size must not exceed ${IMAGE_LIMIT.MAX_IMAGE_SIZE / 1_000_000} MB`,
       err: true,
     };
   }
@@ -69,7 +69,7 @@ export function validateImage(fileType: string, fileSize: number): validation {
 }
 
 export function validateDate(date: Dayjs | null): validation {
-  if (date === null) return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+  if (date === null) return { msg: "This field cannot be blank.", err: true };
   return { msg: "", err: false };
 }
 
@@ -82,13 +82,13 @@ export function validateDateWithInterval(
       if (startDate >= endDate) {
         const displayStartDate: string = dayjs(startDate).format("DD/MM/YYYY hh:mm a");
         return {
-          msg: `กรุณาเลือกวันที่และเวลา หลังจาก ${displayStartDate}`,
+          msg: `Please select date and time after ${displayStartDate}`,
           err: true,
         };
       }
     } else {
       return {
-        msg: "ช่องนี้ไม่สามารถเว้นว่างได้",
+        msg: "This field cannot be blank.",
         err: true,
       };
     }
@@ -98,7 +98,7 @@ export function validateDateWithInterval(
 
 export function validateNationalIDCardNumber(nationalIDCardNumber: string): validation {
   if (nationalIDCardNumber.length == 0) {
-    return { msg: "ช่องนี้ไม่สามารถเว้นว่างได้", err: true };
+    return { msg: "This field cannot be blank.", err: true };
   }
 
   if (
@@ -106,7 +106,7 @@ export function validateNationalIDCardNumber(nationalIDCardNumber: string): vali
     !RegExp(/\d{13}/).test(nationalIDCardNumber) ||
     !checkLastDigit(nationalIDCardNumber)
   ) {
-    return { msg: "รูปแบบเลขบัตรประจำตัวประชาชนไม่ถูกต้อง", err: true };
+    return { msg: "National ID card number format is invalid.", err: true };
   }
   return { msg: "", err: false };
 
@@ -135,7 +135,7 @@ export function validateConfirmPassword(password: string, confirmPassword: strin
   }
   if (password !== confirmPassword) {
     return {
-      msg: "Password และ Confirm Password ต้องเหมือนกัน",
+      msg: "Password and Confirm Password must be match.",
       err: true,
     };
   }
@@ -153,7 +153,7 @@ export function validateConfirmNewPassword(
   }
   if (newPassword !== confirmNewPassword) {
     return {
-      msg: "New Password และ Confirm New Password ต้องเหมือนกัน",
+      msg: "New Password and Confirm New Password must be match.",
       err: true,
     };
   }

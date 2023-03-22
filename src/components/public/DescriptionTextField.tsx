@@ -1,27 +1,16 @@
-import {
-  Box,
-  FormHelperText,
-  Icon,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
-import EditIcon from "@mui/icons-material/Edit";
-import { ICONS } from "enum/ICONS";
+import { Box, FormHelperText, Stack, TextField, Typography } from "@mui/material";
 import React from "react";
 
 type props = {
   name?: string;
-  header?: string;
-  icon: string;
+  header: string;
   placeholder: string;
   value: string;
   handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  char_limit?: number;
+  char_limit: number;
   isErr: boolean;
   errMsg: string;
+  height?: number;
 };
 
 const helperText = {
@@ -32,14 +21,7 @@ const helperText = {
 
 export default function NormalTextField(props: props) {
   const exceedChar: boolean = props.char_limit ? props.value.length > props.char_limit : false;
-
-  function displayStartIcon(iconName: string) {
-    if (iconName === ICONS.MAIL) {
-      return <EmailIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
-    } else if (iconName === ICONS.EDIT) {
-      return <EditIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
-    }
-  }
+  const row: number = props.height ? props.height : 4;
 
   return (
     <>
@@ -50,28 +32,12 @@ export default function NormalTextField(props: props) {
             name={props.name}
             sx={{ backgroundColor: "#ffffff" }}
             fullWidth
+            multiline
+            rows={row}
             placeholder={props.placeholder}
             value={props.value}
             error={props.isErr}
             onChange={props.handleValueChange}
-            inputProps={{
-              sx: {
-                textAlign: "center",
-                "&::placeholder": {
-                  textAlign: "center",
-                },
-              },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">{displayStartIcon(props.icon)}</InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="start">
-                  <Icon fontSize="large" />
-                </InputAdornment>
-              ),
-            }}
           />
         </Box>
         <Box sx={helperText}>

@@ -9,7 +9,7 @@ import { GetAppointmentsByAppointmentId } from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 import Loading from "@/components/public/Loading";
 import { userContext } from "supabase/user_context";
 
@@ -33,15 +33,18 @@ export default function Home() {
       return;
     })
 
-  }, [supabaseClient, appointmentId, userStatus.user?.userId]);
+  }, [supabaseClient, appointmentId, userStatus.user?.userId, userStatus.user]);
 
   function handleGoBack(): void {
-    router.push(PagePaths.myAppointments);
+    router.push(PAGE_PATHS.MY_APPOINTMENTS);
     return;
   }
 
   if (!appointment || userStatus.isLoading) return <Loading />
-  if (!userStatus.user) router.push(PagePaths.login)
+  if (!userStatus.user) {
+    router.push(PAGE_PATHS.LOGIN);
+    return;
+  }
   if (!isParticipant) return handleGoBack()
   return <>
     <Navbar />

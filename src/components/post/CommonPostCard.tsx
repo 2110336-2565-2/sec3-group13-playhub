@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
-import Image from "next/image";
 import {
   Typography,
   Avatar,
@@ -11,12 +10,9 @@ import {
   CardContent,
   CardActions,
   IconButton,
-  Grid,
   Stack,
-  Chip,
   Snackbar,
   Grow,
-  Button,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
@@ -25,10 +21,15 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import { Post } from "../../types/Post";
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { AddParticipantToPost, RemoveParticipantFromPost } from "@/services/Participant";
 import { Database } from "supabase/db_types";
+import CommonButton from "../public/CommonButton";
+import { COLOR } from "enum/COLOR";
+import DisplayTags from "./DisplayTags";
+import DisplayImages from "./DisplayImages";
+import dayjs from "dayjs";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -73,13 +74,15 @@ export default function PostCard(props: props) {
     return false
   }
 
+  const isJoined: boolean = hasJoined();
+
   useEffect(() => {
-    if (hasJoined()) {
+    if (isJoined) {
       setIsUserJoin(true)
     } else {
       setIsUserJoin(false)
     }
-  }, [])
+  }, [isJoined])
 
   function joinPost(): void {
     if (!props.userId) return;
@@ -119,7 +122,8 @@ export default function PostCard(props: props) {
           avatar={
             <IconButton
               onClick={() => {
-                router.push(PagePaths.profile + props.post.ownerId);
+                router.push(PAGE_PATHS.PROFILE + props.post.ownerId);
+                return;
               }}
               sx={{ padding: 0 }}
             >
@@ -135,61 +139,43 @@ export default function PostCard(props: props) {
           titleTypographyProps={{ variant: "h5" }}
           subheaderTypographyProps={{ variant: "h6" }}
         />
-        <CardContent
-          style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}
-        >
-          {/* post preview details start here */}
-          <Stack
-            direction={!hiddenPostDetail ? "row" : "column"}
-            spacing={2}
-            marginBottom={2}
-          >
+        <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
+          <Stack spacing={2}>
+            {/* location */}
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>{props.post.location}</span>
+              <Typography style={{ marginLeft: 8 }}>{props.post.location}</Typography>
             </Typography>
+
+            {/* datetime */}
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>
-                {props.post.startDateTime} - {props.post.endDateTime}
+                {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
+                {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
               </span>
             </Typography>
-          </Stack>
-          <Grid container spacing={1}>
-            {props.post.tags.map((e, index) => (
-              <Grid item key={index}>
-                <Chip
-                  label={e}
-                  variant="outlined"
-                  style={{
-                    minWidth: 100,
-                    height: 40,
-                    border: "1px solid gray",
-                    fontSize: 18,
-                  }}
-                />
-              </Grid>
-            ))}
-          </Grid>
 
-          {/* post preview details end here */}
-          <Collapse
-            in={!hiddenPostDetail}
-            sx={{ marginTop: 2, marginBottom: 1 }}
-          >
-            {/* post hidden details start here */}
-            {props.post.description.split("\n").map((row) => (
-              <Typography key={row}>{row}</Typography>
-            ))}
-            <Grid container spacing={2}>
-              {props.post.image.map((e, index) => (
-                <Grid item key={index}>
-                  <Image src={e} alt="location" width={300} height={350} />
-                </Grid>
-              ))}
-            </Grid>
-            {/* post hidden details end here */}
+            {/* tags */}
+            <DisplayTags tags={props.post.tags} />
+          </Stack>
+
+          <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2, marginBottom: 1 }}>
+            <Stack spacing={2}>
+              {/* description */}
+              <Typography>
+                {props.post.description.split("\n").map((row) => (
+                  <Typography key={row}>{row}</Typography>
+                ))}
+              </Typography>
+
+              {/* images */}
+              <DisplayImages images={props.post.image} />
+            </Stack>
           </Collapse>
+
+
+
         </CardContent>
 
         {/* Post Card Footer */}
@@ -197,23 +183,24 @@ export default function PostCard(props: props) {
           <Box sx={{ flexGrow: 1 }}></Box>
 
           <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
-            <Button onClick={() => joinPost()} variant="contained">
-              {!isUserJoin ? "Join" : "Cancel"}
-            </Button>
+            <Box>
+              <CommonButton label={!isUserJoin ? "Join" : "Cancel"} onClick={() => joinPost()} color={!isUserJoin ? COLOR.PRIMARY : COLOR.NATURAL} />
+            </Box>
           </Grow>
 
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
-            <ArrowDownwardIcon />
+            <ArrowDownwardIcon fontSize="large" color="secondary" />
           </ExpandMore>
-        </CardActions>
-      </Card>
+        </CardActions >
+      </Card >
 
       {/* Comfirm Delete Dialog */}
-      <Snackbar
+      < Snackbar
         open={openSnackBar.isShow}
         autoHideDuration={5000}
         message={openSnackBar.msg}
-        onClose={() => setOpenSnackBar({ msg: "", isShow: false })}
+        onClose={() => setOpenSnackBar({ msg: "", isShow: false })
+        }
       />
     </>
   );

@@ -49,7 +49,7 @@ export default function ConfirmApptDialog(props: props) {
       <DialogContent dividers>
         <Stack spacing={1} alignItems="left" sx={{ margin: "5px 0" }}>
           <Typography align="left" color="red">
-            *You can't undo this change
+            {"*You can't undo this change"}
           </Typography>
         </Stack>
       </DialogContent>

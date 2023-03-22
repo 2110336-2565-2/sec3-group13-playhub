@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -13,7 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AddIcon from "@mui/icons-material/Add";
 import { grey } from "@mui/material/colors";
 import { Tag } from "@/types/Tag";
-import { TAG_LIMIT } from "enum/inputLimit";
+import { TAG_LIMIT } from "enum/INPUT_LIMIT";
 
 type props = {
   header?: string;
@@ -35,26 +35,20 @@ export default function Tags(props: props) {
       return tag.name;
     });
     setMenuItems(props.menuValue.filter((tag) => !tagNames.includes(tag.name)));
-  }, []);
+  }, [props.menuValue, props.value]);
 
   const handleDeleteTag = (toDeleteTag: Tag) => () => {
     // Update displyed tags (delete)
-    props.handleValueChange(
-      props.value.filter((tag) => tag.name !== toDeleteTag.name)
-    );
+    props.handleValueChange(props.value.filter((tag) => tag.name !== toDeleteTag.name));
     // Update menu item (insert)
-    setMenuItems(
-      [...menuItems, toDeleteTag].sort((a, b) => (a.id > b.id ? 1 : -1))
-    );
+    setMenuItems([...menuItems, toDeleteTag].sort((a, b) => (a.id > b.id ? 1 : -1)));
   };
 
   const handleAddTag = (toAddLabel: Tag) => () => {
     // Update displyed tags (insert)
     props.handleValueChange([...props.value, toAddLabel]);
     // Update menu item (delete)
-    setMenuItems((menuItems) =>
-      menuItems.filter((menuItem) => menuItem.id !== toAddLabel.id)
-    );
+    setMenuItems((menuItems) => menuItems.filter((menuItem) => menuItem.id !== toAddLabel.id));
     // Close menu
     handleCloseMenu();
   };
@@ -69,12 +63,12 @@ export default function Tags(props: props) {
 
   return (
     <>
-      <Box display="flex">
+      <Box display="flex" alignItems="end">
         <Typography variant="body1">
           {props.header}
           {"\u00A0"}
         </Typography>
-        <Typography variant="body1" sx={{ color: grey[500] }}>
+        <Typography variant="body2" sx={{ color: grey[500] }}>
           {props.note}
         </Typography>
       </Box>
@@ -89,7 +83,14 @@ export default function Tags(props: props) {
                   {tag.name}
                 </Typography>
               }
-              sx={{ m: "6px 1px" }}
+              style={{
+                borderRadius: "15px",
+                border: "2px black solid",
+                padding: "4px 8px",
+                margin: "6px 4px",
+                boxShadow: "4px 4px 1px grey",
+                maxHeight: "24px",
+              }}
               variant="outlined"
               size="small"
               deleteIcon={<CloseIcon />}
@@ -101,13 +102,20 @@ export default function Tags(props: props) {
         {/* Add tag button component */}
         {menuItems.length > 0 && props.value.length < TAG_LIMIT.MAX_TAG && (
           <Button
-            sx={{ padding: "6px 10px" }}
+            style={{
+              borderRadius: "15px",
+              border: "2px black solid",
+              padding: "4px 8px",
+              margin: "6px 4px",
+              boxShadow: "4px 4px 1px grey",
+              maxHeight: "24px",
+            }}
             size="small"
             startIcon={<AddIcon />}
             onClick={handleOpenMenu}
           >
             <Typography variant="body2" color="primary">
-              ADD TAG
+              ADD
             </Typography>
           </Button>
         )}

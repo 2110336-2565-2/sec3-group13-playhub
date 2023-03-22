@@ -1,36 +1,51 @@
-import { useContext, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { NextRouter, useRouter } from "next/router";
-import { Box, Button, Card, FormHelperText, Stack, Typography } from "@mui/material";
+import { Box, Card, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { userContext } from "supabase/user_context";
 
+import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
-import PasswordTextField from "@/components/resetPassword/PasswordTextField";
+import PasswordTextField from "@/components/public/PasswordTextField";
 import { validateConfirmNewPassword } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
-import { PagePaths } from "enum/pages";
-import Loading from "@/components/public/Loading";
-import { ResetPassword } from "@/services/Password";
+import { PAGE_PATHS } from "enum/PAGES";
 
-type ResetPassword = {
+import { ResetPassword } from "@/services/Password";
+import NormalButton from "@/components/public/CommonButton";
+
+type ResetPasswordInput = {
   password: string;
   confirmPassword: string;
+};
+
+const ResetPasswordStyle = {
+  Card: {
+    width: "45vw",
+    minWidth: "300px",
+    minHeight: "200px",
+
+    backgroundColor: grey[300],
+  },
+  TextField: {
+    width: "20vw",
+    minWidth: "250px",
+  },
 };
 
 export default function Home() {
   const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
-  const userStatus = useContext(userContext);
   const [canResetPassword, setCanResetPassword] = useState(false);
 
-  const [newPassword, setNewPassword] = useState<ResetPassword>({
+  const [newPassword, setNewPassword] = useState<ResetPasswordInput>({
     password: "",
     confirmPassword: "",
   });
+
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const [isRequesting, setIsRequesting] = useState<boolean>(false);
 
@@ -54,7 +69,8 @@ export default function Home() {
       setIsRequesting(true);
       ResetPassword(newPassword.password, supabaseClient)
         .then(() => {
-          router.push(PagePaths.successResetPassword);
+          router.push(PAGE_PATHS.SUCCESS_RESET_PASSWORD);
+          return;
         })
         .catch((err) => {
           setIsRequesting(false);
@@ -70,28 +86,22 @@ export default function Home() {
         setCanResetPassword(true);
       }
     });
-  }, []);
+  }, [supabaseClient.auth]);
 
   useEffect(() => {
     if (router.asPath.indexOf("access_token") == -1) {
-      router.push(PagePaths.requestResetPassword);
+      router.push(PAGE_PATHS.REQUEST_RESET_PASSWORD);
+      return;
     }
   }, [router]);
+
   if (!canResetPassword) return <Loading />;
   return (
     <>
       {isRequesting && <Loading />}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
-        <Card
-          sx={{
-            width: "45vw",
-            minWidth: "300px",
-            minHeight: "200px",
-
-            backgroundColor: grey[300],
-          }}
-        >
+        <Card sx={ResetPasswordStyle.Card}>
           <Stack
             spacing={3}
             sx={{
@@ -100,36 +110,29 @@ export default function Home() {
             alignItems="center"
             justifyContent="center"
           >
-            <Typography variant="h1">Reset Password</Typography>
+            <Typography variant="h2">Reset Password</Typography>
 
-            <Box sx={{ width: "20vw", minWidth: "250px" }}>
+            <Box sx={ResetPasswordStyle.TextField}>
               <PasswordTextField
                 name="password"
                 placeholder="New Password"
                 value={newPassword.password}
                 handleValueChange={handlePasswordChange}
                 isErr={isSubmit && arePasswordsErr.err}
+                errMsg=""
               />
-            </Box>
 
-            <Stack spacing={1} sx={{ width: "20vw", minWidth: "250px" }}>
               <PasswordTextField
                 name="confirmPassword"
                 placeholder="Comfirm New Password"
                 value={newPassword.confirmPassword}
                 handleValueChange={handlePasswordChange}
                 isErr={isSubmit && arePasswordsErr.err}
+                errMsg={arePasswordsErr.msg}
               />
+            </Box>
 
-              <FormHelperText error>
-                {isSubmit && arePasswordsErr.err && arePasswordsErr.msg}
-                {"\u00A0"}
-              </FormHelperText>
-            </Stack>
-
-            <Button variant="contained" onClick={handleSubmit}>
-              Reset Password
-            </Button>
+            <NormalButton label="Reset Password" onClick={handleSubmit} />
           </Stack>
         </Card>
       </Stack>

@@ -1,19 +1,39 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { NextRouter, useRouter } from "next/router";
-import { Box, Button, Card, Stack, Typography } from "@mui/material";
+import { Box, Card, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
+import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
-import EmailTextField from "@/components/requestResetPassword/EmailTextField";
+import NormalTextField from "@/components/public/CommonTextField";
 import { validateEmail } from "@/utilities/validation";
 
 import { validation } from "@/types/Validation";
-import { PagePaths } from "enum/pages";
-import Loading from "@/components/public/Loading";
+import { PAGE_PATHS } from "enum/PAGES";
+import { ICONS } from "enum/ICONS";
+
 import { RequestResetPassword } from "@/services/Password";
+import NormalButton from "@/components/public/CommonButton";
+
+const RequestResetPasswordStyle = {
+  Card: {
+    width: "45vw",
+    minWidth: "300px",
+    minHeight: "200px",
+
+    paddingTop: "12vh",
+    paddingBottom: "6vh",
+
+    backgroundColor: grey[300],
+  },
+  TextField: {
+    width: "30vw",
+    minWidth: "250px",
+  },
+};
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -38,13 +58,16 @@ export default function Home() {
     if (!isEmailErr.err) {
       // reset password end point goes here
       setIsRequesting(true);
-      RequestResetPassword(email, supabaseClient).then(() => {
-        router.push(PagePaths.successRequestResetPassword)
-      }).catch((err) => {
-        setIsRequesting(false);
-        console.log(err)
-        return
-      })
+      RequestResetPassword(email, supabaseClient)
+        .then(() => {
+          router.push(PAGE_PATHS.SUCCESS_REQUEST_RESET_PASSWORD);
+          return;
+        })
+        .catch((err) => {
+          setIsRequesting(false);
+          console.log(err);
+          return;
+        });
     }
   }
 
@@ -53,26 +76,16 @@ export default function Home() {
       {isRequesting && <Loading />}
       <Stack style={{ height: "100vh" }} alignItems="center" justifyContent="center">
         <Background />
-        <Card
-          sx={{
-            width: "45vw",
-            minWidth: "300px",
-            minHeight: "200px",
-
-            paddingTop: "12vh",
-            paddingBottom: "6vh",
-
-            backgroundColor: grey[300],
-          }}
-        >
+        <Card sx={RequestResetPasswordStyle.Card}>
           <Stack spacing={3} alignItems="center" justifyContent="center">
             <Stack spacing={2} alignItems="center" justifyContent="center">
               {/* header text */}
-              <Typography variant="h1">Enter your email to get reset password link!</Typography>
+              <Typography variant="h2">Enter your email to get reset password link!</Typography>
 
               {/* email textfield */}
-              <Box sx={{ width: "30vw", minWidth: "250px" }}>
-                <EmailTextField
+              <Box sx={RequestResetPasswordStyle.TextField}>
+                <NormalTextField
+                  icon={ICONS.MAIL}
                   placeholder="e.g. playhub@mail.com"
                   value={email}
                   handleValueChange={handleEmailChange}
@@ -83,9 +96,7 @@ export default function Home() {
             </Stack>
 
             {/* send link button */}
-            <Button variant="contained" onClick={handleSubmit}>
-              Send Link!
-            </Button>
+            <NormalButton label="Send Link!" onClick={handleSubmit} />
           </Stack>
         </Card>
       </Stack>

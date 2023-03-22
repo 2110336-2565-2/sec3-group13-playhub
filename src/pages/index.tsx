@@ -13,7 +13,7 @@ import Navbar from "@/components/public/Navbar";
 import CommonPostCard from "@/components/post/CommonPostCard";
 
 import { Post } from "@/types/Post";
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 import { GetPostsWithParticipants } from "@/services/Posts";
 
 export default function Home() {
@@ -39,11 +39,11 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   if (userStatus.user.isAdmin) {
-    router.push(PagePaths.adminHome + userStatus.user.userId);
+    router.push(PAGE_PATHS.ADMIN_HOME + userStatus.user.userId);
     return;
   }
   if (posts == null) return <Loading />;

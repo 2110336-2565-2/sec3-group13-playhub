@@ -4,7 +4,7 @@ import { grey } from "@mui/material/colors";
 
 import Background from "@/components/public/Background";
 
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 
 export default function Home() {
   return (
@@ -35,11 +35,11 @@ export default function Home() {
               style={{ width: "6vw", minWidth: "90px", height: "6vw", minHeight: "90px" }}
             />
 
-            <Typography variant="h1">Your password is successfully reset!</Typography>
+            <Typography variant="h2">Your password is successfully reset!</Typography>
 
             <Box display="flex">
               <Typography variant="body1">Click{"\u00A0"}</Typography>
-              <Link color="primary" underline="hover" href={PagePaths.home}>
+              <Link color="primary" underline="hover" href={PAGE_PATHS.HOME}>
                 <Typography variant="body1">here</Typography>
               </Link>
               <Typography variant="body1">{"\u00A0"}to return to home page</Typography>

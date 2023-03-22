@@ -1,12 +1,4 @@
-import {
-  Box,
-  FormHelperText,
-  Icon,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, FormHelperText, Stack, TextField, Typography } from "@mui/material";
 import EmailIcon from "@mui/icons-material/Email";
 import EditIcon from "@mui/icons-material/Edit";
 import { ICONS } from "enum/ICONS";
@@ -54,24 +46,6 @@ export default function NormalTextField(props: props) {
             value={props.value}
             error={props.isErr}
             onChange={props.handleValueChange}
-            inputProps={{
-              sx: {
-                textAlign: "center",
-                "&::placeholder": {
-                  textAlign: "center",
-                },
-              },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">{displayStartIcon(props.icon)}</InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment position="start">
-                  <Icon fontSize="large" />
-                </InputAdornment>
-              ),
-            }}
           />
         </Box>
         <Box sx={helperText}>

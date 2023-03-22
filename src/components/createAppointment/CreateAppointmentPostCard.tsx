@@ -13,7 +13,7 @@ import dayjs from "dayjs";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { Post } from "../../types/Post";
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
 import BorderWithShadow from "../public/BorderWithShadow";
 
@@ -30,7 +30,8 @@ export default function CreateAppointmentPostCard(props: props) {
           avatar={
             <IconButton
               onClick={() => {
-                router.push(PagePaths.profile + props.post.ownerId);
+                router.push(PAGE_PATHS.PROFILE + props.post.ownerId);
+                return;
               }}
               sx={{ padding: 0 }}
             >
@@ -56,8 +57,8 @@ export default function CreateAppointmentPostCard(props: props) {
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>
-                {dayjs(props.post.startDateTime).format("DD/MM/YYYY h.mm A")} -{" "}
-                {dayjs(props.post.endDateTime).format("DD/MM/YYYY h.mm A")}
+                {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
+                {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
               </span>
             </Typography>
           </Stack>

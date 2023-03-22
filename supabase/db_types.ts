@@ -364,7 +364,7 @@ export interface Database {
         Returns: undefined;
       };
       get_appointments: {
-      Returns: {
+        Returns: {
           id: string;
           start_time: string;
           end_time: string;

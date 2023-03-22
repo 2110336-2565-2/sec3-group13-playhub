@@ -27,7 +27,12 @@ const mainTheme = createTheme({
   typography: {
     fontFamily: "LINESeed",
     h1: {
-      fontSize: 32,
+      fontSize: 30,
+      textAlign: "center",
+      fontWeight: 800,
+    },
+    h2: {
+      fontSize: 24,
       textAlign: "center",
       fontWeight: 800,
     },
@@ -40,12 +45,12 @@ const mainTheme = createTheme({
       fontWeight: 700,
     },
     body1: {
-      fontSize: 16,
-      fontWeight: 700,
+      fontSize: 18,
+      fontWeight: 600,
     },
     body2: {
       fontSize: 14,
-      fontWeight: 650,
+      fontWeight: 600,
     },
   },
   components: {
@@ -54,7 +59,7 @@ const mainTheme = createTheme({
         root: {
           margin: 0,
           fontSize: 14,
-          fontWeight: 650,
+          fontWeight: 600,
         },
       },
     },
@@ -68,7 +73,46 @@ const mainTheme = createTheme({
 
     MuiTextField: {
       styleOverrides: {
-        root: { boxShadow: "8px 8px 1px grey", borderRadius: "6px" },
+        root: {
+          boxShadow: "8px 8px 1px grey",
+          borderRadius: "15px",
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderRadius: "15px",
+              border: "3px #000000 solid",
+            },
+            "&:hover fieldset": {
+              borderRadius: "15px",
+              border: "3px #ffa31a solid",
+            },
+            "&.Mui-focused fieldset": {
+              borderRadius: "15px",
+              border: "3px #ffa31a solid",
+            },
+          },
+        },
+      },
+    },
+    MuiFormControl: {
+      styleOverrides: {
+        root: {
+          boxShadow: "8px 8px 1px grey",
+          borderRadius: "15px",
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              borderRadius: "15px",
+              border: "3px #000000 solid",
+            },
+            "&:hover fieldset": {
+              borderRadius: "15px",
+              border: "3px #ffa31a solid",
+            },
+            "&.Mui-focused fieldset": {
+              borderRadius: "15px",
+              border: "3px #ffa31a solid",
+            },
+          },
+        },
       },
     },
     MuiCard: {
@@ -77,16 +121,6 @@ const mainTheme = createTheme({
           boxShadow: "8px 8px 1px grey",
           border: "solid 4px",
           borderRadius: "16px",
-        },
-      },
-    },
-    MuiButton: {
-      styleOverrides: {
-        root: {
-          borderRadius: "10px",
-          fontSize: 16,
-          fontWeight: 800,
-          padding: "10px 64px",
         },
       },
     },

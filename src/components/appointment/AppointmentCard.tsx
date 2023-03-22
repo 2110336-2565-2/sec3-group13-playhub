@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { PagePaths } from "enum/pages";
+import { PAGE_PATHS } from "enum/PAGES";
 import router from "next/router";
 
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -26,7 +26,8 @@ export default function AppointmentCard(props: props) {
         avatar={
           <IconButton
             onClick={() => {
-              router.push(PagePaths.profile + props.appointment.ownerId);
+              router.push(PAGE_PATHS.PROFILE + props.appointment.ownerId);
+              return;
             }}
             sx={{ padding: "0px" }}
           >

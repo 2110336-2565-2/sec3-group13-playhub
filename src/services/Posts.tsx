@@ -184,13 +184,13 @@ export async function GetPostsWithParticipants(
     ownerId: post.owner_id,
     ownerName: post.owner_name,
     ownerProfilePic: post.owner_profile,
-    tags: post.tags.map((tag) => tag.name),
+    tags: post.tags.map((tag: any) => tag.name),
     description: post.description,
     image: post.images,
     location: post.location,
     startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
     endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
-    participants: post.participants.map((e) => ({
+    participants: post.participants.map((e: any) => ({
       userId: e.id,
       username: e.username,
       sex: e.sex,
@@ -228,7 +228,7 @@ export async function GetPostByPostId(
     startTime: dayjsWithoutTZ(getPostDataResult.data[0].start_time),
     endTime: dayjsWithoutTZ(getPostDataResult.data[0].end_time),
     images: getPostDataResult.data[0].images,
-    tags: getPostDataResult.data[0].tag_names.map((_, idx) => ({
+    tags: getPostDataResult.data[0].tag_names.map((_: any, idx: number) => ({
       id: tag_ids[idx],
       name: tag_name[idx],
     })),
@@ -257,7 +257,7 @@ export async function GetPostWithParticipantsByPostId(
     location: postData.location,
     startTime: dayjs(postData.start_time),
     endTime: dayjs(postData.end_time),
-    participants: postData.participants.map((e) => ({
+    participants: postData.participants.map((e: any) => ({
       userId: e.id,
       username: e.username,
       sex: e.sex,

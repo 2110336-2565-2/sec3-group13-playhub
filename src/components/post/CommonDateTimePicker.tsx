@@ -1,12 +1,15 @@
 import { Box, FormHelperText, InputAdornment, Stack, TextField, Typography } from "@mui/material";
-import { LocalizationProvider, MobileDatePicker } from "@mui/x-date-pickers";
+import { LocalizationProvider, MobileDateTimePicker } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
+import EditIcon from "@mui/icons-material/Edit";
 import { Dayjs } from "dayjs";
+import { ICONS } from "enum/ICONS";
 
 type props = {
   header?: string;
   placeHolder?: string;
+  endIcon?: string;
   value: Dayjs | null;
   handleValueChange: (event: Dayjs | null) => void;
   isErr: boolean;
@@ -19,38 +22,34 @@ const helperText = {
   justifyContent: "space-between",
 };
 
-export default function CommonDatePicker(props: props) {
+export default function CommonDateTimePicker(props: props) {
+  function generateEndIcon() {
+    if (props.endIcon === ICONS.EDIT) {
+      return <EditIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
+    }
+    return <></>;
+  }
+
   return (
     <>
       <Stack spacing={1}>
         <Box>
           <Typography variant="body1">{props.header}</Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <MobileDatePicker
-              inputFormat="DD/MM/YYYY"
-              mask="__/__/____"
+            <MobileDateTimePicker
+              inputFormat="DD/MM/YYYY hh:mm a"
+              mask="__/__/____ __:__ _M"
               value={props.value}
               onChange={props.handleValueChange}
               renderInput={(params) => (
                 <TextField
                   {...params}
-                  value={props.value}
                   placeholder={props.placeHolder}
                   error={props.isErr}
-                  sx={{ backgroundColor: "#ffffff" }}
                   fullWidth
-                  inputProps={{
-                    ...params.inputProps,
-                    sx: {
-                      textAlign: "center",
-                      "&::placeholder": {
-                        textAlign: "center",
-                      },
-                    },
-                  }}
                 />
               )}
-              disableFuture
+              disablePast
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -60,15 +59,14 @@ export default function CommonDatePicker(props: props) {
                     />
                   </InputAdornment>
                 ),
+                endAdornment: <InputAdornment position="end">{generateEndIcon()}</InputAdornment>,
               }}
             />
           </LocalizationProvider>
         </Box>
         <Box sx={helperText}>
-          <FormHelperText error>
-            {props.isErr && props.errMsg}
-            {"\u00A0"}
-          </FormHelperText>
+          {props.isErr && <FormHelperText error>{props.errMsg}</FormHelperText>}
+          {"\u00A0"}
         </Box>
       </Stack>
     </>
