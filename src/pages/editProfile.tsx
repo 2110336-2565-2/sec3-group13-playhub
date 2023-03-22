@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect } from "react";
 import { NextRouter, useRouter } from "next/router";
-import Image from "next/image";
 
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -23,7 +22,6 @@ import Navbar from "@/components/public/Navbar";
 import CommonTextField from "@/components/public/CommonTextField";
 import CommonDropdown from "@/components/public/GenderDropdown";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
-import VerifyDialog from "@/components/profile/VerifyDialog";
 import { validateImage, validateTextField } from "@/utilities/validation";
 
 import { User } from "@/types/User";

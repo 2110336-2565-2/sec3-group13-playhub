@@ -26,7 +26,6 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import dayjs from "dayjs";
 import DisplayTags from "@/components/post/DisplayTags";
 import DisplayImages from "@/components/post/DisplayImages";
-import DeletePostDialog from "@/components/post/DeletePostDialog";
 import { User } from "@/types/User";
 import Participant from "@/components/post/Participant";
 import Loading from "@/components/public/Loading";
