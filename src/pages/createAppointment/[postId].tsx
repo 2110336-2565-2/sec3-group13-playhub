@@ -7,7 +7,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
-import { PagePaths } from "enum/PAGES";
+import { PAGE_PATHS } from "enum/PAGES";
 import { GetPostWithParticipantsByPostId } from "@/services/Posts";
 import { CreateAppointment } from "@/services/Appointments";
 import PostInfoCard from "@/components/createAppointment/PostInfoCard";
@@ -46,7 +46,7 @@ export default function Home() {
       setIsCreatingAppointment(true);
       CreateAppointment(postId, postInfo, selectedParticipants, supabaseClient)
         .then(() => {
-          router.push(PagePaths.myAppointments);
+          router.push(PAGE_PATHS.MY_APPOINTMENTS);
           return;
         })
         .catch((err) => {
@@ -67,14 +67,14 @@ export default function Home() {
       })
       .catch((err) => {
         console.log(err);
-        router.push(PagePaths.createAppointment);
+        router.push(PAGE_PATHS.CREATE_APPOINTMENT);
         return;
       });
   }, [supabaseClient, postId, userStatus.user, router]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
 

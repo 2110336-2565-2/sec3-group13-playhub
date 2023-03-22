@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { NextRouter, useRouter } from "next/router";
-import { Box, Button, Card, Stack, Typography } from "@mui/material";
+import { Box, Card, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 import { useSupabaseClient } from "@supabase/auth-helpers-react";

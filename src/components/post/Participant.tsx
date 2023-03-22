@@ -3,7 +3,7 @@ import { Avatar, Card, Chip, IconButton, Popover, Stack, Typography } from "@mui
 import { GENDER } from "enum/GENDER";
 import { PAGE_PATHS } from "enum/PAGES";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import React, { useState } from "react";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";

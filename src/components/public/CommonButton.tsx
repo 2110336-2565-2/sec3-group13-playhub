@@ -1,5 +1,6 @@
 import { Button } from "@mui/material";
 import { COLOR } from "enum/COLOR";
+import React from "react";
 
 type props = {
   label: string;

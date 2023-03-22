@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
@@ -7,7 +7,7 @@ import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
 } from "@/constants/supabase";
-import { Link, Box, Typography, Stack, Button, Card } from "@mui/material";
+import { Link, Box, Typography, Stack, Card } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
 import Loading from "@/components/public/Loading";

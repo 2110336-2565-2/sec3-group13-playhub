@@ -13,7 +13,7 @@ import {
 
 import CloseIcon from "@mui/icons-material/Close";
 import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { UpdateUserNationalIdByUserId } from "@/services/User";
 import { validation } from "@/types/Validation";
 import { validateNationalIDCardNumber } from "@/utilities/validation";

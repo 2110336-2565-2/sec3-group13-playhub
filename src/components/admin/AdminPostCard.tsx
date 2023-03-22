@@ -21,7 +21,6 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
-import DeletePostDialog from "@/components/post/DeletePostDialog";
 
 import { Post } from "../../types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -29,6 +28,8 @@ import { Database } from "supabase/db_types";
 import { NextRouter, useRouter } from "next/router";
 import { PAGE_PATHS } from "enum/PAGES";
 import { DeletePost } from "@/services/Posts";
+import CommonDialog from "../public/CommonDialog";
+import { COLOR } from "enum/COLOR";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -175,10 +176,14 @@ export default function AdminPostCard(props: props) {
       </Card>
 
       {/* Comfirm Delete Dialog */}
-      <DeletePostDialog
+      <CommonDialog
         openModal={openDeletePostModal}
         handleCloseModal={handleCloseDeletePostModal}
-        deletePost={handleDelete}
+        header={["Are you sure to", "delete", "this post ?"]}
+        content="*This action cannot be undone."
+        buttonLabel="Delete"
+        buttonColor={COLOR.ERROR}
+        buttonAction={handleDelete}
       />
     </>
   );

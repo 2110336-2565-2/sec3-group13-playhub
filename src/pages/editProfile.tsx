@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
@@ -6,7 +6,6 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import {
   Typography,
-  Button,
   SelectChangeEvent,
   Avatar,
   Stack,
