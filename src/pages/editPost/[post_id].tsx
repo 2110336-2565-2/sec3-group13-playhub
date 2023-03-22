@@ -57,6 +57,7 @@ const EditPostStyle = {
     width: "30vw",
     minWidth: "300px",
     height: "70vh",
+    minHeight: "710px",
     paddingTop: "2vh",
   },
 };
@@ -236,7 +237,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} alignItems="center">
+      <Stack spacing={4} sx={{ marginBottom: "2vh", }} alignItems="center">
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Edit post</Typography>

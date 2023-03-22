@@ -29,12 +29,14 @@ import DisplayImages from "@/components/post/DisplayImages";
 import DeletePostDialog from "@/components/post/DeletePostDialog";
 import { User } from "@/types/User";
 import Participant from "@/components/post/Participant";
+import Loading from "@/components/public/Loading";
 
 const PostStyle = {
   Card: {
     width: "30vw",
     minWidth: "300px",
     height: "70vh",
+    minHeight: "710px",
     paddingTop: "2vh",
   },
 };
@@ -98,6 +100,13 @@ export default function Home() {
       });
   }, [userStatus.user, router.query.post_id, supabaseClient]);
 
+
+  if (userStatus.isLoading) return <Loading />;
+  if (!userStatus.user) {
+    router.push(PAGE_PATHS.LOGIN);
+    return;
+  }
+  if (!post || !participants) return <Loading />;
   return (
     <>
       <Navbar />
@@ -109,7 +118,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} alignItems="center">
+      <Stack spacing={4} sx={{ marginBottom: "2vh", }} alignItems="center">
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">{post.title}</Typography>
