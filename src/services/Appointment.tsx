@@ -29,7 +29,7 @@ export async function GetAppointmentsByUserId(
     ));
 }
 
-export async function GetAppointmentsByAppointmentId(
+export async function GetAppointmentByAppointmentId(
     appointmentId: number,
     supabaseClient: SupabaseClient<Database>
 ): Promise<AppointmentDetail> {

@@ -5,7 +5,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import AppointmentParticipantCard from "@/components/appointment/AppointmentParticipantCard";
 import AppointmentHostCard from "@/components/appointment/AppointmentHostCard";
 import { AppointmentDetail } from "@/types/Appointment";
-import { GetAppointmentsByAppointmentId } from "@/services/Appointment";
+import { GetAppointmentByAppointmentId } from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
@@ -24,7 +24,7 @@ export default function Home() {
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
     if (!appointmentId || !userStatus.user) return;
-    GetAppointmentsByAppointmentId(appointmentId, supabaseClient).then((appointment) => {
+    GetAppointmentByAppointmentId(appointmentId, supabaseClient).then((appointment) => {
       setIsHost(userStatus.user?.userId == appointment?.ownerId);
       setIsParticipant(appointment?.acceptParticipants.includes(userStatus.user?.username as string))
       setAppointment(appointment);
