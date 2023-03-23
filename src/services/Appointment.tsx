@@ -2,6 +2,123 @@ import { Appointment, AppointmentDetail, AppointmentDetailHeader } from "@/types
 import { SupabaseClient } from "@supabase/supabase-js";
 import dayjs from "dayjs";
 import { Database } from "supabase/db_types";
+import { PostInfo } from "../types/Post";
+import { User } from "@/types/User";
+
+export async function CreateAppointment(
+    postId: number,
+    post: PostInfo,
+    pending_partipants: User[],
+    supabaseClient: SupabaseClient<Database>
+): Promise<void> {
+    const addAppointmentResult = await supabaseClient.rpc("create_appointment", {
+        postid: postId,
+        title: post.title,
+        location: post.location,
+        description: post.description,
+        tags: post.tags.map((e) => e.id),
+        start_time: post.startTime.toString(),
+        end_time: post.endTime.toString(),
+        pending_user_id: pending_partipants.map((p) => p.userId),
+        images: post.images,
+        owner_id: post.userId,
+    });
+
+    if (addAppointmentResult.error) {
+        console.log(addAppointmentResult.error);
+        throw new Error("Something went wrong!!");
+    }
+
+    return;
+}
+
+export async function AcceptAppointment(
+    appointmentId: number,
+    userId: string,
+    supabaseClient: SupabaseClient<Database>
+): Promise<void> {
+    const acceptAppointmentResult = await supabaseClient.rpc(
+        "update_accept_appointment_by_appointment_id",
+        {
+            id: appointmentId,
+            user_id: userId,
+        }
+    );
+    if (acceptAppointmentResult.error) {
+        console.log(acceptAppointmentResult.error);
+        throw new Error("Something went wrong!!");
+    }
+}
+
+export async function RejectAppointment(
+    appointmentId: number,
+    userId: string,
+    supabaseClient: SupabaseClient<Database>
+): Promise<void> {
+    const rejectAppointmentResult = await supabaseClient.rpc(
+        "update_reject_appointment_by_appointment_id",
+        {
+            id: appointmentId,
+            user_id: userId,
+        }
+    );
+    if (rejectAppointmentResult.error) {
+        console.log(rejectAppointmentResult.error);
+        throw new Error("Something went wrong!!");
+    }
+}
+
+export async function GetAppointments(
+    supabaseClient: SupabaseClient<Database>
+): Promise<Appointment[]> {
+    const GetAppointmentsResult = await supabaseClient.rpc("get_appointments");
+
+    if (GetAppointmentsResult.error) {
+        console.log(GetAppointmentsResult.error);
+        throw new Error("Something went wrong!!");
+    }
+
+    return GetAppointmentsResult.data.map((appointment) => ({
+        appointmentId: appointment.id,
+        title: appointment.title,
+        ownerId: appointment.owner_id,
+        ownerName: appointment.username,
+        ownerProfilePic: appointment.image,
+        location: appointment.location,
+        startDateTime: appointment.start_time,
+        endDateTime: appointment.end_time,
+        participantAmount: appointment.participant_number,
+    }));
+}
+
+export async function GetAppointmentsByUserIdWhichPending(
+    userId: string,
+    supabaseClient: SupabaseClient<Database>
+): Promise<Appointment[]> {
+    const getAppointmentsResult = await supabaseClient.rpc(
+        "get_appointments_by_user_id_which_pending",
+        {
+            id: userId,
+        }
+    );
+
+    if (getAppointmentsResult.error) {
+        console.log(getAppointmentsResult.error);
+        throw new Error("Something went wrong!!");
+    }
+
+    return getAppointmentsResult.data.map((appointment) => ({
+        appointmentId: appointment.id,
+        title: appointment.title,
+        ownerId: appointment.owner_id,
+        ownerName: appointment.username,
+        ownerProfilePic: appointment.image,
+        location: appointment.location,
+        startDateTime: dayjs(appointment.start_time),
+        endDateTime: dayjs(appointment.end_time),
+        participantAmount: appointment.participant_number,
+    }));
+}
 
 export async function GetAppointmentsByUserId(
     userId: string,
