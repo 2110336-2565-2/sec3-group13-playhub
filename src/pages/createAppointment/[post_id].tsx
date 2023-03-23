@@ -20,7 +20,7 @@ import { User } from "@/types/User";
 import DisplayDateTime from "@/components/appointment/DisplayDateTime";
 
 import { GetPostWithParticipantsByPostId } from "@/services/Posts";
-import { CreateAppointment } from "@/services/Appointments";
+import { CreateAppointment } from "@/services/Appointment";
 import DisplayImages from "@/components/post/DisplayImages";
 import SelectParticipants from "@/components/appointment/SelectParticipants";
 import CommonButton from "@/components/public/CommonButton";
