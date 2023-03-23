@@ -456,12 +456,12 @@ export interface Database {
           participant_number: number;
         };
       };
-      get_appointments_by_appointment_id: {
+      get_appointment_by_appointment_id: {
         Args: {
           id: number;
         };
         Returns: {
-          id: string;
+          id: number;
           start_time: string;
           end_time: string;
           owner_id: string;
@@ -470,9 +470,9 @@ export interface Database {
           description: string;
           tags: string[];
           images: string[];
-          pending_user_names: string[];
-          accept_user_names: string[];
-          reject_user_names: string[];
+          pending_user_ids: string[];
+          accept_user_ids: string[];
+          reject_user_ids: string[];
           username: string;
           image: string;
           participant_number: number;
