@@ -46,4 +46,5 @@ export enum PAGE_PATHS {
   // admin
   ADMIN_HOME = "/admin/", // subfix : user_id
   ADMIN_PROFILE = "/admin/profile/", // subfix : user_id
+  ADVERTISEMENT = "/admin/advertise"
 }

@@ -1,5 +1,6 @@
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import CommonButton from "@/components/public/CommonButton";
+import Loading from "@/components/public/Loading";
 import { Typography } from "@mui/material";
 
 import { COLOR } from "enum/COLOR"
@@ -8,7 +9,6 @@ import { PAGE_PATHS } from "enum/PAGES"
 import { useContext } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
-import Loading from "@/components/public/Loading";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
