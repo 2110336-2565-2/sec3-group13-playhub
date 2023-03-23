@@ -8,6 +8,7 @@ import { PAGE_PATHS } from "enum/PAGES"
 import { useContext } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
+import Loading from "@/components/public/Loading";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
@@ -21,6 +22,16 @@ export default function Advertise() {
     function backToAdminHome(): void {
         router.push(`${PAGE_PATHS.ADMIN_HOME}${userStatus.user?.userId}`)
         return
+    }
+
+    if (userStatus.isLoading) return <Loading />;
+    if (!userStatus.user) {
+        router.push(PAGE_PATHS.LOGIN);
+        return;
+    }
+    if (!userStatus.user.isAdmin) {
+        router.push(PAGE_PATHS.HOME);
+        return;
     }
 
     return (
