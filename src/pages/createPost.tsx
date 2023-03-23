@@ -227,7 +227,6 @@ export default function Home() {
                 <TitleTextField
                   name="title"
                   header="Title"
-                  icon={ICONS.EDIT}
                   placeholder="This is Post Title"
                   value={input.title}
                   handleValueChange={handleTextFieldChange}
