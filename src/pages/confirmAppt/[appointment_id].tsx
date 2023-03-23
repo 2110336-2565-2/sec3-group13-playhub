@@ -6,7 +6,7 @@ import AppointmentParticipantCard from "@/components/appointment/AppointmentPart
 import { AppointmentDetail } from "@/types/Appointment";
 import {
   AcceptAppointment,
-  GetAppointmentsByAppointmentId,
+  GetAppointmentByAppointmentId,
   RejectAppointment,
 } from "@/services/Appointments";
 import { useRouter } from "next/router";
@@ -26,7 +26,7 @@ export default function Home() {
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
-    GetAppointmentsByAppointmentId(appointmentId, supabaseClient)
+    GetAppointmentByAppointmentId(appointmentId, supabaseClient)
       .then((appointment) => {
         setAppointment(appointment);
         setIsParticipant(

@@ -91,7 +91,7 @@ export async function GetAppointments(
   }));
 }
 
-export async function GetAppointmentsByAppointmentId(
+export async function GetAppointmentByAppointmentId(
   appointmentId: number,
   supabaseClient: SupabaseClient<Database>
 ): Promise<AppointmentDetail> {
@@ -111,9 +111,9 @@ export async function GetAppointmentsByAppointmentId(
     getAppointmentsResult.data[0].accept_user_names[0],
     getAppointmentsResult.data[0].accept_user_names[hostIndex],
   ] = [
-    getAppointmentsResult.data[0].accept_user_names[hostIndex],
-    getAppointmentsResult.data[0].accept_user_names[0],
-  ];
+      getAppointmentsResult.data[0].accept_user_names[hostIndex],
+      getAppointmentsResult.data[0].accept_user_names[0],
+    ];
 
   const detailHeader: AppointmentDetailHeader = {
     title: getAppointmentsResult.data[0].title,
