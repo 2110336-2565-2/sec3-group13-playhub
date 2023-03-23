@@ -14,6 +14,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { grey } from "@mui/material/colors";
 import { Tag } from "@/types/Tag";
 import { TAG_LIMIT } from "enum/INPUT_LIMIT";
+import { COLOR_CODE } from "enum/COLOR";
 
 type props = {
   header?: string;
@@ -23,6 +24,8 @@ type props = {
   menuValue: Tag[];
   isErr: boolean;
   errMsg: string;
+  disabled?: boolean;
+  readOnly?: boolean;
 };
 
 export default function Tags(props: props) {
@@ -64,11 +67,11 @@ export default function Tags(props: props) {
   return (
     <>
       <Box display="flex" alignItems="end">
-        <Typography variant="body1">
+        <Typography variant="h3">
           {props.header}
           {"\u00A0"}
         </Typography>
-        <Typography variant="body2" sx={{ color: grey[500] }}>
+        <Typography variant="h3" sx={{ color: grey[500] }}>
           {props.note}
         </Typography>
       </Box>
@@ -79,7 +82,7 @@ export default function Tags(props: props) {
             <Chip
               key={tag.id}
               label={
-                <Typography variant="body2" color="primary">
+                <Typography variant="body1" color="primary">
                   {tag.name}
                 </Typography>
               }
@@ -90,10 +93,11 @@ export default function Tags(props: props) {
                 margin: "6px 4px",
                 boxShadow: "4px 4px 1px grey",
                 maxHeight: "24px",
+                backgroundColor: props.readOnly ? COLOR_CODE.WHITE : (props.disabled ? COLOR_CODE.DISABLE : COLOR_CODE.WHITE),
               }}
               variant="outlined"
               size="small"
-              deleteIcon={<CloseIcon />}
+              deleteIcon={!props.disabled && !props.readOnly ? <CloseIcon /> : <></>}
               onDelete={handleDeleteTag(tag)}
             />
           );
@@ -114,7 +118,7 @@ export default function Tags(props: props) {
             startIcon={<AddIcon />}
             onClick={handleOpenMenu}
           >
-            <Typography variant="body2" color="primary">
+            <Typography variant="body1" color="primary">
               ADD
             </Typography>
           </Button>
