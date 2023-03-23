@@ -63,7 +63,7 @@ export default function Home() {
   const handleCloseDeletePostModal = (): void => setOpenDeletePostModal(false);
 
   function handleCreateAppointment() {
-    router.push(PAGE_PATHS.CREATE_APPOINTMENT);
+    router.push(PAGE_PATHS.CREATE_APPOINTMENT + router.query.post_id);
     return;
   }
 
@@ -229,10 +229,12 @@ export default function Home() {
             onClick={handleOpenDeletePostModal}
           />
           <CommonButton label="Edit Post" onClick={handleEditPost} />
-          <CommonButton
-            label="Create Appointment"
-            onClick={handleCreateAppointment}
-          />
+          {participants.length > 0 &&
+            <CommonButton
+              label="Create Appointment"
+              onClick={handleCreateAppointment}
+            />
+          }
         </Stack>
       </Stack>
 

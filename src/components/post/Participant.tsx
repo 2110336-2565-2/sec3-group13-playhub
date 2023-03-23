@@ -69,7 +69,7 @@ export default function Participant(props: props) {
         onMouseLeave={handleCloseParticipantCard}
       >
         <Avatar
-          sx={{ width: 50, height: 50, zIndex: "1" }}
+          sx={{ width: 50, height: 50, zIndex: "1", border: "3px #000000 solid", }}
           alt="Profile picture"
           src={props.participant.image as string}
         />

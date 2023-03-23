@@ -7,10 +7,11 @@ import React from "react";
 type props = {
   name?: string;
   header?: string;
-  icon: string;
   placeholder: string;
   value: string;
   handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  disabled?: boolean;
+  readOnly?: boolean;
   char_limit?: number;
   isErr: boolean;
   errMsg: string;
@@ -25,19 +26,11 @@ const helperText = {
 export default function NormalTextField(props: props) {
   const exceedChar: boolean = props.char_limit ? props.value.length > props.char_limit : false;
 
-  function displayStartIcon(iconName: string) {
-    if (iconName === ICONS.MAIL) {
-      return <EmailIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
-    } else if (iconName === ICONS.EDIT) {
-      return <EditIcon fontSize="large" color={props.isErr ? "error" : "secondary"} />;
-    }
-  }
-
   return (
     <>
       <Stack spacing={1}>
         <Box>
-          <Typography variant="body1">{props?.header}</Typography>
+          <Typography variant="h3">{props?.header}</Typography>
           <TextField
             name={props.name}
             sx={{ backgroundColor: "#ffffff" }}
@@ -46,6 +39,10 @@ export default function NormalTextField(props: props) {
             value={props.value}
             error={props.isErr}
             onChange={props.handleValueChange}
+            disabled={props.disabled ? props.disabled : false}
+            InputProps={{
+              readOnly: props.readOnly,
+            }}
           />
         </Box>
         <Box sx={helperText}>

@@ -6,7 +6,7 @@ import AppointmentParticipantCard from "@/components/appointment/AppointmentPart
 import { AppointmentDetail } from "@/types/Appointment";
 import {
   AcceptAppointment,
-  GetAppointmentByAppointmentId,
+  GetAppointmentsByAppointmentId,
   RejectAppointment,
 } from "@/services/Appointments";
 import { useRouter } from "next/router";
@@ -14,7 +14,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import ConfirmApptDialog from "@/components/appointment/ConfirmApptDialog";
-import { PAGE_PATHS } from "enum/PAGES";
+import { PAGE_PATHS, ROLE } from "enum/PAGES";
 import { userContext } from "supabase/user_context";
 import TitleTextField from "@/components/post/TitleTextField";
 import LocationTextField from "@/components/post/LocationTextField";
@@ -26,7 +26,7 @@ import DisplayImages from "@/components/post/DisplayImages";
 import Participant from "@/components/post/Participant";
 import { User } from "@/types/User";
 
-const ConfirmAppointmentStyle = {
+const HostAppointmentStyle = {
   TextField: {
     width: "28vw",
     minWidth: "250px",
@@ -35,7 +35,7 @@ const ConfirmAppointmentStyle = {
     width: "30vw",
     minWidth: "300px",
     height: "75vh",
-    minHeight: "785px",
+    minHeight: "1200px",
     paddingTop: "2vh",
   },
 };
@@ -50,7 +50,7 @@ export default function Home() {
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
-    GetAppointmentByAppointmentId(appointmentId, supabaseClient)
+    GetAppointmentsByAppointmentId(appointmentId, supabaseClient)
       .then((appointment) => {
         setAppointment(appointment);
         setIsParticipant(appointment.ownerId !== userStatus.user?.userId);
@@ -71,14 +71,14 @@ export default function Home() {
 
   const [choice, setChoice] = useState<"accept" | "reject" | null>(null);
 
-  function backToSelectAppointment(): void {
-    router.push(PAGE_PATHS.SELECT_APPOINTMENT);
+  function backToMyAppointments(): void {
+    router.push(PAGE_PATHS.MY_APPOINTMENTS);
     return;
   }
 
   if (!appointment || userStatus.isLoading) return <Loading />;
-  if (!isParticipant) {
-    router.push(PAGE_PATHS.SELECT_APPOINTMENT);
+  if (isParticipant) {
+    router.push(PAGE_PATHS.APPOINTMENT + ROLE.PARTICIPANT + appointmentId);
     return;
   }
   if (!userStatus.user) {
@@ -90,24 +90,18 @@ export default function Home() {
       <Navbar />
 
       <IconButton
-        onClick={backToSelectAppointment}
+        onClick={backToMyAppointments}
         style={{ position: "absolute", top: 86, left: 20, zIndex: "1" }}
       >
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginBottom: "2vh", }} alignItems="center">
-        {/* Page header */}
-        <Box sx={{ marginTop: "3vh" }}>
-          <Typography variant="h1">Confirm Appointment</Typography>
-        </Box>
-
-
+      <Stack spacing={4} sx={{ marginTop: "5vh", marginBottom: "2vh", }} alignItems="center">
         <Stack spacing={5} direction="row">
-          <Card sx={ConfirmAppointmentStyle.Card}>
+          <Card sx={HostAppointmentStyle.Card}>
             <Stack spacing={0} alignItems="center" justifyContent="center">
               {/* Post title */}
-              <Box style={ConfirmAppointmentStyle.TextField}>
+              <Box style={HostAppointmentStyle.TextField}>
                 <TitleTextField
                   name="title"
                   header="Title"
@@ -116,12 +110,12 @@ export default function Home() {
                   handleValueChange={() => { }}
                   isErr={false}
                   errMsg=""
-                  readOnly={true}
+                  disabled={true}
                 />
               </Box>
 
               {/* Location */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={HostAppointmentStyle.TextField}>
                 <LocationTextField
                   header="Location"
                   placeholder="Enter Location"
@@ -129,21 +123,20 @@ export default function Home() {
                   onChange={() => { }}
                   isErr={false}
                   errMsg=""
-                  readOnly={true}
+                  disabled={true}
                 />
               </Box>
 
               {/* Date & Time */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={HostAppointmentStyle.TextField}>
                 <DisplayDateTime
                   header="Date & Time"
                   value={`${appointment.detailHeader.startDateTime.format("DD/MM/YYYY h:mm A")} - ${appointment.detailHeader.endDateTime.format("DD/MM/YYYY h:mm A")}`}
-                  readOnly={true}
                 />
               </Box>
 
               {/* Tags */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={HostAppointmentStyle.TextField}>
                 <Tags
                   header="Tag"
                   value={appointment.detailHeader.tags.map((t, index): Tag => { return { name: t, id: index } })}
@@ -151,7 +144,7 @@ export default function Home() {
                   menuValue={[]}
                   isErr={false}
                   errMsg=""
-                  readOnly={true}
+                  disabled={true}
                 />
                 <FormHelperText>
                   {"\u00A0"}
@@ -159,7 +152,7 @@ export default function Home() {
               </Box>
 
               {/* Description */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={HostAppointmentStyle.TextField}>
                 <DescriptionTextField
                   name="description"
                   header="Description"
@@ -169,28 +162,30 @@ export default function Home() {
                   isErr={false}
                   errMsg=""
                   height={8}
-                  readOnly={true}
+                  disabled={true}
                 />
               </Box>
-            </Stack>
-          </Card>
-          <Card sx={ConfirmAppointmentStyle.Card}>
-            <Stack spacing={3} alignItems="center" justifyContent="center">
+
               {/* Image list */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={HostAppointmentStyle.TextField}>
                 <DisplayImages
                   header="Image"
                   images={appointment.images}
                 />
               </Box>
+            </Stack>
+          </Card>
+          <Card sx={HostAppointmentStyle.Card}>
+            <Stack spacing={3} alignItems="center" justifyContent="center">
+
 
               {/* Number of participants */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={HostAppointmentStyle.TextField}>
                 <Typography variant="h3">{`Number of Participant : ${appointment.acceptParticipants.length}`}</Typography>
               </Box>
 
               {/* Participant List */}
-              <Stack spacing={1} alignItems="start" justifyContent="center">
+              {/* <Stack spacing={1} alignItems="start" justifyContent="center">
                 <Typography variant="h2">Join with</Typography>
                 <Box display="flex">
                   {appointment.acceptParticipants.length == 0 && (
@@ -206,80 +201,11 @@ export default function Home() {
                     </Grid>
                   ))}
                 </Grid>
-              </Stack>
+              </Stack> */}
             </Stack>
           </Card>
         </Stack>
       </Stack>
-      {/* <Navbar />
-      <Box display="flex" paddingBottom="40px">
-        <Link href={PAGE_PATHS.SELECT_APPOINTMENT}>
-          <ArrowBackIcon
-            fontSize="large"
-            sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
-          />
-        </Link>
-      </Box>
-      <Typography paddingTop="40px" variant="h4" align="center">
-        Confirm Appointment
-      </Typography>
-      <Box display="flex" justifyContent="center" padding="40px">
-        <AppointmentParticipantCard appointmentDetail={appointment} />
-      </Box>
-      <Box display="flex" justifyContent="center" padding="40px" gap={5}>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setChoice("accept");
-            }}
-          >
-            ACCEPT
-          </Button>
-        </Grid>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              setChoice("reject");
-            }}
-          >
-            REJECT
-          </Button>
-        </Grid>
-      </Box>
-      {choice && (
-        <ConfirmApptDialog
-          openModal={true}
-          handleCloseModal={() => {
-            setChoice(null);
-          }}
-          choice={choice}
-          onConfirm={() => {
-            if (choice === "accept" && userStatus.user) {
-              AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
-                (err) => {
-                  console.log(err);
-                  return;
-                }
-              );
-              router.push(PAGE_PATHS.SELECT_APPOINTMENT);
-              return;
-            }
-            if (choice === "reject" && userStatus.user) {
-              RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
-                (err) => {
-                  console.log(err);
-                  return;
-                }
-              );
-              router.push(PAGE_PATHS.SELECT_APPOINTMENT);
-              return;
-            }
-          }}
-        />
-      )} */}
     </>
   );
 }

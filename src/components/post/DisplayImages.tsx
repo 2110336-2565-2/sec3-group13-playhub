@@ -1,13 +1,14 @@
-import { ImageList, ImageListItem, Stack } from "@mui/material";
-import Image from "next/image";
+import { ImageList, ImageListItem, Stack, Typography } from "@mui/material";
 
 type props = {
+  header?: string;
   images: string[];
 };
 
 export default function DisplayImages(props: props) {
   return (
     <>
+      <Typography variant="h3">{props?.header}</Typography>
       <ImageList
         sx={{
           width: "29vw",
@@ -23,6 +24,7 @@ export default function DisplayImages(props: props) {
         {props.images.map((image, index) => {
           return (
             <>
+
               <Stack justifySelf="start">
                 <ImageListItem
                   key={index}

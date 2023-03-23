@@ -7,72 +7,96 @@ import {
   IconButton,
   Stack,
   Typography,
+  CardActionArea,
 } from "@mui/material";
 
-import { PAGE_PATHS } from "enum/PAGES";
-import router from "next/router";
+import { PAGE_PATHS, ROLE } from "enum/PAGES";
+import { NextRouter, useRouter } from "next/router";
 
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import PersonIcon from "@mui/icons-material/Person";
+import dayjs from "dayjs";
+import { useContext } from "react";
+import { userContext } from "supabase/user_context";
 
 type props = {
   appointment: Appointment;
+  prefix: string;
 };
+
 export default function AppointmentCard(props: props) {
+  const router: NextRouter = useRouter();
+  const userStatus = useContext(userContext);
+
+  function goToCardDetail() {
+    if (props.prefix === PAGE_PATHS.APPOINTMENT) {
+      if (props.appointment.ownerId === userStatus.user?.userId) {
+        router.push(props.prefix + ROLE.HOST + props.appointment.appointmentId);
+        return;
+      } else {
+        router.push(props.prefix + ROLE.PARTICIPANT + props.appointment.appointmentId);
+        return;
+      }
+    }
+    router.push(props.prefix + props.appointment.appointmentId);
+    return;
+  }
+
+
   return (
-    <Card sx={{ width: "100%", height: "220px" }}>
-      <CardHeader
-        avatar={
-          <IconButton
-            onClick={() => {
-              router.push(PAGE_PATHS.PROFILE + props.appointment.ownerId);
-              return;
-            }}
-            sx={{ padding: "0px" }}
-          >
-            <Avatar
-              sx={{ width: "50px", height: "50px" }}
-              alt="Profile picture"
-              src={props.appointment.ownerProfilePic}
-            />
-          </IconButton>
-        }
-        title={props.appointment.title}
-        subheader={"by " + props.appointment.ownerName}
-        titleTypographyProps={{ variant: "h5" }}
-        subheaderTypographyProps={{ variant: "h6" }}
-      />
-      <CardContent sx={{ paddingLeft: "80px" }}>
-        <Stack spacing="4px">
-          <Typography display="inline-flex">
-            <LocationOnIcon fontSize="medium" />
-            <Typography
-              style={{
-                marginLeft: 8,
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
+    <Card sx={{ borderRadius: "30px" }}>
+      <CardActionArea onClick={goToCardDetail}>
+        {/* Appointment Card Header */}
+        <CardHeader
+          sx={{ height: "6vh" }}
+          avatar={
+            <IconButton
+              onClick={() => {
+                router.push(PAGE_PATHS.PROFILE + props.appointment.ownerId);
+                return;
               }}
+              sx={{ padding: 0 }}
             >
-              {props.appointment.location}
+              <Avatar
+                sx={{ width: 50, height: 50, zIndex: "1" }}
+                alt="Profile picture"
+                src={props.appointment.ownerProfilePic}
+              />
+            </IconButton>
+          }
+          title={props.appointment.title}
+          subheader={props.appointment.ownerName}
+          titleTypographyProps={{ variant: "h1", align: "left" }}
+          subheaderTypographyProps={{ variant: "body1" }}
+        />
+        <CardContent style={{ height: "18vh", paddingLeft: 82, paddingTop: 0 }}>
+          <Stack spacing={2} marginBottom={2}>
+            {/* location */}
+            <Typography variant="body1" display="inline-flex">
+              <LocationOnIcon fontSize="medium" />
+              <Typography style={{ marginLeft: 8 }}>{props.appointment.location}</Typography>
             </Typography>
-          </Typography>
-          <Typography display="inline-flex">
-            <CalendarTodayIcon fontSize="medium" />
-            <Typography style={{ marginLeft: 8 }}>
-              {props.appointment.startDateTime.format("DD/MM/YYYY HH:mm A")} -{" "}
-              {props.appointment.endDateTime.format("DD/MM/YYYY HH:mm A")}
+
+            {/* date */}
+            <Typography variant="body1" display="inline-flex">
+              <CalendarTodayIcon fontSize="medium" />
+              <span style={{ marginLeft: 8 }}>
+                {dayjs(props.appointment.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
+                {dayjs(props.appointment.endDateTime).format("DD/MM/YYYY h:mm A")}
+              </span>
             </Typography>
-          </Typography>
-          <Typography display="inline-flex">
-            <PersonIcon fontSize="medium" />
-            <Typography style={{ marginLeft: 8 }}>
-              Number of Participant : {props.appointment.participantAmount}
+
+            {/* number of participants */}
+            <Typography variant="body1" display="inline-flex">
+              <PersonIcon fontSize="medium" />
+              <Typography style={{ marginLeft: 8 }}>
+                Number of Participant : {props.appointment.participantAmount}
+              </Typography>
             </Typography>
-          </Typography>
-        </Stack>
-      </CardContent>
-    </Card>
+          </Stack>
+        </CardContent>
+      </CardActionArea>
+    </Card >
   );
 }

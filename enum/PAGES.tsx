@@ -7,8 +7,8 @@ export enum PAGE_PATHS {
   HOME = "/",
 
   MY_POSTS = "/myPosts/",
-  POST = "/post/", // subfix : postId
-  EDIT_POST = "/editPost/", // subfix : postId
+  POST = "/post/", // subfix : post_id
+  EDIT_POST = "/editPost/", // subfix : post_id
   CREATE_POST = "/createPost/",
 
   PROFILE = "/profile/", // subfix : user_id
@@ -22,9 +22,10 @@ export enum PAGE_PATHS {
   REQUEST_RESET_PASSWORD = "/requestResetPassword/",
   SUCCESS_REQUEST_RESET_PASSWORD = "/successRequestResetPassword/",
 
+  APPOINTMENT = "/appointment/", //suffix : appointment_id
   MY_APPOINTMENTS = "/myAppointments/",
   SELECT_APPOINTMENT = "/selectAppointment/",
-  CONFIRM_APPOINTMENT = "/confirmAppointment/", //suffix : appointmentId
+  CONFIRM_APPOINTMENT = "/confirmAppointment/", //suffix : appointment_id
   CREATE_APPOINTMENT = "/createAppointment/", // subfix : postId
 
   // home = "/",
@@ -46,4 +47,9 @@ export enum PAGE_PATHS {
   // admin
   ADMIN_HOME = "/admin/", // subfix : user_id
   ADMIN_PROFILE = "/admin/profile/", // subfix : user_id
+}
+
+export enum ROLE {
+  HOST = "host/",
+  PARTICIPANT = "participant/"
 }

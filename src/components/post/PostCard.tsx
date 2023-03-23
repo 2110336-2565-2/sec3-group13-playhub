@@ -64,6 +64,7 @@ export default function PostCard(props: props) {
                 <LocationOnIcon fontSize="medium" />
                 <Typography style={{ marginLeft: 8 }}>{props.post.location}</Typography>
               </Typography>
+
               {/* date */}
               <Typography variant="body1" display="inline-flex">
                 <CalendarTodayIcon fontSize="medium" />
@@ -73,6 +74,7 @@ export default function PostCard(props: props) {
                 </span>
               </Typography>
             </Stack>
+
             {/* tags */}
             <DisplayTags tags={props.post.tags} />
           </CardContent>
