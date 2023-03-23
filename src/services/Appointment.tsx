@@ -33,15 +33,15 @@ export async function GetAppointmentByAppointmentId(
     appointmentId: number,
     supabaseClient: SupabaseClient<Database>
 ): Promise<AppointmentDetail> {
-    const getAppointmentsResult = await supabaseClient.rpc("get_appointments_by_appointment_id", { id: appointmentId })
+    const getAppointmentsResult = await supabaseClient.rpc("get_appointment_by_appointment_id", { id: appointmentId })
 
     if (getAppointmentsResult.error) {
         console.log(getAppointmentsResult.error)
         throw new Error("Something went wrong!!");
     }
 
-    const hostIndex = getAppointmentsResult.data[0].accept_user_names.indexOf(getAppointmentsResult.data[0].username);
-    [getAppointmentsResult.data[0].accept_user_names[0], getAppointmentsResult.data[0].accept_user_names[hostIndex]] = [getAppointmentsResult.data[0].accept_user_names[hostIndex], getAppointmentsResult.data[0].accept_user_names[0]];
+    const hostIndex = getAppointmentsResult.data[0].accept_user_ids.indexOf(getAppointmentsResult.data[0].owner_id);
+    [getAppointmentsResult.data[0].accept_user_ids[0], getAppointmentsResult.data[0].accept_user_ids[hostIndex]] = [getAppointmentsResult.data[0].accept_user_ids[hostIndex], getAppointmentsResult.data[0].accept_user_ids[0]];
 
     const detailHeader: AppointmentDetailHeader = {
         title: getAppointmentsResult.data[0].title,
