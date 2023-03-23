@@ -10,7 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import MyPostCard from "@/components/post/MyPostCard";
+import PostCard from "@/components/post/PostCard";
 
 import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
@@ -71,7 +71,7 @@ export default function Home() {
         >
           {posts.map((item, index) => (
             <Grid item key={index} xs={5.75}>
-              <MyPostCard post={item} />
+              <PostCard post={item} />
             </Grid>
           ))}
         </Grid>
