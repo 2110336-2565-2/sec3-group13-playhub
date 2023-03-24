@@ -1,5 +1,5 @@
 import { User } from "@/types/User";
-import { Avatar, Card, Chip, MenuItem, Popover, Stack, Typography } from "@mui/material";
+import { Avatar, Card, Chip, Icon, MenuItem, Popover, Stack, Typography } from "@mui/material";
 import { GENDER } from "enum/GENDER";
 import React, { useState } from "react";
 import MaleIcon from "@mui/icons-material/Male";
@@ -7,8 +7,9 @@ import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CakeIcon from "@mui/icons-material/Cake";
-import VerifyChip from "@/components/profile/VerifyChip";
+import VerifiedIcon from '@mui/icons-material/Verified';
 import { grey } from "@mui/material/colors";
+import { COLOR_CODE } from "enum/COLOR";
 
 type props = {
   index?: number;
@@ -98,10 +99,29 @@ export default function ParticipantMenuItem(props: props) {
         }}
       >
         <Stack spacing={2} alignItems="center" justifyContent="center">
-          {/* name */}
-          <Typography variant="h2" align="center" sx={ParticipantStyle.TextField}>
-            {props.participant.username}
-          </Typography>
+          <Stack spacing={1} direction="row" alignItems="center" justifyContent="center">
+            {props.participant.isVerified &&
+              <Icon style={{ height: "35px", width: "35px", borderRadius: "100px" }}>
+              </Icon>
+            }
+
+            {/* name */}
+            <Typography variant="h2" align="center" sx={{
+              width: "10vw",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+            }}>
+              {props.participant.username}
+            </Typography>
+
+            {/* verify chip */}
+            {props.participant.isVerified &&
+              <Icon sx={{ bgcolor: COLOR_CODE.PRIMARY, }} style={{ height: "35px", width: "35px", borderRadius: "100px" }}>
+                <VerifiedIcon color="secondary" fontSize="small" />
+              </Icon>
+            }
+          </Stack>
 
           <Stack spacing={1.5} alignItems="center" justifyContent="center">
             {/* image */}
@@ -110,9 +130,6 @@ export default function ParticipantMenuItem(props: props) {
               alt="Profile picture"
               src={props.participant.image as string}
             />
-
-            {/* verify chip */}
-            {props.participant.isVerified && <VerifyChip />}
 
             {/* gender chip */}
             <Chip
@@ -133,9 +150,10 @@ export default function ParticipantMenuItem(props: props) {
               <Typography
                 variant="body1"
                 sx={{
-                  maxWidth: "30vw",
-                  wordBreak: "break-word",
-                  textAlign: "center",
+                  ...ParticipantStyle.TextField,
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
                 }}
                 key={index}
               >
