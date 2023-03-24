@@ -470,12 +470,36 @@ export interface Database {
           description: string;
           tags: string[];
           images: string[];
-          pending_user_ids: string[];
-          accept_user_ids: string[];
-          reject_user_ids: string[];
           username: string;
           image: string;
           participant_number: number;
+          pending_user: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+            image: string | null;
+          }[];
+          accept_user: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+            image: string | null;
+          }[];
+          reject_user: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+            image: string | null;
+          }[];
         };
       };
       update_user_national_id_by_user_id: {

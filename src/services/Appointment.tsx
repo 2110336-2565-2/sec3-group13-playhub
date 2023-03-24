@@ -157,8 +157,9 @@ export async function GetAppointmentByAppointmentId(
         throw new Error("Something went wrong!!");
     }
 
-    const hostIndex = getAppointmentsResult.data[0].accept_user_ids.indexOf(getAppointmentsResult.data[0].owner_id);
-    [getAppointmentsResult.data[0].accept_user_ids[0], getAppointmentsResult.data[0].accept_user_ids[hostIndex]] = [getAppointmentsResult.data[0].accept_user_ids[hostIndex], getAppointmentsResult.data[0].accept_user_ids[0]];
+    const accept_user_ids = getAppointmentsResult.data[0].accept_user.map((user) => user.id);
+    const hostIndex = accept_user_ids.indexOf(getAppointmentsResult.data[0].owner_id);
+    [getAppointmentsResult.data[0].accept_user[0], getAppointmentsResult.data[0].accept_user[hostIndex]] = [getAppointmentsResult.data[0].accept_user[hostIndex], getAppointmentsResult.data[0].accept_user[0]];
 
     const detailHeader: AppointmentDetailHeader = {
         title: getAppointmentsResult.data[0].title,
@@ -168,14 +169,52 @@ export async function GetAppointmentByAppointmentId(
         tags: getAppointmentsResult.data[0].tags,
         description: getAppointmentsResult.data[0].description,
     }
+
+    const acceptParticipants = getAppointmentsResult.data[0].accept_user.map((user) => ({
+        userId: user.id,
+        username: user.username,
+        sex: user.sex,
+        birthdate: user.birthdate,
+        description: user.description,
+        image: user.image,
+        email: "",
+        isAdmin: false,
+        isVerified: user.is_verified,
+    }));
+
+    console.log(acceptParticipants)
+    const pendingParticipants = getAppointmentsResult.data[0].pending_user.map((user) => ({
+        userId: user.id,
+        username: user.username,
+        sex: user.sex,
+        birthdate: user.birthdate,
+        description: user.description,
+        image: user.image,
+        email: "",
+        isAdmin: false,
+        isVerified: user.is_verified,
+    }));
+
+    const rejectParticipants = getAppointmentsResult.data[0].reject_user.map((user) => ({
+        userId: user.id,
+        username: user.username,
+        sex: user.sex,
+        birthdate: user.birthdate,
+        description: user.description,
+        image: user.image,
+        email: "",
+        isAdmin: false,
+        isVerified: user.is_verified,
+    }));
+
     return {
         detailHeader,
         ownerId: getAppointmentsResult.data[0].owner_id,
         images: getAppointmentsResult.data[0].images,
         participantAmount: getAppointmentsResult.data[0].participant_number,
-        pendingParticipants: getAppointmentsResult.data[0].pending_user_ids,
-        acceptParticipants: getAppointmentsResult.data[0].accept_user_ids,
-        rejectParticipants: getAppointmentsResult.data[0].reject_user_ids
+        pendingParticipants: pendingParticipants,
+        acceptParticipants: acceptParticipants,
+        rejectParticipants: rejectParticipants
     }
 
 }

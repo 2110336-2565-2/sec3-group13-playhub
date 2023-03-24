@@ -1,19 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "@/components/public/Navbar";
-import { Typography, Box, Link, Button, Grid, IconButton, Stack, Card, FormHelperText } from "@mui/material";
+import { Typography, Box, Grid, IconButton, Stack, Card, FormHelperText } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import AppointmentParticipantCard from "@/components/appointment/AppointmentParticipantCard";
 import { AppointmentDetail } from "@/types/Appointment";
-import {
-  AcceptAppointment,
-  GetAppointmentByAppointmentId,
-  RejectAppointment,
-} from "@/services/Appointments";
+import { GetAppointmentByAppointmentId } from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
-import ConfirmApptDialog from "@/components/appointment/ConfirmApptDialog";
 import { PAGE_PATHS } from "enum/PAGES";
 import { userContext } from "supabase/user_context";
 import TitleTextField from "@/components/post/TitleTextField";
@@ -49,7 +43,9 @@ export default function Home() {
   const [participant, setParticipants] = useState<User[] | null>(null);
 
   const appointmentId = parseInt(router.query.appointment_id as string);
+
   useEffect(() => {
+    if (!appointmentId) return;
     GetAppointmentByAppointmentId(appointmentId, supabaseClient)
       .then((appointment) => {
         setAppointment(appointment);

@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import { User } from "./User";
 
 export type Appointment = {
   appointmentId: string;
@@ -17,9 +18,9 @@ export type AppointmentDetail = {
   ownerId: string;
   images: string[];
   participantAmount: number;
-  pendingParticipants: string[];
-  acceptParticipants: string[];
-  rejectParticipants: string[];
+  pendingParticipants: User[];
+  acceptParticipants: User[];
+  rejectParticipants: User[];
 };
 
 export type AppointmentDetailHeader = {
