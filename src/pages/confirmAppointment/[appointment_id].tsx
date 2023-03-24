@@ -3,7 +3,7 @@ import Navbar from "@/components/public/Navbar";
 import { Typography, Box, Grid, IconButton, Stack, Card, FormHelperText } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AppointmentDetail } from "@/types/Appointment";
-import { GetAppointmentByAppointmentId } from "@/services/Appointment";
+import { AcceptAppointment, GetAppointmentByAppointmentId, RejectAppointment } from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
@@ -19,6 +19,9 @@ import DescriptionTextField from "@/components/public/DescriptionTextField";
 import DisplayImages from "@/components/post/DisplayImages";
 import Participant from "@/components/post/Participant";
 import { User } from "@/types/User";
+import CommonButton from "@/components/public/CommonButton";
+import { COLOR, COLOR_CODE } from "enum/COLOR";
+import CommonDialog from "@/components/public/CommonDialog";
 
 const ConfirmAppointmentStyle = {
   TextField: {
@@ -40,9 +43,43 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();
   const [isParticipant, setIsParticipant] = useState<boolean | null>(null);
-  const [participant, setParticipants] = useState<User[] | null>(null);
 
   const appointmentId = parseInt(router.query.appointment_id as string);
+
+  const [openAcceptAppointmentModal, setOpenAcceptAppointmentModal] = useState<boolean>(false);
+  const [openRejectAppointmentModal, setOpenRejectAppointmentModal] = useState<boolean>(false);
+
+  const handleOpenAcceptAppointmentModal = (): void => setOpenAcceptAppointmentModal(true);
+  const handleCloseAcceptAppointmentModal = (): void => setOpenAcceptAppointmentModal(false);
+  const handleOpenRejectAppointmentModal = (): void => setOpenRejectAppointmentModal(true);
+  const handleCloseRejectAppointmentModal = (): void => setOpenRejectAppointmentModal(false);
+
+  function handleAcceptAppointment(): void {
+    if (userStatus.user) {
+      AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
+        (err) => {
+          console.log(err);
+          return;
+        }
+      );
+      router.push(PAGE_PATHS.SELECT_APPOINTMENT);
+    }
+    return;
+  }
+
+  function handleRejectAppointment(): void {
+    if (userStatus.user) {
+      RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
+        (err) => {
+          console.log(err);
+          return;
+        }
+      );
+      router.push(PAGE_PATHS.SELECT_APPOINTMENT);
+    }
+    return;
+  }
+
 
   useEffect(() => {
     if (!appointmentId) return;
@@ -55,17 +92,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-
-    if (appointment) {
-      // setParticipants(appointment.acceptParticipants.map((participant, index) => (
-      //   GetUserByUserId(participant, )
-      // )))
-      console.log(appointment.acceptParticipants)
-    }
-
   }, [supabaseClient, appointmentId, userStatus.user]);
-
-  const [choice, setChoice] = useState<"accept" | "reject" | null>(null);
 
   function backToSelectAppointment(): void {
     router.push(PAGE_PATHS.SELECT_APPOINTMENT);
@@ -186,7 +213,7 @@ export default function Home() {
               </Box>
 
               {/* Participant List */}
-              <Stack spacing={1} alignItems="start" justifyContent="center">
+              <Stack spacing={0.5} alignItems="start" justifyContent="center" sx={ConfirmAppointmentStyle.TextField}>
                 <Typography variant="h2">Join with</Typography>
                 <Box display="flex">
                   {appointment.acceptParticipants.length == 0 && (
@@ -196,86 +223,55 @@ export default function Home() {
                   )}
                 </Box>
                 <Grid container spacing={1} style={{ marginLeft: -5 }}>
-                  {appointment.acceptParticipants.map((participant, index) => (
-                    <Grid item key={index}>
-                      <Participant participant={participant} />
-                    </Grid>
-                  ))}
+                  <Grid item key={-1}>
+                    <Participant participant={userStatus.user} color={COLOR_CODE.PRIMARY} />
+                  </Grid>
+                  {appointment.acceptParticipants.filter((p) => p.userId !== userStatus.user?.userId)
+                    .map((participant, index) => (
+                      <Grid item key={index}>
+                        <Participant participant={participant} />
+                      </Grid>
+                    ))}
                 </Grid>
               </Stack>
             </Stack>
           </Card>
         </Stack>
-      </Stack>
-      {/* <Navbar />
-      <Box display="flex" paddingBottom="40px">
-        <Link href={PAGE_PATHS.SELECT_APPOINTMENT}>
-          <ArrowBackIcon
-            fontSize="large"
-            sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
+
+        <Stack direction="row" spacing={4}>
+          <CommonButton
+            label="Accept"
+            onClick={handleOpenAcceptAppointmentModal}
           />
-        </Link>
-      </Box>
-      <Typography paddingTop="40px" variant="h4" align="center">
-        Confirm Appointment
-      </Typography>
-      <Box display="flex" justifyContent="center" padding="40px">
-        <AppointmentParticipantCard appointmentDetail={appointment} />
-      </Box>
-      <Box display="flex" justifyContent="center" padding="40px" gap={5}>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            onClick={() => {
-              setChoice("accept");
-            }}
-          >
-            ACCEPT
-          </Button>
-        </Grid>
-        <Grid item xs={6}>
-          <Button
-            variant="contained"
-            color="secondary"
-            onClick={() => {
-              setChoice("reject");
-            }}
-          >
-            REJECT
-          </Button>
-        </Grid>
-      </Box>
-      {choice && (
-        <ConfirmApptDialog
-          openModal={true}
-          handleCloseModal={() => {
-            setChoice(null);
-          }}
-          choice={choice}
-          onConfirm={() => {
-            if (choice === "accept" && userStatus.user) {
-              AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
-                (err) => {
-                  console.log(err);
-                  return;
-                }
-              );
-              router.push(PAGE_PATHS.SELECT_APPOINTMENT);
-              return;
-            }
-            if (choice === "reject" && userStatus.user) {
-              RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
-                (err) => {
-                  console.log(err);
-                  return;
-                }
-              );
-              router.push(PAGE_PATHS.SELECT_APPOINTMENT);
-              return;
-            }
-          }}
-        />
-      )} */}
+          <CommonButton
+            label="Reject"
+            color={COLOR.NATURAL}
+            onClick={handleOpenRejectAppointmentModal}
+          />
+        </Stack>
+      </Stack>
+
+
+      <CommonDialog
+        openModal={openAcceptAppointmentModal}
+        handleCloseModal={handleCloseAcceptAppointmentModal}
+        header={["Are you sure to", "accept", "this appointment ?"]}
+        hightlightColorCode={COLOR_CODE.ACCEPT}
+        content="*You can’t undo this change"
+        buttonLabel="Accept"
+        buttonColor={COLOR.PRIMARY}
+        buttonAction={handleAcceptAppointment}
+      />
+
+      <CommonDialog
+        openModal={openRejectAppointmentModal}
+        handleCloseModal={handleCloseRejectAppointmentModal}
+        header={["Are you sure to", "reject", "this appointment ?"]}
+        content="*You can’t undo this change"
+        buttonLabel="Reject"
+        buttonColor={COLOR.ERROR}
+        buttonAction={handleRejectAppointment}
+      />
     </>
   );
 }
