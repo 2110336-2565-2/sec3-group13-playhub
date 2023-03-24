@@ -200,7 +200,7 @@ export default function Home() {
                 {post.description.split("\n").length > 5 && <DisplayImages images={post.images} />}
 
                 {/* participants */}
-                <Stack spacing={1} alignItems="start" justifyContent="center">
+                <Stack spacing={0.5} alignItems="start" justifyContent="center">
                   <Typography variant="h2">Join with</Typography>
                   <Box display="flex">
                     {post.participants?.length == 0 && (
