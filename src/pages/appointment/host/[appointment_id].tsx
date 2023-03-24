@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "@/components/public/Navbar";
-import { Typography, Box, IconButton, Stack, Card, FormHelperText } from "@mui/material";
+import { Typography, Box, IconButton, Stack, Card, FormHelperText, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AppointmentDetail } from "@/types/Appointment";
 import { GetAppointmentByAppointmentId } from "@/services/Appointment";
@@ -18,6 +18,8 @@ import { Tag } from "@/types/Tag";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import DisplayImages from "@/components/post/DisplayImages";
 import { User } from "@/types/User";
+import Participant from "@/components/post/Participant";
+import { COLOR_CODE } from "enum/COLOR";
 
 const HostAppointmentStyle = {
   TextField: {
@@ -39,7 +41,6 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();
   const [isParticipant, setIsParticipant] = useState<boolean | null>(null);
-  const [participant, setParticipants] = useState<User[] | null>(null);
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
@@ -52,17 +53,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-
-    if (appointment) {
-      // setParticipants(appointment.acceptParticipants.map((participant, index) => (
-      //   GetUserByUserId(participant, )
-      // )))
-      console.log(appointment.acceptParticipants)
-    }
-
   }, [supabaseClient, appointmentId, userStatus.user]);
-
-  const [choice, setChoice] = useState<"accept" | "reject" | null>(null);
 
   function backToMyAppointments(): void {
     router.push(PAGE_PATHS.MY_APPOINTMENTS);
@@ -177,28 +168,66 @@ export default function Home() {
                 <Typography variant="h3">{`Number of Participant : ${appointment.acceptParticipants.length}`}</Typography>
               </Box>
 
-              {/* Participant List */}
-              {/* <Stack spacing={1} alignItems="start" justifyContent="center">
-                <Typography variant="h2">Join with</Typography>
+              {/* Pending Participant List */}
+              <Stack spacing={0.5} alignItems="start" justifyContent="center" sx={HostAppointmentStyle.TextField}>
+                <Typography variant="h2">Pending Participant List :</Typography>
+                <Box display="flex">
+                  {appointment.pendingParticipants.length == 0 && (
+                    <Typography variant="body1" color="error">
+                      No one is pended in this activity yet.
+                    </Typography>
+                  )}
+                </Box>
+                <Grid container spacing={1} style={{ marginLeft: -5 }}>
+                  {appointment.pendingParticipants.map((participant, index) => (
+                    <Grid item key={index}>
+                      <Participant participant={participant} color={COLOR_CODE.PRIMARY} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Stack>
+
+              {/* Accept Participant List */}
+              <Stack spacing={0.5} alignItems="start" justifyContent="center" sx={HostAppointmentStyle.TextField}>
+                <Typography variant="h2">Accept Participant List :</Typography>
                 <Box display="flex">
                   {appointment.acceptParticipants.length == 0 && (
                     <Typography variant="body1" color="error">
-                      No one is interested in this activity yet.
+                      No one is accepted in this activity yet.
                     </Typography>
                   )}
                 </Box>
                 <Grid container spacing={1} style={{ marginLeft: -5 }}>
                   {appointment.acceptParticipants.map((participant, index) => (
                     <Grid item key={index}>
-                      <Participant participant={participant} />
+                      <Participant participant={participant} color={COLOR_CODE.ACCEPT} />
                     </Grid>
                   ))}
                 </Grid>
-              </Stack> */}
+              </Stack>
+
+              {/* Reject Participant List */}
+              <Stack spacing={0.5} alignItems="start" justifyContent="center" sx={HostAppointmentStyle.TextField}>
+                <Typography variant="h2">Reject Participant List :</Typography>
+                <Box display="flex">
+                  {appointment.rejectParticipants.length == 0 && (
+                    <Typography variant="body1" color="error">
+                      No one is rejected in this activity yet.
+                    </Typography>
+                  )}
+                </Box>
+                <Grid container spacing={1} style={{ marginLeft: -5 }}>
+                  {appointment.rejectParticipants.map((participant, index) => (
+                    <Grid item key={index}>
+                      <Participant participant={participant} color={COLOR_CODE.ERROR} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Stack>
             </Stack>
           </Card>
         </Stack>
-      </Stack>
+      </Stack >
     </>
   );
 }
