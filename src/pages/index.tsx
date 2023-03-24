@@ -52,14 +52,9 @@ export default function Home() {
       <Navbar />
       <Suspense fallback={<Loading />}>
         <Stack
-          spacing="40px"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            flexDirection: "column",
-            padding: "30px",
-          }}
+          spacing={5}
+          style={{ paddingTop: "4vh", paddingBottom: "4vh" }}
+          alignItems="center"
         >
           {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
