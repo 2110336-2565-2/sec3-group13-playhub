@@ -6,6 +6,7 @@ type props = {
   openModal: boolean;
   handleCloseModal: () => void;
   header: string[];
+  hightlightColorCode?: string;
   content: string;
   buttonLabel: string;
   buttonColor: string;
@@ -25,7 +26,7 @@ export default function CommonDialog(props: props) {
           <Stack direction="row">
             <Box display="flex" sx={{ flexGrow: 1, alignItems: "center" }}>
               <Typography variant="body1">{props.header[0]}{"\u00A0"}</Typography>
-              <Typography variant="body1" color="error">
+              <Typography variant="body1" color={props.hightlightColorCode || "error"}>
                 {props.header[1]}
               </Typography>
               <Typography variant="body1">{"\u00A0"}{props.header[2]}</Typography>
