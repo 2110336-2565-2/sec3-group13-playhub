@@ -12,6 +12,7 @@ import { PAGE_PATHS } from "enum/PAGES"
 import { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
+import { validation } from "@/types/Validation";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
@@ -19,16 +20,34 @@ export default function Advertise() {
     const [owner, setOwner] = useState<string>("");
     const [fileImage, setFileImage] = useState<File | null>(null);
 
+    const [errorOwnerTextField, setErrorOwnerTextField] = useState<validation>({
+        msg: "",
+        err: false
+    })
+
     function onSubmit(): void {
+        if (owner.length === 0) {
+            setErrorOwnerTextField({
+                msg: "This field cannot be blank.",
+                err: true
+            })
+            return;
+        }
+
         //BACKEND should be implemented here!
         // Use tempAdvertiseOwner,tempDuration, fileImage send to backend
         const tempAdvertiseOwner: string = "Chula new course"
         const tempDuration: number = 123
         console.table([tempAdvertiseOwner, tempDuration])
+        // Upload via UI
         console.log(fileImage)
     }
 
     const handleOwnerTextFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+        setErrorOwnerTextField({
+            msg: "",
+            err: false
+        })
         setOwner(event.target.value)
     }
     const handleImageChange = (event: any): void => {
@@ -63,8 +82,8 @@ export default function Advertise() {
                     placeholder={"Advertisement’s Owner"}
                     value={owner}
                     handleValueChange={handleOwnerTextFieldChange}
-                    isErr={false}
-                    errMsg={""}
+                    isErr={errorOwnerTextField.err}
+                    errMsg={errorOwnerTextField.msg}
                 />
                 <Typography variant="body1">Duration</Typography>
                 <Typography variant="body1">File</Typography>
