@@ -50,6 +50,11 @@ export default function Navbar() {
     return;
   }
 
+  const routeToSelectRate = (): void => {
+    router.push(PAGE_PATHS.SELECT_RATE)
+    return;
+  }
+
   async function handleSignOut() {
     SignOut(supabaseClient)
       .then(() => {
@@ -82,6 +87,11 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 0.02 }}>
             <IconButton color="inherit" disableRipple onClick={routeToSelectAppointment}>
               <Typography variant="body1">{NAVBAR_PAGES.APPOINTMENT}</Typography>
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: 0.02 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToSelectRate}>
+              <Typography variant="body1">{NAVBAR_PAGES.RATE}</Typography>
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
