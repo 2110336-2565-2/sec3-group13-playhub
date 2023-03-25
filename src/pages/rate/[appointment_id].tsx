@@ -77,10 +77,10 @@ export default function Home() {
   }
 
   if (!appointment || userStatus.isLoading) return <Loading />;
-  // if (!isParticipant) {
-  //   router.push(PAGE_PATHS.SELECT_RATE);
-  //   return;
-  // }
+  if (!isParticipant) {
+    router.push(PAGE_PATHS.SELECT_RATE);
+    return;
+  }
   if (!userStatus.user) {
     router.push(PAGE_PATHS.LOGIN);
     return;
