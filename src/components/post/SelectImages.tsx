@@ -78,7 +78,7 @@ export default function PictureList(props: props) {
   return (
     <>
       <Box display="flex" alignItems="end">
-        <Typography variant="body1">
+        <Typography variant="h3">
           {props.header}
           {"\u00A0"}
         </Typography>

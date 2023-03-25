@@ -17,6 +17,7 @@ export default function DisplayImages(props: props) {
           minHeight: `calc(270px/2* (${props.images.length}+2)/3))`,
           alignContent: "start",
         }}
+        style={{ marginTop: 0 }}
         variant="woven"
         cols={3}
         gap={5}

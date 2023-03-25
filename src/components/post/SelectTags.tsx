@@ -71,7 +71,7 @@ export default function Tags(props: props) {
           {props.header}
           {"\u00A0"}
         </Typography>
-        <Typography variant="h3" sx={{ color: grey[500] }}>
+        <Typography variant="body2" sx={{ color: grey[500] }}>
           {props.note}
         </Typography>
       </Box>

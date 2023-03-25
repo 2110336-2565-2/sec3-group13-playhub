@@ -284,7 +284,7 @@ export default function Home() {
 
               {/* Start date */}
               <Box sx={EditPostStyle.TextField}>
-                <Typography variant="body1">Date time</Typography>
+                <Typography variant="h3">Date & Time</Typography>
                 <CommonDateTimePicker
                   header="Start"
                   placeHolder="e.g. 28/ 02 / 2023 11.00 AM or click on the icon"
