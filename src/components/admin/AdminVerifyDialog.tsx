@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogTitle,
   FormHelperText,
+  IconButton,
   Stack,
   TextField,
   Typography,
@@ -20,6 +21,7 @@ import { validateNationalIDCardNumber } from "@/utilities/validation";
 import { NextRouter, useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
+import CommonButton from "../public/CommonButton";
 
 type props = {
   openModal: boolean;
@@ -87,8 +89,10 @@ export default function AdminVerifyDialog(props: props) {
       >
         <DialogTitle>
           <Stack direction="row" alignItems="center" justifyContent="space-between">
-            <Typography variant="h1">Verify this user</Typography>
-            <CloseIcon onClick={props.handleCloseModal} style={{ cursor: "pointer" }} />
+            <Typography variant="h2">Verify this user</Typography>
+            <IconButton onClick={props.handleCloseModal} sx={{ padding: 0 }}>
+              <CloseIcon fontSize="large" color="secondary" />
+            </IconButton>
           </Stack>
         </DialogTitle>
         <DialogContent dividers>
@@ -122,9 +126,7 @@ export default function AdminVerifyDialog(props: props) {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button variant="contained" color="primary" onClick={verifyUser}>
-            Confirm
-          </Button>
+          <CommonButton label="Confirm" onClick={verifyUser} />
         </DialogActions>
       </Dialog>
     </>

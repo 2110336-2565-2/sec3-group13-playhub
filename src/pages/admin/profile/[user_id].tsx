@@ -5,7 +5,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Avatar, Chip, Typography, Stack, Button } from "@mui/material";
+import { Avatar, Chip, Typography, Stack, Button, Box } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -20,6 +20,7 @@ import { GENDER } from "enum/GENDER";
 import { GetUserByUserId } from "@/services/User";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
 import VerifyChip from "@/components/profile/VerifyChip";
+import CommonButton from "@/components/public/CommonButton";
 
 // style
 const profile_layout = {
@@ -118,9 +119,9 @@ export default function AdminProfile() {
           ))}
           {!targetUserData.isVerified && (
             <>
-              <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
-                Verify
-              </Button>
+              <Box style={{ paddingTop: "5vh" }}>
+                <CommonButton label="Verify" onClick={openVerifyModal} />
+              </Box>
               <AdminVerifyDialog
                 openModal={isVerifyModalShow}
                 handleCloseModal={closeVerifyModal}
