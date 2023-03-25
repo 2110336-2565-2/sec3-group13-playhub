@@ -3,7 +3,7 @@ import CommonButton from "@/components/public/CommonButton";
 import Loading from "@/components/public/Loading";
 import CommonTextField from "@/components/public/CommonTextField";
 
-import { Box, FormHelperText, IconButton, Stack, Typography } from "@mui/material";
+import { Box, FormHelperText, IconButton, Stack, Typography, useTheme } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { COLOR } from "enum/COLOR"
@@ -14,11 +14,11 @@ import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { validation } from "@/types/Validation";
 import { validateImage, validateTextField } from "@/utilities/validation";
-import Image from "next/image";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
     const userStatus = useContext(userContext);
+    const appTheme = useTheme()
 
     const [owner, setOwner] = useState<string>("");
     const [errorOwnerTextField, setErrorOwnerTextField] = useState<validation>({
@@ -128,7 +128,7 @@ export default function Advertise() {
                         sx={{
                             boxShadow: "8px 8px 1px grey",
                             borderRadius: "15px",
-                            border: "3px #000000 solid",
+                            border: `3px ${errFileImage.err ? appTheme.palette.error.main : appTheme.palette.secondary.main}  solid`,
                             height: "250px",
                             textAlign: "center",
                         }}
