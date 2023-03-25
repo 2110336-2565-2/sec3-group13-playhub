@@ -20,6 +20,8 @@ import DisplayImages from "@/components/post/DisplayImages";
 import { User } from "@/types/User";
 import Participant from "@/components/post/Participant";
 import { COLOR_CODE } from "enum/COLOR";
+import CommonButton from "@/components/public/CommonButton";
+import dayjs from "dayjs";
 
 const HostAppointmentStyle = {
   TextField: {
@@ -56,6 +58,12 @@ export default function Home() {
   }, [supabaseClient, appointmentId, userStatus.user]);
 
   function backToMyAppointments(): void {
+    router.push(PAGE_PATHS.MY_APPOINTMENTS);
+    return;
+  }
+
+  function handleEndAppointment(): void {
+    // fill end appointment service here
     router.push(PAGE_PATHS.MY_APPOINTMENTS);
     return;
   }
@@ -227,6 +235,16 @@ export default function Home() {
             </Stack>
           </Card>
         </Stack>
+        <CommonButton
+          label="End"
+          onClick={handleEndAppointment}
+          disabled={appointment.detailHeader.endDateTime >= dayjs()}
+        />
+        {appointment.detailHeader.endDateTime >= dayjs() &&
+          <Typography variant="body2" color="error" style={{ marginTop: "1vh" }}>
+            *Can’t enter this button before end date time
+          </Typography>
+        }
       </Stack >
     </>
   );
