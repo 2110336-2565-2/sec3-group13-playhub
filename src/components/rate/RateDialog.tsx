@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, IconButton, Radio, Rating, Stack, Typography } from "@mui/material";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, FormHelperText, IconButton, Radio, Rating, Stack, Typography } from "@mui/material";
 import NormalButton from "../public/CommonButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { SyntheticEvent, useEffect, useState } from "react";
@@ -10,16 +10,35 @@ import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import Checkbox from "@mui/material/Checkbox";
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import { validation } from "@/types/Validation";
+import { validateTextField } from "@/utilities/validation";
 
 type props = {
   openModal: boolean;
   handleCloseModal: () => void;
 };
 
+type State = {
+  ratingScore: boolean;
+  ratingDescription: boolean;
+}
+
 export default function RateDialog(props: props) {
   const [ratingScore, setRatingScore] = useState<number>(0);
   const [ratingDescription, setRatingDescription] = useState<string>("");
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
+  const [state, setState] = useState<State>({
+    ratingScore: false,
+    ratingDescription: false
+  })
+
+  const isRatingScoreErr: boolean = ratingScore === 0;
+  const ratingScoreErrMsg: string = "*Rate score can’t be blank"
+  const ratingDescriptionError: validation = validateTextField(
+    ratingDescription,
+    CHAR_LIMIT.MIN_DESCRIPTION,
+    CHAR_LIMIT.MAX_DESCRIPTION
+  );
 
   function generateRateLabel(): string {
     switch (ratingScore) {
@@ -46,11 +65,19 @@ export default function RateDialog(props: props) {
 
   function handleRatingScoreChange(event: SyntheticEvent<Element, Event>, newScore: number | null): void {
     if (newScore) {
+      setState({
+        ...state,
+        ratingScore: false
+      })
       setRatingScore(newScore);
     }
   }
 
   function handleRatingDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+    setState({
+      ...state,
+      ratingDescription: false
+    })
     setRatingDescription(event.target.value);
   }
 
@@ -59,8 +86,15 @@ export default function RateDialog(props: props) {
   }
 
   function handleSubmitRating(): void {
-    // add submit rating service here
-    props.handleCloseModal();
+    setState({
+      ratingScore: true,
+      ratingDescription: true
+    })
+
+    if (!isRatingScoreErr && !ratingDescriptionError.err) {
+      // add submit rating service here
+      props.handleCloseModal();
+    }
   }
 
   useEffect(() => {
@@ -92,18 +126,24 @@ export default function RateDialog(props: props) {
           <Stack spacing={0} alignItems="center">
             <Stack spacing={3} style={{ width: "25vw" }}>
               {/* Rating */}
-              <Stack direction="row" spacing={0}>
-                <Rating
-                  value={ratingScore}
-                  onChange={handleRatingScoreChange}
-                  defaultValue={0}
-                  size="large"
-                  icon={<StarIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarIcon>}
-                  emptyIcon={<StarOutlineIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarOutlineIcon>}
-                />
-                <Stack style={{ alignItems: "center", justifyContent: "center", width: "15vw" }}>
-                  <Typography variant="body1">{generateRateLabel()}</Typography>
+              <Stack spacing={0}>
+                <Stack direction="row" spacing={0}>
+                  <Rating
+                    value={ratingScore}
+                    onChange={handleRatingScoreChange}
+                    defaultValue={0}
+                    size="large"
+                    icon={<StarIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarIcon>}
+                    emptyIcon={<StarOutlineIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarOutlineIcon>}
+                  />
+                  <Stack style={{ alignItems: "center", justifyContent: "center", width: "15vw" }}>
+                    <Typography variant="body1">{generateRateLabel()}</Typography>
+                  </Stack>
                 </Stack>
+                <FormHelperText error>
+                  {(state.ratingScore && isRatingScoreErr) && ratingScoreErrMsg}
+                  {"\u00A0"}
+                </FormHelperText>
               </Stack>
 
               {/* Description */}
@@ -113,8 +153,8 @@ export default function RateDialog(props: props) {
                   value={ratingDescription}
                   handleValueChange={handleRatingDescriptionChange}
                   char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
-                  isErr={false}
-                  errMsg=""
+                  isErr={state.ratingDescription && ratingDescriptionError.err}
+                  errMsg={ratingDescriptionError.msg}
                   height={7}
                 />
               </Box>
