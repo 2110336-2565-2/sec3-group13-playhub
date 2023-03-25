@@ -28,6 +28,9 @@ export enum PAGE_PATHS {
   CONFIRM_APPOINTMENT = "/confirmAppointment/", //suffix : appointment_id
   CREATE_APPOINTMENT = "/createAppointment/", // subfix : postId
 
+  SELECT_RATE = "/selectRate/",
+  RATE = "/rate/", //suffix : appointment_id
+
   // home = "/",
   // myPosts = "/myPosts",
   // editPost = "/editPost/", // subfix : postId

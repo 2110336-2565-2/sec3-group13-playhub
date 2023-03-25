@@ -6,7 +6,8 @@ export enum NAVBAR_PAGES {
   LOGOUT = "Logout",
   VERIFY = "Verify",
   POST = "Post",
-  APPOINTMENT = "Appointment"
+  APPOINTMENT = "Appointment",
+  RATE = "Rate",
 }
 
 // export enum NavbarPages {
