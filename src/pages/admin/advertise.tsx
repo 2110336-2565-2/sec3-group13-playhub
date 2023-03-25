@@ -14,6 +14,7 @@ import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { validation } from "@/types/Validation";
 import { validateImage, validateTextField } from "@/utilities/validation";
+import Image from "next/image";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
@@ -26,6 +27,7 @@ export default function Advertise() {
     })
 
     const [fileImage, setFileImage] = useState<File | null>(null);
+    const [displayImage, setDisplayImage] = useState<string>();
     const [errFileImage, setErrorFileImage] = useState<validation>({
         msg: "",
         err: false
@@ -81,6 +83,7 @@ export default function Advertise() {
     }
     function handleImageChange(event: any): void {
         const tempFile = event.target.files[0];
+        setDisplayImage(URL.createObjectURL(tempFile))
         setFileImage(tempFile)
         setErrorFileImage({
             msg: "",
@@ -130,10 +133,14 @@ export default function Advertise() {
                             textAlign: "center",
                         }}
                     >
-                        <IconButton aria-label="upload picture" component="label">
-                            <input onChange={handleImageChange} hidden accept="image/*" type="file" />
-                            <CameraAltIcon color={errFileImage.err ? "error" : undefined} sx={{ fontSize: "50px", opacity: errFileImage.err ? 0.5 : 1 }} />
-                        </IconButton>
+                        {displayImage ?
+                            <img height={"95%"} alt="poster file" src={displayImage} />
+                            :
+                            <IconButton aria-label="upload picture" component="label">
+                                <input onChange={handleImageChange} hidden accept="image/*" type="file" />
+                                <CameraAltIcon color={errFileImage.err ? "error" : undefined} sx={{ fontSize: "50px", opacity: errFileImage.err ? 0.5 : 1 }} />
+                            </IconButton>
+                        }
                     </Box>
                     <FormHelperText error>{errFileImage.err && errFileImage.msg}{"\u00A0"}</FormHelperText>
                 </Stack>
