@@ -4,7 +4,7 @@ import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Avatar, IconButton, Chip, Typography, Stack, Card } from "@mui/material";
+import { Avatar, IconButton, Chip, Typography, Stack, Card, IconButtonProps, styled, CardHeader, Rating, CardContent, Box, Collapse, Divider } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -20,6 +20,37 @@ import { User } from "@/types/User";
 import { PAGE_PATHS } from "enum/PAGES";
 import { GENDER } from "enum/GENDER";
 import { GetUserByUserId } from "@/services/User";
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { COLOR_CODE } from "enum/COLOR";
+import StarIcon from '@mui/icons-material/Star';
+import StarOutlineIcon from '@mui/icons-material/StarOutline';
+
+type Rating = {
+  ratingOwnerName: string;
+  appointmentTitle: string;
+  ratingScore: number;
+  rationDescription: string;
+}
+
+// for actual feedbacks, this should be deleted
+const mockRatings: Rating[] = [{
+  ratingOwnerName: "Anonymous",
+  appointmentTitle: "ไปเล่นบอร์ดเกมกัน แถวสยาม",
+  ratingScore: 4,
+  rationDescription: "พี่ออมดูแลหนูดีมากเลยค่ะ <3"
+},
+{
+  ratingOwnerName: "AbCd",
+  appointmentTitle: "ไปกู้โลกกันเถอะ",
+  ratingScore: 5,
+  rationDescription: ""
+},
+{
+  ratingOwnerName: "ครัยนร้า",
+  appointmentTitle: "จะเป็นวิลเลิน",
+  ratingScore: 4,
+  rationDescription: "kksfnaklsndfklasd fkajdsklfajsdklfjasdkfjaksdjfakljdalsjdkalsjdfksjdfsdkfasdfljadskfljadsklfjakldjfaklsdjfklajsdkljdkjsdkfjsdklfjdfalksdjfalksdjasdaksjfklasdjfklasjdlkajdsfkajsdflkjasdklfjaklsdjfalkjsdflajfkjdlfjl;fl"
+}]
 
 const MyProfileStyle = {
   Card: {
@@ -50,12 +81,34 @@ const MyProfileStyle = {
   },
 };
 
+interface ExpandMoreProps extends IconButtonProps {
+  expand: boolean;
+}
+
+const ExpandMore = styled((props: ExpandMoreProps) => {
+  const { expand, ...other } = props;
+  return <IconButton {...other} />;
+})(({ theme, expand }) => ({
+  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
+  marginLeft: 'auto',
+  transition: theme.transitions.create('transform', {
+    duration: theme.transitions.duration.shortest,
+  }),
+}));
+
 export default function Home() {
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
 
   const [targetUserData, setTargetUserData] = useState<User | null>(null);
+  const [feedbacks, setFeedbacks] = useState<Rating[]>([])
+
+  const [expanded, setExpanded] = useState(false);
+
+  const handleExpandClick = () => {
+    setExpanded(!expanded);
+  };
 
   useEffect(() => {
     async function getTargetUserData() {
@@ -65,6 +118,8 @@ export default function Home() {
     }
 
     getTargetUserData();
+
+    // require some services for setting feedbacks
   }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
 
   function handleEditProfile(): void {
@@ -161,6 +216,81 @@ export default function Home() {
                 </IconButton>
               )}
             </Stack>
+          </Card>
+
+          {/* Feedback */}
+          <Card sx={{
+            width: "50vw",
+            minWidth: "300px",
+
+            marginBottom: "2vh",
+          }}>
+            <CardContent style={{ paddingBottom: 0, }}>
+              {/* header */}
+              <Box display="flex" sx={{ alignItems: "center" }}>
+                <Box sx={{ flexGlow: 1 }}>
+                  <Typography variant="h2">Review</Typography>
+                </Box>
+                <ExpandMore
+                  expand={expanded}
+                  onClick={handleExpandClick}
+                  aria-expanded={expanded}
+                  aria-label="show more"
+                >
+                  <ArrowDownwardIcon color="secondary" />
+                </ExpandMore>
+              </Box>
+
+              <Collapse in={expanded} sx={{ marginTop: 2, marginBottom: 1 }}>
+                <Stack spacing={2}>
+                  {/* for actual feedbacks need to change mackRating to feedabcks */}
+                  {mockRatings.map((rating: Rating, index) => (
+                    <>
+                      <Divider sx={{ height: "2px" }} color={COLOR_CODE.BLACK} />
+                      <Stack
+                        spacing={2}
+                        alignItems="center"
+                      >
+                        {/* rating title */}
+                        <Box display="flex">
+                          <Typography variant="h3">{rating.ratingOwnerName}</Typography>
+                          <Typography variant="body1" sx={{ fontStyle: 'italic' }}>{"\u00A0"}from{"\u00A0"}</Typography>
+                          <Typography variant="h3">{rating.appointmentTitle}</Typography>
+                        </Box>
+
+                        {/* rating score */}
+                        <Rating
+                          defaultValue={rating.ratingScore}
+                          size="large"
+                          readOnly
+                          icon={<StarIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarIcon>}
+                          emptyIcon={<StarOutlineIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarOutlineIcon>}
+                        />
+
+                        {/* rating description */}
+                        {rating.rationDescription !== "" &&
+                          <Stack spacing={0}>
+                            {`" ${rating.rationDescription} "`.split("\n").map((row, index) => (
+                              <Typography
+                                variant="body1"
+                                sx={{
+                                  maxWidth: "45vw",
+                                  wordBreak: "break-word",
+                                  textAlign: "center",
+                                }}
+                                key={index}
+                              >
+                                {row}
+                              </Typography>
+                            ))}
+                          </Stack>
+                        }
+                      </Stack>
+                    </>
+                  ))}
+                </Stack>
+              </Collapse>
+            </CardContent>
           </Card>
         </Stack>
       </Suspense>
