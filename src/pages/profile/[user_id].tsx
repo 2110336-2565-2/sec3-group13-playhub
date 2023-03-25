@@ -1,10 +1,10 @@
-import { Suspense, useContext, useEffect, useState } from "react";
+import { Suspense, useCallback, useContext, useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Avatar, IconButton, Chip, Typography, Stack, Card, IconButtonProps, styled, CardHeader, Rating, CardContent, Box, Collapse, Divider } from "@mui/material";
+import { Avatar, IconButton, Chip, Typography, Stack, Card, IconButtonProps, styled, CardHeader, Rating, CardContent, Box, Collapse, Divider, useScrollTrigger, Fab, Zoom } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -24,6 +24,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { COLOR_CODE } from "enum/COLOR";
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 type Rating = {
   ratingOwnerName: string;
@@ -109,6 +110,11 @@ export default function Home() {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
+
+  const trigger = useScrollTrigger({ threshold: 100 })
+  const scrollToTop = useCallback(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" })
+  }, [])
 
   useEffect(() => {
     async function getTargetUserData() {
@@ -292,8 +298,27 @@ export default function Home() {
               </Collapse>
             </CardContent>
           </Card>
+
+
         </Stack>
+        {/* scroll to top button */}
+        <Zoom in={trigger}>
+          <Fab
+            onClick={scrollToTop}
+            color="primary"
+            sx={{
+              position: "fixed",
+              right: "20px",
+              bottom: "20px",
+              borderRadius: "15px",
+              border: "3px #000000 solid",
+            }}
+          >
+            <ArrowUpwardIcon fontSize="large" />
+          </Fab>
+        </Zoom>
       </Suspense>
     </>
   );
 }
+
