@@ -34,7 +34,7 @@ export default function Advertise() {
             return;
         }
 
-        //BACKEND should be implemented here!
+        // BACKEND should be implemented here!
         // Use tempAdvertiseOwner,tempDuration, fileImage send to backend
         const tempAdvertiseOwner: string = "Chula new course"
         const tempDuration: number = 123
@@ -43,14 +43,14 @@ export default function Advertise() {
         console.log(fileImage)
     }
 
-    const handleOwnerTextFieldChange = (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
+    function handleOwnerTextFieldChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         setErrorOwnerTextField({
             msg: "",
             err: false
         })
         setOwner(event.target.value)
     }
-    const handleImageChange = (event: any): void => {
+    function handleImageChange(event: any): void {
         const tempFile = event.target.files[0];
         setFileImage(tempFile)
         event.target.value = null;
