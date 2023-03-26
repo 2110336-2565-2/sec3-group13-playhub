@@ -16,6 +16,9 @@ import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
 import { GetPostsWithParticipants } from "@/services/Posts";
 
+import SearchPanel from "@/components/index/searchBox";
+import ToTop from "@/components/index/goToTop";
+
 export default function Home() {
   const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
@@ -61,6 +64,7 @@ export default function Home() {
             padding: "30px",
           }}
         >
+          <SearchPanel />
           {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
               <CommonPostCard
@@ -70,6 +74,7 @@ export default function Home() {
             </Box>
           ))}
         </Stack>
+        <ToTop />
       </Suspense>
     </>
   );
