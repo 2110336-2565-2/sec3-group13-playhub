@@ -28,11 +28,11 @@ import CommonButton from "@/components/public/CommonButton";
 const CreatePostStyle = {
   TextField: {
     width: "28vw",
-    minWidth: "250px",
+    minWidth: "400px",
   },
   Card: {
     width: "30vw",
-    minWidth: "300px",
+    minWidth: "450px",
     height: "75vh",
     minHeight: "785px",
     paddingTop: "2vh",

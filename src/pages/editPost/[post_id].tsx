@@ -53,11 +53,11 @@ type EditPostSubmit = {
 const EditPostStyle = {
   TextField: {
     width: "28vw",
-    minWidth: "250px",
+    minWidth: "400px",
   },
   Card: {
     width: "30vw",
-    minWidth: "300px",
+    minWidth: "450px",
     height: "70vh",
     minHeight: "710px",
     paddingTop: "2vh",

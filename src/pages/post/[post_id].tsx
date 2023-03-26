@@ -34,7 +34,7 @@ import CommonDialog from "@/components/public/CommonDialog";
 const PostStyle = {
   Card: {
     width: "30vw",
-    minWidth: "300px",
+    minWidth: "450px",
     height: "70vh",
     minHeight: "710px",
     paddingTop: "2vh",

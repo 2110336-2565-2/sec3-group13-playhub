@@ -32,7 +32,7 @@ export default function PostCard(props: props) {
 
   return (
     <>
-      <Card sx={{ borderRadius: "30px" }}>
+      <Card sx={{ borderRadius: "30px", minWidth: "500px" }}>
         <CardActionArea onClick={goToCardDetail}>
           {/* Post Card Header */}
           <CardHeader
@@ -52,26 +52,61 @@ export default function PostCard(props: props) {
                 />
               </IconButton>
             }
-            title={props.post.title}
-            subheader={props.post.ownerName}
-            titleTypographyProps={{ variant: "h1", align: "left" }}
-            subheaderTypographyProps={{ variant: "body1" }}
+            title={
+              <Typography
+                variant="h1"
+                align="left"
+                display="block"
+                sx={{
+                  width: "31vw",
+                  minWidth: "400px",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}>
+                {props.post.title}
+              </Typography>}
+            subheader={
+              <Typography
+                variant="body1"
+                align="left"
+                display="block"
+                sx={{
+                  width: "31vw",
+                  minWidth: "400px",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}>
+                {props.post.ownerName}
+              </Typography>}
           />
-          <CardContent style={{ height: "18vh", paddingLeft: 82, paddingTop: 0 }}>
+          <CardContent style={{ height: "17vh", minHeight: "160px", paddingLeft: 82, paddingTop: 0 }}>
             <Stack spacing={2} marginBottom={2}>
               {/* location */}
               <Typography variant="body1" display="inline-flex">
                 <LocationOnIcon fontSize="medium" />
-                <Typography style={{ marginLeft: 8 }}>{props.post.location}</Typography>
+                <Typography
+                  style={{ marginLeft: 8 }}
+                  sx={{
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                  }}>
+                  {props.post.location}
+                </Typography>
               </Typography>
 
               {/* date */}
               <Typography variant="body1" display="inline-flex">
                 <CalendarTodayIcon fontSize="medium" />
-                <span style={{ marginLeft: 8 }}>
-                  {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
-                  {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
-                </span>
+                <Typography style={{ marginLeft: 8 }} sx={{
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}>
+                  {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} - {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
+                </Typography>
               </Typography>
             </Stack>
 

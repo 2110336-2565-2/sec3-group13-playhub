@@ -67,7 +67,7 @@ export default function Home() {
           container
           justifyContent="space-between"
           rowSpacing={6}
-          style={{ width: "80vw", marginTop: -6 }}
+          style={{ width: "80vw", minWidth: "1050px", marginTop: -6 }}
         >
           {posts.map((item, index) => (
             <Grid item key={index} xs={5.75}>

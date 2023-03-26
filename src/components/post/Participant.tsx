@@ -160,6 +160,7 @@ export default function Participant(props: props) {
                   variant="body1"
                   sx={{
                     ...ParticipantStyle.TextField,
+                    textAlign: "center",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
