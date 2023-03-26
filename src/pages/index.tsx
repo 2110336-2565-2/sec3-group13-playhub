@@ -15,7 +15,8 @@ import CommonPostCard from "@/components/post/CommonPostCard";
 import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
 import { GetPostsWithParticipants } from "@/services/Posts";
-import { SearchPanel } from "@/components/post/SearchPanel";
+import { SearchPanel } from "@/components/search/SearchPanel";
+import ToTop from "@/components/search/ToTop";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -62,7 +63,7 @@ export default function Home() {
             padding: "30px",
           }}
         >
-          <SearchPanel possibleTags={[1, 2, 3].map((e) => ({ id: e, name: "test" + e }))} />
+          <SearchPanel />
           {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
               <CommonPostCard
@@ -72,6 +73,7 @@ export default function Home() {
             </Box>
           ))}
         </Stack>
+        <ToTop />
       </Suspense>
     </>
   );
