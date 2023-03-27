@@ -28,6 +28,12 @@ export default function Advertise() {
     const [owner, setOwner] = useState<string>("");
     const errorOwnerTextField: validation = validateTextField(owner, 1)
 
+    const [duration, setDuration] = useState<Number | null>(null)
+    const [errDuration, setErrDuration] = useState<validation>({
+        msg: "",
+        err: false
+    })
+
     const [fileImage, setFileImage] = useState<File | null>(null);
     const [displayImage, setDisplayImage] = useState<string>();
     const [errFileImage, setErrorFileImage] = useState<validation>({
@@ -43,6 +49,13 @@ export default function Advertise() {
         if (!fileImage) {
             setErrorFileImage({
                 msg: "Please upload advertisement’s image.",
+                err: true
+            })
+            return;
+        }
+        if (duration === null) {
+            setErrDuration({
+                msg: "Please select advertisement’s duration.",
                 err: true
             })
             return;
@@ -68,6 +81,11 @@ export default function Advertise() {
     function handleOwnerTextFieldChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         setIsPressSubmit(false)
         setOwner(event.target.value)
+    }
+    function handleDurationChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        const newDuration = Number((event.target as HTMLInputElement).value)
+        setDuration(newDuration);
+        console.log(newDuration)
     }
     function handleImageChange(event: any): void {
         setIsPressSubmit(false)
@@ -112,12 +130,14 @@ export default function Advertise() {
                 <RadioGroup
                     row
                     defaultValue="female"
+                    onChange={handleDurationChange}
                 >
                     {[1, 7, 15, 30, 45, 60, 90, 180, 365].map((amountOfDays) => {
                         return <FormControlLabel value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " day" + (amountOfDays === 1 ? "" : "s")} sx={{ width: "20%", margin: 0 }} />
                     })}
                     <FormControlLabel value={"Other"} control={<Radio />} label={"Other"} sx={{ width: "20%", margin: 0 }} />
                 </RadioGroup>
+                <FormHelperText error>{isPressSubmit && errDuration.err && errDuration.msg}{"\u00A0"}</FormHelperText>
                 <Typography variant="body1">File</Typography>
                 <Stack spacing={1}>
                     <Box
