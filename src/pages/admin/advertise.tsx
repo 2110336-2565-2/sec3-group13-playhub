@@ -23,12 +23,10 @@ export default function Advertise() {
     const userStatus = useContext(userContext);
     const appTheme = useTheme()
     const supabaseClient = useSupabaseClient<Database>();
+    const [isPressSubmit, setIsPressSubmit] = useState<boolean>(false);
 
     const [owner, setOwner] = useState<string>("");
-    const [errorOwnerTextField, setErrorOwnerTextField] = useState<validation>({
-        msg: "",
-        err: false
-    })
+    const errorOwnerTextField: validation = validateTextField(owner, 1)
 
     const [fileImage, setFileImage] = useState<File | null>(null);
     const [displayImage, setDisplayImage] = useState<string>();
@@ -38,37 +36,17 @@ export default function Advertise() {
     })
 
     function onSubmit(): void {
-        const resultTextFieldErr: validation = validateTextField(owner, 1)
-        if (resultTextFieldErr.err) {
-            setErrorOwnerTextField(
-                {
-                    msg: resultTextFieldErr.msg,
-                    err: true
-                }
-            )
+        setIsPressSubmit(true)
+        if (errorOwnerTextField.err || errFileImage.err) {
             return;
         }
         if (!fileImage) {
-            setErrorFileImage(
-                {
-                    msg: "Please upload advertisement’s image.",
-                    err: true
-                }
-            )
-            return
+            setErrorFileImage({
+                msg: "Please upload advertisement’s image.",
+                err: true
+            })
+            return;
         }
-        const resultImgErr: validation = validateImage(fileImage.type, 500)
-        if (resultImgErr.err) {
-            setErrorFileImage(
-                {
-                    msg: resultImgErr.msg,
-                    err: true
-                }
-            )
-            return
-        }
-
-
         // BACKEND should be implemented here!
         // Use tempAdvertiseOwner,tempDuration, fileImage send to backend
         const tempAdvertiseOwner: string = "Chula new course"
@@ -88,20 +66,16 @@ export default function Advertise() {
     }
 
     function handleOwnerTextFieldChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
-        setErrorOwnerTextField({
-            msg: "",
-            err: false
-        })
+        setIsPressSubmit(false)
         setOwner(event.target.value)
     }
     function handleImageChange(event: any): void {
+        setIsPressSubmit(false)
         const tempFile = event.target.files[0];
+        const imgErrMsg = validateImage(tempFile.type, tempFile.size);
+        setErrorFileImage(imgErrMsg);
         setDisplayImage(URL.createObjectURL(tempFile))
         setFileImage(tempFile)
-        setErrorFileImage({
-            msg: "",
-            err: false
-        })
         event.target.value = null;
     };
 
@@ -131,7 +105,7 @@ export default function Advertise() {
                     placeholder={"Advertisement’s Owner"}
                     value={owner}
                     handleValueChange={handleOwnerTextFieldChange}
-                    isErr={errorOwnerTextField.err}
+                    isErr={isPressSubmit && errorOwnerTextField.err}
                     errMsg={errorOwnerTextField.msg}
                 />
                 <Typography variant="body1">Duration</Typography>
@@ -155,7 +129,7 @@ export default function Advertise() {
                             </IconButton>
                         }
                     </Box>
-                    <FormHelperText error>{errFileImage.err && errFileImage.msg}{"\u00A0"}</FormHelperText>
+                    <FormHelperText error>{isPressSubmit && errFileImage.err && errFileImage.msg}{"\u00A0"}</FormHelperText>
                 </Stack>
                 <Stack justifyContent={"center"} direction={"row"} flexWrap={"wrap"} spacing={"15px"} marginTop={"40px"}>
                     <CommonButton label={"Cancel"} color={COLOR.NATURAL} onClick={backToAdminHome} />
