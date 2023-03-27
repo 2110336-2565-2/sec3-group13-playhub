@@ -9,16 +9,20 @@ import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { COLOR } from "enum/COLOR"
 import { PAGE_PATHS } from "enum/PAGES"
 
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 import { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { validation } from "@/types/Validation";
 import { validateImage, validateTextField } from "@/utilities/validation";
+import { CreateAdvertisement } from "@/services/Advertisement";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
     const userStatus = useContext(userContext);
     const appTheme = useTheme()
+    const supabaseClient = useSupabaseClient<Database>();
 
     const [owner, setOwner] = useState<string>("");
     const [errorOwnerTextField, setErrorOwnerTextField] = useState<validation>({
@@ -72,6 +76,15 @@ export default function Advertise() {
         console.table([tempAdvertiseOwner, tempDuration])
         // Upload via UI
         console.log(fileImage)
+        CreateAdvertisement(tempAdvertiseOwner, tempDuration, fileImage, supabaseClient)
+            .then(() => {
+                router.push(PAGE_PATHS.ADMIN_HOME + userStatus.user?.userId);
+                return;
+            })
+            .catch((err) => {
+                console.log(err);
+                return;
+            });
     }
 
     function handleOwnerTextFieldChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
