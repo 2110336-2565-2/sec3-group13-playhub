@@ -114,9 +114,9 @@ export default function Advertise() {
                     defaultValue="female"
                 >
                     {[1, 7, 15, 30, 45, 60, 90, 180, 365].map((amountOfDays) => {
-                        return <FormControlLabel value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " days"} />
+                        return <FormControlLabel value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " day" + (amountOfDays === 1 ? "" : "s")} sx={{ width: "20%", margin: 0 }} />
                     })}
-                    <FormControlLabel value={"Other"} control={<Radio />} label={"Other"} />
+                    <FormControlLabel value={"Other"} control={<Radio />} label={"Other"} sx={{ width: "20%", margin: 0 }} />
                 </RadioGroup>
                 <Typography variant="body1">File</Typography>
                 <Stack spacing={1}>
