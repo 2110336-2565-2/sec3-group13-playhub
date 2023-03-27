@@ -3,7 +3,7 @@ import CommonButton from "@/components/public/CommonButton";
 import Loading from "@/components/public/Loading";
 import CommonTextField from "@/components/public/CommonTextField";
 
-import { Box, FormHelperText, IconButton, Stack, Typography, useTheme } from "@mui/material";
+import { Box, FormControl, FormControlLabel, FormHelperText, FormLabel, IconButton, Radio, RadioGroup, Stack, Typography, useTheme } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { COLOR } from "enum/COLOR"
@@ -109,6 +109,15 @@ export default function Advertise() {
                     errMsg={errorOwnerTextField.msg}
                 />
                 <Typography variant="body1">Duration</Typography>
+                <RadioGroup
+                    row
+                    defaultValue="female"
+                >
+                    {[1, 7, 15, 30, 45, 60, 90, 180, 365].map((amountOfDays) => {
+                        return <FormControlLabel value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " days"} />
+                    })}
+                    <FormControlLabel value={"Other"} control={<Radio />} label={"Other"} />
+                </RadioGroup>
                 <Typography variant="body1">File</Typography>
                 <Stack spacing={1}>
                     <Box
