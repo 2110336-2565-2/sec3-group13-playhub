@@ -6,7 +6,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
@@ -65,11 +65,15 @@ export default function Home() {
           }}
         >
           <SearchPanel setPosts={setPosts} />
-          {posts?.map((item, index) => (
-            <Box width="60vw" key={index}>
-              <CommonPostCard post={item} userId={userStatus.user?.userId} />
-            </Box>
-          ))}
+          {posts.length > 0 ? (
+            posts.map((item, index) => (
+              <Box width="60vw" key={index}>
+                <CommonPostCard post={item} userId={userStatus.user?.userId} />
+              </Box>
+            ))
+          ) : (
+            <Typography>No post found</Typography>
+          )}
         </Stack>
         <ToTop />
       </Suspense>
