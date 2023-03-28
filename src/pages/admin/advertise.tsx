@@ -216,7 +216,7 @@ export default function Advertise() {
                         {displayImage ?
                             <img height={"95%"} alt="poster file" src={displayImage} />
                             :
-                            <IconButton aria-label="upload picture" component="label">
+                            <IconButton sx={{ top: "35%" }} aria-label="upload picture" component="label">
                                 <input onChange={handleImageChange} hidden accept="image/*" type="file" />
                                 <CameraAltIcon color={errFileImage.err ? "error" : undefined} sx={{ fontSize: "50px", opacity: errFileImage.err ? 0.5 : 1 }} />
                             </IconButton>
