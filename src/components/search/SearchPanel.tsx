@@ -1,9 +1,13 @@
 import React from "react";
-import { TextField, Box, Autocomplete, Chip } from "@mui/material";
-import { useState, useRef } from "react";
+import { TextField, Box, Autocomplete, Chip, Button } from "@mui/material";
+import { useState, useRef, useEffect } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from '@mui/icons-material/Search';
+import users from "./testUserList";
+import tags from "./testTagList";
 
 type SearchType = 'username' | 'tag' | 'title';
+type SearchMode = 'username' | 'tag' | 'title' | 'null';
 
 interface SearchResult {
     type: SearchType;
@@ -15,19 +19,6 @@ type props = {
 
 };
 
-/* 
-const box_layout = {
-    width: "450px",
-    height: "60px",
-    filter: "drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25))",
-    //border: "6px solid black",
-    borderRadius: "15px",
-    paddingLeft: "10px",
-    paddingRight: "0px",
-    '::placeholder': {
-        textAlign: 'center',
-    },
-}
 const submit_layout = {
     width: "58px",
     height: "58px",
@@ -38,45 +29,52 @@ const submit_layout = {
 const icon_style = {
     color: "black",
 };
-*/
+
 
 export function SearchPanel(props: props) {
-    const users = ["ลุงตู่", "ลุงป้อม", "อุ๊งอิ๊ง", "ทิม"];
-    const tags = ['เพื่อไทย', 'ก้าวไกล', 'พลังประชารัฐ', 'รทสช', 'กล้า'];
     const [searchType, setSearchType] = useState<SearchType>('title');
     const [searchText, setSearchText] = useState<string>('');
     const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+    const [searchMode, setSearchMode] = useState<SearchMode>('null');
     const [options, setOptions] = useState<string[]>([]);
-    const prevSearchText = useRef("");
-    console.log(searchResults)
-    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value;
-        if (value != '') {
-            if (value.startsWith('@')) {
-                setSearchType('username');
-                setSearchText(value.slice(1));
-            } else if (value.startsWith('#')) {
-                setSearchType('tag');
-                setSearchText(value.slice(1));
+    const handleClearText = () => {
+        setSearchText("");
+    };
+    useEffect(() => {
+        if (searchText != '') {
+            if (searchText.startsWith('@')) {
+                setSearchMode('username');
+            } else if (searchText.startsWith('#')) {
+                setSearchMode('tag');
             } else {
-                setSearchType('title');
-                setSearchText(value);
+                setSearchMode('title');
             }
+        }
+        else { setSearchMode('null'); }
+    }, [searchText]);
+    useEffect(() => {
+        if (searchMode == 'null') {
+            handleClearText()
+        }
+    }, [searchMode]);
+
+
+
+    const handleSubmit = () => {
+        console.log('submit');
+        if (searchMode !== 'null') {
+            const value = (searchMode === 'username' || searchMode === 'tag') ? searchText.slice(1) : searchText;
+            setSearchResults([...searchResults, { type: searchMode, value }]);
+            setSearchMode('null');
+            setSearchText('');
         }
     };
 
-    const handleSubmit = () => {
-        console.log("submit")
-        setSearchResults([
-            ...searchResults,
-            { type: searchType, value: searchText },
-        ]);
-        setSearchText("");
-    };
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             handleSubmit();
+            setSearchText("");
         }
     };
     const handleDeleteTag = (index: number) => {
@@ -93,22 +91,21 @@ export function SearchPanel(props: props) {
 
     const getOptions = () => {
         let options: string[] = [];
-        if (searchType === "username") {
-            options = users.filter((user) => user.startsWith(searchText));
-        } else if (searchType === "tag") {
-            options = tags.filter((tag) => tag.startsWith(searchText));
-        }
+        if (searchMode === "username") {
+            options = users.filter((user) => user.toLowerCase().includes(searchText.slice(1).toLowerCase()));
+        } else if (searchMode === "tag") {
+
+            options = tags.filter((tag) => tag.toLowerCase().includes(searchText.slice(1).toLowerCase()));
+        }// i think i will try to comment 2 if above cos autocomplete can do it (no need to filter for it.)
+
         if (searchResults.length > 0) {
             const selectedValues = searchResults.filter((result) => result.type === searchType).map((result) => result.value);
             options = options.filter((option) => !selectedValues.includes(option));
         }
+        console.log('OP= ', options)
         return options;
     };
-    /*problem
-    1.อยากให้คลิกที่ dropdown แล้วเลือกได้เลย(tag and username searching)
-    2.สำหรับ title search
-    กด enter 1 ครั้ง text ยังไม่หาย (แต่ข้อมูลมีแล้วนะ)
-    */
+
 
 
 
@@ -117,52 +114,52 @@ export function SearchPanel(props: props) {
     return (
         <>
             <div>
-                {/*
-            I will use this layout later
-                    <form onSubmit={handleSubmit}>
-                    <TextField
-                        name="search"
-                        placeholder="Search: @username, #tag, title"
-                        variant="outlined"
-                        InputProps={{
-                            style: box_layout,
-                            endAdornment: (
-                                <Button type="submit" style={submit_layout}>
-                                    <SearchIcon style={icon_style} />
-                                </Button>
-                            ),
-                        }}
-                    />
-                </form>
-                */}
+
                 <Autocomplete
                     sx={{ width: "500px" }}
                     freeSolo
                     inputValue={searchText}
-                    value={searchText}
                     onInputChange={(event, value) => setSearchText(value)}
                     options={getOptions()}
                     renderInput={(params) => (
                         <TextField
-                            name="search"
                             {...params}
+                            name="search"
                             placeholder="Search: @username, #tag, title"
                             variant="outlined"
-                            onChange={handleChange}
-                            onKeyDown={handleKeyDown}
+
+                            value={searchText}
+                            onChange={(event) => setSearchText(event.target.value)}
+                            onKeyDown={(event) => {
+                                if (event.key === "Enter") {
+                                    handleSubmit();
+                                    setSearchText("");
+                                }
+                            }}
+                            InputProps={{
+                                ...params.InputProps,
+                                type: 'search',
+                            }}
+                        /* InputProps={{
+                             endAdornment: (
+                                 <Button type="submit" style={submit_layout}>
+                                     <SearchIcon style={icon_style} />
+                                 </Button>
+                             ),
+                         }}*/
                         />
                     )}
                 />
                 <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 1, marginTop: "20px" }}>
                     {searchResults.map((result, index) => (
-                        <Chip key={index} label={`${result.type === 'username' ? '@' : result.type === 'tag' ? '#' : ''}${result.value}`} deleteIcon={<CloseIcon />}
+                        <Chip key={index} label={`${result.type === 'username' ? '@: ' : result.type === 'tag' ? '#: ' : ''}${result.value}`} deleteIcon={<CloseIcon />}
                             onDelete={() => handleDeleteTag(index)}
                         />
                     ))}
                 </Box>
             </div>
             <div>
-                <p>Search Type: {searchType}</p>
+                <p>Search Type: {searchMode}</p>
                 <p>Search results: {JSON.stringify(searchResults)}</p>
                 <p>Search Text: {searchText}</p>
 
