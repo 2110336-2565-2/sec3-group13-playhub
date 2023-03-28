@@ -144,8 +144,8 @@ export async function GetCurrentUserPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time,
+    startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
   }));
 }
 
@@ -165,8 +165,8 @@ export async function GetPosts(supabaseClient: SupabaseClient<Database>): Promis
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time,
+    startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
   }));
 }
 
