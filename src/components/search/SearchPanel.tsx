@@ -45,9 +45,9 @@ export function SearchPanel(props: props) {
 
   const getOptions = () => {
     if (searchText.length == 0 || searchMode != "tag") return [];
-    const options = tags.filter((tag) =>
-      tag.toLowerCase().includes(searchText.slice(1).toLowerCase())
-    );
+    const options = tags
+      .filter((tag) => tag.toLowerCase().includes(searchText.slice(1).toLowerCase()))
+      .map((e) => "#" + e);
     const selectedValues = searchResults
       .filter((result) => result.type === searchMode)
       .map((result) => result.value);
@@ -72,7 +72,10 @@ export function SearchPanel(props: props) {
           sx={{ width: "500px" }}
           freeSolo
           inputValue={searchText}
-          onInputChange={(_, value) => handleInputValueChange(value)}
+          value={searchText}
+          onInputChange={(_, value) => {
+            handleInputValueChange(value);
+          }}
           onChange={(_, value) => {
             value && setSearchText(value);
           }}
@@ -84,7 +87,7 @@ export function SearchPanel(props: props) {
               placeholder="Search: @username, #tag, title"
               variant="outlined"
               InputProps={{
-                ...params.InputProps,
+                ref: params.InputProps.ref,
                 endAdornment: (
                   <Button
                     variant="contained"
