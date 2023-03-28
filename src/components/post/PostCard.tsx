@@ -115,8 +115,7 @@ export default function PostCard(props: props) {
                     overflow: "hidden",
                   }}
                 >
-                  {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
-                  {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
+                  {props.post.startDateTime} - {props.post.endDateTime}
                 </Typography>
               </Typography>
             </Stack>
