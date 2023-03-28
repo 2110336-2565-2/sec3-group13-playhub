@@ -172,7 +172,7 @@ export default function Advertise() {
             <CommonDialog
                 openModal={showDiscardDialog}
                 handleCloseModal={() => { setShowDiscardDialog(false) }}
-                header={["Are you sure to cancel this advertisement ?"]}
+                header={["Are you sure to", "cancel", "this advertisement ?"]}
                 content={"*This advertisement would be discarded."}
                 buttonLabel={"Yes"}
                 buttonColor={COLOR.PRIMARY}
