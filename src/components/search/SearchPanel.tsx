@@ -1,5 +1,14 @@
 import React, { useEffect, Dispatch, SetStateAction } from "react";
-import { TextField, Box, Autocomplete, Chip, Button, Typography, Stack } from "@mui/material";
+import {
+  TextField,
+  Box,
+  Autocomplete,
+  Chip,
+  Button,
+  Typography,
+  Stack,
+  FormHelperText,
+} from "@mui/material";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
@@ -27,8 +36,15 @@ const submit_layout = {
   border: "3px solid #000000",
   borderRadius: "15px",
 };
+
 const icon_style = {
   color: "black",
+};
+
+const helperText = {
+  display: "flex",
+  flexDirection: "row",
+  marginTop: "10px",
 };
 
 export function SearchPanel(props: props) {
@@ -37,6 +53,7 @@ export function SearchPanel(props: props) {
   const [searchText, setSearchText] = useState<string>("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchMode, setSearchMode] = useState<SearchMode>("title");
+  const [errMsg, setErrMsg] = useState<string>("");
   const supabaseClient = useSupabaseClient<Database>();
 
   useEffect(() => {
@@ -71,6 +88,13 @@ export function SearchPanel(props: props) {
     if (value.length == 0) return;
     const prefixedRemoved =
       searchMode === "username" || searchMode === "tag" ? value.slice(1) : value;
+    const selectedInSameType = searchResults
+      .filter((e) => e.type == searchMode)
+      .map((e) => e.value);
+    if (selectedInSameType.includes(prefixedRemoved)) {
+      setErrMsg(`You already insert this ${searchMode == "username" ? "host" : "title"} keyword.`);
+      return;
+    }
     const conditions = [...searchResults, { type: searchMode, value: prefixedRemoved }];
     setSearchResults(conditions);
     setSearchText("");
@@ -95,6 +119,7 @@ export function SearchPanel(props: props) {
   };
 
   const handleInputValueChange = (value: string) => {
+    setErrMsg("");
     setSearchText(value);
     if (value.startsWith("@")) {
       setSearchMode("username");
@@ -144,6 +169,9 @@ export function SearchPanel(props: props) {
             />
           )}
         />
+        <Box sx={helperText}>
+          <FormHelperText error>{errMsg != "" && errMsg}</FormHelperText>
+        </Box>
         <Box
           sx={{
             display: "flex",
