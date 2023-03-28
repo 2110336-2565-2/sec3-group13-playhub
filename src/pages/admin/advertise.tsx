@@ -164,7 +164,7 @@ export default function Advertise() {
                     </Box>
                     <FormHelperText error>{isPressSubmit && errFileImage.err && errFileImage.msg}{"\u00A0"}</FormHelperText>
                 </Stack>
-                <Stack justifyContent={"center"} direction={"row"} flexWrap={"wrap"} spacing={"15px"} marginTop={"40px"}>
+                <Stack justifyContent={"center"} direction={"row"} flexWrap={"wrap"} spacing={"15px"} margin={"30px 0"}>
                     <CommonButton label={"Cancel"} color={COLOR.NATURAL} onClick={() => { setShowDiscardDialog(!showDiscardDialog) }} />
                     <CommonButton label={"Add"} onClick={() => { setShowSummaryDialog(!showSummaryDialog) }} />
                 </Stack>
