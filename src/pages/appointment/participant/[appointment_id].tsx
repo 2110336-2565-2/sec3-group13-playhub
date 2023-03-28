@@ -115,9 +115,7 @@ export default function Home() {
               <Box sx={ParticipantAppointmentStyle.TextField}>
                 <DisplayDateTime
                   header="Date & Time"
-                  value={`${appointment.detailHeader.startDateTime.format(
-                    "DD/MM/YYYY h:mm A"
-                  )} - ${appointment.detailHeader.endDateTime.format("DD/MM/YYYY h:mm A")}`}
+                  value={`${appointment.detailHeader.startDateTime} - ${appointment.detailHeader.endDateTime}`}
                   readOnly={true}
                 />
               </Box>

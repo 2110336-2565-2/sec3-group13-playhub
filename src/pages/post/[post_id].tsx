@@ -161,10 +161,7 @@ export default function Home() {
                 {/* date */}
                 <Stack spacing={2} direction="row" alignItems="center">
                   <CalendarTodayIcon fontSize="large" />
-                  <Typography variant="body1">
-                    {post.startTime.format("DD/MM/YYYY h:mm A")} -{" "}
-                    {post.endTime.format("DD/MM/YYYY h:mm A")}
-                  </Typography>
+                  <Typography variant="body1">{`${post.startTime} - ${post.endTime}`}</Typography>
                 </Stack>
 
                 {/* tags */}

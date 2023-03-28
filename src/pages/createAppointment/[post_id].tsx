@@ -178,9 +178,7 @@ export default function Home() {
                   header="Date & Time"
                   value={
                     postInfo?.startTime && postInfo?.endTime
-                      ? `${postInfo?.startTime.format(
-                          "DD/MM/YYYY h:mm A"
-                        )} - ${postInfo?.endTime.format("DD/MM/YYYY h:mm A")}`
+                      ? `${postInfo?.startTime} - ${postInfo?.endTime}`
                       : ""
                   }
                 />
