@@ -80,7 +80,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginTop: "5vh", marginBottom: "2vh", }} alignItems="center">
+      <Stack spacing={4} sx={{ marginTop: "5vh", marginBottom: "2vh" }} alignItems="center">
         <Stack spacing={5} direction="row">
           <Card sx={HostAppointmentStyle.Card}>
             <Stack spacing={0} alignItems="center" justifyContent="center">
@@ -91,7 +91,7 @@ export default function Home() {
                   header="Title"
                   placeholder="This is Post Title"
                   value={appointment.detailHeader.title}
-                  handleValueChange={() => { }}
+                  handleValueChange={() => {}}
                   isErr={false}
                   errMsg=""
                   disabled={true}
@@ -104,7 +104,7 @@ export default function Home() {
                   header="Location"
                   placeholder="Enter Location"
                   initialValue={appointment.detailHeader.location}
-                  onChange={() => { }}
+                  onChange={() => {}}
                   isErr={false}
                   errMsg=""
                   disabled={true}
@@ -115,7 +115,9 @@ export default function Home() {
               <Box sx={HostAppointmentStyle.TextField}>
                 <DisplayDateTime
                   header="Date & Time"
-                  value={`${appointment.detailHeader.startDateTime.format("DD/MM/YYYY h:mm A")} - ${appointment.detailHeader.endDateTime.format("DD/MM/YYYY h:mm A")}`}
+                  value={`${appointment.detailHeader.startDateTime.format(
+                    "DD/MM/YYYY h:mm A"
+                  )} - ${appointment.detailHeader.endDateTime.format("DD/MM/YYYY h:mm A")}`}
                 />
               </Box>
 
@@ -123,16 +125,16 @@ export default function Home() {
               <Box sx={HostAppointmentStyle.TextField}>
                 <Tags
                   header="Tag"
-                  value={appointment.detailHeader.tags.map((t, index): Tag => { return { name: t, id: index } })}
-                  handleValueChange={() => { }}
+                  value={appointment.detailHeader.tags.map((t, index): Tag => {
+                    return { name: t, id: index };
+                  })}
+                  handleValueChange={() => {}}
                   menuValue={[]}
                   isErr={false}
                   errMsg=""
                   disabled={true}
                 />
-                <FormHelperText>
-                  {"\u00A0"}
-                </FormHelperText>
+                <FormHelperText>{"\u00A0"}</FormHelperText>
               </Box>
 
               {/* Description */}
@@ -142,7 +144,7 @@ export default function Home() {
                   header="Description"
                   placeholder="Enter Description Here"
                   value={appointment.detailHeader.description}
-                  handleValueChange={() => { }}
+                  handleValueChange={() => {}}
                   isErr={false}
                   errMsg=""
                   height={8}
@@ -152,24 +154,24 @@ export default function Home() {
 
               {/* Image list */}
               <Box sx={HostAppointmentStyle.TextField}>
-                <DisplayImages
-                  header="Image"
-                  images={appointment.images}
-                />
+                <DisplayImages header="Image" images={appointment.images} />
               </Box>
             </Stack>
           </Card>
           <Card sx={HostAppointmentStyle.Card}>
             <Stack spacing={3} alignItems="center" justifyContent="center">
-
-
               {/* Number of participants */}
               <Box sx={HostAppointmentStyle.TextField}>
                 <Typography variant="h3">{`Number of Participant : ${appointment.acceptParticipants.length}`}</Typography>
               </Box>
 
               {/* Pending Participant List */}
-              <Stack spacing={0.5} alignItems="start" justifyContent="center" sx={HostAppointmentStyle.TextField}>
+              <Stack
+                spacing={0.5}
+                alignItems="start"
+                justifyContent="center"
+                sx={HostAppointmentStyle.TextField}
+              >
                 <Typography variant="h2">Pending Participant List :</Typography>
                 <Box display="flex">
                   {appointment.pendingParticipants.length == 0 && (
@@ -188,7 +190,12 @@ export default function Home() {
               </Stack>
 
               {/* Accept Participant List */}
-              <Stack spacing={0.5} alignItems="start" justifyContent="center" sx={HostAppointmentStyle.TextField}>
+              <Stack
+                spacing={0.5}
+                alignItems="start"
+                justifyContent="center"
+                sx={HostAppointmentStyle.TextField}
+              >
                 <Typography variant="h2">Accept Participant List :</Typography>
                 <Box display="flex">
                   {appointment.acceptParticipants.length == 0 && (
@@ -207,7 +214,12 @@ export default function Home() {
               </Stack>
 
               {/* Reject Participant List */}
-              <Stack spacing={0.5} alignItems="start" justifyContent="center" sx={HostAppointmentStyle.TextField}>
+              <Stack
+                spacing={0.5}
+                alignItems="start"
+                justifyContent="center"
+                sx={HostAppointmentStyle.TextField}
+              >
                 <Typography variant="h2">Reject Participant List :</Typography>
                 <Box display="flex">
                   {appointment.rejectParticipants.length == 0 && (
@@ -227,7 +239,7 @@ export default function Home() {
             </Stack>
           </Card>
         </Stack>
-      </Stack >
+      </Stack>
     </>
   );
 }

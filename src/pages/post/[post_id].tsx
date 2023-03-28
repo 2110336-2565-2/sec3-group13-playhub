@@ -104,7 +104,6 @@ export default function Home() {
       });
   }, [userStatus.user, router.query.post_id, supabaseClient]);
 
-
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
     router.push(PAGE_PATHS.LOGIN);
@@ -122,7 +121,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginBottom: "2vh", }} alignItems="center">
+      <Stack spacing={4} sx={{ marginBottom: "2vh" }} alignItems="center">
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">{post.title}</Typography>
@@ -229,12 +228,9 @@ export default function Home() {
             onClick={handleOpenDeletePostModal}
           />
           <CommonButton label="Edit Post" onClick={handleEditPost} />
-          {participants.length > 0 &&
-            <CommonButton
-              label="Create Appointment"
-              onClick={handleCreateAppointment}
-            />
-          }
+          {participants.length > 0 && (
+            <CommonButton label="Create Appointment" onClick={handleCreateAppointment} />
+          )}
         </Stack>
       </Stack>
 

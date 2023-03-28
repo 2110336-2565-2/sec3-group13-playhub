@@ -53,57 +53,59 @@ type props = {
 type snackBar = {
   msg: string;
   isShow: boolean;
-}
+};
 
 export default function PostCard(props: props) {
   const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
 
-  const [isUserJoin, setIsUserJoin] = useState<boolean>(false)
+  const [isUserJoin, setIsUserJoin] = useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
   const [openSnackBar, setOpenSnackBar] = useState<snackBar>({ msg: "", isShow: false });
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   function hasJoined(): boolean {
-    if (!props.post.participants) return false
+    if (!props.post.participants) return false;
     for (let i = 0; i < props.post.participants.length; i++) {
       if (props.post.participants[i].userId === props.userId) {
-        return true
+        return true;
       }
     }
-    return false
+    return false;
   }
 
   const isJoined: boolean = hasJoined();
 
   useEffect(() => {
     if (isJoined) {
-      setIsUserJoin(true)
+      setIsUserJoin(true);
     } else {
-      setIsUserJoin(false)
+      setIsUserJoin(false);
     }
-  }, [isJoined])
+  }, [isJoined]);
 
   function joinPost(): void {
     if (!props.userId) return;
     if (!isUserJoin) {
       AddParticipantToPost(props.userId, props.post.postId, supabaseClient)
         .then(() => {
-          setOpenSnackBar({ msg: `Join ${props.post.title} !`, isShow: true })
-          setIsUserJoin(true)
-        }).catch((err) => {
-          console.log(err)
-          return;
+          setOpenSnackBar({ msg: `Join ${props.post.title} !`, isShow: true });
+          setIsUserJoin(true);
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     } else {
       RemoveParticipantFromPost(props.userId, props.post.postId, supabaseClient)
         .then(() => {
-          setOpenSnackBar({ msg: `Cancel ${props.post.title} !`, isShow: true })
-          setIsUserJoin(false)
-        }).catch((err) => {
-          console.log(err)
-          return;
+          setOpenSnackBar({ msg: `Cancel ${props.post.title} !`, isShow: true });
+          setIsUserJoin(false);
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
   }
 
@@ -173,9 +175,6 @@ export default function PostCard(props: props) {
               <DisplayImages images={props.post.image} />
             </Stack>
           </Collapse>
-
-
-
         </CardContent>
 
         {/* Post Card Footer */}
@@ -184,23 +183,26 @@ export default function PostCard(props: props) {
 
           <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
             <Box>
-              <CommonButton label={!isUserJoin ? "Join" : "Cancel"} onClick={() => joinPost()} color={!isUserJoin ? COLOR.PRIMARY : COLOR.NATURAL} />
+              <CommonButton
+                label={!isUserJoin ? "Join" : "Cancel"}
+                onClick={() => joinPost()}
+                color={!isUserJoin ? COLOR.PRIMARY : COLOR.NATURAL}
+              />
             </Box>
           </Grow>
 
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
             <ArrowDownwardIcon fontSize="large" color="secondary" />
           </ExpandMore>
-        </CardActions >
-      </Card >
+        </CardActions>
+      </Card>
 
       {/* Comfirm Delete Dialog */}
-      < Snackbar
+      <Snackbar
         open={openSnackBar.isShow}
         autoHideDuration={5000}
         message={openSnackBar.msg}
-        onClose={() => setOpenSnackBar({ msg: "", isShow: false })
-        }
+        onClose={() => setOpenSnackBar({ msg: "", isShow: false })}
       />
     </>
   );

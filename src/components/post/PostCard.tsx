@@ -63,9 +63,11 @@ export default function PostCard(props: props) {
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
-                }}>
+                }}
+              >
                 {props.post.title}
-              </Typography>}
+              </Typography>
+            }
             subheader={
               <Typography
                 variant="body1"
@@ -77,11 +79,15 @@ export default function PostCard(props: props) {
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
-                }}>
+                }}
+              >
                 {props.post.ownerName}
-              </Typography>}
+              </Typography>
+            }
           />
-          <CardContent style={{ height: "17vh", minHeight: "160px", paddingLeft: 82, paddingTop: 0 }}>
+          <CardContent
+            style={{ height: "17vh", minHeight: "160px", paddingLeft: 82, paddingTop: 0 }}
+          >
             <Stack spacing={2} marginBottom={2}>
               {/* location */}
               <Typography variant="body1" display="inline-flex">
@@ -92,7 +98,8 @@ export default function PostCard(props: props) {
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
                     overflow: "hidden",
-                  }}>
+                  }}
+                >
                   {props.post.location}
                 </Typography>
               </Typography>
@@ -100,12 +107,16 @@ export default function PostCard(props: props) {
               {/* date */}
               <Typography variant="body1" display="inline-flex">
                 <CalendarTodayIcon fontSize="medium" />
-                <Typography style={{ marginLeft: 8 }} sx={{
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  overflow: "hidden",
-                }}>
-                  {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} - {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
+                <Typography
+                  style={{ marginLeft: 8 }}
+                  sx={{
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                  }}
+                >
+                  {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
+                  {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
                 </Typography>
               </Typography>
             </Stack>

@@ -213,7 +213,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginBottom: "2vh", }} alignItems="center">
+      <Stack spacing={4} sx={{ marginBottom: "2vh" }} alignItems="center">
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Create post</Typography>

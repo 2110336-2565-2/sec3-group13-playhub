@@ -25,8 +25,8 @@ import { SignOut } from "@/services/User";
 
 const NavBarMunuItemStyle = {
   justifyContent: "center",
-  minWidth: "175px"
-}
+  minWidth: "175px",
+};
 
 export default function Navbar() {
   const router: NextRouter = useRouter();
@@ -53,27 +53,27 @@ export default function Navbar() {
   const routeToMyPosts = (): void => {
     router.push(PAGE_PATHS.MY_POSTS);
     return;
-  }
+  };
 
   const routeToMyAppointments = (): void => {
     router.push(PAGE_PATHS.MY_APPOINTMENTS);
     return;
-  }
+  };
 
   const routeToSelectAppointment = (): void => {
     router.push(PAGE_PATHS.SELECT_APPOINTMENT);
     return;
-  }
+  };
 
   const routeToMyProfile = (): void => {
     router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
     return;
-  }
+  };
 
   const routeToVerify = (): void => {
     router.push(PAGE_PATHS.VERIFY);
     return;
-  }
+  };
 
   const handleSignOut = (): void => {
     SignOut(supabaseClient)
@@ -85,7 +85,7 @@ export default function Navbar() {
         console.log(err);
         return;
       });
-  }
+  };
 
   return (
     <>
@@ -145,15 +145,11 @@ export default function Navbar() {
         onClose={handleCloseAppointmentMenu}
       >
         <MenuItem key={1} onClick={routeToMyAppointments} style={NavBarMunuItemStyle}>
-          <Typography variant="body1">
-            {NAVBAR_PAGES.MY_APPOINTMENT}
-          </Typography>
+          <Typography variant="body1">{NAVBAR_PAGES.MY_APPOINTMENT}</Typography>
         </MenuItem>
 
         <MenuItem key={2} onClick={routeToSelectAppointment} style={NavBarMunuItemStyle}>
-          <Typography variant="body1" >
-            {NAVBAR_PAGES.CONFIRM_REJECT}
-          </Typography>
+          <Typography variant="body1">{NAVBAR_PAGES.CONFIRM_REJECT}</Typography>
         </MenuItem>
       </Menu>
 

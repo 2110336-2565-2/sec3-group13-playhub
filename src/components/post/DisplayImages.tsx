@@ -25,7 +25,6 @@ export default function DisplayImages(props: props) {
         {props.images.map((image, index) => {
           return (
             <>
-
               <Stack justifySelf="start">
                 <ImageListItem
                   key={index}

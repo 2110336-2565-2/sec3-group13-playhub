@@ -54,11 +54,7 @@ export default function Home() {
       <AdminNavbar />
 
       <Suspense fallback={<Loading />}>
-        <Stack
-          spacing={5}
-          style={{ paddingTop: "4vh", paddingBottom: "4vh" }}
-          alignItems="center"
-        >
+        <Stack spacing={5} style={{ paddingTop: "4vh", paddingBottom: "4vh" }} alignItems="center">
           {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
               <AdminPostCard post={item} handleDeletePost={handleDeletePost} />

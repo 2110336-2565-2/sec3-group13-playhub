@@ -46,11 +46,11 @@ export default function Home() {
     return;
   }
   if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME)
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME)
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   if (posts == null) return <Loading />;

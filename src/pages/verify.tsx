@@ -30,7 +30,8 @@ export default function Verify() {
     ?subject=Verify ${userStatus.user.email} PlayHub account
     &body=รายละเอียดบัญชี${newLine}
     Email account : ${userStatus.user.email}${newLine}
-    Profile link : ${process.env.NEXT_PUBLIC_DOMAIN_NAME + PAGE_PATHS.PROFILE + userStatus.user.userId
+    Profile link : ${
+      process.env.NEXT_PUBLIC_DOMAIN_NAME + PAGE_PATHS.PROFILE + userStatus.user.userId
     }${newLine}
     ${newLine}โปรดแนบ รูปถ่ายบัตรประจำตัวประชาชน`;
 

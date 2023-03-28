@@ -151,9 +151,6 @@ export default function AdminPostCard(props: props) {
               <DisplayImages images={props.post.image} />
             </Stack>
           </Collapse>
-
-
-
         </CardContent>
 
         {/* Post Card Footer */}
@@ -163,8 +160,8 @@ export default function AdminPostCard(props: props) {
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
             <ArrowDownwardIcon fontSize="large" color="secondary" />
           </ExpandMore>
-        </CardActions >
-      </Card >
+        </CardActions>
+      </Card>
 
       {/* Comfirm Delete Dialog */}
       <CommonDialog

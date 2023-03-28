@@ -1,11 +1,4 @@
-import {
-  Box,
-  FormHelperText,
-  InputAdornment,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, FormHelperText, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import React from "react";
 import { COLOR_CODE } from "enum/COLOR";
@@ -24,7 +17,7 @@ const helperText = {
 };
 
 export default function NormalTextField(props: props) {
-  const dateTimeStyle: string = props.readOnly ? COLOR_CODE.WHITE : COLOR_CODE.DISABLE
+  const dateTimeStyle: string = props.readOnly ? COLOR_CODE.WHITE : COLOR_CODE.DISABLE;
   const isDisabled: boolean = !props.readOnly && true;
 
   return (
@@ -40,18 +33,16 @@ export default function NormalTextField(props: props) {
             InputProps={{
               readOnly: props.readOnly,
               startAdornment: (
-                <InputAdornment position="start">{
-                  <CalendarTodayIcon fontSize="large" color="secondary" />
-                }</InputAdornment>
+                <InputAdornment position="start">
+                  {<CalendarTodayIcon fontSize="large" color="secondary" />}
+                </InputAdornment>
               ),
             }}
             disabled={isDisabled}
           />
         </Box>
         <Box sx={helperText}>
-          <FormHelperText error>
-            {"\u00A0"}
-          </FormHelperText>
+          <FormHelperText error>{"\u00A0"}</FormHelperText>
         </Box>
       </Stack>
     </>

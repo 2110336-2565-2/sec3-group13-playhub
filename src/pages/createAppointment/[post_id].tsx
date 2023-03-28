@@ -55,7 +55,7 @@ export default function Home() {
   function handleAddParticipant(participant: User): void {
     setParticipantCountError(false);
     if (availableParticipants) {
-      setAvailableParticipants(availableParticipants.filter((p) => p !== participant))
+      setAvailableParticipants(availableParticipants.filter((p) => p !== participant));
     }
     setSelectedParticipants([...selectedParticipants, participant]);
   }
@@ -65,7 +65,7 @@ export default function Home() {
     if (availableParticipants) {
       setAvailableParticipants([...availableParticipants, participant]);
     }
-    setSelectedParticipants(selectedParticipants.filter((p) => p !== participant))
+    setSelectedParticipants(selectedParticipants.filter((p) => p !== participant));
   }
 
   function handleSubmit() {
@@ -95,7 +95,9 @@ export default function Home() {
       .then((p: PostInfo) => {
         setPostInfo(p);
         if (!p.participants) return;
-        setAvailableParticipants(p.participants.filter((e) => e.userId !== userStatus.user?.userId));
+        setAvailableParticipants(
+          p.participants.filter((e) => e.userId !== userStatus.user?.userId)
+        );
       })
       .catch((err: any) => {
         console.log(err);
@@ -134,7 +136,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginBottom: "3vh", }} alignItems="center">
+      <Stack spacing={4} sx={{ marginBottom: "3vh" }} alignItems="center">
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Create Appointment</Typography>
@@ -150,7 +152,7 @@ export default function Home() {
                   header="Title"
                   placeholder="This is Post Title"
                   value={postInfo?.title ? postInfo?.title : ""}
-                  handleValueChange={() => { }}
+                  handleValueChange={() => {}}
                   isErr={false}
                   errMsg=""
                   disabled={true}
@@ -163,7 +165,7 @@ export default function Home() {
                   header="Location"
                   placeholder="Enter Location"
                   initialValue={postInfo?.location ? postInfo?.location : ""}
-                  onChange={() => { }}
+                  onChange={() => {}}
                   isErr={false}
                   errMsg=""
                   disabled={true}
@@ -174,8 +176,13 @@ export default function Home() {
               <Box sx={CreatePostStyle.TextField}>
                 <DisplayDateTime
                   header="Date & Time"
-                  value={(postInfo?.startTime && postInfo?.endTime) ?
-                    `${postInfo?.startTime.format("DD/MM/YYYY h:mm A")} - ${postInfo?.endTime.format("DD/MM/YYYY h:mm A")}` : ""}
+                  value={
+                    postInfo?.startTime && postInfo?.endTime
+                      ? `${postInfo?.startTime.format(
+                          "DD/MM/YYYY h:mm A"
+                        )} - ${postInfo?.endTime.format("DD/MM/YYYY h:mm A")}`
+                      : ""
+                  }
                 />
               </Box>
 
@@ -184,15 +191,13 @@ export default function Home() {
                 <Tags
                   header="Tag"
                   value={postInfo?.tags}
-                  handleValueChange={() => { }}
+                  handleValueChange={() => {}}
                   menuValue={[]}
                   isErr={false}
                   errMsg=""
                   disabled={true}
                 />
-                <FormHelperText>
-                  {"\u00A0"}
-                </FormHelperText>
+                <FormHelperText>{"\u00A0"}</FormHelperText>
               </Box>
 
               {/* Description */}
@@ -202,7 +207,7 @@ export default function Home() {
                   header="Description"
                   placeholder="Enter Description Here"
                   value={postInfo?.description}
-                  handleValueChange={() => { }}
+                  handleValueChange={() => {}}
                   isErr={false}
                   errMsg=""
                   height={8}
@@ -212,19 +217,17 @@ export default function Home() {
             </Stack>
           </Card>
           <Card sx={CreatePostStyle.Card}>
-            <Stack sx={{
-              height: "75vh",
-              minHeight: "750px",
-            }}
+            <Stack
+              sx={{
+                height: "75vh",
+                minHeight: "750px",
+              }}
               justifyContent="space-between"
             >
               <Stack spacing={3} alignItems="center" justifyContent="center">
                 {/* Image list */}
                 <Box sx={CreatePostStyle.TextField}>
-                  <DisplayImages
-                    header="Image"
-                    images={postInfo.images}
-                  />
+                  <DisplayImages header="Image" images={postInfo.images} />
                 </Box>
 
                 {/* Participant */}
@@ -244,11 +247,10 @@ export default function Home() {
               <Box display="flex" sx={{ justifyContent: "center" }}>
                 <CommonButton label="Create" onClick={handleSubmit} />
               </Box>
-
             </Stack>
           </Card>
         </Stack>
-      </Stack >
+      </Stack>
     </>
   );
 }

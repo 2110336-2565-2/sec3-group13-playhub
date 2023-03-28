@@ -7,7 +7,7 @@ import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CakeIcon from "@mui/icons-material/Cake";
-import VerifiedIcon from '@mui/icons-material/Verified';
+import VerifiedIcon from "@mui/icons-material/Verified";
 import { grey } from "@mui/material/colors";
 import { COLOR_CODE } from "enum/COLOR";
 
@@ -54,116 +54,124 @@ export default function ParticipantMenuItem(props: props) {
     }
   }
 
-  return <>
-    <MenuItem
-      key={props.index}
-      onMouseEnter={handleOpenParticipantCard}
-      onMouseLeave={handleCloseParticipantCard}
-      onClick={() => {
-        handleCloseParticipantCard();
-        props.onClick();
-      }}
-    >
-      <Typography variant="body1">{props.participant.username}</Typography>
-    </MenuItem>
-
-    <Popover
-      sx={{
-        pointerEvents: "none",
-      }}
-      PaperProps={{
-        sx: {
-          borderRadius: "16px",
-        },
-      }}
-      open={Boolean(displayParticipantCard)}
-      anchorEl={displayParticipantCard}
-      onClose={handleCloseParticipantCard}
-      anchorOrigin={{
-        vertical: "bottom",
-        horizontal: "right",
-      }}
-      transformOrigin={{
-        vertical: "bottom",
-        horizontal: "left",
-      }}
-      disableRestoreFocus
-    >
-      <Card
-        style={{
-          padding: "10px",
-          width: "15vw",
-          minWidth: "100px",
-          boxShadow: "0px 0px 0px",
-          borderColor: grey[400],
+  return (
+    <>
+      <MenuItem
+        key={props.index}
+        onMouseEnter={handleOpenParticipantCard}
+        onMouseLeave={handleCloseParticipantCard}
+        onClick={() => {
+          handleCloseParticipantCard();
+          props.onClick();
         }}
       >
-        <Stack spacing={2} alignItems="center" justifyContent="center">
-          <Stack spacing={1} direction="row" alignItems="center" justifyContent="center">
-            {props.participant.isVerified &&
-              <Icon style={{ height: "35px", width: "35px", borderRadius: "100px" }}>
-              </Icon>
-            }
+        <Typography variant="body1">{props.participant.username}</Typography>
+      </MenuItem>
 
-            {/* name */}
-            <Typography variant="h2" align="center" sx={{
-              width: "10vw",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-              overflow: "hidden",
-            }}>
-              {props.participant.username}
-            </Typography>
+      <Popover
+        sx={{
+          pointerEvents: "none",
+        }}
+        PaperProps={{
+          sx: {
+            borderRadius: "16px",
+          },
+        }}
+        open={Boolean(displayParticipantCard)}
+        anchorEl={displayParticipantCard}
+        onClose={handleCloseParticipantCard}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        disableRestoreFocus
+      >
+        <Card
+          style={{
+            padding: "10px",
+            width: "15vw",
+            minWidth: "100px",
+            boxShadow: "0px 0px 0px",
+            borderColor: grey[400],
+          }}
+        >
+          <Stack spacing={2} alignItems="center" justifyContent="center">
+            <Stack spacing={1} direction="row" alignItems="center" justifyContent="center">
+              {props.participant.isVerified && (
+                <Icon style={{ height: "35px", width: "35px", borderRadius: "100px" }}></Icon>
+              )}
 
-            {/* verify chip */}
-            {props.participant.isVerified &&
-              <Icon sx={{ bgcolor: COLOR_CODE.PRIMARY, }} style={{ height: "35px", width: "35px", borderRadius: "100px" }}>
-                <VerifiedIcon color="secondary" fontSize="small" />
-              </Icon>
-            }
-          </Stack>
-
-          <Stack spacing={1.5} alignItems="center" justifyContent="center">
-            {/* image */}
-            <Avatar
-              sx={{ width: 150, height: 150, zIndex: "1" }}
-              alt="Profile picture"
-              src={props.participant.image as string}
-            />
-
-            {/* gender chip */}
-            <Chip
-              icon={displayGenderIcon(props.participant.sex)}
-              label={props.participant.sex}
-              sx={ParticipantStyle.Chip}
-            />
-
-            {/* birthdate chip */}
-            <Chip
-              icon={<CakeIcon />}
-              label={props.participant.birthdate}
-              sx={ParticipantStyle.Chip}
-            />
-          </Stack>
-          <Stack spacing={0}>
-            {`" ${props.participant.description} "`.split("\n").map((row, index) => (
+              {/* name */}
               <Typography
-                variant="body1"
+                variant="h2"
+                align="center"
                 sx={{
-                  ...ParticipantStyle.TextField,
-                  textAlign: "center",
+                  width: "10vw",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
                 }}
-                key={index}
               >
-                {row}
+                {props.participant.username}
               </Typography>
-            ))}
+
+              {/* verify chip */}
+              {props.participant.isVerified && (
+                <Icon
+                  sx={{ bgcolor: COLOR_CODE.PRIMARY }}
+                  style={{ height: "35px", width: "35px", borderRadius: "100px" }}
+                >
+                  <VerifiedIcon color="secondary" fontSize="small" />
+                </Icon>
+              )}
+            </Stack>
+
+            <Stack spacing={1.5} alignItems="center" justifyContent="center">
+              {/* image */}
+              <Avatar
+                sx={{ width: 150, height: 150, zIndex: "1" }}
+                alt="Profile picture"
+                src={props.participant.image as string}
+              />
+
+              {/* gender chip */}
+              <Chip
+                icon={displayGenderIcon(props.participant.sex)}
+                label={props.participant.sex}
+                sx={ParticipantStyle.Chip}
+              />
+
+              {/* birthdate chip */}
+              <Chip
+                icon={<CakeIcon />}
+                label={props.participant.birthdate}
+                sx={ParticipantStyle.Chip}
+              />
+            </Stack>
+            <Stack spacing={0}>
+              {`" ${props.participant.description} "`.split("\n").map((row, index) => (
+                <Typography
+                  variant="body1"
+                  sx={{
+                    ...ParticipantStyle.TextField,
+                    textAlign: "center",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                  }}
+                  key={index}
+                >
+                  {row}
+                </Typography>
+              ))}
+            </Stack>
           </Stack>
-        </Stack>
-      </Card>
-    </Popover>
-  </>
+        </Card>
+      </Popover>
+    </>
+  );
 }

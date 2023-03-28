@@ -43,7 +43,6 @@ export default function AppointmentCard(props: props) {
     return;
   }
 
-
   return (
     <Card sx={{ borderRadius: "30px" }}>
       <CardActionArea onClick={goToCardDetail}>
@@ -76,9 +75,11 @@ export default function AppointmentCard(props: props) {
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
-              }}>
+              }}
+            >
               {props.appointment.title}
-            </Typography>}
+            </Typography>
+          }
           subheader={
             <Typography
               variant="body1"
@@ -90,32 +91,40 @@ export default function AppointmentCard(props: props) {
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
                 overflow: "hidden",
-              }}>
+              }}
+            >
               {props.appointment.ownerName}
-            </Typography>}
+            </Typography>
+          }
         />
         <CardContent style={{ height: "13vh", minHeight: "120px", paddingLeft: 82, paddingTop: 0 }}>
           <Stack spacing={2} marginBottom={2}>
             {/* location */}
             <Typography variant="body1" display="inline-flex">
               <LocationOnIcon fontSize="medium" />
-              <Typography style={{ marginLeft: 8 }}
+              <Typography
+                style={{ marginLeft: 8 }}
                 sx={{
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
-                }}>{props.appointment.location}</Typography>
+                }}
+              >
+                {props.appointment.location}
+              </Typography>
             </Typography>
 
             {/* date */}
             <Typography variant="body1" display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
-              <Typography style={{ marginLeft: 8 }}
+              <Typography
+                style={{ marginLeft: 8 }}
                 sx={{
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
                   overflow: "hidden",
-                }}>
+                }}
+              >
                 {dayjs(props.appointment.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
                 {dayjs(props.appointment.endDateTime).format("DD/MM/YYYY h:mm A")}
               </Typography>
@@ -131,6 +140,6 @@ export default function AppointmentCard(props: props) {
           </Stack>
         </CardContent>
       </CardActionArea>
-    </Card >
+    </Card>
   );
 }
