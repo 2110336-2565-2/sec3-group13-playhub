@@ -33,7 +33,8 @@ const icon_style = {
 };
 
 export function SearchPanel(props: props) {
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tagNames, setTagNames] = useState<string[]>([]);
+  const [tagIds, setTagIds] = useState<number[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchMode, setSearchMode] = useState<SearchMode>("title");
@@ -42,24 +43,23 @@ export function SearchPanel(props: props) {
   useEffect(() => {
     GetAllTags(supabaseClient)
       .then((t) => {
-        setTags(t);
+        setTagNames(t.map((e) => e.name));
+        setTagIds(t.map((e) => e.id));
       })
       .catch((error) => {
         console.log(error);
       });
   }, [supabaseClient]);
 
-  const handleSubmit = (value: string) => {
-    if (value.length == 0) return;
-    const prefixedRemoved =
-      searchMode === "username" || searchMode === "tag" ? value.slice(1) : value;
-    const conditions = [...searchResults, { type: searchMode, value: prefixedRemoved }];
-    setSearchResults(conditions);
-    setSearchText("");
-
-    const hostNames = conditions.filter((e) => e.type == "username").map((e) => e.value);
-    const postNames = conditions.filter((e) => e.type == "title").map((e) => e.value);
-    SearchPostByConditions([], hostNames, postNames, supabaseClient)
+  const updatePosts = (conditions: SearchResult[]) => {
+    const targetTagIndex = conditions
+      .filter((e) => e.type == "tag")
+      .map((e) => e.value)
+      .map((e) => tagNames.findIndex((value) => value == e));
+    const targetTagIds = tagIds.filter((_, index) => targetTagIndex.includes(index));
+    const targetHostNames = conditions.filter((e) => e.type == "username").map((e) => e.value);
+    const targetPostNames = conditions.filter((e) => e.type == "title").map((e) => e.value);
+    SearchPostByConditions(targetTagIds, targetHostNames, targetPostNames, supabaseClient)
       .then((matchedPosts) => {
         props.setPosts(matchedPosts);
       })
@@ -68,15 +68,27 @@ export function SearchPanel(props: props) {
       });
   };
 
+  const handleSubmit = (value: string) => {
+    if (value.length == 0) return;
+    const prefixedRemoved =
+      searchMode === "username" || searchMode === "tag" ? value.slice(1) : value;
+    const conditions = [...searchResults, { type: searchMode, value: prefixedRemoved }];
+    setSearchResults(conditions);
+    setSearchText("");
+    updatePosts(conditions);
+  };
+
   const handleDeleteTag = (index: number) => {
-    setSearchResults((prevResults) => prevResults.filter((_, i) => i !== index));
+    const conditions = searchResults.filter((_, i) => i !== index);
+    setSearchResults(conditions);
+    updatePosts(conditions);
   };
 
   const getOptions = () => {
     if (searchText.length == 0 || searchMode != "tag") return [];
-    const options = tags
-      .filter((tag) => tag.name.toLowerCase().includes(searchText.slice(1).toLowerCase()))
-      .map((e) => e.name);
+    const options = tagNames.filter((tag) =>
+      tag.toLowerCase().includes(searchText.slice(1).toLowerCase())
+    );
     const selectedValues = searchResults
       .filter((result) => result.type === searchMode)
       .map((result) => result.value);

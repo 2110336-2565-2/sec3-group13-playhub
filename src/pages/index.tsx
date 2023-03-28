@@ -31,10 +31,11 @@ export default function Home() {
       GetPostsWithParticipants(supabaseClient)
         .then((p) => {
           setPosts(p);
-        }).catch((err) => {
-          console.log(err)
-          return
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
     getPostData();
   }, [userStatus.user, supabaseClient]);
@@ -63,13 +64,10 @@ export default function Home() {
             padding: "30px",
           }}
         >
-          <SearchPanel />
+          <SearchPanel setPosts={setPosts} />
           {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
-              <CommonPostCard
-                post={item}
-                userId={userStatus.user?.userId}
-              />
+              <CommonPostCard post={item} userId={userStatus.user?.userId} />
             </Box>
           ))}
         </Stack>
