@@ -3,7 +3,7 @@ import CommonButton from "@/components/public/CommonButton";
 import Loading from "@/components/public/Loading";
 import CommonTextField from "@/components/public/CommonTextField";
 
-import { Box, FormControl, FormControlLabel, FormHelperText, FormLabel, IconButton, Radio, RadioGroup, Stack, Typography, useTheme } from "@mui/material";
+import { Box, FormControlLabel, FormHelperText, IconButton, Radio, RadioGroup, Stack, Typography, useTheme } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { COLOR } from "enum/COLOR"
@@ -18,6 +18,7 @@ import { validation } from "@/types/Validation";
 import { validateImage, validateTextField } from "@/utilities/validation";
 import { CreateAdvertisement } from "@/services/Advertisement";
 import CommonDialog from "@/components/public/CommonDialog";
+import AdvertiseConfirmDialog from "@/components/admin/AdvertiseConfirmDialog";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
@@ -29,7 +30,7 @@ export default function Advertise() {
     const [owner, setOwner] = useState<string>("");
     const errorOwnerTextField: validation = validateTextField(owner, 1)
 
-    const [duration, setDuration] = useState<Number | null>(null)
+    const [duration, setDuration] = useState<number | null>(null)
     const [errDuration, setErrDuration] = useState<validation>({
         msg: "",
         err: false
@@ -46,6 +47,19 @@ export default function Advertise() {
     const [showDiscardDialog, setShowDiscardDialog] = useState<boolean>(false)
 
     function onSubmit(): void {
+        if (owner.length === 0 || !duration || !fileImage) return;
+        CreateAdvertisement(owner, duration, fileImage, supabaseClient)
+            .then(() => {
+                router.push(PAGE_PATHS.ADMIN_HOME + userStatus.user?.userId);
+                return;
+            })
+            .catch((err) => {
+                console.log(err);
+                return;
+            });
+    }
+
+    function openSummaryDialog(): void {
         setIsPressSubmit(true)
         if (errorOwnerTextField.err || errFileImage.err) {
             return;
@@ -64,24 +78,8 @@ export default function Advertise() {
             })
             return;
         }
-        // BACKEND should be implemented here!
-        // Use tempAdvertiseOwner,tempDuration, fileImage send to backend
-        const tempAdvertiseOwner: string = "Chula new course"
-        const tempDuration: number = 123
-        console.table([tempAdvertiseOwner, tempDuration])
-        // Upload via UI
-        console.log(fileImage)
-        CreateAdvertisement(tempAdvertiseOwner, tempDuration, fileImage, supabaseClient)
-            .then(() => {
-                router.push(PAGE_PATHS.ADMIN_HOME + userStatus.user?.userId);
-                return;
-            })
-            .catch((err) => {
-                console.log(err);
-                return;
-            });
+        setShowSummaryDialog(true)
     }
-
     function handleOwnerTextFieldChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         setIsPressSubmit(false)
         setOwner(event.target.value)
@@ -166,9 +164,20 @@ export default function Advertise() {
                 </Stack>
                 <Stack justifyContent={"center"} direction={"row"} flexWrap={"wrap"} spacing={"15px"} margin={"30px 0"}>
                     <CommonButton label={"Cancel"} color={COLOR.NATURAL} onClick={() => { setShowDiscardDialog(!showDiscardDialog) }} />
-                    <CommonButton label={"Add"} onClick={() => { setShowSummaryDialog(!showSummaryDialog) }} />
+                    <CommonButton label={"Add"} onClick={openSummaryDialog} />
                 </Stack>
             </Stack>
+            <AdvertiseConfirmDialog
+                openModal={showSummaryDialog}
+                handleCloseModal={() => { setShowSummaryDialog(false); }}
+                header={"Add this advertisement ?"}
+                buttonLabel={"Add"}
+                buttonColor={COLOR.PRIMARY}
+                buttonAction={onSubmit}
+                owner={owner}
+                duration={duration}
+                fileImageURL={displayImage}
+            />
             <CommonDialog
                 openModal={showDiscardDialog}
                 handleCloseModal={() => { setShowDiscardDialog(false) }}
