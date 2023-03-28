@@ -115,8 +115,9 @@ export function SearchPanel(props: props) {
 
 
     return (
-        <div>
-            {/*
+        <>
+            <div>
+                {/*
             I will use this layout later
                     <form onSubmit={handleSubmit}>
                     <TextField
@@ -134,30 +135,39 @@ export function SearchPanel(props: props) {
                     />
                 </form>
                 */}
-            <Autocomplete
-                sx={{ width: "500px" }}
-                freeSolo
-                inputValue={searchText}
-                onInputChange={(event, value) => setSearchText(value)}
-                options={getOptions()}
-                renderInput={(params) => (
-                    <TextField
-                        name="search"
-                        {...params}
-                        placeholder="Search: @username, #tag, title"
-                        variant="outlined"
-                        onChange={handleChange}
-                        onKeyDown={handleKeyDown}
-                    />
-                )}
-            />
-            <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 1, marginTop: "20px" }}>
-                {searchResults.map((result, index) => (
-                    <Chip key={index} label={`${result.type === 'username' ? '@' : result.type === 'tag' ? '#' : ''}${result.value}`} deleteIcon={<CloseIcon />}
-                        onDelete={() => handleDeleteTag(index)}
-                    />
-                ))}
-            </Box>
-        </div>
+                <Autocomplete
+                    sx={{ width: "500px" }}
+                    freeSolo
+                    inputValue={searchText}
+                    value={searchText}
+                    onInputChange={(event, value) => setSearchText(value)}
+                    options={getOptions()}
+                    renderInput={(params) => (
+                        <TextField
+                            name="search"
+                            {...params}
+                            placeholder="Search: @username, #tag, title"
+                            variant="outlined"
+                            onChange={handleChange}
+                            onKeyDown={handleKeyDown}
+                        />
+                    )}
+                />
+                <Box sx={{ display: 'flex', justifyContent: 'center', flexWrap: 'wrap', gap: 1, marginTop: "20px" }}>
+                    {searchResults.map((result, index) => (
+                        <Chip key={index} label={`${result.type === 'username' ? '@' : result.type === 'tag' ? '#' : ''}${result.value}`} deleteIcon={<CloseIcon />}
+                            onDelete={() => handleDeleteTag(index)}
+                        />
+                    ))}
+                </Box>
+            </div>
+            <div>
+                <p>Search Type: {searchType}</p>
+                <p>Search results: {JSON.stringify(searchResults)}</p>
+                <p>Search Text: {searchText}</p>
+
+            </div>
+
+        </>
     );
 }
