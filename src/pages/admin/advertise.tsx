@@ -5,6 +5,7 @@ import CommonTextField from "@/components/public/CommonTextField";
 
 import { Box, FormControlLabel, FormHelperText, IconButton, Input, Radio, RadioGroup, Stack, TextField, Typography, useTheme } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
+import CloseIcon from "@mui/icons-material/Close";
 
 import { COLOR } from "enum/COLOR"
 import { PAGE_PATHS } from "enum/PAGES"
@@ -112,6 +113,11 @@ export default function Advertise() {
         setFileImage(tempFile)
         event.target.value = null;
     };
+    function handleCancelImageChip(): void {
+        setErrorFileImage({ msg: "", err: false });
+        setDisplayImage(undefined)
+        setFileImage(null);
+    };
 
     function backToAdminHome(): void {
         router.push(`${PAGE_PATHS.ADMIN_HOME}${userStatus.user?.userId}`)
@@ -186,7 +192,17 @@ export default function Advertise() {
 
                 </RadioGroup>
                 <FormHelperText error>{isPressSubmit && errDuration.err && errDuration.msg}{"\u00A0"}</FormHelperText>
-                <Typography variant="body1">File</Typography>
+                <Stack direction={"row"} justifyContent="space-between">
+                    <Typography variant="body1">File</Typography>
+                    <IconButton
+                        onClick={handleCancelImageChip}
+                        color="primary"
+                        sx={{ position: "relative", top: "25px", backgroundColor: "black", opacity: fileImage === null ? 0 : 1 }}
+                        disabled={fileImage === null}
+                    >
+                        <CloseIcon fontSize="medium" />
+                    </IconButton>
+                </Stack>
                 <Stack spacing={1}>
                     <Box
                         sx={{
