@@ -1,7 +1,6 @@
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
 import NormalButton from "../public/CommonButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { ReactNode } from "react";
 
 type props = {
     openModal: boolean;
@@ -11,7 +10,7 @@ type props = {
     buttonColor: string;
     buttonAction: () => void;
     owner: string;
-    duration: Number | null;
+    duration: Number | "Other" | null;
     fileImageURL: string | undefined;
 };
 

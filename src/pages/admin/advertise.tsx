@@ -3,7 +3,7 @@ import CommonButton from "@/components/public/CommonButton";
 import Loading from "@/components/public/Loading";
 import CommonTextField from "@/components/public/CommonTextField";
 
-import { Box, FormControlLabel, FormHelperText, IconButton, Radio, RadioGroup, Stack, Typography, useTheme } from "@mui/material";
+import { Box, FormControlLabel, FormHelperText, IconButton, Input, Radio, RadioGroup, Stack, TextField, Typography, useTheme } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 
 import { COLOR } from "enum/COLOR"
@@ -30,7 +30,8 @@ export default function Advertise() {
     const [owner, setOwner] = useState<string>("");
     const errorOwnerTextField: validation = validateTextField(owner, 1)
 
-    const [duration, setDuration] = useState<number | null>(null)
+    const [duration, setDuration] = useState<number | "Other" | null>(null)
+    const [isDurationCustomed, setIsDurationCustomed] = useState<boolean>(false)
     const [errDuration, setErrDuration] = useState<validation>({
         msg: "",
         err: false
@@ -47,7 +48,7 @@ export default function Advertise() {
     const [showDiscardDialog, setShowDiscardDialog] = useState<boolean>(false)
 
     function onSubmit(): void {
-        if (owner.length === 0 || !duration || !fileImage) return;
+        if (owner.length === 0 || !duration || duration === "Other" || !fileImage) return;
         CreateAdvertisement(owner, duration, fileImage, supabaseClient)
             .then(() => {
                 router.push(PAGE_PATHS.ADMIN_HOME + userStatus.user?.userId);
@@ -78,6 +79,13 @@ export default function Advertise() {
             })
             return;
         }
+        if (duration === "Other" || duration === 0) {
+            setErrDuration({
+                msg: "Please fill in the number of day for advertisement’s duration",
+                err: true
+            })
+            return
+        }
         setShowSummaryDialog(true)
     }
     function handleOwnerTextFieldChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
@@ -85,9 +93,14 @@ export default function Advertise() {
         setOwner(event.target.value)
     }
     function handleDurationChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        setErrDuration({ msg: "", err: false })
+        if ((event.target as HTMLInputElement).value === "Other") {
+            setDuration("Other")
+            return
+        }
+        setIsDurationCustomed(false)
         const newDuration = Number((event.target as HTMLInputElement).value)
         setDuration(newDuration);
-        console.log(newDuration)
     }
     function handleImageChange(event: any): void {
         setIsPressSubmit(false)
@@ -135,9 +148,40 @@ export default function Advertise() {
                     onChange={handleDurationChange}
                 >
                     {[1, 7, 15, 30, 45, 60, 90, 180, 365].map((amountOfDays) => {
-                        return <FormControlLabel value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " day" + (amountOfDays === 1 ? "" : "s")} sx={{ width: "20%", margin: 0 }} />
+                        return <FormControlLabel value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " day" + (amountOfDays === 1 ? "" : "s")} sx={{ width: "18%", margin: 0 }} />
                     })}
-                    <FormControlLabel value={"Other"} control={<Radio />} label={"Other"} sx={{ width: "20%", margin: 0 }} />
+
+                    <FormControlLabel
+                        sx={{ width: "18%", margin: 0 }}
+                        value={duration}
+                        control={
+                            <Radio
+                                checked={isDurationCustomed}
+                                onClick={() => setIsDurationCustomed(true)}
+                                value="Other"
+                                color="primary"
+                            />
+                        }
+                        label={
+                            isDurationCustomed ?
+                                <Box display={"flex"}>
+                                    Other{"\u00A0"}
+                                    <Input
+                                        value={duration === "Other" ? "" : duration}
+                                        sx={{ width: "50px" }}
+                                        onChange={(e) => {
+                                            setErrDuration({ msg: "", err: false })
+                                            const val = e.target.value
+                                            const regex = RegExp("^[0-9]{0,3}$")
+                                            if (!regex.test(val)) return;
+                                            setDuration(Number(val))
+                                        }}
+                                    />
+                                    {"\u00A0"}days
+                                </Box>
+                                : 'Other'
+                        } />
+
                 </RadioGroup>
                 <FormHelperText error>{isPressSubmit && errDuration.err && errDuration.msg}{"\u00A0"}</FormHelperText>
                 <Typography variant="body1">File</Typography>
