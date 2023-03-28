@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useEffect, Dispatch, SetStateAction } from "react";
 import { TextField, Box, Autocomplete, Chip, Button } from "@mui/material";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import tags from "./testTagList";
+import { Tag } from "@/types/Tag";
+import { GetAllTags } from "@/services/Tags";
+import { Database } from "supabase/db_types";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Post } from "@/types/Post";
+import { SearchPostByConditions } from "@/services/Search";
 
 type SearchMode = "username" | "tag" | "title";
 
@@ -12,7 +17,9 @@ interface SearchResult {
   value: string;
 }
 
-type props = {};
+type props = {
+  setPosts: Dispatch<SetStateAction<Post[] | null>>;
+};
 
 const submit_layout = {
   width: "58px",
@@ -26,17 +33,39 @@ const icon_style = {
 };
 
 export function SearchPanel(props: props) {
+  const [tags, setTags] = useState<Tag[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchMode, setSearchMode] = useState<SearchMode>("title");
+  const supabaseClient = useSupabaseClient<Database>();
 
-  const handleSubmit = () => {
-    console.log("submit");
-    if (searchText.length == 0) return;
-    const value =
-      searchMode === "username" || searchMode === "tag" ? searchText.slice(1) : searchText;
-    setSearchResults([...searchResults, { type: searchMode, value }]);
+  useEffect(() => {
+    GetAllTags(supabaseClient)
+      .then((t) => {
+        setTags(t);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [supabaseClient]);
+
+  const handleSubmit = (value: string) => {
+    if (value.length == 0) return;
+    const prefixedRemoved =
+      searchMode === "username" || searchMode === "tag" ? value.slice(1) : value;
+    const conditions = [...searchResults, { type: searchMode, value: prefixedRemoved }];
+    setSearchResults(conditions);
     setSearchText("");
+
+    const hostNames = conditions.filter((e) => e.type == "username").map((e) => e.value);
+    const postNames = conditions.filter((e) => e.type == "title").map((e) => e.value);
+    SearchPostByConditions([], hostNames, postNames, supabaseClient)
+      .then((matchedPosts) => {
+        props.setPosts(matchedPosts);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const handleDeleteTag = (index: number) => {
@@ -46,12 +75,12 @@ export function SearchPanel(props: props) {
   const getOptions = () => {
     if (searchText.length == 0 || searchMode != "tag") return [];
     const options = tags
-      .filter((tag) => tag.toLowerCase().includes(searchText.slice(1).toLowerCase()))
-      .map((e) => "#" + e);
+      .filter((tag) => tag.name.toLowerCase().includes(searchText.slice(1).toLowerCase()))
+      .map((e) => e.name);
     const selectedValues = searchResults
       .filter((result) => result.type === searchMode)
       .map((result) => result.value);
-    return options.filter((option) => !selectedValues.includes(option));
+    return options.filter((option) => !selectedValues.includes(option)).map((e) => "#" + e);
   };
 
   const handleInputValueChange = (value: string) => {
@@ -70,6 +99,7 @@ export function SearchPanel(props: props) {
       <div>
         <Autocomplete
           sx={{ width: "500px" }}
+          disableClearable
           freeSolo
           inputValue={searchText}
           value={searchText}
@@ -77,7 +107,8 @@ export function SearchPanel(props: props) {
             handleInputValueChange(value);
           }}
           onChange={(_, value) => {
-            value && setSearchText(value);
+            if (!value) return;
+            handleSubmit(value);
           }}
           options={getOptions()}
           renderInput={(params) => (
@@ -93,7 +124,7 @@ export function SearchPanel(props: props) {
                     variant="contained"
                     type="submit"
                     style={submit_layout}
-                    onClick={handleSubmit}
+                    onClick={() => handleSubmit(searchText)}
                   >
                     <SearchIcon style={icon_style} />
                   </Button>
@@ -122,11 +153,6 @@ export function SearchPanel(props: props) {
             />
           ))}
         </Box>
-      </div>
-      <div>
-        <p>Search Type: {searchMode}</p>
-        <p>Search results: {JSON.stringify(searchResults)}</p>
-        <p>Search Text: {searchText}</p>
       </div>
     </>
   );
