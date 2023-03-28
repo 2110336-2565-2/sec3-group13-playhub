@@ -1,9 +1,8 @@
 import React, { useEffect, Dispatch, SetStateAction } from "react";
-import { TextField, Box, Autocomplete, Chip, Button } from "@mui/material";
+import { TextField, Box, Autocomplete, Chip, Button, Typography, Stack } from "@mui/material";
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import { Tag } from "@/types/Tag";
 import { GetAllTags } from "@/services/Tags";
 import { Database } from "supabase/db_types";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -157,9 +156,20 @@ export function SearchPanel(props: props) {
           {searchResults.map((result, index) => (
             <Chip
               key={index}
-              label={`${result.type === "username" ? "@" : result.type === "tag" ? "#" : ""}${
-                result.value
-              }`}
+              label={
+                <Stack direction="row" spacing="10px">
+                  <Typography variant="body2">
+                    {result.type === "username"
+                      ? "HOST:"
+                      : result.type === "tag"
+                      ? "TAG:"
+                      : "TITLE:"}
+                  </Typography>
+                  <Typography variant="body2" color="primary">
+                    {result.value}
+                  </Typography>
+                </Stack>
+              }
               deleteIcon={<CloseIcon />}
               onDelete={() => handleDeleteTag(index)}
             />
