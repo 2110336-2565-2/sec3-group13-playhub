@@ -17,6 +17,7 @@ import { userContext } from "supabase/user_context";
 import { validation } from "@/types/Validation";
 import { validateImage, validateTextField } from "@/utilities/validation";
 import { CreateAdvertisement } from "@/services/Advertisement";
+import CommonDialog from "@/components/public/CommonDialog";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
@@ -40,6 +41,9 @@ export default function Advertise() {
         msg: "",
         err: false
     })
+
+    const [showSummaryDialog, setShowSummaryDialog] = useState<boolean>(false)
+    const [showDiscardDialog, setShowDiscardDialog] = useState<boolean>(false)
 
     function onSubmit(): void {
         setIsPressSubmit(true)
@@ -161,10 +165,19 @@ export default function Advertise() {
                     <FormHelperText error>{isPressSubmit && errFileImage.err && errFileImage.msg}{"\u00A0"}</FormHelperText>
                 </Stack>
                 <Stack justifyContent={"center"} direction={"row"} flexWrap={"wrap"} spacing={"15px"} marginTop={"40px"}>
-                    <CommonButton label={"Cancel"} color={COLOR.NATURAL} onClick={backToAdminHome} />
-                    <CommonButton label={"Add"} onClick={onSubmit} />
+                    <CommonButton label={"Cancel"} color={COLOR.NATURAL} onClick={() => { setShowDiscardDialog(!showDiscardDialog) }} />
+                    <CommonButton label={"Add"} onClick={() => { setShowSummaryDialog(!showSummaryDialog) }} />
                 </Stack>
             </Stack>
+            <CommonDialog
+                openModal={showDiscardDialog}
+                handleCloseModal={() => { setShowDiscardDialog(false) }}
+                header={["Are you sure to cancel this advertisement ?"]}
+                content={"*This advertisement would be discarded."}
+                buttonLabel={"Yes"}
+                buttonColor={COLOR.PRIMARY}
+                buttonAction={backToAdminHome}
+            />
         </>
     )
 }
