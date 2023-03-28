@@ -65,13 +65,6 @@ export default function Advertise() {
         if (errorOwnerTextField.err || errFileImage.err) {
             return;
         }
-        if (!fileImage) {
-            setErrorFileImage({
-                msg: "Please upload advertisement’s image.",
-                err: true
-            })
-            return;
-        }
         if (duration === null) {
             setErrDuration({
                 msg: "Please select advertisement’s duration.",
@@ -85,6 +78,13 @@ export default function Advertise() {
                 err: true
             })
             return
+        }
+        if (!fileImage) {
+            setErrorFileImage({
+                msg: "Please upload advertisement’s image.",
+                err: true
+            })
+            return;
         }
         setShowSummaryDialog(true)
     }
