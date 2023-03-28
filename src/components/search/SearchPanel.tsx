@@ -162,6 +162,7 @@ export function SearchPanel(props: props) {
                 <p>Search Type: {searchMode}</p>
                 <p>Search results: {JSON.stringify(searchResults)}</p>
                 <p>Search Text: {searchText}</p>
+                <p>Option: {getOptions()}</p>
 
             </div>
 
