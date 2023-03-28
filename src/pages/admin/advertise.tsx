@@ -93,6 +93,7 @@ export default function Advertise() {
         setOwner(event.target.value)
     }
     function handleDurationChange(event: React.ChangeEvent<HTMLInputElement>): void {
+        setIsPressSubmit(false)
         setErrDuration({ msg: "", err: false })
         if ((event.target as HTMLInputElement).value === "Other") {
             setDuration("Other")
@@ -176,6 +177,7 @@ export default function Advertise() {
                                             if (!regex.test(val)) return;
                                             setDuration(Number(val))
                                         }}
+                                        error={isPressSubmit && duration === "Other"}
                                     />
                                     {"\u00A0"}days
                                 </Box>
