@@ -50,18 +50,27 @@ export default function Home() {
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Select Appointment To Confirm</Typography>
         </Box>
-        <Grid
-          container
-          justifyContent="space-between"
-          rowSpacing={6}
-          style={{ width: "80vw", minWidth: "1050px", marginTop: -6 }}
-        >
-          {appointments.map((appointment, index) => (
-            <Grid item key={index} xs={5.75}>
-              <AppointmentCard appointment={appointment} prefix={PAGE_PATHS.CONFIRM_APPOINTMENT} />
-            </Grid>
-          ))}
-        </Grid>
+        {appointments.length === 0 ? (
+          <Stack alignItems="center" justifyContent="center" style={{ height: "70vh" }}>
+            <Typography variant="h2">No Appointment to Confirm/Reject Yet.</Typography>
+          </Stack>
+        ) : (
+          <Grid
+            container
+            justifyContent="space-between"
+            rowSpacing={6}
+            style={{ width: "80vw", minWidth: "1050px", marginTop: -6 }}
+          >
+            {appointments.map((appointment, index) => (
+              <Grid item key={index} xs={5.75}>
+                <AppointmentCard
+                  appointment={appointment}
+                  prefix={PAGE_PATHS.CONFIRM_APPOINTMENT}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Stack>
     </>
   );
