@@ -23,3 +23,27 @@ export async function GetReviewsByRevieweeId(
         score: review.score,
     }));
 }
+export async function GetIsUserReviewedAppointment(
+    supabaseClient: SupabaseClient<Database>,
+    userId: string,
+    appointmentId: number,
+): Promise<boolean> {
+    const isReviewedResult = await supabaseClient.rpc(
+        "get_is_user_reviewed_appointment",
+        {
+            user_id: userId,
+            appointment_id: appointmentId
+        }
+    );
+
+    if (isReviewedResult.error) {
+        console.log(isReviewedResult.error);
+        throw new Error("Something went wrong!!");
+    }
+
+    if (isReviewedResult.data) {
+        return true;
+    } else {
+        return false;
+    }
+}

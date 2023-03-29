@@ -22,6 +22,7 @@ import Participant from "@/components/post/Participant";
 import { COLOR_CODE } from "enum/COLOR";
 import CommonButton from "@/components/public/CommonButton";
 import RateDialog from "@/components/rate/RateDialog";
+import { GetIsUserReviewedAppointment } from "@/services/Review";
 
 const ParticipantAppointmentStyle = {
   TextField: {
@@ -63,11 +64,11 @@ export default function Home() {
         return;
       });
 
-    // use checking whether this appointment is reviewed by this user or not
-    // if so
-    setIsReviewed(true);
-    //if not 
-    setIsReviewed(false);
+    if (userStatus.user) {
+      GetIsUserReviewedAppointment(supabaseClient, userStatus.user!.userId, appointmentId)
+        .then((value) => setIsReviewed(value));
+    }
+
   }, [supabaseClient, appointmentId, userStatus.user]);
 
   function backToMyAppointments(): void {
