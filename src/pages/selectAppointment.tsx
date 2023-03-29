@@ -1,6 +1,6 @@
 import AppointmentCard from "@/components/appointment/AppointmentCard";
 import Navbar from "@/components/public/Navbar";
-import { GetAppointmentsByUserId } from "@/services/Appointment";
+import { GetAppointmentsByUserIdWhichPending } from "@/services/Appointment";
 import { Appointment } from "@/types/Appointment";
 import { Typography, Grid, Box, Stack } from "@mui/material";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -21,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     if (!userStatus.user) return;
 
-    GetAppointmentsByUserId(userStatus.user.userId, supabaseClient)
+    GetAppointmentsByUserIdWhichPending(userStatus.user.userId, supabaseClient)
       .then((appointment) => {
         setAppointments(appointment);
       })
