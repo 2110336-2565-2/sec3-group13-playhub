@@ -119,6 +119,7 @@ export function SearchPanel(props: props) {
     }
     const conditions = [...searchResults, { type: searchMode, value: prefixedRemoved }];
     setSearchResults(conditions);
+    setSearchMode("title");
     setSearchText("");
     updatePosts(conditions);
   };
@@ -183,6 +184,7 @@ export function SearchPanel(props: props) {
                   sx={{
                     border: "3px solid black",
                   }}
+                  disabled={searchMode == "tag"}
                   variant="contained"
                   type="submit"
                   style={submit_layout}
