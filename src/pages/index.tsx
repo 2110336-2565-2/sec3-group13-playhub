@@ -71,7 +71,10 @@ export default function Home() {
               </Box>
             ))
           ) : (
-            <Typography>No post found</Typography>
+            <Stack alignItems="center" spacing={2}>
+              <Typography variant="h5">Sorry! No Post Found</Typography>
+              <Typography variant="body2">Please try again with different keyword</Typography>
+            </Stack>
           )}
         </Stack>
         <ToTop />
