@@ -177,6 +177,15 @@ export function SearchPanel(props: props) {
             placeholder="Search: @username, #tag, title"
             variant="outlined"
             error={errMsg != ""}
+            inputProps={{
+              ...params.inputProps,
+              sx: {
+                textAlign: "center",
+                "&::placeholder": {
+                  textAlign: "center",
+                },
+              },
+            }}
             InputProps={{
               ref: params.InputProps.ref,
               sx: textfield_overwrite,
