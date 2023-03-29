@@ -216,7 +216,7 @@ export default function Home() {
                 justifyContent="center"
                 sx={ConfirmAppointmentStyle.TextField}
               >
-                <Typography variant="h2">Join with</Typography>
+                <Typography variant="h2">Participant List</Typography>
                 <Box display="flex">
                   {appointment.acceptParticipants.length == 0 && (
                     <Typography variant="body1" color="error">
