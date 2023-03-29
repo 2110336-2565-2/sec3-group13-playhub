@@ -65,7 +65,7 @@ export default function Home() {
       });
 
     if (userStatus.user) {
-      GetIsUserReviewedAppointment(supabaseClient, userStatus.user!.userId, appointmentId)
+      GetIsUserReviewedAppointment(supabaseClient, userStatus.user.userId, appointmentId)
         .then((value) => setIsReviewed(value));
     }
 
@@ -222,6 +222,8 @@ export default function Home() {
       <RateDialog
         openModal={openRateModal}
         handleCloseModal={handleCloseRateModal}
+        appointmentId={appointmentId}
+        isEditing={isReviewed!}
       />
     </>
   );

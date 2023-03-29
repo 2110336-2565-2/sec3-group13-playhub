@@ -1,7 +1,7 @@
 import { Box, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, FormHelperText, IconButton, Radio, Rating, Stack, Typography } from "@mui/material";
 import NormalButton from "../public/CommonButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState, useContext, useRef } from "react";
 import { RATING } from "enum/RATING";
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
@@ -12,10 +12,16 @@ import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import { validation } from "@/types/Validation";
 import { validateTextField } from "@/utilities/validation";
+import { CreateReview, GetReviewByReviewerAndAppointmentId, UpdateReview } from "@/services/Review";
+import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 type props = {
   openModal: boolean;
   handleCloseModal: () => void;
+  appointmentId: number;
+  isEditing: boolean;
 };
 
 type State = {
@@ -31,6 +37,8 @@ export default function RateDialog(props: props) {
     ratingScore: false,
     ratingDescription: false
   })
+  const userStatus = useContext(userContext);
+  const supabaseClient = useSupabaseClient<Database>();
 
   const isRatingScoreErr: boolean = ratingScore === 0;
   const ratingScoreErrMsg: string = "*Rate score can’t be blank"
@@ -39,6 +47,7 @@ export default function RateDialog(props: props) {
     CHAR_LIMIT.MIN_DESCRIPTION,
     CHAR_LIMIT.MAX_DESCRIPTION
   );
+  const [reviewId, setReviewId] = useState<number | null>(null);
 
   function generateRateLabel(): string {
     switch (ratingScore) {
@@ -92,17 +101,46 @@ export default function RateDialog(props: props) {
     })
 
     if (!isRatingScoreErr && !ratingDescriptionError.err) {
-      // add submit rating service here
+      if (props.isEditing) {
+        UpdateReview(
+          supabaseClient,
+          reviewId!,
+          ratingDescription,
+          ratingScore,
+          isAnonymous,
+        )
+      } else {
+        CreateReview(
+          supabaseClient,
+          ratingDescription,
+          ratingScore,
+          props.appointmentId,
+          userStatus.user!.userId,
+          isAnonymous,
+        );
+      }
       props.handleCloseModal();
     }
   }
 
   useEffect(() => {
-    // require retreiving rating imformation and set them
-    //setRatingScore(2); // this is mocking score, need to be set by some services
-    //setRatingDescription("I love it"); // this is mocking description, need to be set by some services
-    //setIsAnonymous(true); // this is mocking anonymous, need to be set by some services
-  });
+    console.log("use effect");
+    if (userStatus.user) {
+      GetReviewByReviewerAndAppointmentId(supabaseClient, userStatus.user.userId, props.appointmentId)
+        .then((review) => {
+          if (review) {
+            setRatingScore(review.score);
+            setRatingDescription(review.description);
+            setIsAnonymous(review.isAnonymous);
+            setReviewId(review.id);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
+    }
+  }, [supabaseClient, userStatus.user]);
 
   return (
     <>

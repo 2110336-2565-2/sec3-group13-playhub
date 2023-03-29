@@ -25,7 +25,7 @@ import { COLOR_CODE } from "enum/COLOR";
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { Review } from "@/types/Review";
+import { ReviewExtend } from "@/types/Review";
 import { GetReviewsByRevieweeId } from "@/services/Review";
 
 const MyProfileStyle = {
@@ -78,7 +78,7 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
 
   const [targetUserData, setTargetUserData] = useState<User | null>(null);
-  const [feedbacks, setFeedbacks] = useState<Review[]>([])
+  const [feedbacks, setFeedbacks] = useState<ReviewExtend[]>([])
 
   const [expanded, setExpanded] = useState(false);
 
@@ -227,7 +227,7 @@ export default function Home() {
               <Collapse in={expanded} sx={{ marginTop: 2, marginBottom: 1 }}>
                 <Stack spacing={2}>
                   {/* for actual feedbacks need to change mackRating to feedabcks */}
-                  {feedbacks.map((rating: Review, index) => (
+                  {feedbacks.map((rating: ReviewExtend, index) => (
                     <>
                       <Divider sx={{ height: "2px" }} color={COLOR_CODE.BLACK} />
                       <Stack
