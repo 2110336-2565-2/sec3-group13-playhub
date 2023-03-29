@@ -3,7 +3,7 @@ import { Box, FormHelperText, Grid, IconButton, Menu, Stack, Typography } from "
 import Participant from "../post/Participant";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
-import ParticipantMenuItem from "./ParticipantMunuItem";
+import ParticipantMenuItem from "./ParticipantMenuItem";
 import { COLOR_CODE } from "enum/COLOR";
 import CloseIcon from "@mui/icons-material/Close";
 
