@@ -4,7 +4,6 @@ import dayjs from "dayjs";
 import { Database } from "supabase/db_types";
 import { PostInfo } from "../types/Post";
 import { User } from "@/types/User";
-import { dayjsWithoutTZ } from "./Posts";
 
 export async function CreateAppointment(
   postId: number,
@@ -86,8 +85,8 @@ export async function GetAppointments(
     ownerName: appointment.username,
     ownerProfilePic: appointment.image,
     location: appointment.location,
-    startDateTime: dayjsWithoutTZ(appointment.start_time).format("DD/MM/YYYY hh:mm A"),
-    endDateTime: dayjsWithoutTZ(appointment.end_time).format("DD/MM/YYYY hh:mm A"),
+    startDateTime: dayjs(appointment.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjs(appointment.end_time).format("DD/MM/YYYY hh:mm A"),
     participantAmount: appointment.participant_number,
   }));
 }
@@ -115,12 +114,8 @@ export async function GetAppointmentsByUserIdWhichPending(
     ownerName: appointment.username,
     ownerProfilePic: appointment.image,
     location: appointment.location,
-    startDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].start_time).format(
-      "DD/MM/YYYY hh:mm A"
-    ),
-    endDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].end_time).format(
-      "DD/MM/YYYY hh:mm A"
-    ),
+    startDateTime: dayjs(getAppointmentsResult.data[0].start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjs(getAppointmentsResult.data[0].end_time).format("DD/MM/YYYY hh:mm A"),
     participantAmount: appointment.participant_number,
   }));
 }
@@ -145,12 +140,8 @@ export async function GetAppointmentsByUserId(
     ownerName: appointment.username,
     ownerProfilePic: appointment.image,
     location: appointment.location,
-    startDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].start_time).format(
-      "DD/MM/YYYY hh:mm A"
-    ),
-    endDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].end_time).format(
-      "DD/MM/YYYY hh:mm A"
-    ),
+    startDateTime: dayjs(getAppointmentsResult.data[0].start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjs(getAppointmentsResult.data[0].end_time).format("DD/MM/YYYY hh:mm A"),
     participantAmount: appointment.participant_number,
   }));
 }
@@ -181,12 +172,8 @@ export async function GetAppointmentByAppointmentId(
   const detailHeader: AppointmentDetailHeader = {
     title: getAppointmentsResult.data[0].title,
     location: getAppointmentsResult.data[0].location,
-    startDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].start_time).format(
-      "DD/MM/YYYY hh:mm A"
-    ),
-    endDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].end_time).format(
-      "DD/MM/YYYY hh:mm A"
-    ),
+    startDateTime: dayjs(getAppointmentsResult.data[0].start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjs(getAppointmentsResult.data[0].end_time).format("DD/MM/YYYY hh:mm A"),
     tags: getAppointmentsResult.data[0].tags,
     description: getAppointmentsResult.data[0].description,
   };
