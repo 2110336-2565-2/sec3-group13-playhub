@@ -61,6 +61,7 @@ const textfield_overwrite = {
 
 const helperText = {
   marginTop: "10px",
+  alignSelf: "start",
 };
 
 export function SearchPanel(props: props) {
@@ -224,6 +225,10 @@ export function SearchPanel(props: props) {
         {searchResults.map((result, index) => (
           <Chip
             key={index}
+            sx={{
+              border: "3px solid black",
+              backgroundColor: "white",
+            }}
             label={
               <Stack direction="row" spacing="10px">
                 <Typography variant="body2">
