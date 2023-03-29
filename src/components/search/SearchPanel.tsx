@@ -30,15 +30,32 @@ type props = {
 };
 
 const submit_layout = {
-  width: "58px",
   height: "58px",
-  background: "#FFA31A",
-  border: "3px solid #000000",
   borderRadius: "15px",
 };
 
-const icon_style = {
-  color: "black",
+const textfield_overwrite = {
+  "&&": {
+    padding: "0px",
+  },
+  "&& fieldset": {
+    transition: "border 0.3s",
+  },
+  "&&.Mui-error fieldset": {
+    border: "3px solid red",
+  },
+  "&&:hover .MuiButton-root": {
+    border: "3px solid #ffa31a",
+  },
+  "&&.Mui-focused .MuiButton-root": {
+    border: "3px solid #ffa31a",
+  },
+  "&&.Mui-error .MuiButton-root": {
+    border: "3px solid red",
+  },
+  "&&.Mui-error .MuiSvgIcon-root": {
+    color: "red",
+  },
 };
 
 const helperText = {
@@ -153,16 +170,21 @@ export function SearchPanel(props: props) {
               name="search"
               placeholder="Search: @username, #tag, title"
               variant="outlined"
+              error={errMsg != ""}
               InputProps={{
                 ref: params.InputProps.ref,
+                sx: textfield_overwrite,
                 endAdornment: (
                   <Button
+                    sx={{
+                      border: "3px solid black",
+                    }}
                     variant="contained"
                     type="submit"
                     style={submit_layout}
                     onClick={() => handleSubmit(searchText)}
                   >
-                    <SearchIcon style={icon_style} />
+                    <SearchIcon />
                   </Button>
                 ),
               }}
