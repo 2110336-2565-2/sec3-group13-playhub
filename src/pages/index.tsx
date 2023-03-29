@@ -61,17 +61,17 @@ export default function Home() {
             alignItems: "center",
             flexDirection: "column",
             padding: "30px",
+            minHeight: "80vh",
           }}
         >
           <SearchPanel setPosts={setPosts} />
-          {posts.length > 0 ? (
-            posts.map((item, index) => (
-              <Box width="60vw" key={index}>
-                <CommonPostCard post={item} userId={userStatus.user?.userId} />
-              </Box>
-            ))
-          ) : (
-            <Stack alignItems="center" spacing={2}>
+          {posts.map((item, index) => (
+            <Box width="60vw" key={index}>
+              <CommonPostCard post={item} userId={userStatus.user?.userId} />
+            </Box>
+          ))}
+          {posts.length == 0 && (
+            <Stack alignItems="center" spacing={2} flexGrow={10} justifyContent="center">
               <Typography variant="h5">Sorry! No Post Found</Typography>
               <Typography variant="body2">Please try again with different keyword</Typography>
             </Stack>
