@@ -236,7 +236,7 @@ export default function Home() {
                       >
                         {/* rating title */}
                         <Box display="flex">
-                          <Typography variant="h3">{rating.reviewerName}</Typography>
+                          <Typography variant="h3">{rating.isAnonymous ? "Anonymous" : rating.reviewerName}</Typography>
                           <Typography variant="body1" sx={{ fontStyle: 'italic' }}>{"\u00A0"}from{"\u00A0"}</Typography>
                           <Typography variant="h3">{rating.appointmentTitle}</Typography>
                         </Box>
