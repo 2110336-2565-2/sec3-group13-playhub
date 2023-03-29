@@ -4,6 +4,7 @@ import dayjs from "dayjs";
 import { Database } from "supabase/db_types";
 import { PostInfo } from "../types/Post";
 import { User } from "@/types/User";
+import { dayjsWithoutTZ } from "./Posts";
 
 export async function CreateAppointment(
   postId: number,
@@ -71,22 +72,22 @@ export async function RejectAppointment(
 export async function GetAppointments(
   supabaseClient: SupabaseClient<Database>
 ): Promise<Appointment[]> {
-  const GetAppointmentsResult = await supabaseClient.rpc("get_appointments");
+  const getAppointmentsResult = await supabaseClient.rpc("get_appointments");
 
-  if (GetAppointmentsResult.error) {
-    console.log(GetAppointmentsResult.error);
+  if (getAppointmentsResult.error) {
+    console.log(getAppointmentsResult.error);
     throw new Error("Something went wrong!!");
   }
 
-  return GetAppointmentsResult.data.map((appointment) => ({
+  return getAppointmentsResult.data.map((appointment) => ({
     appointmentId: appointment.id,
     title: appointment.title,
     ownerId: appointment.owner_id,
     ownerName: appointment.username,
     ownerProfilePic: appointment.image,
     location: appointment.location,
-    startDateTime: appointment.start_time,
-    endDateTime: appointment.end_time,
+    startDateTime: dayjsWithoutTZ(appointment.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjsWithoutTZ(appointment.end_time).format("DD/MM/YYYY hh:mm A"),
     participantAmount: appointment.participant_number,
   }));
 }
@@ -114,8 +115,12 @@ export async function GetAppointmentsByUserIdWhichPending(
     ownerName: appointment.username,
     ownerProfilePic: appointment.image,
     location: appointment.location,
-    startDateTime: dayjs(appointment.start_time),
-    endDateTime: dayjs(appointment.end_time),
+    startDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].start_time).format(
+      "DD/MM/YYYY hh:mm A"
+    ),
+    endDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].end_time).format(
+      "DD/MM/YYYY hh:mm A"
+    ),
     participantAmount: appointment.participant_number,
   }));
 }
@@ -140,8 +145,12 @@ export async function GetAppointmentsByUserId(
     ownerName: appointment.username,
     ownerProfilePic: appointment.image,
     location: appointment.location,
-    startDateTime: dayjs(appointment.start_time),
-    endDateTime: dayjs(appointment.end_time),
+    startDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].start_time).format(
+      "DD/MM/YYYY hh:mm A"
+    ),
+    endDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].end_time).format(
+      "DD/MM/YYYY hh:mm A"
+    ),
     participantAmount: appointment.participant_number,
   }));
 }
@@ -172,8 +181,12 @@ export async function GetAppointmentByAppointmentId(
   const detailHeader: AppointmentDetailHeader = {
     title: getAppointmentsResult.data[0].title,
     location: getAppointmentsResult.data[0].location,
-    startDateTime: dayjs(getAppointmentsResult.data[0].start_time),
-    endDateTime: dayjs(getAppointmentsResult.data[0].end_time),
+    startDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].start_time).format(
+      "DD/MM/YYYY hh:mm A"
+    ),
+    endDateTime: dayjsWithoutTZ(getAppointmentsResult.data[0].end_time).format(
+      "DD/MM/YYYY hh:mm A"
+    ),
     tags: getAppointmentsResult.data[0].tags,
     description: getAppointmentsResult.data[0].description,
   };
