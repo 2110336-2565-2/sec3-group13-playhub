@@ -59,8 +59,6 @@ const textfield_overwrite = {
 };
 
 const helperText = {
-  display: "flex",
-  flexDirection: "row",
   marginTop: "10px",
 };
 
@@ -102,9 +100,16 @@ export function SearchPanel(props: props) {
   };
 
   const handleSubmit = (value: string) => {
-    if (value.length == 0) return;
+    if (value.length == 0) {
+      setErrMsg("Give at least one character.");
+      return;
+    }
     const prefixedRemoved =
       searchMode === "username" || searchMode === "tag" ? value.slice(1) : value;
+    if (prefixedRemoved.length == 0) {
+      setErrMsg("Give at least one character.");
+      return;
+    }
     const selectedInSameType = searchResults
       .filter((e) => e.type == searchMode)
       .map((e) => e.value);
@@ -148,84 +153,79 @@ export function SearchPanel(props: props) {
   };
 
   return (
-    <>
-      <div>
-        <Autocomplete
-          sx={{ width: "500px" }}
-          disableClearable
-          freeSolo
-          inputValue={searchText}
-          value={searchText}
-          onInputChange={(_, value) => {
-            handleInputValueChange(value);
-          }}
-          onChange={(_, value) => {
-            if (!value) return;
-            handleSubmit(value);
-          }}
-          options={getOptions()}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              name="search"
-              placeholder="Search: @username, #tag, title"
-              variant="outlined"
-              error={errMsg != ""}
-              InputProps={{
-                ref: params.InputProps.ref,
-                sx: textfield_overwrite,
-                endAdornment: (
-                  <Button
-                    sx={{
-                      border: "3px solid black",
-                    }}
-                    variant="contained"
-                    type="submit"
-                    style={submit_layout}
-                    onClick={() => handleSubmit(searchText)}
-                  >
-                    <SearchIcon />
-                  </Button>
-                ),
-              }}
-            />
-          )}
-        />
-        <Box sx={helperText}>
-          <FormHelperText error>{errMsg != "" && errMsg}</FormHelperText>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            flexWrap: "wrap",
-            gap: 1,
-            marginTop: "20px",
-          }}
-        >
-          {searchResults.map((result, index) => (
-            <Chip
-              key={index}
-              label={
-                <Stack direction="row" spacing="10px">
-                  <Typography variant="body2">
-                    {result.type === "username"
-                      ? "HOST:"
-                      : result.type === "tag"
-                      ? "TAG:"
-                      : "TITLE:"}
-                  </Typography>
-                  <Typography variant="body2" color="primary">
-                    {result.value}
-                  </Typography>
-                </Stack>
-              }
-              deleteIcon={<CloseIcon />}
-              onDelete={() => handleDeleteTag(index)}
-            />
-          ))}
-        </Box>
-      </div>
-    </>
+    <Stack alignItems="center" direction="column">
+      <Autocomplete
+        sx={{ width: "500px" }}
+        disableClearable
+        freeSolo
+        inputValue={searchText}
+        value={searchText}
+        onInputChange={(_, value) => {
+          handleInputValueChange(value);
+        }}
+        onChange={(_, value) => {
+          if (!value) return;
+          handleSubmit(value);
+        }}
+        options={getOptions()}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            name="search"
+            placeholder="Search: @username, #tag, title"
+            variant="outlined"
+            error={errMsg != ""}
+            InputProps={{
+              ref: params.InputProps.ref,
+              sx: textfield_overwrite,
+              endAdornment: (
+                <Button
+                  sx={{
+                    border: "3px solid black",
+                  }}
+                  variant="contained"
+                  type="submit"
+                  style={submit_layout}
+                  onClick={() => handleSubmit(searchText)}
+                >
+                  <SearchIcon />
+                </Button>
+              ),
+            }}
+          />
+        )}
+      />
+      <Box sx={helperText}>
+        <FormHelperText error>{errMsg != "" && errMsg}</FormHelperText>
+      </Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          flexWrap: "wrap",
+          gap: 1,
+          marginTop: "20px",
+          width: "700px",
+        }}
+      >
+        {searchResults.map((result, index) => (
+          <Chip
+            key={index}
+            label={
+              <Stack direction="row" spacing="10px">
+                <Typography variant="body2">
+                  {result.type === "username" ? "HOST:" : result.type === "tag" ? "TAG:" : "TITLE:"}
+                </Typography>
+                <Typography variant="body2" color="primary">
+                  {result.value}
+                </Typography>
+              </Stack>
+            }
+            deleteIcon={<CloseIcon />}
+            onDelete={() => handleDeleteTag(index)}
+          />
+        ))}
+      </Box>
+    </Stack>
   );
 }
