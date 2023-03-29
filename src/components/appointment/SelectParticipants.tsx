@@ -2,7 +2,7 @@ import { User } from "@/types/User";
 import { Box, FormHelperText, Grid, IconButton, Menu, Stack, Typography } from "@mui/material";
 import Participant from "../post/Participant";
 import AddIcon from "@mui/icons-material/Add";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ParticipantMenuItem from "./ParticipantMenuItem";
 import { COLOR_CODE } from "enum/COLOR";
 import CloseIcon from "@mui/icons-material/Close";
@@ -96,6 +96,7 @@ export default function SelectParticipants(props: props) {
       >
         {props.availableParticipants?.map((user, index) => (
           <ParticipantMenuItem
+            key={index}
             index={index}
             participant={user}
             onClick={() => {
