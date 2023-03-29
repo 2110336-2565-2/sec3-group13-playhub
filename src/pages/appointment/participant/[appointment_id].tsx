@@ -155,9 +155,11 @@ export default function Home() {
           <Card sx={ParticipantAppointmentStyle.Card}>
             <Stack spacing={3} alignItems="center" justifyContent="center">
               {/* Image list */}
-              <Box sx={ParticipantAppointmentStyle.TextField}>
-                <DisplayImages header="Image" images={appointment.images} />
-              </Box>
+              {appointment.images.length !== 0 && (
+                <Box sx={ParticipantAppointmentStyle.TextField}>
+                  <DisplayImages header="Image" images={appointment.images} />
+                </Box>
+              )}
 
               {/* Number of participants */}
               <Box sx={ParticipantAppointmentStyle.TextField}>

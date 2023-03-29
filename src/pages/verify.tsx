@@ -96,11 +96,12 @@ export default function Verify() {
             <Typography display="inline" variant="body1" color="error">
               {"\u00A0"}national ID card photo{"\u00A0"}
             </Typography>
-            to this
+            to this{"\u00A0"}
             <Link href={emailToAdmin} style={{ color: "blue", textDecorationLine: "underline" }}>
-              {"\u00A0"}email{"\u00A0"}
+              email
             </Link>
-            and wait for verification around 1 week. If you pass the verification, this badge
+            {"\u00A0"}and wait for verification around 1 week. If you pass the verification, this
+            badge
             {"\u00A0"}
             <VerifyChip />
             {"\u00A0"}would be appear in your profile page.

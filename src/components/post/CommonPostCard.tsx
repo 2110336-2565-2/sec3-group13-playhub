@@ -193,7 +193,8 @@ export default function PostCard(props: props) {
           </ExpandMore>
         </CardActions>
       </Card>
-      {isUserJoin ? (
+
+      {!isUserJoin ? (
         <CommonDialog
           openModal={openJoinModal}
           handleCloseModal={handleCloseJoinModal}

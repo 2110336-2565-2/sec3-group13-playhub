@@ -36,14 +36,6 @@ export default function Home() {
     router.push(PAGE_PATHS.LOGIN);
     return;
   }
-  if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME);
-    return;
-  }
-  if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME);
-    return;
-  }
   if (appointments == null) return <Loading />;
   return (
     <>
@@ -54,18 +46,24 @@ export default function Home() {
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">My Appointment</Typography>
         </Box>
-        <Grid
-          container
-          justifyContent="space-between"
-          rowSpacing={6}
-          style={{ width: "80vw", marginTop: -6 }}
-        >
-          {appointments.map((appointment, index) => (
-            <Grid item key={index} xs={5.75}>
-              <AppointmentCard appointment={appointment} prefix={PAGE_PATHS.APPOINTMENT} />
-            </Grid>
-          ))}
-        </Grid>
+        {appointments.length === 0 ? (
+          <Stack alignItems="center" justifyContent="center" style={{ height: "70vh" }}>
+            <Typography variant="h2">No Appointment Yet.</Typography>
+          </Stack>
+        ) : (
+          <Grid
+            container
+            justifyContent="space-between"
+            rowSpacing={6}
+            style={{ width: "80vw", marginTop: -6 }}
+          >
+            {appointments.map((appointment, index) => (
+              <Grid item key={index} xs={5.75}>
+                <AppointmentCard appointment={appointment} prefix={PAGE_PATHS.APPOINTMENT} />
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Stack>
     </>
   );

@@ -198,9 +198,11 @@ export default function Home() {
           <Card sx={ConfirmAppointmentStyle.Card}>
             <Stack spacing={3} alignItems="center" justifyContent="center">
               {/* Image list */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
-                <DisplayImages header="Image" images={appointment.images} />
-              </Box>
+              {appointment.images.length !== 0 && (
+                <Box sx={ConfirmAppointmentStyle.TextField}>
+                  <DisplayImages header="Image" images={appointment.images} />
+                </Box>
+              )}
 
               {/* Number of participants */}
               <Box sx={ConfirmAppointmentStyle.TextField}>
@@ -214,7 +216,7 @@ export default function Home() {
                 justifyContent="center"
                 sx={ConfirmAppointmentStyle.TextField}
               >
-                <Typography variant="h2">Join with</Typography>
+                <Typography variant="h2">Participant List</Typography>
                 <Box display="flex">
                   {appointment.acceptParticipants.length == 0 && (
                     <Typography variant="body1" color="error">
