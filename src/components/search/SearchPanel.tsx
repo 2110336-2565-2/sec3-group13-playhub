@@ -30,6 +30,7 @@ type props = {
 };
 
 const submit_layout = {
+  minWidth: "58px",
   height: "58px",
   borderRadius: "15px",
 };
