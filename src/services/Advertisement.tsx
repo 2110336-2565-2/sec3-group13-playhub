@@ -31,3 +31,15 @@ export async function CreateAdvertisement(
 
   return;
 }
+
+export async function GetAdvertisement(supabaseClient: SupabaseClient<Database>): Promise<any> {
+  const advertisement = await supabaseClient.rpc("get_advertisement");
+  if (advertisement.error) {
+    console.log(advertisement.error)
+    throw new Error("Get Advertisement Error!!");
+  }
+  if (!advertisement.data) {
+    throw new Error("No advertisement data found");
+  }
+  return advertisement.data;
+}
