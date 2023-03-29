@@ -68,7 +68,6 @@ export default function Home() {
     setIsReviewed(true);
     //if not 
     setIsReviewed(false);
-
   }, [supabaseClient, appointmentId, userStatus.user]);
 
   function backToMyAppointments(): void {

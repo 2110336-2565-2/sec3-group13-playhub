@@ -25,33 +25,8 @@ import { COLOR_CODE } from "enum/COLOR";
 import StarIcon from '@mui/icons-material/Star';
 import StarOutlineIcon from '@mui/icons-material/StarOutline';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-
-type Rating = {
-  ratingOwnerName: string;
-  appointmentTitle: string;
-  ratingScore: number;
-  rationDescription: string;
-}
-
-// for actual feedbacks, this should be deleted
-const mockRatings: Rating[] = [{
-  ratingOwnerName: "Anonymous",
-  appointmentTitle: "ไปเล่นบอร์ดเกมกัน แถวสยาม",
-  ratingScore: 4,
-  rationDescription: "พี่ออมดูแลหนูดีมากเลยค่ะ <3"
-},
-{
-  ratingOwnerName: "AbCd",
-  appointmentTitle: "ไปกู้โลกกันเถอะ",
-  ratingScore: 5,
-  rationDescription: ""
-},
-{
-  ratingOwnerName: "ครัยนร้า",
-  appointmentTitle: "จะเป็นวิลเลิน",
-  ratingScore: 4,
-  rationDescription: "kksfnaklsndfklasd fkajdsklfajsdklfjasdkfjaksdjfakljdalsjdkalsjdfksjdfsdkfasdfljadskfljadsklfjakldjfaklsdjfklajsdkljdkjsdkfjsdklfjdfalksdjfalksdjasdaksjfklasdjfklasjdlkajdsfkajsdflkjasdklfjaklsdjfalkjsdflajfkjdlfjl;fl"
-}]
+import { Review } from "@/types/Review";
+import { GetReviewsByRevieweeId } from "@/services/Review";
 
 const MyProfileStyle = {
   Card: {
@@ -103,7 +78,7 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
 
   const [targetUserData, setTargetUserData] = useState<User | null>(null);
-  const [feedbacks, setFeedbacks] = useState<Rating[]>([])
+  const [feedbacks, setFeedbacks] = useState<Review[]>([])
 
   const [expanded, setExpanded] = useState(false);
 
@@ -122,10 +97,12 @@ export default function Home() {
       const userData = await GetUserByUserId(router.query.user_id as string, supabaseClient);
       setTargetUserData(userData);
     }
-
     getTargetUserData();
 
-    // require some services for setting feedbacks
+    if (router.query.user_id) {
+      GetReviewsByRevieweeId(supabaseClient, router.query.user_id as string)
+        .then((reviews) => setFeedbacks(reviews));
+    }
   }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
 
   function handleEditProfile(): void {
@@ -250,7 +227,7 @@ export default function Home() {
               <Collapse in={expanded} sx={{ marginTop: 2, marginBottom: 1 }}>
                 <Stack spacing={2}>
                   {/* for actual feedbacks need to change mackRating to feedabcks */}
-                  {mockRatings.map((rating: Rating, index) => (
+                  {feedbacks.map((rating: Review, index) => (
                     <>
                       <Divider sx={{ height: "2px" }} color={COLOR_CODE.BLACK} />
                       <Stack
@@ -259,14 +236,14 @@ export default function Home() {
                       >
                         {/* rating title */}
                         <Box display="flex">
-                          <Typography variant="h3">{rating.ratingOwnerName}</Typography>
+                          <Typography variant="h3">{rating.reviewerName}</Typography>
                           <Typography variant="body1" sx={{ fontStyle: 'italic' }}>{"\u00A0"}from{"\u00A0"}</Typography>
                           <Typography variant="h3">{rating.appointmentTitle}</Typography>
                         </Box>
 
                         {/* rating score */}
                         <Rating
-                          defaultValue={rating.ratingScore}
+                          defaultValue={rating.score}
                           size="large"
                           readOnly
                           icon={<StarIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarIcon>}
@@ -274,9 +251,9 @@ export default function Home() {
                         />
 
                         {/* rating description */}
-                        {rating.rationDescription !== "" &&
+                        {rating.description !== "" &&
                           <Stack spacing={0}>
-                            {`" ${rating.rationDescription} "`.split("\n").map((row, index) => (
+                            {`" ${rating.description} "`.split("\n").map((row, index) => (
                               <Typography
                                 variant="body1"
                                 sx={{
