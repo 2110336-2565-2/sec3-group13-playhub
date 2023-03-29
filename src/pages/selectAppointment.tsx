@@ -45,7 +45,7 @@ export default function Home() {
     <>
       <Navbar />
 
-      <Stack spacing={4} alignItems="center">
+      <Stack spacing={4} alignItems="center" style={{ marginBottom: "3vh" }}>
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Select Appointment To Confirm</Typography>
