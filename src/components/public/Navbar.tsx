@@ -104,11 +104,13 @@ export default function Navbar() {
           </Box>
 
           {/* Post button */}
-          <Box sx={{ flexGrow: 0.02 }}>
-            <IconButton color="inherit" disableRipple onClick={routeToMyPosts}>
-              <Typography variant="body1">{NAVBAR_PAGES.POST}</Typography>
-            </IconButton>
-          </Box>
+          {userStatus.user?.isVerified && (
+            <Box sx={{ flexGrow: 0.02 }}>
+              <IconButton color="inherit" disableRipple onClick={routeToMyPosts}>
+                <Typography variant="body1">{NAVBAR_PAGES.POST}</Typography>
+              </IconButton>
+            </Box>
+          )}
 
           {/* Appointment button */}
           <Box sx={{ flexGrow: 0.02 }}>
