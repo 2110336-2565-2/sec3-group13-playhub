@@ -224,9 +224,11 @@ export default function Home() {
             >
               <Stack spacing={3} alignItems="center" justifyContent="center">
                 {/* Image list */}
-                <Box sx={CreatePostStyle.TextField}>
-                  <DisplayImages header="Image" images={postInfo.images} />
-                </Box>
+                {postInfo.images.length !== 0 && (
+                  <Box sx={CreatePostStyle.TextField}>
+                    <DisplayImages header="Image" images={postInfo.images} />
+                  </Box>
+                )}
 
                 {/* Participant */}
                 <Box sx={CreatePostStyle.TextField}>

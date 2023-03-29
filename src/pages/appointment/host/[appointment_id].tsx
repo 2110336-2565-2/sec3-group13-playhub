@@ -29,8 +29,6 @@ const HostAppointmentStyle = {
   Card: {
     width: "30vw",
     minWidth: "450px",
-    height: "75vh",
-    minHeight: "1170px",
     paddingTop: "2vh",
   },
 };
@@ -151,9 +149,11 @@ export default function Home() {
               </Box>
 
               {/* Image list */}
-              <Box sx={HostAppointmentStyle.TextField}>
-                <DisplayImages header="Image" images={appointment.images} />
-              </Box>
+              {appointment.images.length !== 0 && (
+                <Box sx={HostAppointmentStyle.TextField}>
+                  <DisplayImages header="Image" images={appointment.images} />
+                </Box>
+              )}
             </Stack>
           </Card>
           <Card sx={HostAppointmentStyle.Card}>
