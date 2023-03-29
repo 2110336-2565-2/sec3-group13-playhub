@@ -228,7 +228,7 @@ export function SearchPanel(props: props) {
           <Chip
             key={index}
             sx={{
-              border: "3px solid black",
+              border: "2.5px solid black",
               backgroundColor: "white",
             }}
             label={
