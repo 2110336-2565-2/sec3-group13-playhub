@@ -129,8 +129,7 @@ export default function AdminPostCard(props: props) {
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>
-                {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
-                {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
+                {props.post.startDateTime} - {props.post.endDateTime}
               </span>
             </Typography>
 

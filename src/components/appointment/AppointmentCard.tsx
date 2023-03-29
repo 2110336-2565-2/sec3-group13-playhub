@@ -125,8 +125,7 @@ export default function AppointmentCard(props: props) {
                   overflow: "hidden",
                 }}
               >
-                {dayjs(props.appointment.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
-                {dayjs(props.appointment.endDateTime).format("DD/MM/YYYY h:mm A")}
+                {props.appointment.startDateTime} - {props.appointment.endDateTime}
               </Typography>
             </Typography>
 

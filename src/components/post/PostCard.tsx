@@ -16,7 +16,6 @@ import { Post } from "../../types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
 import { NextRouter, useRouter } from "next/router";
 import DisplayTags from "./DisplayTags";
-import dayjs from "dayjs";
 
 type props = {
   post: Post;
