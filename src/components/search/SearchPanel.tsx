@@ -180,6 +180,7 @@ export function SearchPanel(props: props) {
             inputProps={{
               ...params.inputProps,
               sx: {
+                color: errMsg == "" ? "black" : "red",
                 textAlign: "center",
                 "&::placeholder": {
                   textAlign: "center",
