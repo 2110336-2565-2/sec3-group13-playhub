@@ -40,10 +40,6 @@ export default function Home() {
     router.push(PAGE_PATHS.HOME);
     return;
   }
-  if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME);
-    return;
-  }
   if (appointments == null) return <Loading />;
   return (
     <>
