@@ -61,7 +61,7 @@ const textfield_overwrite = {
 
 const helperText = {
   marginTop: "10px",
-  alignSelf: "start",
+  marginLeft: "10px",
 };
 
 export function SearchPanel(props: props) {
@@ -172,46 +172,48 @@ export function SearchPanel(props: props) {
         }}
         options={getOptions()}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            name="search"
-            placeholder="Search: @username, #tag, title"
-            variant="outlined"
-            error={errMsg != ""}
-            inputProps={{
-              ...params.inputProps,
-              sx: {
-                color: errMsg == "" ? "black" : "red",
-                textAlign: "center",
-                "&::placeholder": {
+          <Stack>
+            <TextField
+              {...params}
+              name="search"
+              placeholder="Search: @username, #tag, title"
+              variant="outlined"
+              error={errMsg != ""}
+              inputProps={{
+                ...params.inputProps,
+                sx: {
+                  color: errMsg == "" ? "black" : "red",
                   textAlign: "center",
+                  "&::placeholder": {
+                    textAlign: "center",
+                  },
                 },
-              },
-            }}
-            InputProps={{
-              ref: params.InputProps.ref,
-              sx: textfield_overwrite,
-              endAdornment: (
-                <Button
-                  sx={{
-                    border: "3px solid black",
-                  }}
-                  disabled={searchMode == "tag"}
-                  variant="contained"
-                  type="submit"
-                  style={submit_layout}
-                  onClick={() => handleSubmit(searchText)}
-                >
-                  <SearchIcon />
-                </Button>
-              ),
-            }}
-          />
+              }}
+              InputProps={{
+                ref: params.InputProps.ref,
+                sx: textfield_overwrite,
+                endAdornment: (
+                  <Button
+                    sx={{
+                      border: "3px solid black",
+                    }}
+                    disabled={searchMode == "tag"}
+                    variant="contained"
+                    type="submit"
+                    style={submit_layout}
+                    onClick={() => handleSubmit(searchText)}
+                  >
+                    <SearchIcon />
+                  </Button>
+                ),
+              }}
+            />
+            <Box sx={helperText}>
+              <FormHelperText error>{errMsg != "" && errMsg}</FormHelperText>
+            </Box>
+          </Stack>
         )}
       />
-      <Box sx={helperText}>
-        <FormHelperText error>{errMsg != "" && errMsg}</FormHelperText>
-      </Box>
       <Box
         sx={{
           display: "flex",
