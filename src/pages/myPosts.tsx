@@ -10,7 +10,7 @@ import AddIcon from "@mui/icons-material/Add";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
-import MyPostCard from "@/components/post/MyPostCard";
+import PostCard from "@/components/post/PostCard";
 
 import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
@@ -46,11 +46,11 @@ export default function Home() {
     return;
   }
   if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME)
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME)
+    router.push(PAGE_PATHS.HOME);
     return;
   }
   if (posts == null) return <Loading />;
@@ -58,23 +58,29 @@ export default function Home() {
     <>
       <Navbar />
 
-      <Stack spacing={4} alignItems="center">
+      <Stack spacing={4} alignItems="center" style={{ marginBottom: "3vh" }}>
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">My post</Typography>
         </Box>
-        <Grid
-          container
-          justifyContent="space-between"
-          rowSpacing={6}
-          style={{ width: "80vw", marginTop: -6 }}
-        >
-          {posts.map((item, index) => (
-            <Grid item key={index} xs={5.75}>
-              <MyPostCard post={item} />
-            </Grid>
-          ))}
-        </Grid>
+        {posts.length === 0 ? (
+          <Stack alignItems="center" justifyContent="center" style={{ height: "70vh" }}>
+            <Typography variant="h2">No Post Yet.</Typography>
+          </Stack>
+        ) : (
+          <Grid
+            container
+            justifyContent="space-between"
+            rowSpacing={6}
+            style={{ width: "80vw", minWidth: "1050px", marginTop: -6 }}
+          >
+            {posts.map((item, index) => (
+              <Grid item key={index} xs={5.75}>
+                <PostCard post={item} />
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Stack>
 
       {userStatus.user.isVerified && (

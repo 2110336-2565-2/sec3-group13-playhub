@@ -1,18 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import Navbar from "@/components/public/Navbar";
-import { Typography, Box, Grid, IconButton, Stack, Card, FormHelperText } from "@mui/material";
+import { Typography, Box, IconButton, Stack, Card, FormHelperText, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AppointmentDetail } from "@/types/Appointment";
-import {
-  AcceptAppointment,
-  GetAppointmentByAppointmentId,
-  RejectAppointment,
-} from "@/services/Appointment";
+import { GetAppointmentByAppointmentId } from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
-import { PAGE_PATHS } from "enum/PAGES";
+import { PAGE_PATHS, ROLE } from "enum/PAGES";
 import { userContext } from "supabase/user_context";
 import TitleTextField from "@/components/post/TitleTextField";
 import LocationTextField from "@/components/post/LocationTextField";
@@ -21,20 +17,18 @@ import Tags from "@/components/post/SelectTags";
 import { Tag } from "@/types/Tag";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import DisplayImages from "@/components/post/DisplayImages";
-import Participant from "@/components/post/Participant";
 import { User } from "@/types/User";
-import CommonButton from "@/components/public/CommonButton";
-import { COLOR, COLOR_CODE } from "enum/COLOR";
-import CommonDialog from "@/components/public/CommonDialog";
+import Participant from "@/components/post/Participant";
+import { COLOR_CODE } from "enum/COLOR";
 
-const ConfirmAppointmentStyle = {
+const ParticipantAppointmentStyle = {
   TextField: {
     width: "28vw",
-    minWidth: "250px",
+    minWidth: "400px",
   },
   Card: {
     width: "30vw",
-    minWidth: "300px",
+    minWidth: "450px",
     height: "75vh",
     minHeight: "785px",
     paddingTop: "2vh",
@@ -49,39 +43,7 @@ export default function Home() {
   const [isParticipant, setIsParticipant] = useState<boolean | null>(null);
 
   const appointmentId = parseInt(router.query.appointment_id as string);
-
-  const [openAcceptAppointmentModal, setOpenAcceptAppointmentModal] = useState<boolean>(false);
-  const [openRejectAppointmentModal, setOpenRejectAppointmentModal] = useState<boolean>(false);
-
-  const handleOpenAcceptAppointmentModal = (): void => setOpenAcceptAppointmentModal(true);
-  const handleCloseAcceptAppointmentModal = (): void => setOpenAcceptAppointmentModal(false);
-  const handleOpenRejectAppointmentModal = (): void => setOpenRejectAppointmentModal(true);
-  const handleCloseRejectAppointmentModal = (): void => setOpenRejectAppointmentModal(false);
-
-  function handleAcceptAppointment(): void {
-    if (userStatus.user) {
-      AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch((err) => {
-        console.log(err);
-        return;
-      });
-      router.push(PAGE_PATHS.SELECT_APPOINTMENT);
-    }
-    return;
-  }
-
-  function handleRejectAppointment(): void {
-    if (userStatus.user) {
-      RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch((err) => {
-        console.log(err);
-        return;
-      });
-      router.push(PAGE_PATHS.SELECT_APPOINTMENT);
-    }
-    return;
-  }
-
   useEffect(() => {
-    if (!appointmentId) return;
     GetAppointmentByAppointmentId(appointmentId, supabaseClient)
       .then((appointment) => {
         setAppointment(appointment);
@@ -93,14 +55,14 @@ export default function Home() {
       });
   }, [supabaseClient, appointmentId, userStatus.user]);
 
-  function backToSelectAppointment(): void {
-    router.push(PAGE_PATHS.SELECT_APPOINTMENT);
+  function backToMyAppointments(): void {
+    router.push(PAGE_PATHS.MY_APPOINTMENTS);
     return;
   }
 
   if (!appointment || userStatus.isLoading) return <Loading />;
   if (!isParticipant) {
-    router.push(PAGE_PATHS.SELECT_APPOINTMENT);
+    router.push(PAGE_PATHS.APPOINTMENT + ROLE.HOST + appointmentId);
     return;
   }
   if (!userStatus.user) {
@@ -112,23 +74,18 @@ export default function Home() {
       <Navbar />
 
       <IconButton
-        onClick={backToSelectAppointment}
+        onClick={backToMyAppointments}
         style={{ position: "absolute", top: 86, left: 20, zIndex: "1" }}
       >
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginBottom: "2vh" }} alignItems="center">
-        {/* Page header */}
-        <Box sx={{ marginTop: "3vh" }}>
-          <Typography variant="h1">Confirm Appointment</Typography>
-        </Box>
-
+      <Stack spacing={4} sx={{ marginTop: "70px", marginBottom: "2vh" }} alignItems="center">
         <Stack spacing={5} direction="row">
-          <Card sx={ConfirmAppointmentStyle.Card}>
+          <Card sx={ParticipantAppointmentStyle.Card}>
             <Stack spacing={0} alignItems="center" justifyContent="center">
               {/* Post title */}
-              <Box style={ConfirmAppointmentStyle.TextField}>
+              <Box style={ParticipantAppointmentStyle.TextField}>
                 <TitleTextField
                   name="title"
                   header="Title"
@@ -142,7 +99,7 @@ export default function Home() {
               </Box>
 
               {/* Location */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={ParticipantAppointmentStyle.TextField}>
                 <LocationTextField
                   header="Location"
                   placeholder="Enter Location"
@@ -155,7 +112,7 @@ export default function Home() {
               </Box>
 
               {/* Date & Time */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={ParticipantAppointmentStyle.TextField}>
                 <DisplayDateTime
                   header="Date & Time"
                   value={`${appointment.detailHeader.startDateTime} - ${appointment.detailHeader.endDateTime}`}
@@ -164,7 +121,7 @@ export default function Home() {
               </Box>
 
               {/* Tags */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={ParticipantAppointmentStyle.TextField}>
                 <Tags
                   header="Tag"
                   value={appointment.detailHeader.tags.map((t, index): Tag => {
@@ -180,7 +137,7 @@ export default function Home() {
               </Box>
 
               {/* Description */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={ParticipantAppointmentStyle.TextField}>
                 <DescriptionTextField
                   name="description"
                   header="Description"
@@ -195,17 +152,17 @@ export default function Home() {
               </Box>
             </Stack>
           </Card>
-          <Card sx={ConfirmAppointmentStyle.Card}>
+          <Card sx={ParticipantAppointmentStyle.Card}>
             <Stack spacing={3} alignItems="center" justifyContent="center">
               {/* Image list */}
               {appointment.images.length !== 0 && (
-                <Box sx={ConfirmAppointmentStyle.TextField}>
+                <Box sx={ParticipantAppointmentStyle.TextField}>
                   <DisplayImages header="Image" images={appointment.images} />
                 </Box>
               )}
 
               {/* Number of participants */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
+              <Box sx={ParticipantAppointmentStyle.TextField}>
                 <Typography variant="h3">{`Number of Participant : ${appointment.acceptParticipants.length}`}</Typography>
               </Box>
 
@@ -214,9 +171,9 @@ export default function Home() {
                 spacing={0.5}
                 alignItems="start"
                 justifyContent="center"
-                sx={ConfirmAppointmentStyle.TextField}
+                sx={ParticipantAppointmentStyle.TextField}
               >
-                <Typography variant="h2">Participant List</Typography>
+                <Typography variant="h2">Join with</Typography>
                 <Box display="flex">
                   {appointment.acceptParticipants.length == 0 && (
                     <Typography variant="body1" color="error">
@@ -247,37 +204,7 @@ export default function Home() {
             </Stack>
           </Card>
         </Stack>
-
-        <Stack direction="row" spacing={4}>
-          <CommonButton label="Accept" onClick={handleOpenAcceptAppointmentModal} />
-          <CommonButton
-            label="Reject"
-            color={COLOR.NATURAL}
-            onClick={handleOpenRejectAppointmentModal}
-          />
-        </Stack>
       </Stack>
-
-      <CommonDialog
-        openModal={openAcceptAppointmentModal}
-        handleCloseModal={handleCloseAcceptAppointmentModal}
-        header={["Are you sure to", "accept", "this appointment ?"]}
-        hightlightColorCode={COLOR_CODE.ACCEPT}
-        content="*You can’t undo this change"
-        buttonLabel="Accept"
-        buttonColor={COLOR.PRIMARY}
-        buttonAction={handleAcceptAppointment}
-      />
-
-      <CommonDialog
-        openModal={openRejectAppointmentModal}
-        handleCloseModal={handleCloseRejectAppointmentModal}
-        header={["Are you sure to", "reject", "this appointment ?"]}
-        content="*You can’t undo this change"
-        buttonLabel="Reject"
-        buttonColor={COLOR.ERROR}
-        buttonAction={handleRejectAppointment}
-      />
     </>
   );
 }

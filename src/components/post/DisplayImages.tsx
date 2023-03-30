@@ -1,13 +1,14 @@
-import { ImageList, ImageListItem, Stack } from "@mui/material";
-import Image from "next/image";
+import { ImageList, ImageListItem, Stack, Typography } from "@mui/material";
 
 type props = {
+  header?: string;
   images: string[];
 };
 
 export default function DisplayImages(props: props) {
   return (
     <>
+      <Typography variant="h3">{props?.header}</Typography>
       <ImageList
         sx={{
           width: "29vw",
@@ -16,6 +17,7 @@ export default function DisplayImages(props: props) {
           minHeight: `calc(270px/2* (${props.images.length}+2)/3))`,
           alignContent: "start",
         }}
+        style={{ marginTop: 0 }}
         variant="woven"
         cols={3}
         gap={5}

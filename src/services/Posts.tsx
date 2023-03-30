@@ -5,7 +5,7 @@ import { Database } from "supabase/db_types";
 import dayjs, { Dayjs } from "dayjs";
 import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
 
-function dayjsWithoutTZ(date: string): Dayjs {
+export function dayjsWithoutTZ(date: string): Dayjs {
   const dateWithoutTZ = date.substring(0, date.indexOf("+"));
   return dayjs(dateWithoutTZ);
 }
@@ -144,8 +144,8 @@ export async function GetCurrentUserPosts(
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time,
+    startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
   }));
 }
 
@@ -165,8 +165,8 @@ export async function GetPosts(supabaseClient: SupabaseClient<Database>): Promis
     description: post.description,
     image: post.images,
     location: post.location,
-    startDateTime: post.start_time,
-    endDateTime: post.end_time,
+    startDateTime: dayjsWithoutTZ(post.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjsWithoutTZ(post.end_time).format("DD/MM/YYYY hh:mm A"),
   }));
 }
 

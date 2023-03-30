@@ -5,10 +5,11 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Avatar, Chip, Typography, Stack, Button } from "@mui/material";
+import { Avatar, Chip, Typography, Stack, Button, Box } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
+import FavoriteIcon from "@mui/icons-material/Favorite";
 import CakeIcon from "@mui/icons-material/Cake";
 
 import Navbar from "@/components/admin/AdminNavbar";
@@ -20,6 +21,7 @@ import { GENDER } from "enum/GENDER";
 import { GetUserByUserId } from "@/services/User";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
 import VerifyChip from "@/components/profile/VerifyChip";
+import CommonButton from "@/components/public/CommonButton";
 
 // style
 const profile_layout = {
@@ -36,6 +38,20 @@ export default function AdminProfile() {
   const [targetUserData, setTargetUserData] = useState<User | null>(null);
 
   const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
+
+  function displayGenderIcon(gender: string) {
+    if (gender === GENDER.MALE) {
+      return <MaleIcon />;
+    } else if (gender === GENDER.FEMALE) {
+      return <FemaleIcon />;
+    } else if (gender === GENDER.OTHERS) {
+      return <TransgenderIcon />;
+    } else if (gender === GENDER.PREFERS_NOT_TO_SAY) {
+      return <FavoriteIcon />;
+    } else {
+      return <div></div>;
+    }
+  }
 
   useEffect(() => {
     if (!userStatus.user || !router.query.user_id || targetUserData) return;
@@ -90,20 +106,7 @@ export default function AdminProfile() {
 
           {targetUserData.isVerified && <VerifyChip />}
           <Stack direction="row" spacing={1}>
-            <Chip
-              icon={
-                targetUserData.sex === GENDER.MALE ? (
-                  <MaleIcon />
-                ) : targetUserData.sex === GENDER.FEMALE ? (
-                  <FemaleIcon />
-                ) : targetUserData.sex === GENDER.OTHERS ? (
-                  <TransgenderIcon />
-                ) : (
-                  <div></div>
-                )
-              }
-              label={targetUserData.sex}
-            />
+            <Chip icon={displayGenderIcon(targetUserData.sex)} label={targetUserData.sex} />
             <Chip icon={<CakeIcon />} label={targetUserData.birthdate} />
           </Stack>
 
@@ -118,9 +121,9 @@ export default function AdminProfile() {
           ))}
           {!targetUserData.isVerified && (
             <>
-              <Button style={{ marginTop: "50px" }} onClick={openVerifyModal} variant="contained">
-                Verify
-              </Button>
+              <Box style={{ paddingTop: "5vh" }}>
+                <CommonButton label="Verify" onClick={openVerifyModal} />
+              </Box>
               <AdminVerifyDialog
                 openModal={isVerifyModalShow}
                 handleCloseModal={closeVerifyModal}

@@ -30,7 +30,8 @@ export default function Verify() {
     ?subject=Verify ${userStatus.user.email} PlayHub account
     &body=รายละเอียดบัญชี${newLine}
     Email account : ${userStatus.user.email}${newLine}
-    Profile link : ${process.env.NEXT_PUBLIC_DOMAIN_NAME + PAGE_PATHS.PROFILE + userStatus.user.userId
+    Profile link : ${
+      process.env.NEXT_PUBLIC_DOMAIN_NAME + PAGE_PATHS.PROFILE + userStatus.user.userId
     }${newLine}
     ${newLine}โปรดแนบ รูปถ่ายบัตรประจำตัวประชาชน`;
 
@@ -39,7 +40,7 @@ export default function Verify() {
       <Navbar />
       <Stack
         spacing={8}
-        width="35vw"
+        width="45vw"
         minWidth="270px"
         minHeight="90vh"
         justifyContent="center"
@@ -47,46 +48,65 @@ export default function Verify() {
           margin: "auto",
         }}
       >
-        <Box>
-          <Typography gutterBottom variant="h1">
-            Verify คืออะไร
-          </Typography>
-          <Typography component="span" variant="body2">
-            คือ ระบบการยืนยันตัวตน เพื่อสร้างความอุ่นใจและปลอดภัยแก่ท่านและสมาชิกชาว PlayHub
-            ที่เข้ามาใช้บริการเว็บไซต์ของเรา รวมไปถึงการได้รับสิทธิพิเศษต่าง ๆ จาก PlayHub
-          </Typography>
-        </Box>
-
-        <Box>
-          <Typography gutterBottom variant="h1">
-            Verify แล้วได้อะไร
-          </Typography>
-          <Typography component="div" variant="body2">
-            1. ท่านจะสามารถสร้างกิจกรรมเพื่อหาเพื่อน ๆ มาร่วมสนุกกับท่านได้
-          </Typography>
-          <Typography component="div" variant="body2">
-            2. ท่านจะได้รับเครื่องหมายยืนยันตัวตนสุดเท่ในหน้าโปรไฟล์ของท่าน
-          </Typography>
-        </Box>
-
-        <Box>
-          <Typography gutterBottom variant="h1">
-            Verify อย่างไร
-          </Typography>
-          <Typography component="span" variant="body2">
-            ส่ง
-            <Link href={emailToAdmin} style={{ color: "blue", textDecorationLine: "underline" }}>
-              อีเมล
-            </Link>
-            นี้ พร้อมแนบ
-            <Typography display="inline" variant="body2" color="red">
-              รูปถ่ายบัตรประจำตัวประชาชน
+        <Stack spacing={2}>
+          <Typography gutterBottom variant="h2" align="center">
+            What is
+            <Typography gutterBottom display="inline" variant="h2" color="primary">
+              {"\u00A0"}Verify{"\u00A0"}
             </Typography>
-            แล้วรอการตรวจสอบประมาณ 1 สัปดาห์ หากการยืนยันตัวตนสำเร็จจะมีสัญลักษณ์ &nbsp;
-            <VerifyChip />
-            &nbsp; ปรากฎขึ้นในหน้าโปร์ไฟล์ของท่าน
+            ?
           </Typography>
-        </Box>
+
+          <Typography variant="body1" align="center" style={{ lineHeight: "40px" }}>
+            <Typography display="inline" color="primary">
+              Verify{"\u00A0"}
+            </Typography>
+            is an authentication system to provide security for you and PlayHub members who use our
+            website, as well as receive special privileges from PlayHub.
+          </Typography>
+        </Stack>
+
+        <Stack spacing={2}>
+          <Typography gutterBottom variant="h2">
+            What
+            <Typography gutterBottom display="inline" variant="h2" color="primary">
+              {"\u00A0"}Verify{"\u00A0"}
+            </Typography>
+            gives you
+          </Typography>
+          <Box display="flex" justifyContent="center">
+            <Typography variant="body1" align="left" style={{ lineHeight: "40px" }}>
+              <Box>1. You will be able to create activity post to find friends to join you.</Box>
+              <Box>2. You will receive a cool identity badge on your profile.</Box>
+            </Typography>
+          </Box>
+        </Stack>
+
+        <Stack spacing={2}>
+          <Typography gutterBottom variant="h2" align="center">
+            How to
+            <Typography gutterBottom display="inline" variant="h2" color="primary">
+              {"\u00A0"}Verify{"\u00A0"}
+            </Typography>
+            ?
+          </Typography>
+
+          <Typography variant="body1" align="center" style={{ lineHeight: "40px" }}>
+            Attach
+            <Typography display="inline" variant="body1" color="error">
+              {"\u00A0"}national ID card photo{"\u00A0"}
+            </Typography>
+            to this{"\u00A0"}
+            <Link href={emailToAdmin} style={{ color: "blue", textDecorationLine: "underline" }}>
+              email
+            </Link>
+            {"\u00A0"}and wait for verification around 1 week. If you pass the verification, this
+            badge
+            {"\u00A0"}
+            <VerifyChip />
+            {"\u00A0"}would be appear in your profile page.
+          </Typography>
+        </Stack>
       </Stack>
     </>
   );
