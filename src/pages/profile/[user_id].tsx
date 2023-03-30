@@ -140,7 +140,7 @@ export default function Home() {
                   sx={MyProfileStyle.Chip}
                 />
               </Stack>
-              {targetUserData.description.length === 0 && (
+              {targetUserData.description.length !== 0 && (
                 <Stack spacing={0}>
                   {`" ${targetUserData.description} "`.split("\n").map((row, index) => (
                     <Typography
