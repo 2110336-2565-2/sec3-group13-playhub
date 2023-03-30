@@ -18,8 +18,7 @@ import { GetPostsWithParticipants } from "@/services/Posts";
 import { GetAdvertisementUrl } from "@/services/Advertisement";
 import { Advertise } from "@/types/Advertisement";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
-import { ADVERTISE_CONFIG } from "enum/ADVERTISE";
-import { isShowAdvertise } from "@/utilities/advertise";
+import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -28,8 +27,6 @@ export default function Home() {
 
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [advertise, setAdvertise] = useState<Advertise[] | null>()
-
-  const freqOfAdvertise = ADVERTISE_CONFIG.FREQUENCY_OF_ADVERTISE
 
   useEffect(() => {
     async function getPostData() {
@@ -88,7 +85,7 @@ export default function Home() {
                 userId={userStatus.user?.userId}
               />
               {advertise && isShowAdvertise(index, posts.length) &&
-                <AdvertiseCard src={advertise[Math.min(Math.floor(index / freqOfAdvertise), advertise.length - 1)].image_url} />
+                <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
               }
             </Box>
           ))}

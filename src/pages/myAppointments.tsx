@@ -2,7 +2,7 @@ import AppointmentCard from "@/components/appointment/AppointmentCard";
 import Navbar from "@/components/public/Navbar";
 import { GetAppointmentsByUserId } from "@/services/Appointment";
 import { Appointment } from "@/types/Appointment";
-import { Typography, Grid, Box, Stack } from "@mui/material";
+import { Typography, Grid, Stack } from "@mui/material";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useContext, useEffect, useState } from "react";
 import { Database } from "supabase/db_types";
@@ -12,9 +12,8 @@ import { PAGE_PATHS } from "enum/PAGES";
 import Loading from "@/components/public/Loading";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
 import { Advertise } from "@/types/Advertisement";
-import { ADVERTISE_CONFIG } from "enum/ADVERTISE";
 import { GetAdvertisementUrl } from "@/services/Advertisement";
-import { isShowAdvertise } from "@/utilities/advertise";
+import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
 
 export default function Home() {
     const router: NextRouter = useRouter();
@@ -24,7 +23,6 @@ export default function Home() {
     const userStatus = useContext(userContext);
 
     const [advertise, setAdvertise] = useState<Advertise[] | null>()
-    const freqOfAdvertise = ADVERTISE_CONFIG.FREQUENCY_OF_ADVERTISE
 
     function handleCardClick(appointmentId: string): void {
         router.push(PAGE_PATHS.MY_APPOINTMENTS + appointmentId);
@@ -77,7 +75,7 @@ export default function Home() {
                                 </div>
                             </Grid>
                             {advertise && isShowAdvertise(index, appointments.length) &&
-                                <AdvertiseCard src={advertise[Math.min(Math.floor(index / freqOfAdvertise), advertise.length - 1)].image_url} />
+                                <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
                             }
                         </>
                     ))}

@@ -18,9 +18,8 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { GetCurrentUserPosts } from "@/services/Posts";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
 import { Advertise } from "@/types/Advertisement";
-import { ADVERTISE_CONFIG } from "enum/ADVERTISE";
 import { GetAdvertisementUrl } from "@/services/Advertisement";
-import { isShowAdvertise } from "@/utilities/advertise";
+import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -29,8 +28,6 @@ export default function Home() {
 
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [advertise, setAdvertise] = useState<Advertise[] | null>(null);
-
-  const freqOfAdvertise = ADVERTISE_CONFIG.FREQUENCY_OF_ADVERTISE
 
   useEffect(() => {
     async function getPostData() {
@@ -94,7 +91,7 @@ export default function Home() {
                 <MyPostCard post={item} />
               </Grid>
               {advertise && isShowAdvertise(index, posts.length) &&
-                <AdvertiseCard src={advertise[Math.min(Math.floor(index / freqOfAdvertise), advertise.length - 1)].image_url} />
+                <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
               }
             </>
           ))}

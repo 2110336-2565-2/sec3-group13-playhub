@@ -1,7 +1,8 @@
 import { ADVERTISE_CONFIG } from "enum/ADVERTISE";
 
+const freqOfAdvertise = ADVERTISE_CONFIG.FREQUENCY_OF_ADVERTISE;
+
 function isShowAdvertise(index: number, theNumberOfCards: number): boolean {
-  const freqOfAdvertise = ADVERTISE_CONFIG.FREQUENCY_OF_ADVERTISE;
   if (theNumberOfCards === 0) return false;
   // case : a few cards
   if (theNumberOfCards <= freqOfAdvertise - 1) {
@@ -13,4 +14,8 @@ function isShowAdvertise(index: number, theNumberOfCards: number): boolean {
   return index % freqOfAdvertise === freqOfAdvertise - 1;
 }
 
-export { isShowAdvertise };
+function selectAdvertise(index: number, advertiseLength: number): number {
+  return Math.min(Math.floor(index / freqOfAdvertise), advertiseLength - 1);
+}
+
+export { isShowAdvertise, selectAdvertise };
