@@ -140,21 +140,23 @@ export default function Home() {
                   sx={MyProfileStyle.Chip}
                 />
               </Stack>
-              <Stack spacing={0}>
-                {`" ${targetUserData.description} "`.split("\n").map((row, index) => (
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      maxWidth: "30vw",
-                      wordBreak: "break-word",
-                      textAlign: "center",
-                    }}
-                    key={index}
-                  >
-                    {row}
-                  </Typography>
-                ))}
-              </Stack>
+              {targetUserData.description.length === 0 && (
+                <Stack spacing={0}>
+                  {`" ${targetUserData.description} "`.split("\n").map((row, index) => (
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        maxWidth: "30vw",
+                        wordBreak: "break-word",
+                        textAlign: "center",
+                      }}
+                      key={index}
+                    >
+                      {row}
+                    </Typography>
+                  ))}
+                </Stack>
+              )}
               {router.query.user_id === userStatus.user.userId && (
                 <IconButton onClick={handleEditProfile}>
                   <EditIcon color="secondary" />
