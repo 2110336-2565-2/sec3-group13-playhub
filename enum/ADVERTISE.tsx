@@ -1,0 +1,3 @@
+export enum ADVERTISE_CONFIG {
+    FREQUENCY_OF_ADVERTISE = 6
+}

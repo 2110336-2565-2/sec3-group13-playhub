@@ -18,6 +18,7 @@ import { GetPostsWithParticipants } from "@/services/Posts";
 import { GetAdvertisementUrl } from "@/services/Advertisement";
 import { Advertise } from "@/types/Advertisement";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
+import { ADVERTISE_CONFIG } from "enum/ADVERTISE";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -26,6 +27,8 @@ export default function Home() {
 
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [advertise, setAdvertise] = useState<Advertise[] | null>()
+
+  const freqOfAdvertise = ADVERTISE_CONFIG.FREQUENCY_OF_ADVERTISE
 
   useEffect(() => {
     async function getPostData() {
@@ -83,12 +86,12 @@ export default function Home() {
                 post={item}
                 userId={userStatus.user?.userId}
               />
-              {advertise && index % 6 === 5 &&
-                <AdvertiseCard src={advertise[Math.floor(index / 6)].image_url} />
+              {advertise && index % freqOfAdvertise === freqOfAdvertise - 1 &&
+                <AdvertiseCard src={advertise[Math.floor(index / freqOfAdvertise)].image_url} />
               }
             </Box>
           ))}
-          {advertise && posts.length !== 0 && posts.length <= 5 &&
+          {advertise && posts.length !== 0 && posts.length <= freqOfAdvertise - 1 &&
             <AdvertiseCard src={advertise[Math.floor(Math.random() * advertise.length)].image_url} />
           }
         </Stack>
