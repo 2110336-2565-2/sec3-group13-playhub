@@ -53,9 +53,26 @@ export default function Home() {
         console.log(err);
         return;
       });
-
-    console.log(appointment?.detailHeader.endDateTime);
   }, [supabaseClient, appointmentId, userStatus.user]);
+
+  function compareDate(): boolean {
+    if (appointment) {
+      const date: string = appointment.detailHeader.endDateTime.split(" ")[0];
+      const time: string = appointment.detailHeader.endDateTime.split(" ")[1];
+      const am_pm: string = appointment.detailHeader.endDateTime.split(" ")[2];
+
+      const endDate: Date = new Date(
+        Number(date.split("/")[2]),
+        Number(date.split("/")[1]) - 1,
+        Number(date.split("/")[0]),
+        Number(time.split(":")[0]) + Number(am_pm === "PM" ? 12 : 0),
+        Number(time.split(":")[1])
+      );
+
+      return endDate >= new Date();
+    }
+    return false;
+  }
 
   function backToMyAppointments(): void {
     router.push(PAGE_PATHS.MY_APPOINTMENTS);
@@ -88,7 +105,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginTop: "5vh", marginBottom: "2vh" }} alignItems="center">
+      <Stack spacing={4} sx={{ marginTop: "70px", marginBottom: "2vh" }} alignItems="center">
         <Stack spacing={5} direction="row">
           <Card sx={HostAppointmentStyle.Card}>
             <Stack spacing={0} alignItems="center" justifyContent="center">
@@ -247,16 +264,12 @@ export default function Home() {
             </Stack>
           </Card>
         </Stack>
-        {/* <CommonButton
-          label="End"
-          onClick={handleEndAppointment}
-          disabled={Date(appointment.detailHeader.endDateTime) >= new Date()}
-        />
-        {appointment.detailHeader.endDateTime >= dayjs() && (
+        <CommonButton label="End" onClick={handleEndAppointment} disabled={compareDate()} />
+        {compareDate() && (
           <Typography variant="body2" color="error" style={{ marginTop: "1vh" }}>
             *Can’t enter this button before end date time
           </Typography>
-        )} */}
+        )}
       </Stack>
     </>
   );
