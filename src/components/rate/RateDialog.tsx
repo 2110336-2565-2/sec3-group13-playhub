@@ -1,21 +1,36 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, FormControlLabel, FormHelperText, IconButton, Radio, Rating, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
+  FormHelperText,
+  IconButton,
+  Radio,
+  Rating,
+  Stack,
+  Typography,
+} from "@mui/material";
 import NormalButton from "../public/CommonButton";
 import CloseIcon from "@mui/icons-material/Close";
 import { SyntheticEvent, useEffect, useState, useContext, useRef } from "react";
 import { RATING } from "enum/RATING";
-import StarIcon from '@mui/icons-material/Star';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
+import StarIcon from "@mui/icons-material/Star";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import DescriptionTextField from "../public/DescriptionTextField";
 import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import Checkbox from "@mui/material/Checkbox";
-import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
-import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
+import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { validation } from "@/types/Validation";
 import { validateTextField } from "@/utilities/validation";
 import { CreateReview, GetReviewByReviewerAndAppointmentId, UpdateReview } from "@/services/Review";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
+import { PAGE_PATHS } from "enum/PAGES";
+import { useRouter } from "next/router";
 
 type props = {
   openModal: boolean;
@@ -27,7 +42,7 @@ type props = {
 type State = {
   ratingScore: boolean;
   ratingDescription: boolean;
-}
+};
 
 export default function RateDialog(props: props) {
   const [ratingScore, setRatingScore] = useState<number>(0);
@@ -35,13 +50,14 @@ export default function RateDialog(props: props) {
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
   const [state, setState] = useState<State>({
     ratingScore: false,
-    ratingDescription: false
-  })
+    ratingDescription: false,
+  });
+  const router = useRouter();
   const userStatus = useContext(userContext);
   const supabaseClient = useSupabaseClient<Database>();
 
   const isRatingScoreErr: boolean = ratingScore === 0;
-  const ratingScoreErrMsg: string = "*Rate score can’t be blank"
+  const ratingScoreErrMsg: string = "*Rate score can’t be blank";
   const ratingDescriptionError: validation = validateTextField(
     ratingDescription,
     CHAR_LIMIT.MIN_DESCRIPTION,
@@ -67,48 +83,58 @@ export default function RateDialog(props: props) {
         return RATING.FIVE;
       }
       default: {
-        return ""
+        return "";
       }
     }
   }
 
-  function handleRatingScoreChange(event: SyntheticEvent<Element, Event>, newScore: number | null): void {
+  function handleCloseAndResetModal(): void {
+    props.handleCloseModal();
+    setRatingScore(0);
+    setRatingDescription("");
+    setIsAnonymous(false);
+    setState({
+      ratingScore: false,
+      ratingDescription: false,
+    });
+  }
+
+  function handleRatingScoreChange(
+    event: SyntheticEvent<Element, Event>,
+    newScore: number | null
+  ): void {
     if (newScore) {
       setState({
         ...state,
-        ratingScore: false
-      })
+        ratingScore: false,
+      });
       setRatingScore(newScore);
     }
   }
 
-  function handleRatingDescriptionChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) {
+  function handleRatingDescriptionChange(
+    event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) {
     setState({
       ...state,
-      ratingDescription: false
-    })
+      ratingDescription: false,
+    });
     setRatingDescription(event.target.value);
   }
 
   function handleIsAnonymousChange(event: React.ChangeEvent<HTMLInputElement>): void {
-    setIsAnonymous(event.target.checked)
+    setIsAnonymous(event.target.checked);
   }
 
   function handleSubmitRating(): void {
     setState({
       ratingScore: true,
-      ratingDescription: true
-    })
+      ratingDescription: true,
+    });
 
     if (!isRatingScoreErr && !ratingDescriptionError.err) {
       if (props.isEditing) {
-        UpdateReview(
-          supabaseClient,
-          reviewId!,
-          ratingDescription,
-          ratingScore,
-          isAnonymous,
-        )
+        UpdateReview(supabaseClient, reviewId!, ratingDescription, ratingScore, isAnonymous);
       } else {
         CreateReview(
           supabaseClient,
@@ -116,17 +142,22 @@ export default function RateDialog(props: props) {
           ratingScore,
           props.appointmentId,
           userStatus.user!.userId,
-          isAnonymous,
+          isAnonymous
         );
       }
-      props.handleCloseModal();
+      handleCloseAndResetModal();
+      router.push(PAGE_PATHS.SELECT_RATE);
     }
   }
 
   useEffect(() => {
     console.log("use effect");
     if (userStatus.user) {
-      GetReviewByReviewerAndAppointmentId(supabaseClient, userStatus.user.userId, props.appointmentId)
+      GetReviewByReviewerAndAppointmentId(
+        supabaseClient,
+        userStatus.user.userId,
+        props.appointmentId
+      )
         .then((review) => {
           if (review) {
             setRatingScore(review.score);
@@ -148,21 +179,21 @@ export default function RateDialog(props: props) {
         fullWidth={true}
         maxWidth="sm"
         open={props.openModal}
-        onClose={props.handleCloseModal}
+        onClose={handleCloseAndResetModal}
       >
         <DialogTitle>
           <Stack direction="row">
             <Box display="flex" sx={{ flexGrow: 1, alignItems: "center" }}>
               <Typography variant="h3">Rate Appointment</Typography>
             </Box>
-            <IconButton onClick={props.handleCloseModal} sx={{ padding: 0 }}>
+            <IconButton onClick={handleCloseAndResetModal} sx={{ padding: 0 }}>
               <CloseIcon fontSize="large" color="secondary" />
             </IconButton>
           </Stack>
         </DialogTitle>
         <DialogContent dividers>
           <Stack spacing={0} alignItems="center">
-            <Stack spacing={3} style={{ width: "25vw" }}>
+            <Stack spacing={3} style={{ width: "25vw", minWidth: "400px" }}>
               {/* Rating */}
               <Stack spacing={0}>
                 <Stack direction="row" spacing={0}>
@@ -171,21 +202,31 @@ export default function RateDialog(props: props) {
                     onChange={handleRatingScoreChange}
                     defaultValue={0}
                     size="large"
-                    icon={<StarIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarIcon>}
-                    emptyIcon={<StarOutlineIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarOutlineIcon>}
+                    icon={
+                      <StarIcon
+                        style={{ width: "50px", height: "50px" }}
+                        color="secondary"
+                      ></StarIcon>
+                    }
+                    emptyIcon={
+                      <StarOutlineIcon
+                        style={{ width: "50px", height: "50px" }}
+                        color="secondary"
+                      ></StarOutlineIcon>
+                    }
                   />
                   <Stack style={{ alignItems: "center", justifyContent: "center", width: "15vw" }}>
                     <Typography variant="body1">{generateRateLabel()}</Typography>
                   </Stack>
                 </Stack>
                 <FormHelperText error>
-                  {(state.ratingScore && isRatingScoreErr) && ratingScoreErrMsg}
+                  {state.ratingScore && isRatingScoreErr && ratingScoreErrMsg}
                   {"\u00A0"}
                 </FormHelperText>
               </Stack>
 
               {/* Description */}
-              <Box style={{ width: "25vw" }}>
+              <Box style={{ width: "25vw", minWidth: "400px", marginTop: 0 }}>
                 <DescriptionTextField
                   placeholder="How do you feel about this activity? (Optional)"
                   value={ratingDescription}
@@ -199,16 +240,19 @@ export default function RateDialog(props: props) {
             </Stack>
 
             {/* Check Box */}
-            <Box style={{ width: "25vw" }}>
+            <Box style={{ width: "25vw", minWidth: "400px" }}>
               <FormControlLabel
                 value="anonymous"
-                control={<Checkbox
-                  icon={<RadioButtonUncheckedIcon />}
-                  checkedIcon={<RadioButtonCheckedIcon />}
-                  checked={isAnonymous}
-                  onChange={handleIsAnonymousChange}
-                />}
-                label="Anonymous Rate" />
+                control={
+                  <Checkbox
+                    icon={<RadioButtonUncheckedIcon />}
+                    checkedIcon={<RadioButtonCheckedIcon />}
+                    checked={isAnonymous}
+                    onChange={handleIsAnonymousChange}
+                  />
+                }
+                label="Anonymous Rate"
+              />
             </Box>
           </Stack>
         </DialogContent>
@@ -217,5 +261,5 @@ export default function RateDialog(props: props) {
         </DialogActions>
       </Dialog>
     </>
-  )
+  );
 }
