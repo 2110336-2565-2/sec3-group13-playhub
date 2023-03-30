@@ -196,6 +196,13 @@ export function SearchPanel(props: props) {
                   },
                 },
               }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  const value = (event.target as HTMLInputElement).value;
+                  if (!value) return;
+                  handleSubmit(value);
+                }
+              }}
               InputProps={{
                 ref: params.InputProps.ref,
                 sx: textfield_overwrite,
