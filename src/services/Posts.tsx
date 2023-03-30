@@ -5,7 +5,7 @@ import { Database } from "supabase/db_types";
 import dayjs, { Dayjs } from "dayjs";
 import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
 
-function dayjsWithoutTZ(date: string): Dayjs {
+export function dayjsWithoutTZ(date: string): Dayjs {
   const dateWithoutTZ = date.substring(0, date.indexOf("+"));
   return dayjs(dateWithoutTZ);
 }
