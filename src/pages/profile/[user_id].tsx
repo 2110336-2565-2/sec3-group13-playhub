@@ -222,35 +222,37 @@ export default function Home() {
           </Card>
 
           {/* Feedback */}
-          <Card
-            sx={{
-              width: "50vw",
-              minWidth: "300px",
+          {userStatus.user?.isVerified && (
+            <Card
+              sx={{
+                width: "50vw",
+                minWidth: "300px",
 
-              marginBottom: "2vh",
-            }}
-          >
-            <CardContent style={{ paddingBottom: 0 }}>
-              {/* header */}
-              <Box display="flex" sx={{ alignItems: "center" }}>
-                <Box sx={{ flexGlow: 1 }}>
-                  <Typography variant="h2">Review</Typography>
+                marginBottom: "2vh",
+              }}
+            >
+              <CardContent style={{ paddingBottom: 0 }}>
+                {/* header */}
+                <Box display="flex" sx={{ alignItems: "center" }}>
+                  <Box sx={{ flexGlow: 1 }}>
+                    <Typography variant="h2">Review</Typography>
+                  </Box>
+                  <ExpandMore
+                    expand={expanded}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                  >
+                    <ArrowDownwardIcon color="secondary" />
+                  </ExpandMore>
                 </Box>
-                <ExpandMore
-                  expand={expanded}
-                  onClick={handleExpandClick}
-                  aria-expanded={expanded}
-                  aria-label="show more"
-                >
-                  <ArrowDownwardIcon color="secondary" />
-                </ExpandMore>
-              </Box>
 
-              <Collapse in={expanded} sx={{ marginTop: 2, marginBottom: 1 }}>
-                <FeedBackList feedbacks={feedbacks} />
-              </Collapse>
-            </CardContent>
-          </Card>
+                <Collapse in={expanded} sx={{ marginTop: 2, marginBottom: 1 }}>
+                  <FeedBackList feedbacks={feedbacks} />
+                </Collapse>
+              </CardContent>
+            </Card>
+          )}
         </Stack>
 
         {/* scroll to top button */}
