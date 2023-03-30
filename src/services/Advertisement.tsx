@@ -32,14 +32,14 @@ export async function CreateAdvertisement(
   return;
 }
 
-export async function GetAdvertisement(supabaseClient: SupabaseClient<Database>): Promise<any> {
-  const advertisement = await supabaseClient.rpc("get_advertisement");
-  if (advertisement.error) {
-    console.log(advertisement.error)
+export async function GetAdvertisementUrl(supabaseClient: SupabaseClient<Database>): Promise<any> {
+  const advertisementResult = await supabaseClient.rpc("get_advertisement");
+  if (advertisementResult.error) {
+    console.log(advertisementResult.error)
     throw new Error("Get Advertisement Error!!");
   }
-  if (!advertisement.data) {
+  if (!advertisementResult.data) {
     throw new Error("No advertisement data found");
   }
-  return advertisement.data;
+  return advertisementResult.data;
 }
