@@ -98,7 +98,7 @@ export default function Home() {
             </>
           ))}
           {advertise && posts.length !== 0 && posts.length <= freqOfAdvertise - 1 &&
-            <AdvertiseCard src={advertise[Math.floor(Math.random() * advertise.length)].image_url} />
+            <AdvertiseCard src={advertise[Math.min(Math.floor(Math.random() * advertise.length), advertise.length)].image_url} />
           }
         </Grid>
 
