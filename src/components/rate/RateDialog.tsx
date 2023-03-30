@@ -7,14 +7,13 @@ import {
   FormControlLabel,
   FormHelperText,
   IconButton,
-  Radio,
   Rating,
   Stack,
   Typography,
 } from "@mui/material";
 import NormalButton from "../public/CommonButton";
 import CloseIcon from "@mui/icons-material/Close";
-import { SyntheticEvent, useEffect, useState, useContext, useRef } from "react";
+import React, { SyntheticEvent, useEffect, useState, useContext } from "react";
 import { RATING } from "enum/RATING";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
