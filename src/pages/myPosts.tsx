@@ -16,6 +16,10 @@ import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
 
 import { GetCurrentUserPosts } from "@/services/Posts";
+import AdvertiseCard from "@/components/public/AdvertiseCard";
+import { Advertise } from "@/types/Advertisement";
+import { ADVERTISE_CONFIG } from "enum/ADVERTISE";
+import { GetAdvertisementUrl } from "@/services/Advertisement";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -23,6 +27,9 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
 
   const [posts, setPosts] = useState<Post[] | null>(null);
+  const [advertise, setAdvertise] = useState<Advertise[] | null>(null);
+
+  const freqOfAdvertise = ADVERTISE_CONFIG.FREQUENCY_OF_ADVERTISE
 
   useEffect(() => {
     async function getPostData() {
@@ -36,8 +43,19 @@ export default function Home() {
           return;
         });
     }
-
+    async function getAdvertisement() {
+      if (!userStatus.user) return;
+      GetAdvertisementUrl(supabaseClient)
+        .then((p) => {
+          setAdvertise(p)
+          console.log(p)
+        }).catch((err) => {
+          console.log(err)
+          return
+        })
+    }
     getPostData();
+    getAdvertisement();
   }, [userStatus.user, supabaseClient]);
 
   if (userStatus.isLoading) return <Loading />;
@@ -67,14 +85,23 @@ export default function Home() {
           container
           justifyContent="space-between"
           rowSpacing={6}
-          style={{ width: "80vw", marginTop: -6 }}
+          style={{ width: "80vw", marginTop: -6, marginBottom: "30px" }}
         >
           {posts.map((item, index) => (
-            <Grid item key={index} xs={5.75}>
-              <MyPostCard post={item} />
-            </Grid>
+            <>
+              <Grid item key={index} xs={5.75}>
+                <MyPostCard post={item} />
+              </Grid>
+              {advertise && index % freqOfAdvertise === freqOfAdvertise - 1 &&
+                <AdvertiseCard src={advertise[Math.min(Math.floor(index / freqOfAdvertise), advertise.length - 1)].image_url} />
+              }
+            </>
           ))}
+          {advertise && posts.length !== 0 && posts.length <= freqOfAdvertise - 1 &&
+            <AdvertiseCard src={advertise[Math.floor(Math.random() * advertise.length)].image_url} />
+          }
         </Grid>
+
       </Stack>
 
       {userStatus.user.isVerified && (
