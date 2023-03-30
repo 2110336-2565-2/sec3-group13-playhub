@@ -4,7 +4,25 @@ import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { Avatar, IconButton, Chip, Typography, Stack, Card, IconButtonProps, styled, CardHeader, Rating, CardContent, Box, Collapse, Divider, useScrollTrigger, Fab, Zoom } from "@mui/material";
+import {
+  Avatar,
+  IconButton,
+  Chip,
+  Typography,
+  Stack,
+  Card,
+  IconButtonProps,
+  styled,
+  CardHeader,
+  Rating,
+  CardContent,
+  Box,
+  Collapse,
+  Divider,
+  useScrollTrigger,
+  Fab,
+  Zoom,
+} from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
@@ -20,13 +38,14 @@ import { User } from "@/types/User";
 import { PAGE_PATHS } from "enum/PAGES";
 import { GENDER } from "enum/GENDER";
 import { GetUserByUserId } from "@/services/User";
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import { COLOR_CODE } from "enum/COLOR";
-import StarIcon from '@mui/icons-material/Star';
-import StarOutlineIcon from '@mui/icons-material/StarOutline';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import StarIcon from "@mui/icons-material/Star";
+import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { ReviewExtend } from "@/types/Review";
 import { GetReviewsByRevieweeId } from "@/services/Review";
+import FeedBackList from "@/components/rate/FeedbackList";
 
 const MyProfileStyle = {
   Card: {
@@ -65,9 +84,9 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
 })(({ theme, expand }) => ({
-  transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-  marginLeft: 'auto',
-  transition: theme.transitions.create('transform', {
+  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
+  marginLeft: "auto",
+  transition: theme.transitions.create("transform", {
     duration: theme.transitions.duration.shortest,
   }),
 }));
@@ -78,7 +97,7 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
 
   const [targetUserData, setTargetUserData] = useState<User | null>(null);
-  const [feedbacks, setFeedbacks] = useState<ReviewExtend[]>([])
+  const [feedbacks, setFeedbacks] = useState<ReviewExtend[]>([]);
 
   const [expanded, setExpanded] = useState(false);
 
@@ -86,10 +105,10 @@ export default function Home() {
     setExpanded(!expanded);
   };
 
-  const trigger = useScrollTrigger({ threshold: 100 })
+  const trigger = useScrollTrigger({ threshold: 100 });
   const scrollToTop = useCallback(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }, [])
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, []);
 
   useEffect(() => {
     async function getTargetUserData() {
@@ -100,8 +119,9 @@ export default function Home() {
     getTargetUserData();
 
     if (router.query.user_id) {
-      GetReviewsByRevieweeId(supabaseClient, router.query.user_id as string)
-        .then((reviews) => setFeedbacks(reviews));
+      GetReviewsByRevieweeId(supabaseClient, router.query.user_id as string).then((reviews) =>
+        setFeedbacks(reviews)
+      );
     }
   }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
 
@@ -202,13 +222,15 @@ export default function Home() {
           </Card>
 
           {/* Feedback */}
-          <Card sx={{
-            width: "50vw",
-            minWidth: "300px",
+          <Card
+            sx={{
+              width: "50vw",
+              minWidth: "300px",
 
-            marginBottom: "2vh",
-          }}>
-            <CardContent style={{ paddingBottom: 0, }}>
+              marginBottom: "2vh",
+            }}
+          >
+            <CardContent style={{ paddingBottom: 0 }}>
               {/* header */}
               <Box display="flex" sx={{ alignItems: "center" }}>
                 <Box sx={{ flexGlow: 1 }}>
@@ -225,59 +247,12 @@ export default function Home() {
               </Box>
 
               <Collapse in={expanded} sx={{ marginTop: 2, marginBottom: 1 }}>
-                <Stack spacing={2}>
-                  {/* for actual feedbacks need to change mackRating to feedabcks */}
-                  {feedbacks.map((rating: ReviewExtend, index) => (
-                    <>
-                      <Divider sx={{ height: "2px" }} color={COLOR_CODE.BLACK} />
-                      <Stack
-                        spacing={2}
-                        alignItems="center"
-                      >
-                        {/* rating title */}
-                        <Box display="flex">
-                          <Typography variant="h3">{rating.isAnonymous ? "Anonymous" : rating.reviewerName}</Typography>
-                          <Typography variant="body1" sx={{ fontStyle: 'italic' }}>{"\u00A0"}from{"\u00A0"}</Typography>
-                          <Typography variant="h3">{rating.appointmentTitle}</Typography>
-                        </Box>
-
-                        {/* rating score */}
-                        <Rating
-                          defaultValue={rating.score}
-                          size="large"
-                          readOnly
-                          icon={<StarIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarIcon>}
-                          emptyIcon={<StarOutlineIcon style={{ width: "40px", height: "40px" }} color="secondary"></StarOutlineIcon>}
-                        />
-
-                        {/* rating description */}
-                        {rating.description !== "" &&
-                          <Stack spacing={0}>
-                            {`" ${rating.description} "`.split("\n").map((row, index) => (
-                              <Typography
-                                variant="body1"
-                                sx={{
-                                  maxWidth: "45vw",
-                                  wordBreak: "break-word",
-                                  textAlign: "center",
-                                }}
-                                key={index}
-                              >
-                                {row}
-                              </Typography>
-                            ))}
-                          </Stack>
-                        }
-                      </Stack>
-                    </>
-                  ))}
-                </Stack>
+                <FeedBackList feedbacks={feedbacks} />
               </Collapse>
             </CardContent>
           </Card>
-
-
         </Stack>
+
         {/* scroll to top button */}
         <Zoom in={trigger}>
           <Fab
@@ -298,4 +273,3 @@ export default function Home() {
     </>
   );
 }
-
