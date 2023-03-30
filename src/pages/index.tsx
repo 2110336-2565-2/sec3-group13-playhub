@@ -87,7 +87,7 @@ export default function Home() {
                 userId={userStatus.user?.userId}
               />
               {advertise && index % freqOfAdvertise === freqOfAdvertise - 1 &&
-                <AdvertiseCard src={advertise[Math.floor(index / freqOfAdvertise)].image_url} />
+                <AdvertiseCard src={advertise[Math.min(Math.floor(index / freqOfAdvertise), advertise.length - 1)].image_url} />
               }
             </Box>
           ))}
