@@ -1,8 +1,6 @@
 import { User } from "@/types/User";
-import { Avatar, Badge, Card, Chip, IconButton, Popover, Stack, Typography } from "@mui/material";
+import { Avatar, Card, Chip, Icon, MenuItem, Popover, Stack, Typography } from "@mui/material";
 import { GENDER } from "enum/GENDER";
-import { PAGE_PATHS } from "enum/PAGES";
-import { useRouter } from "next/router";
 import React, { useState } from "react";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
@@ -12,11 +10,11 @@ import CakeIcon from "@mui/icons-material/Cake";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import { grey } from "@mui/material/colors";
 import { COLOR_CODE } from "enum/COLOR";
-import Icon from "@mui/material/Icon";
 
 type props = {
+  index?: number;
   participant: User;
-  color?: string;
+  onClick: () => void;
 };
 
 const ParticipantStyle = {
@@ -31,15 +29,8 @@ const ParticipantStyle = {
   },
 };
 
-export default function Participant(props: props) {
-  const router = useRouter();
-
+export default function ParticipantMenuItem(props: props) {
   const [displayParticipantCard, setDisplayParticipantCard] = useState<HTMLElement | null>(null);
-
-  function handleGoToParticipantProfile(): void {
-    router.push(PAGE_PATHS.PROFILE + props.participant.userId);
-    return;
-  }
 
   function handleOpenParticipantCard(event: React.MouseEvent<HTMLElement>): void {
     setDisplayParticipantCard(event.currentTarget);
@@ -65,23 +56,17 @@ export default function Participant(props: props) {
 
   return (
     <>
-      <IconButton
-        sx={{ padding: 0 }}
-        onClick={handleGoToParticipantProfile}
+      <MenuItem
+        key={props.index}
         onMouseEnter={handleOpenParticipantCard}
         onMouseLeave={handleCloseParticipantCard}
+        onClick={() => {
+          handleCloseParticipantCard();
+          props.onClick();
+        }}
       >
-        <Avatar
-          sx={{
-            width: 50,
-            height: 50,
-            zIndex: "1",
-            border: `3px ${props.color || "#000000"} solid`,
-          }}
-          alt="Profile picture"
-          src={props.participant.image as string}
-        />
-      </IconButton>
+        <Typography variant="body1">{props.participant.username}</Typography>
+      </MenuItem>
 
       <Popover
         sx={{
@@ -96,6 +81,10 @@ export default function Participant(props: props) {
         anchorEl={displayParticipantCard}
         onClose={handleCloseParticipantCard}
         anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
           vertical: "bottom",
           horizontal: "left",
         }}
@@ -164,7 +153,7 @@ export default function Participant(props: props) {
               />
             </Stack>
             <Stack spacing={0}>
-              {props.participant.description.split("\n").map((row, index) => (
+              {`" ${props.participant.description} "`.split("\n").map((row, index) => (
                 <Typography
                   variant="body1"
                   sx={{

@@ -9,16 +9,13 @@ import {
   CardContent,
   CardActions,
   IconButton,
-  Grid,
   Stack,
-  Chip,
 } from "@mui/material";
 
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import Image from "next/image";
 import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
 
@@ -30,6 +27,9 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { DeletePost } from "@/services/Posts";
 import CommonDialog from "../public/CommonDialog";
 import { COLOR } from "enum/COLOR";
+import dayjs from "dayjs";
+import DisplayTags from "../post/DisplayTags";
+import DisplayImages from "../post/DisplayImages";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -84,7 +84,6 @@ export default function AdminPostCard(props: props) {
           borderRadius: "16px",
           minWidth: "260px",
           maxWidth: "1200px",
-          margin: "40px",
         }}
       >
         {/* Post Card Header */}
@@ -112,57 +111,44 @@ export default function AdminPostCard(props: props) {
             <>
               {owner && (
                 <IconButton size="large" color="error" onClick={handleOpenDeletePostModal}>
-                  <DeleteOutlineIcon />
+                  <DeleteOutlineIcon fontSize="large" />
                 </IconButton>
               )}
             </>
           }
         />
         <CardContent style={{ padding: "0px 16px", marginLeft: 50, marginRight: 50 }}>
-          {/* post preview details start here */}
-          <Stack direction={!hiddenPostDetail ? "row" : "column"} spacing={2} marginBottom={2}>
+          <Stack spacing={2}>
+            {/* location */}
             <Typography display="inline-flex">
               <LocationOnIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>{props.post.location}</span>
+              <Typography style={{ marginLeft: 8 }}>{props.post.location}</Typography>
             </Typography>
+
+            {/* datetime */}
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>
                 {props.post.startDateTime} - {props.post.endDateTime}
               </span>
             </Typography>
-          </Stack>
-          <Grid container spacing={1}>
-            {props.post.tags.map((e, index) => (
-              <Grid item key={index}>
-                <Chip
-                  label={e}
-                  variant="outlined"
-                  style={{
-                    minWidth: 100,
-                    height: 40,
-                    border: "1px solid gray",
-                    fontSize: 18,
-                  }}
-                />
-              </Grid>
-            ))}
-          </Grid>
 
-          {/* post preview details end here */}
+            {/* tags */}
+            <DisplayTags tags={props.post.tags} />
+          </Stack>
+
           <Collapse in={!hiddenPostDetail} sx={{ marginTop: 2, marginBottom: 1 }}>
-            {/* post hidden details start here */}
-            {props.post.description.split("\n").map((row) => (
-              <Typography key={row}>{row}</Typography>
-            ))}
-            <Grid container spacing={2}>
-              {props.post.image.map((e, index) => (
-                <Grid item key={index}>
-                  <Image src={e} alt="location" width={300} height={350} />
-                </Grid>
-              ))}
-            </Grid>
-            {/* post hidden details end here */}
+            <Stack spacing={2}>
+              {/* description */}
+              <Typography>
+                {props.post.description.split("\n").map((row) => (
+                  <Typography key={row}>{row}</Typography>
+                ))}
+              </Typography>
+
+              {/* images */}
+              <DisplayImages images={props.post.image} />
+            </Stack>
           </Collapse>
         </CardContent>
 
@@ -171,7 +157,7 @@ export default function AdminPostCard(props: props) {
           <Box sx={{ flexGrow: 1 }}></Box>
 
           <ExpandMore expand={!hiddenPostDetail} onClick={handleExpandDetail}>
-            <ArrowDownwardIcon />
+            <ArrowDownwardIcon fontSize="large" color="secondary" />
           </ExpandMore>
         </CardActions>
       </Card>

@@ -51,11 +51,11 @@ type CreatePostSubmit = {
 const CreatePostStyle = {
   TextField: {
     width: "28vw",
-    minWidth: "250px",
+    minWidth: "400px",
   },
   Card: {
     width: "30vw",
-    minWidth: "300px",
+    minWidth: "450px",
     height: "70vh",
     minHeight: "710px",
     paddingTop: "2vh",
@@ -213,7 +213,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginBottom: "2vh", }} alignItems="center">
+      <Stack spacing={4} sx={{ marginBottom: "2vh" }} alignItems="center">
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Create post</Typography>

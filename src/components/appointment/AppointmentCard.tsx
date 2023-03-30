@@ -43,7 +43,6 @@ export default function AppointmentCard(props: props) {
     return;
   }
 
-
   return (
     <Card sx={{ borderRadius: "30px" }}>
       <CardActionArea onClick={goToCardDetail}>
@@ -65,26 +64,69 @@ export default function AppointmentCard(props: props) {
               />
             </IconButton>
           }
-          title={props.appointment.title}
-          subheader={props.appointment.ownerName}
-          titleTypographyProps={{ variant: "h1", align: "left" }}
-          subheaderTypographyProps={{ variant: "body1" }}
+          title={
+            <Typography
+              variant="h1"
+              align="left"
+              display="block"
+              sx={{
+                width: "31vw",
+                minWidth: "400px",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+            >
+              {props.appointment.title}
+            </Typography>
+          }
+          subheader={
+            <Typography
+              variant="body1"
+              align="left"
+              display="block"
+              sx={{
+                width: "31vw",
+                minWidth: "400px",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+              }}
+            >
+              {props.appointment.ownerName}
+            </Typography>
+          }
         />
-        <CardContent style={{ height: "18vh", paddingLeft: 82, paddingTop: 0 }}>
+        <CardContent style={{ height: "13vh", minHeight: "120px", paddingLeft: 82, paddingTop: 0 }}>
           <Stack spacing={2} marginBottom={2}>
             {/* location */}
             <Typography variant="body1" display="inline-flex">
               <LocationOnIcon fontSize="medium" />
-              <Typography style={{ marginLeft: 8 }}>{props.appointment.location}</Typography>
+              <Typography
+                style={{ marginLeft: 8 }}
+                sx={{
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}
+              >
+                {props.appointment.location}
+              </Typography>
             </Typography>
 
             {/* date */}
             <Typography variant="body1" display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
-              <span style={{ marginLeft: 8 }}>
-                {dayjs(props.appointment.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
-                {dayjs(props.appointment.endDateTime).format("DD/MM/YYYY h:mm A")}
-              </span>
+              <Typography
+                style={{ marginLeft: 8 }}
+                sx={{
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}
+              >
+                {props.appointment.startDateTime} - {props.appointment.endDateTime}
+              </Typography>
             </Typography>
 
             {/* number of participants */}
@@ -97,6 +139,6 @@ export default function AppointmentCard(props: props) {
           </Stack>
         </CardContent>
       </CardActionArea>
-    </Card >
+    </Card>
   );
 }

@@ -8,8 +8,8 @@ export type Appointment = {
   ownerName: string;
   ownerProfilePic: string;
   location: string;
-  startDateTime: Dayjs;
-  endDateTime: Dayjs;
+  startDateTime: string;
+  endDateTime: string;
   participantAmount: number;
 };
 
@@ -26,9 +26,8 @@ export type AppointmentDetail = {
 export type AppointmentDetailHeader = {
   title: string;
   location: string;
-  startDateTime: Dayjs;
-  endDateTime: Dayjs;
+  startDateTime: string;
+  endDateTime: string;
   tags: string[];
   description: string;
 };
-

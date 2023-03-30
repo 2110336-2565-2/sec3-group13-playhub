@@ -3,7 +3,11 @@ import Navbar from "@/components/public/Navbar";
 import { Typography, Box, Grid, IconButton, Stack, Card, FormHelperText } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AppointmentDetail } from "@/types/Appointment";
-import { AcceptAppointment, GetAppointmentByAppointmentId, RejectAppointment } from "@/services/Appointment";
+import {
+  AcceptAppointment,
+  GetAppointmentByAppointmentId,
+  RejectAppointment,
+} from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
@@ -56,12 +60,10 @@ export default function Home() {
 
   function handleAcceptAppointment(): void {
     if (userStatus.user) {
-      AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
-        (err) => {
-          console.log(err);
-          return;
-        }
-      );
+      AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch((err) => {
+        console.log(err);
+        return;
+      });
       router.push(PAGE_PATHS.SELECT_APPOINTMENT);
     }
     return;
@@ -69,17 +71,14 @@ export default function Home() {
 
   function handleRejectAppointment(): void {
     if (userStatus.user) {
-      RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch(
-        (err) => {
-          console.log(err);
-          return;
-        }
-      );
+      RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch((err) => {
+        console.log(err);
+        return;
+      });
       router.push(PAGE_PATHS.SELECT_APPOINTMENT);
     }
     return;
   }
-
 
   useEffect(() => {
     if (!appointmentId) return;
@@ -119,12 +118,11 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginBottom: "2vh", }} alignItems="center">
+      <Stack spacing={4} sx={{ marginBottom: "2vh" }} alignItems="center">
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Confirm Appointment</Typography>
         </Box>
-
 
         <Stack spacing={5} direction="row">
           <Card sx={ConfirmAppointmentStyle.Card}>
@@ -136,7 +134,7 @@ export default function Home() {
                   header="Title"
                   placeholder="This is Post Title"
                   value={appointment.detailHeader.title}
-                  handleValueChange={() => { }}
+                  handleValueChange={() => {}}
                   isErr={false}
                   errMsg=""
                   readOnly={true}
@@ -149,7 +147,7 @@ export default function Home() {
                   header="Location"
                   placeholder="Enter Location"
                   initialValue={appointment.detailHeader.location}
-                  onChange={() => { }}
+                  onChange={() => {}}
                   isErr={false}
                   errMsg=""
                   readOnly={true}
@@ -160,7 +158,7 @@ export default function Home() {
               <Box sx={ConfirmAppointmentStyle.TextField}>
                 <DisplayDateTime
                   header="Date & Time"
-                  value={`${appointment.detailHeader.startDateTime.format("DD/MM/YYYY h:mm A")} - ${appointment.detailHeader.endDateTime.format("DD/MM/YYYY h:mm A")}`}
+                  value={`${appointment.detailHeader.startDateTime} - ${appointment.detailHeader.endDateTime}`}
                   readOnly={true}
                 />
               </Box>
@@ -169,16 +167,16 @@ export default function Home() {
               <Box sx={ConfirmAppointmentStyle.TextField}>
                 <Tags
                   header="Tag"
-                  value={appointment.detailHeader.tags.map((t, index): Tag => { return { name: t, id: index } })}
-                  handleValueChange={() => { }}
+                  value={appointment.detailHeader.tags.map((t, index): Tag => {
+                    return { name: t, id: index };
+                  })}
+                  handleValueChange={() => {}}
                   menuValue={[]}
                   isErr={false}
                   errMsg=""
                   readOnly={true}
                 />
-                <FormHelperText>
-                  {"\u00A0"}
-                </FormHelperText>
+                <FormHelperText>{"\u00A0"}</FormHelperText>
               </Box>
 
               {/* Description */}
@@ -188,7 +186,7 @@ export default function Home() {
                   header="Description"
                   placeholder="Enter Description Here"
                   value={appointment.detailHeader.description}
-                  handleValueChange={() => { }}
+                  handleValueChange={() => {}}
                   isErr={false}
                   errMsg=""
                   height={8}
@@ -200,12 +198,11 @@ export default function Home() {
           <Card sx={ConfirmAppointmentStyle.Card}>
             <Stack spacing={3} alignItems="center" justifyContent="center">
               {/* Image list */}
-              <Box sx={ConfirmAppointmentStyle.TextField}>
-                <DisplayImages
-                  header="Image"
-                  images={appointment.images}
-                />
-              </Box>
+              {appointment.images.length !== 0 && (
+                <Box sx={ConfirmAppointmentStyle.TextField}>
+                  <DisplayImages header="Image" images={appointment.images} />
+                </Box>
+              )}
 
               {/* Number of participants */}
               <Box sx={ConfirmAppointmentStyle.TextField}>
@@ -213,8 +210,13 @@ export default function Home() {
               </Box>
 
               {/* Participant List */}
-              <Stack spacing={0.5} alignItems="start" justifyContent="center" sx={ConfirmAppointmentStyle.TextField}>
-                <Typography variant="h2">Join with</Typography>
+              <Stack
+                spacing={0.5}
+                alignItems="start"
+                justifyContent="center"
+                sx={ConfirmAppointmentStyle.TextField}
+              >
+                <Typography variant="h2">Participant List</Typography>
                 <Box display="flex">
                   {appointment.acceptParticipants.length == 0 && (
                     <Typography variant="body1" color="error">
@@ -226,7 +228,8 @@ export default function Home() {
                   <Grid item key={-1}>
                     <Participant participant={userStatus.user} color={COLOR_CODE.PRIMARY} />
                   </Grid>
-                  {appointment.acceptParticipants.filter((p) => p.userId !== userStatus.user?.userId)
+                  {appointment.acceptParticipants
+                    .filter((p) => p.userId !== userStatus.user?.userId)
                     .map((participant, index) => (
                       <Grid item key={index}>
                         <Participant participant={participant} />
@@ -239,10 +242,7 @@ export default function Home() {
         </Stack>
 
         <Stack direction="row" spacing={4}>
-          <CommonButton
-            label="Accept"
-            onClick={handleOpenAcceptAppointmentModal}
-          />
+          <CommonButton label="Accept" onClick={handleOpenAcceptAppointmentModal} />
           <CommonButton
             label="Reject"
             color={COLOR.NATURAL}
@@ -250,7 +250,6 @@ export default function Home() {
           />
         </Stack>
       </Stack>
-
 
       <CommonDialog
         openModal={openAcceptAppointmentModal}

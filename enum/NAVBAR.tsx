@@ -8,6 +8,7 @@ export enum NAVBAR_PAGES {
   POST = "Post",
   APPOINTMENT = "Appointment",
   RATE = "Rate",
+  CONFIRM_REJECT = "Confirm/Reject",
 }
 
 // export enum NavbarPages {

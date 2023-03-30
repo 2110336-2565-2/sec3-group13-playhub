@@ -93,7 +93,11 @@ export default function Tags(props: props) {
                 margin: "6px 4px",
                 boxShadow: "4px 4px 1px grey",
                 maxHeight: "24px",
-                backgroundColor: props.readOnly ? COLOR_CODE.WHITE : (props.disabled ? COLOR_CODE.DISABLE : COLOR_CODE.WHITE),
+                backgroundColor: props.readOnly
+                  ? COLOR_CODE.WHITE
+                  : props.disabled
+                  ? COLOR_CODE.DISABLE
+                  : COLOR_CODE.WHITE,
               }}
               variant="outlined"
               size="small"

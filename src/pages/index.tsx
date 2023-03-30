@@ -29,10 +29,11 @@ export default function Home() {
       GetPostsWithParticipants(supabaseClient)
         .then((p) => {
           setPosts(p);
-        }).catch((err) => {
-          console.log(err)
-          return
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
     getPostData();
   }, [userStatus.user, supabaseClient]);
@@ -51,17 +52,10 @@ export default function Home() {
     <>
       <Navbar />
       <Suspense fallback={<Loading />}>
-        <Stack
-          spacing={5}
-          style={{ paddingTop: "4vh", paddingBottom: "4vh" }}
-          alignItems="center"
-        >
+        <Stack spacing={5} style={{ paddingTop: "4vh", paddingBottom: "4vh" }} alignItems="center">
           {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
-              <CommonPostCard
-                post={item}
-                userId={userStatus.user?.userId}
-              />
+              <CommonPostCard post={item} userId={userStatus.user?.userId} />
             </Box>
           ))}
         </Stack>

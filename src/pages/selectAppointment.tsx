@@ -1,6 +1,6 @@
 import AppointmentCard from "@/components/appointment/AppointmentCard";
 import Navbar from "@/components/public/Navbar";
-import { GetAppointmentsByUserId } from "@/services/Appointment";
+import { GetAppointmentsByUserIdWhichPending } from "@/services/Appointment";
 import { Appointment } from "@/types/Appointment";
 import { Typography, Grid, Box, Stack } from "@mui/material";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
@@ -21,13 +21,14 @@ export default function Home() {
   useEffect(() => {
     if (!userStatus.user) return;
 
-    GetAppointmentsByUserId(userStatus.user.userId, supabaseClient).then((appointment) => {
-      setAppointments(appointment);
-    }).catch((err) => {
-      console.log(err)
-      return;
-    })
-
+    GetAppointmentsByUserIdWhichPending(userStatus.user.userId, supabaseClient)
+      .then((appointment) => {
+        setAppointments(appointment);
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }, [supabaseClient, userStatus.user]);
 
   if (userStatus.isLoading) return <Loading />;
@@ -35,35 +36,38 @@ export default function Home() {
     router.push(PAGE_PATHS.LOGIN);
     return;
   }
-  if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME)
-    return;
-  }
-  if (!userStatus.user.isVerified) {
-    router.push(PAGE_PATHS.HOME)
-    return;
-  }
   if (appointments == null) return <Loading />;
-  return <>
-    <Navbar />
+  return (
+    <>
+      <Navbar />
 
-    <Stack spacing={4} alignItems="center">
-      {/* Page header */}
-      <Box sx={{ marginTop: "3vh" }}>
-        <Typography variant="h1">Select Appointment To Confirm</Typography>
-      </Box>
-      <Grid
-        container
-        justifyContent="space-between"
-        rowSpacing={6}
-        style={{ width: "80vw", marginTop: -6 }}
-      >
-        {appointments.map((appointment, index) => (
-          <Grid item key={index} xs={5.75}>
-            <AppointmentCard appointment={appointment} prefix={PAGE_PATHS.CONFIRM_APPOINTMENT} />
+      <Stack spacing={4} alignItems="center" style={{ marginBottom: "3vh" }}>
+        {/* Page header */}
+        <Box sx={{ marginTop: "3vh" }}>
+          <Typography variant="h1">Select Appointment To Confirm</Typography>
+        </Box>
+        {appointments.length === 0 ? (
+          <Stack alignItems="center" justifyContent="center" style={{ height: "70vh" }}>
+            <Typography variant="h2">No Appointment to Confirm/Reject Yet.</Typography>
+          </Stack>
+        ) : (
+          <Grid
+            container
+            justifyContent="space-between"
+            rowSpacing={6}
+            style={{ width: "80vw", minWidth: "1050px", marginTop: -6 }}
+          >
+            {appointments.map((appointment, index) => (
+              <Grid item key={index} xs={5.75}>
+                <AppointmentCard
+                  appointment={appointment}
+                  prefix={PAGE_PATHS.CONFIRM_APPOINTMENT}
+                />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
-    </Stack>
-  </>
+        )}
+      </Stack>
+    </>
+  );
 }
