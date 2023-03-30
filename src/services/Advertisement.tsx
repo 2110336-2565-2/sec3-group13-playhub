@@ -1,6 +1,7 @@
 import { SupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import dayjs, { Dayjs } from "dayjs";
+import { Advertise } from "@/types/Advertisement";
 
 export async function CreateAdvertisement(
   title: string,
@@ -32,7 +33,7 @@ export async function CreateAdvertisement(
   return;
 }
 
-export async function GetAdvertisementUrl(supabaseClient: SupabaseClient<Database>): Promise<any> {
+export async function GetAdvertisementUrl(supabaseClient: SupabaseClient<Database>): Promise<Advertise[]> {
   const advertisementResult = await supabaseClient.rpc("get_advertisement");
   if (advertisementResult.error) {
     console.log(advertisementResult.error)
@@ -41,5 +42,7 @@ export async function GetAdvertisementUrl(supabaseClient: SupabaseClient<Databas
   if (!advertisementResult.data) {
     throw new Error("No advertisement data found");
   }
-  return advertisementResult.data;
+  return advertisementResult.data.map((ad) => ({
+    image_url: ad.image_url,
+  }));
 }
