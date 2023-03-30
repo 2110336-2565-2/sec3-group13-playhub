@@ -34,6 +34,11 @@ const submit_layout = {
   height: "58px",
   borderRadius: "15px",
 };
+const chip_style = {
+  border: "1px solid #000000",
+  color: "primary",
+  background: "white",
+};
 
 const textfield_overwrite = {
   "&&": {
@@ -115,7 +120,9 @@ export function SearchPanel(props: props) {
     const selectedInSameType = searchResults
       .filter((e) => e.type == searchMode)
       .map((e) => e.value);
-    if (selectedInSameType.includes(prefixedRemoved)) {
+    const selectedLowercase: string[] = selectedInSameType.map((str: string) => str.toLowerCase());
+    const isIncluded: boolean = selectedLowercase.includes(prefixedRemoved.toLowerCase());
+    if (isIncluded) {
       setErrMsg(`You already insert this ${searchMode == "username" ? "host" : "title"} keyword.`);
       return;
     }
@@ -188,6 +195,13 @@ export function SearchPanel(props: props) {
                     textAlign: "center",
                   },
                 },
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  const value = (event.target as HTMLInputElement).value;
+                  if (!value) return;
+                  handleSubmit(value);
+                }
               }}
               InputProps={{
                 ref: params.InputProps.ref,
