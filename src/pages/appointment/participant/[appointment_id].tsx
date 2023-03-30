@@ -183,10 +183,17 @@ export default function Home() {
                 </Box>
                 <Grid container spacing={1} style={{ marginLeft: -5 }}>
                   <Grid item key={-1}>
-                    <Participant participant={userStatus.user} color={COLOR_CODE.PRIMARY} />
+                    <Participant
+                      participant={
+                        appointment.acceptParticipants.filter(
+                          (p) => p.userId === appointment.ownerId
+                        )[0]
+                      }
+                      color={COLOR_CODE.PRIMARY}
+                    />
                   </Grid>
                   {appointment.acceptParticipants
-                    .filter((p) => p.userId !== userStatus.user?.userId)
+                    .filter((p) => p.userId !== appointment.ownerId)
                     .map((participant, index) => (
                       <Grid item key={index}>
                         <Participant participant={participant} />
