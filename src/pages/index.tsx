@@ -19,6 +19,7 @@ import { GetAdvertisementUrl } from "@/services/Advertisement";
 import { Advertise } from "@/types/Advertisement";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
 import { ADVERTISE_CONFIG } from "enum/ADVERTISE";
+import { isShowAdvertise } from "@/utilities/advertise";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -86,14 +87,11 @@ export default function Home() {
                 post={item}
                 userId={userStatus.user?.userId}
               />
-              {advertise && index % freqOfAdvertise === freqOfAdvertise - 1 &&
+              {advertise && isShowAdvertise(index, posts.length) &&
                 <AdvertiseCard src={advertise[Math.min(Math.floor(index / freqOfAdvertise), advertise.length - 1)].image_url} />
               }
             </Box>
           ))}
-          {advertise && posts.length !== 0 && posts.length <= freqOfAdvertise - 1 &&
-            <AdvertiseCard src={advertise[Math.min(Math.floor(Math.random() * advertise.length), advertise.length - 1)].image_url} />
-          }
         </Stack>
       </Suspense>
     </>

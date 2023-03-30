@@ -20,6 +20,7 @@ import AdvertiseCard from "@/components/public/AdvertiseCard";
 import { Advertise } from "@/types/Advertisement";
 import { ADVERTISE_CONFIG } from "enum/ADVERTISE";
 import { GetAdvertisementUrl } from "@/services/Advertisement";
+import { isShowAdvertise } from "@/utilities/advertise";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -92,16 +93,12 @@ export default function Home() {
               <Grid item key={index} xs={5.75}>
                 <MyPostCard post={item} />
               </Grid>
-              {advertise && index % freqOfAdvertise === freqOfAdvertise - 1 &&
+              {advertise && isShowAdvertise(index, posts.length) &&
                 <AdvertiseCard src={advertise[Math.min(Math.floor(index / freqOfAdvertise), advertise.length - 1)].image_url} />
               }
             </>
           ))}
-          {advertise && posts.length !== 0 && posts.length <= freqOfAdvertise - 1 &&
-            <AdvertiseCard src={advertise[Math.min(Math.floor(Math.random() * advertise.length), advertise.length)].image_url} />
-          }
         </Grid>
-
       </Stack>
 
       {userStatus.user.isVerified && (
