@@ -80,7 +80,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginTop: "5vh", marginBottom: "2vh" }} alignItems="center">
+      <Stack spacing={4} sx={{ marginTop: "70px", marginBottom: "2vh" }} alignItems="center">
         <Stack spacing={5} direction="row">
           <Card sx={ParticipantAppointmentStyle.Card}>
             <Stack spacing={0} alignItems="center" justifyContent="center">
