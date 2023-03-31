@@ -194,11 +194,11 @@ export default function Advertise() {
                     <Typography variant="body1">File</Typography>
                     <IconButton
                         onClick={handleCancelImageChip}
-                        color="primary"
-                        sx={{ position: "relative", top: "25px", backgroundColor: "black", opacity: fileImage === null ? 0 : 1 }}
+                        color="secondary"
+                        style={{ padding: "5px", position: "relative", top: "23px", left: "12px", backgroundColor: "black", opacity: fileImage === null ? 0 : 1 }}
                         disabled={fileImage === null}
                     >
-                        <CloseIcon fontSize="medium" />
+                        <CloseIcon color="primary" fontSize="medium" />
                     </IconButton>
                 </Stack>
                 <Stack spacing={1}>
