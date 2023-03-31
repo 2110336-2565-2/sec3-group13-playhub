@@ -21,13 +21,14 @@ export default function Home() {
   useEffect(() => {
     if (!userStatus.user) return;
 
-    GetAppointmentsByUserId(userStatus.user.userId, supabaseClient).then((appointment) => {
-      setAppointments(appointment);
-    }).catch((err) => {
-      console.log(err)
-      return;
-    })
-
+    GetAppointmentsByUserId(userStatus.user.userId, supabaseClient)
+      .then((appointment) => {
+        setAppointments(appointment);
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }, [supabaseClient, userStatus.user]);
 
   if (userStatus.isLoading) return <Loading />;
@@ -36,31 +37,34 @@ export default function Home() {
     return;
   }
   if (appointments == null) return <Loading />;
-  return <>
-    <Navbar />
+  return (
+    <>
+      <Navbar />
 
-    <Stack spacing={4} alignItems="center">
-      {/* Page header */}
-      <Box sx={{ marginTop: "3vh" }}>
-        <Typography variant="h1">Select Appointment To Rate</Typography>
-      </Box>
-      {appointments.length === 0 ? (
-        <Stack alignItems="center" justifyContent="center" style={{ height: "70vh" }}>
-          <Typography variant="h2">No Appointment to Rate Yet.</Typography>
-        </Stack>
-      ) : (
-        <Grid
-          container
-          justifyContent="space-between"
-          rowSpacing={6}
-          style={{ width: "80vw", marginTop: -6 }}
-        >
-          {appointments.map((appointment, index) => (
-            <Grid item key={index} xs={5.75}>
-              <AppointmentCard appointment={appointment} prefix={PAGE_PATHS.RATE} />
-            </Grid>
-          ))}
-        </Grid>)}
-    </Stack>
-  </>
+      <Stack spacing={4} alignItems="center" style={{ marginBottom: "4vh" }}>
+        {/* Page header */}
+        <Box sx={{ marginTop: "3vh" }}>
+          <Typography variant="h1">Select Appointment To Rate</Typography>
+        </Box>
+        {appointments.length === 0 ? (
+          <Stack alignItems="center" justifyContent="center" style={{ height: "70vh" }}>
+            <Typography variant="h2">No Appointment to Rate Yet.</Typography>
+          </Stack>
+        ) : (
+          <Grid
+            container
+            justifyContent="space-between"
+            rowSpacing={6}
+            style={{ width: "80vw", marginTop: -6 }}
+          >
+            {appointments.map((appointment, index) => (
+              <Grid item key={index} xs={5.75}>
+                <AppointmentCard appointment={appointment} prefix={PAGE_PATHS.RATE} />
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Stack>
+    </>
+  );
 }
