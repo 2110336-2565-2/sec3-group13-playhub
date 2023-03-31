@@ -142,6 +142,14 @@ export default function Advertise() {
                 <Typography variant="h1">Add Advertisement</Typography>
                 <Typography variant="body1">Owner</Typography>
                 <TextField
+                    inputProps={{
+                        sx: {
+                            textAlign: "center",
+                            "&::placeholder": {
+                                textAlign: "center",
+                            },
+                        },
+                    }}
                     placeholder="Advertisement’s Owner"
                     value={owner}
                     onChange={handleOwnerTextFieldChange}
