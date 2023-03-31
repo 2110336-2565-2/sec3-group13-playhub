@@ -171,7 +171,7 @@ export default function Advertise() {
                         }
                         label={
                             isDurationCustomed ?
-                                <Box display={"flex"}>
+                                <Box display="flex" alignItems="center">
                                     Other{"\u00A0"}
                                     <Input
                                         value={duration === "Other" ? "" : duration}
