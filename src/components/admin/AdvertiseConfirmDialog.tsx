@@ -45,7 +45,7 @@ export default function AdvertiseConfirmDialog(props: props) {
                     <Typography>File:</Typography>
                     <Box display="flex" sx={{ justifyContent: "center" }}>
                         <Card
-                            sx={{ height: "200px", width: "600px", justifySelf: "center" }}
+                            sx={{ height: "200px", width: "600px", justifySelf: "center", boxShadow: "0px 0px 0px", }}
                         >
                             <CardMedia
                                 sx={{ height: "100%", widtyh: "100%" }}
