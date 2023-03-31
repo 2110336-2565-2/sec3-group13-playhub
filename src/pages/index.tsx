@@ -85,7 +85,9 @@ export default function Home() {
                 userId={userStatus.user?.userId}
               />
               {advertise && isShowAdvertise(index, posts.length) &&
-                <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
+                <Box sx={{ marginTop: "50px" }}>
+                  <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
+                </Box>
               }
             </Box>
           ))}

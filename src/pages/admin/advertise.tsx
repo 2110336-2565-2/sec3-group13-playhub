@@ -21,6 +21,7 @@ import { CreateAdvertisement } from "@/services/Advertisement";
 import CommonDialog from "@/components/public/CommonDialog";
 import AdvertiseConfirmDialog from "@/components/admin/AdvertiseConfirmDialog";
 import { STARTER_DURATION } from "enum/ADVERTISE";
+import AdvertiseCard from "@/components/public/AdvertiseCard";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
@@ -39,7 +40,7 @@ export default function Advertise() {
     })
 
     const [fileImage, setFileImage] = useState<File | null>(null);
-    const [displayImage, setDisplayImage] = useState<string>();
+    const [displayImage, setDisplayImage] = useState<string>("");
     const [errFileImage, setErrorFileImage] = useState<validation>({
         msg: "",
         err: false
@@ -116,7 +117,7 @@ export default function Advertise() {
     };
     function handleCancelImageChip(): void {
         setErrorFileImage({ msg: "", err: false });
-        setDisplayImage(undefined)
+        setDisplayImage("")
         setFileImage(null);
     };
 
@@ -217,8 +218,7 @@ export default function Advertise() {
                             boxShadow: "8px 8px 1px grey",
                             borderRadius: "15px",
                             border: `3px ${errFileImage.err ? appTheme.palette.error.main : appTheme.palette.secondary.main}  solid`,
-                            height: "20vw",
-                            minHeight: "240px",
+                            aspectRatio: "970 / 250",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -226,11 +226,10 @@ export default function Advertise() {
                         }}
                     >
                         {displayImage ?
-                            <CardMedia
-                                sx={{ height: "100%", width: "100%" }}
-                                image={displayImage}
-                                title="poster file"
-                            />
+                            <>
+                                <AdvertiseCard src={displayImage} />
+                            </>
+
                             // <img height="100%" width="100%" alt="poster file" src={displayImage} />
                             :
                             <IconButton sx={{ width: "150px", height: "150px" }} aria-label="upload picture" component="label">

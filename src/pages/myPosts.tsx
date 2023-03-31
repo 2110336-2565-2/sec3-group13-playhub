@@ -91,11 +91,13 @@ export default function Home() {
                 <MyPostCard post={item} />
               </Grid>
               {advertise && isShowAdvertise(index, posts.length) &&
-                <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
+                <Box sx={{ width: "100%", marginTop: "50px" }}>
+                  <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
+                </Box>
               }
             </>
           ))}
-        </Grid>
+        </Grid >
       </Stack>
 
       {userStatus.user.isVerified && (

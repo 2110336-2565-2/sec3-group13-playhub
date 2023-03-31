@@ -1,6 +1,7 @@
-import { Box, Card, CardMedia, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
 import NormalButton from "../public/CommonButton";
 import CloseIcon from "@mui/icons-material/Close";
+import AdvertiseCard from "../public/AdvertiseCard";
 
 type props = {
     openModal: boolean;
@@ -11,7 +12,7 @@ type props = {
     buttonAction: () => void;
     owner: string;
     duration: Number | "Other" | null;
-    fileImageURL: string | undefined;
+    fileImageURL: string;
 };
 
 export default function AdvertiseConfirmDialog(props: props) {
@@ -43,17 +44,7 @@ export default function AdvertiseConfirmDialog(props: props) {
                         <Typography color="primary">{props.duration?.toString()} day{props.duration === 1 ? "" : "s"}</Typography>
                     </Box>
                     <Typography>File:</Typography>
-                    <Box display="flex" sx={{ justifyContent: "center" }}>
-                        <Card
-                            sx={{ height: "200px", width: "600px", justifySelf: "center", boxShadow: "0px 0px 0px", }}
-                        >
-                            <CardMedia
-                                sx={{ height: "100%", widtyh: "100%" }}
-                                image={props.fileImageURL}
-                                title="preview_advert"
-                            />
-                        </Card>
-                    </Box>
+                    <AdvertiseCard src={props.fileImageURL} />
                 </DialogContent>
                 <DialogActions>
                     <NormalButton label={props.buttonLabel} onClick={props.buttonAction} color={props.buttonColor} />

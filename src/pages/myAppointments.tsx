@@ -2,7 +2,7 @@ import AppointmentCard from "@/components/appointment/AppointmentCard";
 import Navbar from "@/components/public/Navbar";
 import { GetAppointmentsByUserId } from "@/services/Appointment";
 import { Appointment } from "@/types/Appointment";
-import { Typography, Grid, Stack } from "@mui/material";
+import { Typography, Grid, Stack, Box } from "@mui/material";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { useContext, useEffect, useState } from "react";
 import { Database } from "supabase/db_types";
@@ -75,7 +75,9 @@ export default function Home() {
                                 </div>
                             </Grid>
                             {advertise && isShowAdvertise(index, appointments.length) &&
-                                <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
+                                <Box sx={{ width: "100%", marginTop: "50px" }}>
+                                    <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
+                                </Box>
                             }
                         </>
                     ))}
