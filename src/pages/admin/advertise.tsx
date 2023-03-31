@@ -210,15 +210,18 @@ export default function Advertise() {
                             borderRadius: "15px",
                             border: `3px ${errFileImage.err ? appTheme.palette.error.main : appTheme.palette.secondary.main}  solid`,
                             height: "250px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
                             textAlign: "center",
                         }}
                     >
                         {displayImage ?
                             <img height={"95%"} alt="poster file" src={displayImage} />
                             :
-                            <IconButton sx={{ top: "35%" }} aria-label="upload picture" component="label">
+                            <IconButton sx={{ width: "150px", height: "150px" }} aria-label="upload picture" component="label">
                                 <input onChange={handleImageChange} hidden accept="image/*" type="file" />
-                                <CameraAltIcon color={errFileImage.err ? "error" : undefined} sx={{ fontSize: "50px", opacity: errFileImage.err ? 0.5 : 1 }} />
+                                <CameraAltIcon color={errFileImage.err ? "error" : undefined} sx={{ fontSize: "100px", opacity: errFileImage.err ? 0.5 : 1 }} />
                             </IconButton>
                         }
                     </Box>
