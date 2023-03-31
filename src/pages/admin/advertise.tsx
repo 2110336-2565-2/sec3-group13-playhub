@@ -3,7 +3,7 @@ import CommonButton from "@/components/public/CommonButton";
 import Loading from "@/components/public/Loading";
 import CommonTextField from "@/components/public/CommonTextField";
 
-import { Box, FormControlLabel, FormHelperText, IconButton, Input, Radio, RadioGroup, Stack, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Card, CardMedia, FormControlLabel, FormHelperText, IconButton, Input, Radio, RadioGroup, Stack, TextField, Typography, useTheme } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -135,7 +135,7 @@ export default function Advertise() {
     return (
         <>
             <AdminNavbar />
-            <Stack margin={"30px auto auto auto"} width={"60vw"}>
+            <Stack margin={"30px auto auto auto"} width="60vw" minWidth="720px">
                 <Typography variant="h1">Add Advertisement</Typography>
                 <Typography variant="body1">Owner</Typography>
                 <CommonTextField
@@ -202,12 +202,13 @@ export default function Advertise() {
                     </IconButton>
                 </Stack>
                 <Stack spacing={1}>
-                    <Box
+                    <Card
                         sx={{
                             boxShadow: "8px 8px 1px grey",
                             borderRadius: "15px",
                             border: `3px ${errFileImage.err ? appTheme.palette.error.main : appTheme.palette.secondary.main}  solid`,
-                            height: "250px",
+                            height: "20vw",
+                            minHeight: "240px",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
@@ -215,14 +216,19 @@ export default function Advertise() {
                         }}
                     >
                         {displayImage ?
-                            <img height={"95%"} alt="poster file" src={displayImage} />
+                            <CardMedia
+                                sx={{ height: "100%", width: "100%" }}
+                                image={displayImage}
+                                title="poster file"
+                            />
+                            // <img height="100%" width="100%" alt="poster file" src={displayImage} />
                             :
                             <IconButton sx={{ width: "150px", height: "150px" }} aria-label="upload picture" component="label">
                                 <input onChange={handleImageChange} hidden accept="image/*" type="file" />
                                 <CameraAltIcon color={errFileImage.err ? "error" : undefined} sx={{ fontSize: "100px", opacity: errFileImage.err ? 0.5 : 1 }} />
                             </IconButton>
                         }
-                    </Box>
+                    </Card>
                     <FormHelperText error>{errFileImage.err && errFileImage.msg}{"\u00A0"}</FormHelperText>
                 </Stack>
                 <Stack justifyContent={"center"} direction={"row"} flexWrap={"wrap"} spacing={"15px"} margin={"30px 0"}>

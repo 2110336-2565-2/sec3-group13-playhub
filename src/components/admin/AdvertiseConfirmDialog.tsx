@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Card, CardMedia, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, Stack, Typography } from "@mui/material";
 import NormalButton from "../public/CommonButton";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -43,7 +43,17 @@ export default function AdvertiseConfirmDialog(props: props) {
                         <Typography color="primary">{props.duration?.toString()} day{props.duration === 1 ? "" : "s"}</Typography>
                     </Box>
                     <Typography>File:</Typography>
-                    <img width={"80%"} src={props.fileImageURL} alt={"preview_advert"} />
+                    <Box display="flex" sx={{ justifyContent: "center" }}>
+                        <Card
+                            sx={{ height: "200px", width: "600px", justifySelf: "center" }}
+                        >
+                            <CardMedia
+                                sx={{ height: "100%", widtyh: "100%" }}
+                                image={props.fileImageURL}
+                                title="preview_advert"
+                            />
+                        </Card>
+                    </Box>
                 </DialogContent>
                 <DialogActions>
                     <NormalButton label={props.buttonLabel} onClick={props.buttonAction} color={props.buttonColor} />
