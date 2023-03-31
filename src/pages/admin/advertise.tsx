@@ -64,28 +64,25 @@ export default function Advertise() {
 
     function openSummaryDialog(): void {
         setIsPressSubmit(true)
-        if (errorOwnerTextField.err || errFileImage.err) {
-            return;
-        }
         if (duration === null) {
             setErrDuration({
                 msg: "Please select advertisement’s duration.",
                 err: true
             })
-            return;
         }
         if (duration === "Other" || duration === 0) {
             setErrDuration({
                 msg: "Please fill in the number of day for advertisement’s duration",
                 err: true
             })
-            return
         }
         if (!fileImage) {
             setErrorFileImage({
                 msg: "Please upload advertisement’s image.",
                 err: true
             })
+        }
+        if (errorOwnerTextField.err || errFileImage.err || errDuration.err) {
             return;
         }
         setShowSummaryDialog(true)
