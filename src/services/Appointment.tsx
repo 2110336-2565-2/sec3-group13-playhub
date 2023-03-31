@@ -225,3 +225,16 @@ export async function GetAppointmentByAppointmentId(
     rejectParticipants: rejectParticipants,
   };
 }
+
+export async function EndAppointment(
+  appointmentId: number,
+  supabaseClient: SupabaseClient<Database>
+): Promise<void> {
+  const endAppointmentResult = await supabaseClient.rpc("end_appointment", {
+    end_id: appointmentId,
+  });
+  if (endAppointmentResult.error) {
+    console.log(endAppointmentResult.error);
+    throw new Error("Something went wrong!!");
+  }
+}

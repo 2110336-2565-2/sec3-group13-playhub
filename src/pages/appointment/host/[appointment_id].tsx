@@ -3,7 +3,7 @@ import Navbar from "@/components/public/Navbar";
 import { Typography, Box, IconButton, Stack, Card, FormHelperText, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AppointmentDetail } from "@/types/Appointment";
-import { GetAppointmentByAppointmentId } from "@/services/Appointment";
+import { GetAppointmentByAppointmentId, EndAppointment } from "@/services/Appointment";
 import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
@@ -80,9 +80,15 @@ export default function Home() {
   }
 
   function handleEndAppointment(): void {
-    // fill end appointment service here
-    router.push(PAGE_PATHS.MY_APPOINTMENTS);
-    return;
+    EndAppointment(appointmentId, supabaseClient)
+      .then(() => {
+        router.push(PAGE_PATHS.MY_APPOINTMENTS);
+        return;
+      })
+      .catch((err) => {
+        console.log(err);
+        return;
+      });
   }
 
   if (!appointment || userStatus.isLoading) return <Loading />;
