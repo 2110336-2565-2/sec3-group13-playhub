@@ -27,10 +27,9 @@ export default function Advertise() {
     const userStatus = useContext(userContext);
     const appTheme = useTheme()
     const supabaseClient = useSupabaseClient<Database>();
-    const [isPressSubmit, setIsPressSubmit] = useState<boolean>(false);
 
     const [owner, setOwner] = useState<string>("");
-    const errorOwnerTextField: validation = validateTextField(owner, 1)
+    const [errOwner, setErrOwner] = useState<validation>({ msg: "", err: false });
 
     const [duration, setDuration] = useState<number | "Other" | null>(null)
     const [isDurationCustomed, setIsDurationCustomed] = useState<boolean>(false)
@@ -63,36 +62,41 @@ export default function Advertise() {
     }
 
     function openSummaryDialog(): void {
-        setIsPressSubmit(true)
+        let isError: boolean = false
+        const errorOwnerTextField: validation = validateTextField(owner, 1)
+        setErrOwner(errorOwnerTextField)
+        isError ||= errorOwnerTextField.err
         if (duration === null) {
             setErrDuration({
                 msg: "Please select advertisement’s duration.",
                 err: true
             })
+            isError = true
         }
         if (duration === "Other" || duration === 0) {
             setErrDuration({
                 msg: "Please fill in the number of day for advertisement’s duration",
                 err: true
             })
+            isError = true
         }
         if (!fileImage) {
             setErrorFileImage({
                 msg: "Please upload advertisement’s image.",
                 err: true
             })
+            isError = true
         }
-        if (errorOwnerTextField.err || errFileImage.err || errDuration.err) {
+        if (isError) {
             return;
         }
         setShowSummaryDialog(true)
     }
     function handleOwnerTextFieldChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
-        setIsPressSubmit(false)
+        setErrOwner({ msg: "", err: false })
         setOwner(event.target.value)
     }
     function handleDurationChange(event: ChangeEvent<HTMLInputElement>): void {
-        setIsPressSubmit(false)
         setErrDuration({ msg: "", err: false })
         if ((event.target as HTMLInputElement).value === "Other") {
             setDuration("Other")
@@ -103,7 +107,6 @@ export default function Advertise() {
         setDuration(newDuration);
     }
     function handleImageChange(event: any): void {
-        setIsPressSubmit(false)
         const tempFile = event.target.files[0];
         const imgErrMsg = validateImage(tempFile.type, tempFile.size);
         setErrorFileImage(imgErrMsg);
@@ -138,14 +141,13 @@ export default function Advertise() {
             <Stack margin={"30px auto auto auto"} width={"60vw"}>
                 <Typography variant="h1">Add Advertisement</Typography>
                 <Typography variant="body1">Owner</Typography>
-                <CommonTextField
-                    icon={""}
-                    placeholder={"Advertisement’s Owner"}
+                <TextField
+                    placeholder="Advertisement’s Owner"
                     value={owner}
-                    handleValueChange={handleOwnerTextFieldChange}
-                    isErr={isPressSubmit && errorOwnerTextField.err}
-                    errMsg={errorOwnerTextField.msg}
+                    onChange={handleOwnerTextFieldChange}
+                    error={errOwner.err}
                 />
+                <FormHelperText sx={{ margin: "10px" }} error>{errOwner.err && errOwner.msg}{"\u00A0"}</FormHelperText>
                 <Typography variant="body1">Duration</Typography>
                 <RadioGroup
                     row
@@ -181,7 +183,7 @@ export default function Advertise() {
                                             if (!regex.test(val)) return;
                                             setDuration(Number(val))
                                         }}
-                                        error={isPressSubmit && duration === "Other"}
+                                        error={duration === "Other"}
                                     />
                                     {"\u00A0"}days
                                 </Box>
@@ -189,7 +191,7 @@ export default function Advertise() {
                         } />
 
                 </RadioGroup>
-                <FormHelperText error>{isPressSubmit && errDuration.err && errDuration.msg}{"\u00A0"}</FormHelperText>
+                <FormHelperText error>{errDuration.err && errDuration.msg}{"\u00A0"}</FormHelperText>
                 <Stack direction={"row"} justifyContent="space-between">
                     <Typography variant="body1">File</Typography>
                     <IconButton
