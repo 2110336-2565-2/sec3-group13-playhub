@@ -15,7 +15,7 @@ function isShowAdvertise(index: number, theNumberOfCards: number): boolean {
 }
 
 function selectAdvertise(index: number, advertiseLength: number): number {
-  return Math.min(Math.floor(index / freqOfAdvertise), advertiseLength - 1);
+  return Math.floor(index / freqOfAdvertise) % advertiseLength;
 }
 
 export { isShowAdvertise, selectAdvertise };
