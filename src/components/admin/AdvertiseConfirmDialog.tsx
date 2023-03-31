@@ -43,7 +43,7 @@ export default function AdvertiseConfirmDialog(props: props) {
                         <Typography color="primary">{props.duration?.toString()} day{props.duration === 1 ? "" : "s"}</Typography>
                     </Box>
                     <Typography>File:</Typography>
-                    <img width={"80%"} src={props.fileImageURL} />
+                    <img width={"80%"} src={props.fileImageURL} alt={"preview_advert"} />
                 </DialogContent>
                 <DialogActions>
                     <NormalButton label={props.buttonLabel} onClick={props.buttonAction} color={props.buttonColor} />
