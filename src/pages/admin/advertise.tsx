@@ -12,7 +12,7 @@ import { PAGE_PATHS } from "enum/PAGES"
 
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { useContext, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { validation } from "@/types/Validation";
@@ -89,11 +89,11 @@ export default function Advertise() {
         }
         setShowSummaryDialog(true)
     }
-    function handleOwnerTextFieldChange(event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
+    function handleOwnerTextFieldChange(event: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>): void {
         setIsPressSubmit(false)
         setOwner(event.target.value)
     }
-    function handleDurationChange(event: React.ChangeEvent<HTMLInputElement>): void {
+    function handleDurationChange(event: ChangeEvent<HTMLInputElement>): void {
         setIsPressSubmit(false)
         setErrDuration({ msg: "", err: false })
         if ((event.target as HTMLInputElement).value === "Other") {
@@ -155,7 +155,7 @@ export default function Advertise() {
                     onChange={handleDurationChange}
                 >
                     {[1, 7, 15, 30, 45, 60, 90, 180, 365].map((amountOfDays) => {
-                        return <FormControlLabel value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " day" + (amountOfDays === 1 ? "" : "s")} sx={{ width: "18%", margin: 0 }} />
+                        return <FormControlLabel key={amountOfDays} value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " day" + (amountOfDays === 1 ? "" : "s")} sx={{ width: "18%", margin: 0 }} />
                     })}
 
                     <FormControlLabel
