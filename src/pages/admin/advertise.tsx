@@ -20,6 +20,7 @@ import { validateImage, validateTextField } from "@/utilities/validation";
 import { CreateAdvertisement } from "@/services/Advertisement";
 import CommonDialog from "@/components/public/CommonDialog";
 import AdvertiseConfirmDialog from "@/components/admin/AdvertiseConfirmDialog";
+import { STARTER_DURATION } from "enum/ADVERTISE";
 
 export default function Advertise() {
     const router: NextRouter = useRouter();
@@ -154,7 +155,7 @@ export default function Advertise() {
                     defaultValue="female"
                     onChange={handleDurationChange}
                 >
-                    {[1, 7, 15, 30, 45, 60, 90, 180, 365].map((amountOfDays) => {
+                    {STARTER_DURATION.map((amountOfDays) => {
                         return <FormControlLabel key={amountOfDays} value={amountOfDays} control={<Radio />} label={amountOfDays.toString() + " day" + (amountOfDays === 1 ? "" : "s")} sx={{ width: "18%", margin: 0 }} />
                     })}
 
