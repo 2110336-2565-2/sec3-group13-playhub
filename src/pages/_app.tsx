@@ -36,6 +36,10 @@ const mainTheme = createTheme({
       textAlign: "center",
       fontWeight: 800,
     },
+    h3: {
+      fontSize: 22,
+      fontWeight: 600,
+    },
     h5: {
       fontSize: 22,
       fontWeight: 700,
@@ -70,11 +74,23 @@ const mainTheme = createTheme({
         },
       },
     },
-
+    MuiAutocomplete: {
+      styleOverrides: {
+        root: {
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-disabled": {
+              borderRadius: "15px",
+              backgroundColor: "#E8E8E8",
+            },
+          },
+        },
+      },
+    },
     MuiTextField: {
       styleOverrides: {
         root: {
           boxShadow: "8px 8px 1px grey",
+          backgroundColor: "#ffffff",
           borderRadius: "15px",
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
@@ -89,6 +105,29 @@ const mainTheme = createTheme({
               borderRadius: "15px",
               border: "3px #ffa31a solid",
             },
+            "&.Mui-disabled fieldset": {
+              borderRadius: "15px",
+              border: "3px #000000 solid",
+            },
+            "&.Mui-disabled input": {
+              borderRadius: "15px",
+              backgroundColor: "#E8E8E8",
+            },
+            "&.Mui-disabled inputMultiline": {
+              borderRadius: "15px",
+              backgroundColor: "#E8E8E8",
+            },
+            "&.MuiInputBase-multiline.Mui-disabled": {
+              borderRadius: "15px",
+              backgroundColor: "#E8E8E8",
+            },
+            "&.MuiInputBase-readOnly fieldset": {
+              borderRadius: "15px",
+              border: "3px #000000 solid",
+            },
+          },
+          "&.MuiInputBase-input.Mui-disabled": {
+            WebkitTextFillColor: "#838383",
           },
         },
       },

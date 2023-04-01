@@ -8,7 +8,6 @@ import Typography from "@mui/material/Typography";
 import parse from "autosuggest-highlight/parse";
 import { debounce } from "@mui/material/utils";
 import { FormHelperText, InputAdornment, Stack } from "@mui/material";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 const GOOGLE_MAPS_API_KEY: string = process.env.NEXT_PUBLIC_GOOGLE_CLOUD_API_KEY!;
 const autocompleteService = { current: null };
@@ -51,6 +50,8 @@ type props = {
   placeholder?: string;
   initialValue?: string;
   onChange: (event: string) => void;
+  disabled?: boolean;
+  readOnly?: boolean;
   isErr: boolean;
   errMsg: string;
 };
@@ -123,7 +124,7 @@ export default function LocationTextField(props: props) {
     <>
       <Stack spacing={1}>
         <Box>
-          <Typography variant="body1">{props.header}</Typography>
+          <Typography variant="h3">{props.header}</Typography>
           <Autocomplete
             id="google-map-demo"
             getOptionLabel={(option) => (typeof option === "string" ? option : option.description)}
@@ -132,6 +133,7 @@ export default function LocationTextField(props: props) {
             autoComplete
             includeInputInList
             filterSelectedOptions
+            disabled={props.disabled || props.readOnly ? props.disabled || props.readOnly : false}
             value={value}
             noOptionsText="No locations"
             onChange={(event: any, newValue: PlaceType | null) => {
@@ -147,9 +149,11 @@ export default function LocationTextField(props: props) {
                 {...params}
                 placeholder={props.placeholder}
                 fullWidth
+                disabled={props.disabled ? props.disabled : false}
                 error={props.isErr}
                 InputProps={{
                   ...params.InputProps,
+                  readOnly: props.readOnly,
                   startAdornment: (
                     <InputAdornment position="end">
                       <LocationOnIcon

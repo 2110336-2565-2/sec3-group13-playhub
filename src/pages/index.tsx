@@ -54,18 +54,9 @@ export default function Home() {
     <>
       <Navbar />
       <Suspense fallback={<Loading />}>
-        <Stack
-          spacing="40px"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            padding: "30px",
-            minHeight: "80vh",
-          }}
-        >
+        <Stack spacing={5} style={{ paddingTop: "4vh", paddingBottom: "4vh" }} alignItems="center">
           <SearchPanel setPosts={setPosts} />
-          {posts.map((item, index) => (
+          {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
               <CommonPostCard post={item} userId={userStatus.user?.userId} />
             </Box>

@@ -4,15 +4,7 @@ import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import {
-  Typography,
-  SelectChangeEvent,
-  Avatar,
-  Stack,
-  Box,
-  IconButton,
-  Card,
-} from "@mui/material";
+import { Typography, SelectChangeEvent, Avatar, Stack, Box, IconButton, Card } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -247,7 +239,11 @@ export default function Home() {
             <Avatar alt="Anya" sx={EditProfileStyle.Avatar}>
               {input.image && (
                 <Avatar
-                  sx={!isImageUpload ? { ...EditProfileStyle.Avatar, opacity: "0.5" } : { ...EditProfileStyle.Avatar, objectFit: "cover" }}
+                  sx={
+                    !isImageUpload
+                      ? { ...EditProfileStyle.Avatar, opacity: "0.5" }
+                      : { ...EditProfileStyle.Avatar, objectFit: "cover" }
+                  }
                   alt="Profile picture"
                   src={input.image}
                 />

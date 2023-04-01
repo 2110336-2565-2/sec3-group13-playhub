@@ -11,7 +11,6 @@ import {
   CardActions,
   IconButton,
   Stack,
-  Snackbar,
   Grow,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
@@ -26,10 +25,11 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { AddParticipantToPost, RemoveParticipantFromPost } from "@/services/Participant";
 import { Database } from "supabase/db_types";
 import CommonButton from "../public/CommonButton";
-import { COLOR } from "enum/COLOR";
+import { COLOR, COLOR_CODE } from "enum/COLOR";
 import DisplayTags from "./DisplayTags";
 import DisplayImages from "./DisplayImages";
 import dayjs from "dayjs";
+import CommonDialog from "../public/CommonDialog";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -50,60 +50,60 @@ type props = {
   userId: string | undefined;
 };
 
-type snackBar = {
-  msg: string;
-  isShow: boolean;
-}
-
 export default function PostCard(props: props) {
   const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
 
-  const [isUserJoin, setIsUserJoin] = useState<boolean>(false)
+  const [isUserJoin, setIsUserJoin] = useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
-  const [openSnackBar, setOpenSnackBar] = useState<snackBar>({ msg: "", isShow: false });
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
+  const [openJoinModal, setOpenJoinModal] = useState<boolean>(false);
+
+  const handleOpenJoinModal = (): void => setOpenJoinModal(true);
+  const handleCloseJoinModal = (): void => setOpenJoinModal(false);
+
   function hasJoined(): boolean {
-    if (!props.post.participants) return false
+    if (!props.post.participants) return false;
     for (let i = 0; i < props.post.participants.length; i++) {
       if (props.post.participants[i].userId === props.userId) {
-        return true
+        return true;
       }
     }
-    return false
+    return false;
   }
 
   const isJoined: boolean = hasJoined();
 
   useEffect(() => {
     if (isJoined) {
-      setIsUserJoin(true)
+      setIsUserJoin(true);
     } else {
-      setIsUserJoin(false)
+      setIsUserJoin(false);
     }
-  }, [isJoined])
+  }, [isJoined]);
 
   function joinPost(): void {
     if (!props.userId) return;
+    handleCloseJoinModal();
     if (!isUserJoin) {
       AddParticipantToPost(props.userId, props.post.postId, supabaseClient)
         .then(() => {
-          setOpenSnackBar({ msg: `Join ${props.post.title} !`, isShow: true })
-          setIsUserJoin(true)
-        }).catch((err) => {
-          console.log(err)
-          return;
+          setIsUserJoin(true);
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     } else {
       RemoveParticipantFromPost(props.userId, props.post.postId, supabaseClient)
         .then(() => {
-          setOpenSnackBar({ msg: `Cancel ${props.post.title} !`, isShow: true })
-          setIsUserJoin(false)
-        }).catch((err) => {
-          console.log(err)
-          return;
+          setIsUserJoin(false);
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
   }
 
@@ -173,9 +173,6 @@ export default function PostCard(props: props) {
               <DisplayImages images={props.post.image} />
             </Stack>
           </Collapse>
-
-
-
         </CardContent>
 
         {/* Post Card Footer */}
@@ -184,7 +181,11 @@ export default function PostCard(props: props) {
 
           <Grow in={!hiddenPostDetail} style={{ transformOrigin: "0 0 0" }}>
             <Box>
-              <CommonButton label={!isUserJoin ? "Join" : "Cancel"} onClick={() => joinPost()} color={!isUserJoin ? COLOR.PRIMARY : COLOR.NATURAL} />
+              <CommonButton
+                label={!isUserJoin ? "Join" : "Cancel"}
+                onClick={handleOpenJoinModal}
+                color={!isUserJoin ? COLOR.PRIMARY : COLOR.NATURAL}
+              />
             </Box>
           </Grow>
 
@@ -194,13 +195,29 @@ export default function PostCard(props: props) {
         </CardActions>
       </Card>
 
-      {/* Comfirm Delete Dialog */}
-      <Snackbar
-        open={openSnackBar.isShow}
-        autoHideDuration={5000}
-        message={openSnackBar.msg}
-        onClose={() => setOpenSnackBar({ msg: "", isShow: false })}
-      />
+      {!isUserJoin ? (
+        <CommonDialog
+          openModal={openJoinModal}
+          handleCloseModal={handleCloseJoinModal}
+          header={["", "Join", `"${props.post.title}" ?`]}
+          hightlightColorCode={COLOR_CODE.PRIMARY}
+          content="You can cancel join by press Cancel on this post."
+          buttonLabel="Join"
+          buttonColor={COLOR.PRIMARY}
+          buttonAction={joinPost}
+        />
+      ) : (
+        <CommonDialog
+          openModal={openJoinModal}
+          handleCloseModal={handleCloseJoinModal}
+          header={["", "Cancel Join", `"${props.post.title}" ?`]}
+          hightlightColorCode={COLOR_CODE.PRIMARY}
+          content="You can re-join by press Join on this post."
+          buttonLabel="Cancel Join"
+          buttonColor={COLOR.PRIMARY}
+          buttonAction={joinPost}
+        />
+      )}
     </>
   );
 }
