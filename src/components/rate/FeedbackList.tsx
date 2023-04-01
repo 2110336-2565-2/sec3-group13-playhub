@@ -30,7 +30,7 @@ export default function FeedBackList(props: props) {
               <Divider sx={{ height: "2px" }} color={COLOR_CODE.BLACK} />
               <Stack spacing={2} alignItems="center">
                 {/* rating title */}
-                <Box display="flex">
+                <Box display="flex" sx={{ textAlign: "center" }}>
                   <Typography variant="h3">
                     {rating.isAnonymous ? "Anonymous" : rating.reviewerName}
                   </Typography>
