@@ -226,11 +226,7 @@ export default function Advertise() {
                         }}
                     >
                         {displayImage ?
-                            <>
-                                <AdvertiseCard src={displayImage} />
-                            </>
-
-                            // <img height="100%" width="100%" alt="poster file" src={displayImage} />
+                            <AdvertiseCard src={displayImage} />
                             :
                             <IconButton sx={{ width: "150px", height: "150px" }} aria-label="upload picture" component="label">
                                 <input onChange={handleImageChange} hidden accept="image/*" type="file" />

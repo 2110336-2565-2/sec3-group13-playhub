@@ -44,7 +44,6 @@ export default function Home() {
       GetAdvertisementUrl(supabaseClient)
         .then((p) => {
           setAdvertise(p)
-          console.log(p)
         }).catch((err) => {
           console.log(err)
           return
