@@ -106,7 +106,6 @@ export default function AdminVerifyDialog(props: props) {
     setErrMsg("");
     setIsError(false);
   }
-
   return (
     <>
       <Dialog

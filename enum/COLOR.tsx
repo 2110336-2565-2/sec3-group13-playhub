@@ -10,5 +10,5 @@ export enum COLOR_CODE {
   DISABLE = "#E8E8E8",
   WHITE = "#FFFFFF",
   ACCEPT = "#42FF00",
-  PRIMARY = "#ffa31a"
+  PRIMARY = "#ffa31a",
 }
