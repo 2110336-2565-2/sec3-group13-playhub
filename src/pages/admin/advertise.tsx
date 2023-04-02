@@ -1,14 +1,13 @@
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import CommonButton from "@/components/public/CommonButton";
 import Loading from "@/components/public/Loading";
-import CommonTextField from "@/components/public/CommonTextField";
 
-import { Box, Card, CardMedia, FormControlLabel, FormHelperText, IconButton, Input, Radio, RadioGroup, Stack, TextField, Typography, useTheme } from "@mui/material";
+import { Box, Card, FormControlLabel, FormHelperText, IconButton, Input, Radio, RadioGroup, Stack, TextField, Typography, useTheme } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CloseIcon from "@mui/icons-material/Close";
 
-import { COLOR } from "enum/COLOR"
-import { PAGE_PATHS } from "enum/PAGES"
+import { COLOR } from "enum/COLOR";
+import { PAGE_PATHS } from "enum/PAGES";
 
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
