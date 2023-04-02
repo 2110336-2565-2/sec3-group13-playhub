@@ -81,8 +81,8 @@ const mainTheme = createTheme({
             "&.Mui-disabled": {
               borderRadius: "15px",
               backgroundColor: "#E8E8E8",
-            }
-          }
+            },
+          },
         },
       },
     },

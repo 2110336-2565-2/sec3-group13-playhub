@@ -28,7 +28,6 @@ import CommonButton from "../public/CommonButton";
 import { COLOR, COLOR_CODE } from "enum/COLOR";
 import DisplayTags from "./DisplayTags";
 import DisplayImages from "./DisplayImages";
-import dayjs from "dayjs";
 import CommonDialog from "../public/CommonDialog";
 
 interface ExpandMoreProps extends IconButtonProps {

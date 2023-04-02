@@ -23,7 +23,6 @@ import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 
 import { GetAllTags } from "@/services/Tags";
 import { GetPostByPostId, UpdatePost } from "@/services/Posts";
-import { ICONS } from "enum/ICONS";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CommonButton from "@/components/public/CommonButton";

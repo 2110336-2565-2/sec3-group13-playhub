@@ -6,7 +6,6 @@ import { Box, Container, FormHelperText, IconButton, Stack, Typography } from "@
 import { grey } from "@mui/material/colors";
 import { IMAGE_LIMIT } from "enum/INPUT_LIMIT";
 import CloseIcon from "@mui/icons-material/Close";
-import Image from "next/image";
 
 // style
 const image_layout = {

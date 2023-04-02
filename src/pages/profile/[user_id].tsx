@@ -13,12 +13,9 @@ import {
   Card,
   IconButtonProps,
   styled,
-  CardHeader,
-  Rating,
   CardContent,
   Box,
   Collapse,
-  Divider,
   useScrollTrigger,
   Fab,
   Zoom,
@@ -39,9 +36,6 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { GENDER } from "enum/GENDER";
 import { GetUserByUserId } from "@/services/User";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import { COLOR_CODE } from "enum/COLOR";
-import StarIcon from "@mui/icons-material/Star";
-import StarOutlineIcon from "@mui/icons-material/StarOutline";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { ReviewExtend } from "@/types/Review";
 import { GetReviewsByRevieweeId } from "@/services/Review";

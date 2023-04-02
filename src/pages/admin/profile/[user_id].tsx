@@ -5,7 +5,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Avatar, Chip, Typography, Stack, Button, Box } from "@mui/material";
+import { Avatar, Chip, Typography, Stack, Box } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
