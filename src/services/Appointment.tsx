@@ -238,3 +238,29 @@ export async function EndAppointment(
     throw new Error("Something went wrong!!");
   }
 }
+
+export async function GetAppointmentsToRate(
+  userId: string,
+  supabaseClient: SupabaseClient<Database>
+): Promise<Appointment[]> {
+  const getAppointmentsResult = await supabaseClient.rpc("get_appointment_to_rate", {
+    id: userId,
+  });
+
+  if (getAppointmentsResult.error) {
+    console.log(getAppointmentsResult.error);
+    throw new Error("Something went wrong!!");
+  }
+
+  return getAppointmentsResult.data.map((appointment) => ({
+    appointmentId: appointment.id,
+    title: appointment.title,
+    ownerId: appointment.owner_id,
+    ownerName: appointment.username,
+    ownerProfilePic: appointment.image,
+    location: appointment.location,
+    startDateTime: dayjs(getAppointmentsResult.data[0].start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjs(getAppointmentsResult.data[0].end_time).format("DD/MM/YYYY hh:mm A"),
+    participantAmount: appointment.participant_number,
+  }));
+}
