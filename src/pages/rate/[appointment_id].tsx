@@ -71,7 +71,7 @@ export default function Home() {
   }, [supabaseClient, appointmentId, userStatus.user]);
 
   function backToMyAppointments(): void {
-    router.push(PAGE_PATHS.MY_APPOINTMENTS);
+    router.push(PAGE_PATHS.SELECT_RATE);
     return;
   }
 
