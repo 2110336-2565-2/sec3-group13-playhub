@@ -16,6 +16,10 @@ import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
 
 import { GetCurrentUserPosts } from "@/services/Posts";
+import AdvertiseCard from "@/components/public/AdvertiseCard";
+import { Advertise } from "@/types/Advertisement";
+import { GetAdvertisementUrl } from "@/services/Advertisement";
+import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -23,6 +27,7 @@ export default function Home() {
   const supabaseClient = useSupabaseClient<Database>();
 
   const [posts, setPosts] = useState<Post[] | null>(null);
+  const [advertise, setAdvertise] = useState<Advertise[] | null>(null);
 
   useEffect(() => {
     async function getPostData() {
@@ -36,8 +41,20 @@ export default function Home() {
           return;
         });
     }
-
+    async function getAdvertisement() {
+      if (!userStatus.user) return;
+      GetAdvertisementUrl(supabaseClient)
+        .then((p) => {
+          setAdvertise(p);
+          console.log(p);
+        })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
+    }
     getPostData();
+    getAdvertisement();
   }, [userStatus.user, supabaseClient]);
 
   if (userStatus.isLoading) return <Loading />;
@@ -75,9 +92,18 @@ export default function Home() {
             style={{ width: "80vw", minWidth: "1050px", marginTop: -6 }}
           >
             {posts.map((item, index) => (
-              <Grid item key={index} xs={5.75}>
-                <PostCard post={item} />
-              </Grid>
+              <>
+                <Grid item key={index} xs={5.75}>
+                  <PostCard post={item} />
+                </Grid>
+                {advertise && isShowAdvertise(index, posts.length) && (
+                  <Box sx={{ width: "100%", marginTop: "50px" }}>
+                    <AdvertiseCard
+                      src={advertise[selectAdvertise(index, advertise.length)].image_url}
+                    />
+                  </Box>
+                )}
+              </>
             ))}
           </Grid>
         )}

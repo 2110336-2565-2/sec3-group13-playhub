@@ -39,6 +39,11 @@ export default function AdminNavbar() {
     return;
   };
 
+  const routeToAdvertise = (): void => {
+    router.push(PAGE_PATHS.ADVERTISEMENT)
+    return;
+  }
+
   async function handleSignOut() {
     SignOut(supabaseClient)
       .then(() => {
@@ -61,6 +66,11 @@ export default function AdminNavbar() {
           <Box sx={{ flexGrow: 1 }}>
             <IconButton color="inherit" disableRipple onClick={routeToHome}>
               <Typography variant="body1">{NAVBAR_PAGES.HOME}</Typography>
+            </IconButton>
+          </Box>
+          <Box sx={{ flexGrow: -1 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToAdvertise}>
+              <Typography variant="body1">{NAVBAR_PAGES.ADVERTISEMENT}</Typography>
             </IconButton>
           </Box>
           <IconButton onClick={handleMenu}>
