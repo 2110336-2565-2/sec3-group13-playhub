@@ -1,5 +1,5 @@
 import { User } from "@/types/User";
-import { Avatar, Card, Chip, IconButton, Popover, Stack, Typography } from "@mui/material";
+import { Avatar, Badge, Card, Chip, IconButton, Popover, Stack, Typography } from "@mui/material";
 import { GENDER } from "enum/GENDER";
 import { PAGE_PATHS } from "enum/PAGES";
 import { useRouter } from "next/router";

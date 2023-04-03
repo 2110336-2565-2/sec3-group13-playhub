@@ -153,7 +153,7 @@ export default function ParticipantMenuItem(props: props) {
               />
             </Stack>
             <Stack spacing={0}>
-              {`" ${props.participant.description} "`.split("\n").map((row, index) => (
+              {props.participant.description.split("\n").map((row, index) => (
                 <Typography
                   variant="body1"
                   sx={{

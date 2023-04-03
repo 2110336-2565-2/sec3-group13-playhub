@@ -10,14 +10,3 @@ export enum NAVBAR_PAGES {
   RATE = "Rate",
   CONFIRM_REJECT = "Confirm/Reject",
 }
-
-// export enum NavbarPages {
-//   home = "Home",
-//   myPost = "My Post",
-//   profile = "Profile",
-//   myAppointments = "My Appointments",
-//  logout = "Logout",
-//   verify = "Verify",
-//   selectPost = "Post",
-//   selectAppointment = "Appointment"
-// }

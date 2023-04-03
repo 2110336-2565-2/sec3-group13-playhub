@@ -31,22 +31,6 @@ export enum PAGE_PATHS {
   SELECT_RATE = "/selectRate/",
   RATE = "/rate/", //suffix : appointment_id
 
-  // home = "/",
-  // myPosts = "/myPosts",
-  // editPost = "/editPost/", // subfix : postId
-  // createPost = "/createPost",
-  // profile = "/profile/", // subfix : user_id
-  // editProfile = "/editProfile",
-  // selectApptToConfirm = "/selectApptToConfirm",
-  // confirmAppt = "/confirmAppt/",
-  // myAppointments = "/myAppointments/", // suffix : appointmentId
-  // createAppointment = "/createAppointment", 
-  // verify = "/verify",
-  // resetPassword = "/resetPassword",
-  // successResetPassword = "/successResetPassword",
-  // requestResetPassword = "/requestResetPassword",
-  // successRequestResetPassword = "/successRequestResetPassword",
-
   // admin
   ADMIN_HOME = "/admin/", // subfix : user_id
   ADMIN_PROFILE = "/admin/profile/", // subfix : user_id
@@ -54,5 +38,5 @@ export enum PAGE_PATHS {
 
 export enum ROLE {
   HOST = "host/",
-  PARTICIPANT = "participant/"
+  PARTICIPANT = "participant/",
 }

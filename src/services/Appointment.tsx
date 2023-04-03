@@ -114,8 +114,8 @@ export async function GetAppointmentsByUserIdWhichPending(
     ownerName: appointment.username,
     ownerProfilePic: appointment.image,
     location: appointment.location,
-    startDateTime: dayjs(getAppointmentsResult.data[0].start_time).format("DD/MM/YYYY hh:mm A"),
-    endDateTime: dayjs(getAppointmentsResult.data[0].end_time).format("DD/MM/YYYY hh:mm A"),
+    startDateTime: dayjs(appointment.start_time).format("DD/MM/YYYY hh:mm A"),
+    endDateTime: dayjs(appointment.end_time).format("DD/MM/YYYY hh:mm A"),
     participantAmount: appointment.participant_number,
   }));
 }

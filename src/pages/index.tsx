@@ -6,7 +6,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
@@ -15,6 +15,8 @@ import CommonPostCard from "@/components/post/CommonPostCard";
 import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
 import { GetPostsWithParticipants } from "@/services/Posts";
+import { SearchPanel } from "@/components/search/SearchPanel";
+import ToTop from "@/components/search/ToTop";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -53,12 +55,20 @@ export default function Home() {
       <Navbar />
       <Suspense fallback={<Loading />}>
         <Stack spacing={5} style={{ paddingTop: "4vh", paddingBottom: "4vh" }} alignItems="center">
+          <SearchPanel setPosts={setPosts} />
           {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
               <CommonPostCard post={item} userId={userStatus.user?.userId} />
             </Box>
           ))}
+          {posts.length == 0 && (
+            <Stack alignItems="center" spacing={2} flexGrow={10} justifyContent="center">
+              <Typography variant="h5">Sorry! No Post Found</Typography>
+              <Typography variant="body2">Please try again with different keyword</Typography>
+            </Stack>
+          )}
         </Stack>
+        <ToTop />
       </Suspense>
     </>
   );

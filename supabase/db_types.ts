@@ -525,6 +525,38 @@ export interface Database {
         };
         Returns: undefined;
       };
+      search_posts_by_conditions: {
+        Args: {
+          tag_ids: number[];
+          host_names: string[];
+          post_names: string[];
+        };
+        Returns: {
+          id: number;
+          title: string;
+          description: string;
+          owner_id: string;
+          owner_name: string;
+          owner_profile: string;
+          location: string;
+          start_time: string;
+          end_time: string;
+          tags: {
+            id: number;
+            name: string;
+          }[];
+          images: string[];
+          participants: {
+            id: string;
+            username: string;
+            sex: string;
+            is_verified: boolean;
+            birthdate: string;
+            description: string;
+            image: string | null;
+          }[];
+        };
+      };
     };
     Enums: {
       [_ in never]: never;
