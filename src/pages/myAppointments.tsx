@@ -16,73 +16,84 @@ import { GetAdvertisementUrl } from "@/services/Advertisement";
 import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
 
 export default function Home() {
-    const router: NextRouter = useRouter();
+  const router: NextRouter = useRouter();
 
-    const supabaseClient = useSupabaseClient<Database>();
-    const [appointments, setAppointments] = useState<Appointment[]>([]);
-    const userStatus = useContext(userContext);
+  const supabaseClient = useSupabaseClient<Database>();
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const userStatus = useContext(userContext);
 
-    const [advertise, setAdvertise] = useState<Advertise[] | null>()
+  const [advertise, setAdvertise] = useState<Advertise[] | null>();
 
-    function handleCardClick(appointmentId: string): void {
-        router.push(PAGE_PATHS.MY_APPOINTMENTS + appointmentId);
+  function handleCardClick(appointmentId: string): void {
+    router.push(PAGE_PATHS.MY_APPOINTMENTS + appointmentId);
+    return;
+  }
+
+  useEffect(() => {
+    if (!userStatus.user) return;
+
+    GetAppointmentsByUserId(userStatus.user.userId, supabaseClient)
+      .then((appointment) => {
+        setAppointments(appointment);
+      })
+      .catch((err) => {
+        console.log(err);
         return;
-    }
-
-    useEffect(() => {
-        if (!userStatus.user) return;
-
-        GetAppointmentsByUserId(userStatus.user.userId, supabaseClient).then((appointment) => {
-            setAppointments(appointment);
-        }).catch((err) => {
-            console.log(err)
-            return;
-        })
-
-        GetAdvertisementUrl(supabaseClient)
-            .then((p) => {
-                setAdvertise(p)
-                console.log(p)
-            }).catch((err) => {
-                console.log(err)
-                return
-            })
-
-    }, [supabaseClient, userStatus.user]);
-
-    if (userStatus.isLoading) return <Loading />;
-    if (!userStatus.user) {
-        router.push(PAGE_PATHS.LOGIN);
+      });
+    GetAdvertisementUrl(supabaseClient)
+      .then((p) => {
+        setAdvertise(p);
+        console.log(p);
+      })
+      .catch((err) => {
+        console.log(err);
         return;
-    }
-    return (
-        <>
-            <Navbar />
-            <Stack spacing={4} alignItems="center">
+      });
+  }, [supabaseClient, userStatus.user]);
 
-                <Typography paddingTop="40px" variant="h4" align="center">My Appointments</Typography>
-                <Grid
-                    container
-                    justifyContent="space-between"
-                    rowSpacing={6}
-                    style={{ width: "80vw", marginTop: -6, marginBottom: "30px" }}
-                >
-                    {appointments.map((item, index) => (
-                        <>
-                            <Grid item xs={12} md={6} key={index}>
-                                <div onClick={() => handleCardClick(item.appointmentId)}>
-                                    <AppointmentCard appointment={item} />
-                                </div>
-                            </Grid>
-                            {advertise && isShowAdvertise(index, appointments.length) &&
-                                <Box sx={{ width: "100%", marginTop: "50px" }}>
-                                    <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
-                                </Box>
-                            }
-                        </>
-                    ))}
+  if (userStatus.isLoading) return <Loading />;
+  if (!userStatus.user) {
+    router.push(PAGE_PATHS.LOGIN);
+    return;
+  }
+  if (appointments == null) return <Loading />;
+  return (
+    <>
+      <Navbar />
+
+      <Stack spacing={4} alignItems="center" style={{ marginBottom: "3vh" }}>
+        {/* Page header */}
+        <Box sx={{ marginTop: "3vh" }}>
+          <Typography variant="h1">My Appointment</Typography>
+        </Box>
+        {appointments.length === 0 ? (
+          <Stack alignItems="center" justifyContent="center" style={{ height: "70vh" }}>
+            <Typography variant="h2">No Appointment Yet.</Typography>
+          </Stack>
+        ) : (
+          <Grid
+            container
+            justifyContent="space-between"
+            rowSpacing={6}
+            style={{ width: "80vw", marginTop: -6 }}
+          >
+            {appointments.map((appointment, index) => (
+              <>
+                <Grid item key={index} xs={5.75}>
+                  <AppointmentCard appointment={appointment} prefix={PAGE_PATHS.APPOINTMENT} />
                 </Grid>
-            </Stack>
-        </>
-    );
+                {advertise && isShowAdvertise(index, appointments.length) && (
+                  <Box sx={{ width: "100%", marginTop: "50px" }}>
+                    <AdvertiseCard
+                      src={advertise[selectAdvertise(index, advertise.length)].image_url}
+                    />
+                  </Box>
+                )}
+              </>
+            ))}
+          </Grid>
+        )}
+      </Stack>
+    </>
+  );
 }

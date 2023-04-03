@@ -1,4 +1,3 @@
-import { SUPABASE_CONNECTING_ERROR } from "@/constants/supabase";
 import { User } from "@/types/User";
 import { AuthResponse, SupabaseClient } from "@supabase/supabase-js";
 import { Database } from "supabase/db_types";

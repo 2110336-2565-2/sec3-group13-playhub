@@ -1,5 +1,5 @@
 import { User } from "@/types/User";
-import { Avatar, Card, Chip, IconButton, Popover, Stack, Typography } from "@mui/material";
+import { Avatar, Badge, Card, Chip, IconButton, Popover, Stack, Typography } from "@mui/material";
 import { GENDER } from "enum/GENDER";
 import { PAGE_PATHS } from "enum/PAGES";
 import { useRouter } from "next/router";
@@ -9,11 +9,14 @@ import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CakeIcon from "@mui/icons-material/Cake";
-import VerifyChip from "@/components/profile/VerifyChip";
+import VerifiedIcon from "@mui/icons-material/Verified";
 import { grey } from "@mui/material/colors";
+import { COLOR_CODE } from "enum/COLOR";
+import Icon from "@mui/material/Icon";
 
 type props = {
   participant: User;
+  color?: string;
 };
 
 const ParticipantStyle = {
@@ -69,7 +72,12 @@ export default function Participant(props: props) {
         onMouseLeave={handleCloseParticipantCard}
       >
         <Avatar
-          sx={{ width: 50, height: 50, zIndex: "1" }}
+          sx={{
+            width: 50,
+            height: 50,
+            zIndex: "1",
+            border: `3px ${props.color || "#000000"} solid`,
+          }}
           alt="Profile picture"
           src={props.participant.image as string}
         />
@@ -103,10 +111,35 @@ export default function Participant(props: props) {
           }}
         >
           <Stack spacing={2} alignItems="center" justifyContent="center">
-            {/* name */}
-            <Typography variant="h2" align="center" sx={ParticipantStyle.TextField}>
-              {props.participant.username}
-            </Typography>
+            <Stack spacing={1} direction="row" alignItems="center" justifyContent="center">
+              {props.participant.isVerified && (
+                <Icon style={{ height: "35px", width: "35px", borderRadius: "100px" }}></Icon>
+              )}
+
+              {/* name */}
+              <Typography
+                variant="h2"
+                align="center"
+                sx={{
+                  width: "10vw",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  overflow: "hidden",
+                }}
+              >
+                {props.participant.username}
+              </Typography>
+
+              {/* verify chip */}
+              {props.participant.isVerified && (
+                <Icon
+                  sx={{ bgcolor: COLOR_CODE.PRIMARY }}
+                  style={{ height: "35px", width: "35px", borderRadius: "100px" }}
+                >
+                  <VerifiedIcon color="secondary" fontSize="small" />
+                </Icon>
+              )}
+            </Stack>
 
             <Stack spacing={1.5} alignItems="center" justifyContent="center">
               {/* image */}
@@ -115,9 +148,6 @@ export default function Participant(props: props) {
                 alt="Profile picture"
                 src={props.participant.image as string}
               />
-
-              {/* verify chip */}
-              {props.participant.isVerified && <VerifyChip />}
 
               {/* gender chip */}
               <Chip
@@ -134,13 +164,15 @@ export default function Participant(props: props) {
               />
             </Stack>
             <Stack spacing={0}>
-              {`" ${props.participant.description} "`.split("\n").map((row, index) => (
+              {props.participant.description.split("\n").map((row, index) => (
                 <Typography
                   variant="body1"
                   sx={{
-                    maxWidth: "30vw",
-                    wordBreak: "break-word",
+                    ...ParticipantStyle.TextField,
                     textAlign: "center",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
                   }}
                   key={index}
                 >

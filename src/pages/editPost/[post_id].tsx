@@ -23,7 +23,6 @@ import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 
 import { GetAllTags } from "@/services/Tags";
 import { GetPostByPostId, UpdatePost } from "@/services/Posts";
-import { ICONS } from "enum/ICONS";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CommonButton from "@/components/public/CommonButton";
@@ -53,11 +52,11 @@ type EditPostSubmit = {
 const EditPostStyle = {
   TextField: {
     width: "28vw",
-    minWidth: "250px",
+    minWidth: "400px",
   },
   Card: {
     width: "30vw",
-    minWidth: "300px",
+    minWidth: "450px",
     height: "70vh",
     minHeight: "710px",
     paddingTop: "2vh",
@@ -247,7 +246,7 @@ export default function Home() {
         <ArrowBackIcon fontSize="large" color="secondary" />
       </IconButton>
 
-      <Stack spacing={4} sx={{ marginBottom: "2vh", }} alignItems="center">
+      <Stack spacing={4} sx={{ marginBottom: "2vh" }} alignItems="center">
         {/* Page header */}
         <Box sx={{ marginTop: "3vh" }}>
           <Typography variant="h1">Edit post</Typography>
@@ -261,7 +260,6 @@ export default function Home() {
                 <TitleTextField
                   name="title"
                   header="Title"
-                  icon={ICONS.EDIT}
                   placeholder="This is Post Title"
                   value={input.title}
                   handleValueChange={handleTextFieldChange}
@@ -285,7 +283,7 @@ export default function Home() {
 
               {/* Start date */}
               <Box sx={EditPostStyle.TextField}>
-                <Typography variant="body1">Date time</Typography>
+                <Typography variant="h3">Date & Time</Typography>
                 <CommonDateTimePicker
                   header="Start"
                   placeHolder="e.g. 28/ 02 / 2023 11.00 AM or click on the icon"

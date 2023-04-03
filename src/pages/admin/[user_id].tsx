@@ -1,9 +1,9 @@
 import { Post } from "@/types/Post";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-import { useContext, useEffect, useState } from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { userContext } from "supabase/user_context";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Loading from "@/components/public/Loading";
 import { NextRouter, useRouter } from "next/router";
 import { PAGE_PATHS } from "enum/PAGES";
@@ -52,22 +52,16 @@ export default function Home() {
   return (
     <>
       <AdminNavbar />
-      <Stack
-        spacing="40px"
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          width: "100%",
-          flexDirection: "column",
-          padding: "30px",
-        }}
-      >
-        {posts.map((item, index) => (
-          <Box width="60vw" key={index}>
-            <AdminPostCard post={item} handleDeletePost={handleDeletePost} />
-          </Box>
-        ))}
-      </Stack>
+
+      <Suspense fallback={<Loading />}>
+        <Stack spacing={5} style={{ paddingTop: "4vh", paddingBottom: "4vh" }} alignItems="center">
+          {posts?.map((item, index) => (
+            <Box width="60vw" key={index}>
+              <AdminPostCard post={item} handleDeletePost={handleDeletePost} />
+            </Box>
+          ))}
+        </Stack>
+      </Suspense>
     </>
   );
 }

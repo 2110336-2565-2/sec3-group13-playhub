@@ -6,7 +6,7 @@ import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-import { Box, Stack } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
@@ -19,6 +19,8 @@ import { GetAdvertisementUrl } from "@/services/Advertisement";
 import { Advertise } from "@/types/Advertisement";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
 import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
+import { SearchPanel } from "@/components/search/SearchPanel";
+import ToTop from "@/components/search/ToTop";
 
 export default function Home() {
   const router: NextRouter = useRouter();
@@ -26,7 +28,7 @@ export default function Home() {
   const userStatus = useContext(userContext);
 
   const [posts, setPosts] = useState<Post[] | null>(null);
-  const [advertise, setAdvertise] = useState<Advertise[] | null>()
+  const [advertise, setAdvertise] = useState<Advertise[] | null>();
 
   useEffect(() => {
     async function getPostData() {
@@ -34,20 +36,22 @@ export default function Home() {
       GetPostsWithParticipants(supabaseClient)
         .then((p) => {
           setPosts(p);
-        }).catch((err) => {
-          console.log(err)
-          return
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
     async function getAdvertisement() {
       if (!userStatus.user) return;
       GetAdvertisementUrl(supabaseClient)
         .then((p) => {
-          setAdvertise(p)
-        }).catch((err) => {
-          console.log(err)
-          return
+          setAdvertise(p);
         })
+        .catch((err) => {
+          console.log(err);
+          return;
+        });
     }
     getPostData();
     getAdvertisement();
@@ -67,30 +71,28 @@ export default function Home() {
     <>
       <Navbar />
       <Suspense fallback={<Loading />}>
-        <Stack
-          spacing="40px"
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            flexDirection: "column",
-            padding: "30px",
-          }}
-        >
-          {posts.map((item, index) => (
+        <Stack spacing={5} style={{ paddingTop: "4vh", paddingBottom: "4vh" }} alignItems="center">
+          <SearchPanel setPosts={setPosts} />
+          {posts?.map((item, index) => (
             <Box width="60vw" key={index}>
-              <CommonPostCard
-                post={item}
-                userId={userStatus.user?.userId}
-              />
-              {advertise && isShowAdvertise(index, posts.length) &&
+              <CommonPostCard post={item} userId={userStatus.user?.userId} />
+              {advertise && isShowAdvertise(index, posts.length) && (
                 <Box sx={{ marginTop: "50px" }}>
-                  <AdvertiseCard src={advertise[selectAdvertise(index, advertise.length)].image_url} />
+                  <AdvertiseCard
+                    src={advertise[selectAdvertise(index, advertise.length)].image_url}
+                  />
                 </Box>
-              }
+              )}
             </Box>
           ))}
+          {posts.length == 0 && (
+            <Stack alignItems="center" spacing={2} flexGrow={10} justifyContent="center">
+              <Typography variant="h5">Sorry! No Post Found</Typography>
+              <Typography variant="body2">Please try again with different keyword</Typography>
+            </Stack>
+          )}
         </Stack>
+        <ToTop />
       </Suspense>
     </>
   );

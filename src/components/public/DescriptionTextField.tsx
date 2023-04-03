@@ -3,14 +3,16 @@ import React from "react";
 
 type props = {
   name?: string;
-  header: string;
+  header?: string;
   placeholder: string;
   value: string;
   handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
-  char_limit: number;
+  char_limit?: number;
   isErr: boolean;
   errMsg: string;
   height?: number;
+  disabled?: boolean;
+  readOnly?: boolean;
 };
 
 const helperText = {
@@ -27,7 +29,7 @@ export default function NormalTextField(props: props) {
     <>
       <Stack spacing={1}>
         <Box>
-          <Typography variant="body1">{props?.header}</Typography>
+          <Typography variant="h3">{props?.header}</Typography>
           <TextField
             name={props.name}
             sx={{ backgroundColor: "#ffffff" }}
@@ -38,6 +40,10 @@ export default function NormalTextField(props: props) {
             value={props.value}
             error={props.isErr}
             onChange={props.handleValueChange}
+            disabled={props.disabled ? props.disabled : false}
+            InputProps={{
+              readOnly: props.readOnly,
+            }}
           />
         </Box>
         <Box sx={helperText}>

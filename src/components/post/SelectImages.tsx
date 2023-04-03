@@ -6,7 +6,6 @@ import { Box, Container, FormHelperText, IconButton, Stack, Typography } from "@
 import { grey } from "@mui/material/colors";
 import { IMAGE_LIMIT } from "enum/INPUT_LIMIT";
 import CloseIcon from "@mui/icons-material/Close";
-import Image from "next/image";
 
 // style
 const image_layout = {
@@ -78,7 +77,7 @@ export default function PictureList(props: props) {
   return (
     <>
       <Box display="flex" alignItems="end">
-        <Typography variant="body1">
+        <Typography variant="h3">
           {props.header}
           {"\u00A0"}
         </Typography>

@@ -6,6 +6,7 @@ type props = {
   label: string;
   onClick: (event: React.MouseEvent<HTMLElement>) => void;
   color?: string;
+  disabled?: boolean;
 };
 
 export default function NormalButton(props: props) {
@@ -33,6 +34,7 @@ export default function NormalButton(props: props) {
         }}
         color={generateColor()}
         onClick={props.onClick}
+        disabled={props.disabled || false}
       >
         {props.label}
       </Button>

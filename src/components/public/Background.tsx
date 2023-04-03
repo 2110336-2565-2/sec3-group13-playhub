@@ -3,7 +3,7 @@ import { Box } from "@mui/material";
 type props = {
   minHeight?: string;
   minWidth?: string;
-}
+};
 
 export default function Background(props: props) {
   const backgroungUrl: string =

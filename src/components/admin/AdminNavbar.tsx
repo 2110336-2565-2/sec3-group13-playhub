@@ -99,11 +99,11 @@ export default function AdminNavbar() {
             <MenuItem>
               <Link textAlign="center" color="error" underline="none" onClick={handleSignOut}>
                 <Typography variant="body1">{NAVBAR_PAGES.LOGOUT}</Typography>
-              </Link >
-            </MenuItem >
-          </Menu >
-        </Toolbar >
-      </AppBar >
+              </Link>
+            </MenuItem>
+          </Menu>
+        </Toolbar>
+      </AppBar>
     </>
   );
 }
