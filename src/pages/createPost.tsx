@@ -22,7 +22,6 @@ import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import { GetAllTags } from "@/services/Tags";
 import { CreatePost } from "@/services/Posts";
 import { PostInfo } from "@/types/Post";
-import { ICONS } from "enum/ICONS";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import LocationTextField from "@/components/post/LocationTextField";
 import CommonButton from "@/components/public/CommonButton";

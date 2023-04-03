@@ -1,6 +1,5 @@
 import { Box, FormHelperText, InputAdornment, Stack, TextField, Typography } from "@mui/material";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import React from "react";
 import { COLOR_CODE } from "enum/COLOR";
 
 type props = {

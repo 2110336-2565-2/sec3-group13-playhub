@@ -1,7 +1,4 @@
 import { Box, FormHelperText, Stack, TextField, Typography } from "@mui/material";
-import EmailIcon from "@mui/icons-material/Email";
-import EditIcon from "@mui/icons-material/Edit";
-import { ICONS } from "enum/ICONS";
 import React from "react";
 
 type props = {

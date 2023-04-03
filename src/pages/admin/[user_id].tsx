@@ -3,7 +3,7 @@ import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 import { Suspense, useContext, useEffect, useState } from "react";
 import { userContext } from "supabase/user_context";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import Loading from "@/components/public/Loading";
 import { NextRouter, useRouter } from "next/router";
 import { PAGE_PATHS } from "enum/PAGES";

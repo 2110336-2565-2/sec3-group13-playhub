@@ -27,7 +27,6 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { DeletePost } from "@/services/Posts";
 import CommonDialog from "../public/CommonDialog";
 import { COLOR } from "enum/COLOR";
-import dayjs from "dayjs";
 import DisplayTags from "../post/DisplayTags";
 import DisplayImages from "../post/DisplayImages";
 

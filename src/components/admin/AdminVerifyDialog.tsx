@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
@@ -8,8 +7,6 @@ import {
   FormControl,
   FormHelperText,
   IconButton,
-  Input,
-  InputLabel,
   Stack,
   TextField,
   Typography,
@@ -106,6 +103,7 @@ export default function AdminVerifyDialog(props: props) {
     setErrMsg("");
     setIsError(false);
   }
+
   return (
     <>
       <Dialog

@@ -28,7 +28,6 @@ import CommonButton from "../public/CommonButton";
 import { COLOR, COLOR_CODE } from "enum/COLOR";
 import DisplayTags from "./DisplayTags";
 import DisplayImages from "./DisplayImages";
-import dayjs from "dayjs";
 import CommonDialog from "../public/CommonDialog";
 
 interface ExpandMoreProps extends IconButtonProps {
@@ -151,8 +150,7 @@ export default function PostCard(props: props) {
             <Typography display="inline-flex">
               <CalendarTodayIcon fontSize="medium" />
               <span style={{ marginLeft: 8 }}>
-                {dayjs(props.post.startDateTime).format("DD/MM/YYYY h:mm A")} -{" "}
-                {dayjs(props.post.endDateTime).format("DD/MM/YYYY h:mm A")}
+                {props.post.startDateTime} - {props.post.endDateTime}
               </span>
             </Typography>
 

@@ -65,6 +65,11 @@ export default function Navbar() {
     return;
   };
 
+  const routeToSelectRate = (): void => {
+    router.push(PAGE_PATHS.SELECT_RATE);
+    return;
+  };
+
   const routeToMyProfile = (): void => {
     router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
     return;
@@ -116,6 +121,13 @@ export default function Navbar() {
           <Box sx={{ flexGrow: 0.02 }}>
             <IconButton color="inherit" disableRipple onClick={handleOpenAppointmentMenu}>
               <Typography variant="body1">{NAVBAR_PAGES.APPOINTMENT}</Typography>
+            </IconButton>
+          </Box>
+
+          {/* Rate button */}
+          <Box sx={{ flexGrow: 0.02 }}>
+            <IconButton color="inherit" disableRipple onClick={routeToSelectRate}>
+              <Typography variant="body1">{NAVBAR_PAGES.RATE}</Typography>
             </IconButton>
           </Box>
 

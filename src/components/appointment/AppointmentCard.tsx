@@ -16,7 +16,6 @@ import { NextRouter, useRouter } from "next/router";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import PersonIcon from "@mui/icons-material/Person";
-import dayjs from "dayjs";
 import { useContext } from "react";
 import { userContext } from "supabase/user_context";
 

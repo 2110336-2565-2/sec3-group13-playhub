@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Navbar from "@/components/public/Navbar";
 import { Typography, Box, IconButton, Stack, Card, FormHelperText, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -17,7 +17,6 @@ import Tags from "@/components/post/SelectTags";
 import { Tag } from "@/types/Tag";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import DisplayImages from "@/components/post/DisplayImages";
-import { User } from "@/types/User";
 import Participant from "@/components/post/Participant";
 import { COLOR_CODE } from "enum/COLOR";
 

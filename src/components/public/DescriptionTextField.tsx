@@ -3,7 +3,7 @@ import React from "react";
 
 type props = {
   name?: string;
-  header: string;
+  header?: string;
   placeholder: string;
   value: string;
   handleValueChange: (event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
