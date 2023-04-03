@@ -113,7 +113,7 @@ export default function AdminProfile() {
           {targetUserData.description.split("\n").map((row) => (
             <Typography
               variant="body1"
-              sx={{ ...profile_layout, wordBreak: "break-word" }}
+              sx={{ ...profile_layout, wordBreak: "break-word", textAlign: "center" }}
               key={row}
             >
               {row}
