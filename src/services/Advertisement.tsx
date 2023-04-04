@@ -11,14 +11,13 @@ export async function CreateAdvertisement(
 ): Promise<void> {
   const currentDate: Dayjs = dayjs();
   const endDate: Dayjs = currentDate.add(duration, "day");
-  const uploadImageResult = await supabaseClient.storage
-    .from("advertise")
-    .upload(currentDate.valueOf() + image.name, image);
+  const imageName = `${currentDate.valueOf()}-${endDate.valueOf()}`;
+  const uploadImageResult = await supabaseClient.storage.from("advertise").upload(imageName, image);
   if (uploadImageResult.error) {
     console.log(uploadImageResult.error);
     throw new Error("UploadImage Error!!!");
   }
-  const imageUrlResult = supabaseClient.storage.from("advertise").getPublicUrl(currentDate.valueOf() + image.name);
+  const imageUrlResult = supabaseClient.storage.from("advertise").getPublicUrl(imageName);
   const addAdvertisementResult = await supabaseClient.rpc("create_advertisement", {
     title: title,
     end_date: endDate.toISOString(),
@@ -33,10 +32,12 @@ export async function CreateAdvertisement(
   return;
 }
 
-export async function GetAdvertisementUrl(supabaseClient: SupabaseClient<Database>): Promise<Advertise[]> {
+export async function GetAdvertisementUrl(
+  supabaseClient: SupabaseClient<Database>
+): Promise<Advertise[]> {
   const advertisementResult = await supabaseClient.rpc("get_advertisement");
   if (advertisementResult.error) {
-    console.log(advertisementResult.error)
+    console.log(advertisementResult.error);
     throw new Error("Get Advertisement Error!!");
   }
   if (!advertisementResult.data) {
