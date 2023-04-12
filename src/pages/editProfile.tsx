@@ -1,65 +1,94 @@
 import React, { useState, useContext, useEffect } from "react";
-
 import { NextRouter, useRouter } from "next/router";
-import Image from "next/image";
 
 import { userContext } from "supabase/user_context";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
-
-import {
-  Typography,
-  Button,
-  SelectChangeEvent,
-  Avatar,
-  Stack,
-  Box,
-  Link,
-  IconButton,
-} from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Typography, SelectChangeEvent, Avatar, Stack, Box, IconButton, Card } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import CancelIcon from "@mui/icons-material/Cancel";
+import CloseIcon from "@mui/icons-material/Close";
 
-import { editProfileHeader } from "public/locales/editProfileHeader";
-
+import Loading from "@/components/public/Loading";
 import Navbar from "@/components/public/Navbar";
 import CommonTextField from "@/components/public/CommonTextField";
-import CommonDropdown from "@/components/public/CommonDropdown";
+import CommonDropdown from "@/components/public/GenderDropdown";
+import DescriptionTextField from "@/components/public/DescriptionTextField";
 import { validateImage, validateTextField } from "@/utilities/validation";
 
 import { User } from "@/types/User";
 import { validation } from "@/types/Validation";
-import { Gender } from "enum/gender";
-import { CHAR_LIMIT } from "enum/inputLimit";
-import { PagePaths } from "enum/pages";
+import { GENDER } from "enum/GENDER";
+import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
+import { PAGE_PATHS } from "enum/PAGES";
+import { ICONS } from "enum/ICONS";
 
-import Loading from "@/components/public/Loading";
 import { UpdateProfile } from "@/services/Profile";
+import NormalButton from "@/components/public/CommonButton";
+import CommonDialog from "@/components/public/CommonDialog";
+import { COLOR } from "enum/COLOR";
 
-export default function Home() {
-  const supabaseClient = useSupabaseClient<Database>();
-  const userStatus = useContext(userContext);
+type EditProfileInput = {
+  image: string | null;
+  displayName: string;
+  description: string;
+  gender: string;
+};
 
-  const avatar = { width: 200, height: 200 };
-  const overlayIcon = {
+type EditProfileSubmit = {
+  image: boolean;
+  displayName: boolean;
+  description: boolean;
+  gender: boolean;
+};
+
+const EditProfileStyle = {
+  Avatar: {
+    width: 200,
+    height: 200,
+    border: "4px black solid",
+  },
+  DeletePictureButton: {
     position: "absolute",
     color: "black",
     opacity: "0.5",
-  };
-  const editInfoContainer = {
+  },
+  Card: {
     width: "50vw",
-    margin: "3vh 0 0 0",
-  };
+    minWidth: "300px",
 
+    marginTop: "3vh",
+    marginBottom: "3vh",
+
+    paddingBottom: "2vh",
+  },
+  TextField: {
+    width: "40vw",
+  },
+  HalfTextField: {
+    width: "18vw",
+  },
+};
+
+export default function Home() {
   const router: NextRouter = useRouter();
+  const supabaseClient = useSupabaseClient<Database>();
+  const userStatus = useContext(userContext);
 
-  const [displayName, setDisplayName] = useState<string>("");
-  const [gender, setGender] = useState<string>("");
-  const [description, setDescription] = useState<string>("");
-  const [image, setImage] = useState<string | null>(null);
+  const [input, setInput] = useState<EditProfileInput>({
+    image: null,
+    displayName: "",
+    description: "",
+    gender: "",
+  });
+  const [state, setState] = useState<EditProfileSubmit>({
+    image: false,
+    displayName: false,
+    description: false,
+    gender: false,
+  });
   const [originalImage, setOriginalImage] = useState<string | null>(null);
 
+  const [isVerifyModalShow, setIsVerifyModalShow] = useState<boolean>(false);
   const [isPressSubmit, setIsPressSubmit] = useState<boolean>(false);
   const [fileImage, setFileImage] = useState<File | null>(null);
   const [isImageUpload, setIsImageUpload] = useState<boolean>(false);
@@ -69,21 +98,23 @@ export default function Home() {
   });
 
   const displayNameErr: validation = validateTextField(
-    displayName,
+    input.displayName,
     CHAR_LIMIT.MIN_DISPLAY_NAME,
     CHAR_LIMIT.MAX_DISPLAY_NAME
   );
   const descriptionErr: validation = validateTextField(
-    description,
+    input.description,
     CHAR_LIMIT.MIN_DESCRIPTION,
     CHAR_LIMIT.MAX_DESCRIPTION
   );
 
   const getProfile = async (User: User) => {
-    setDisplayName(User.username);
-    setDescription(User.description);
-    setGender(User.sex);
-    setImage(User.image);
+    setInput({
+      displayName: User.username,
+      description: User.description,
+      gender: User.sex,
+      image: User.image,
+    });
     setOriginalImage(User.image);
   };
 
@@ -96,9 +127,17 @@ export default function Home() {
       showImageUploadError.err
     );
     if (readyToSubmit) {
-      UpdateProfile(displayName, gender, description, fileImage, userStatus.user, supabaseClient)
+      UpdateProfile(
+        input.displayName,
+        input.gender,
+        input.description,
+        fileImage,
+        userStatus.user,
+        supabaseClient
+      )
         .then(() => {
-          router.push(PagePaths.profile + "/" + userStatus.user?.userId);
+          router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
+          return;
         })
         .catch((err) => {
           console.log(err);
@@ -110,7 +149,7 @@ export default function Home() {
 
   const handleImageChange = (event: any): void => {
     const tempFile = event.target.files[0];
-    setImage(URL.createObjectURL(tempFile));
+    setInput({ ...input, image: URL.createObjectURL(tempFile) });
     const imgErrMsg = validateImage(tempFile.type, tempFile.size);
     setShowImageUploadError(imgErrMsg);
     setIsImageUpload(true);
@@ -122,28 +161,36 @@ export default function Home() {
   const handleCancelImageChip = (): void => {
     setIsImageUpload(false);
     setShowImageUploadError({ msg: "", err: false });
-    setImage(originalImage);
+    setInput({ ...input, image: originalImage });
     setFileImage(null);
   };
 
   const handleDisplayNameChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
-    setDisplayName(event.target.value);
+    setInput({ ...input, displayName: event.target.value });
     setIsPressSubmit(false);
   };
   const handleDescChange = (
     event: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ): void => {
-    setDescription(event.target.value);
+    setInput({ ...input, description: event.target.value });
     setIsPressSubmit(false);
   };
   const handleSelectChange = (event: SelectChangeEvent): void => {
-    setGender(event.target.value as string);
+    setInput({ ...input, gender: event.target.value as string });
   };
 
-  function handleGoBack(): void {
-    router.push(PagePaths.profile + "/" + userStatus.user?.username);
+  function handleOpenModal(): void {
+    setIsVerifyModalShow(true);
+  }
+
+  function handleCloseModal(): void {
+    setIsVerifyModalShow(false);
+  }
+
+  function handleGoBackToMyProfile() {
+    router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
     return;
   }
 
@@ -154,90 +201,118 @@ export default function Home() {
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
-    router.push(PagePaths.login);
+    router.push(PAGE_PATHS.LOGIN);
     return;
   }
   return (
     <>
       <Navbar />
-      <Link onClick={handleGoBack}>
-        <ArrowBackIcon
-          fontSize="large"
-          sx={{ position: "absolute", margin: "3vh 0 0 3vh", color: "black" }}
-        />
-      </Link>
-      <Stack
-        spacing={2}
-        alignItems="center"
-        justifyContent="center"
-        style={{ minHeight: "80vh", marginBottom: "10vh" }}
-      >
-        <CancelIcon
-          onClick={handleCancelImageChip}
-          color={showImageUploadError.err ? "error" : "secondary"}
-          sx={{ position: "relative", top: "70px", left: "80px", zIndex: "1" }}
-          fontSize="large"
-          cursor="pointer"
-        />
-
-        <Avatar alt="Anya" sx={avatar}>
-          {image && (
-            <Image
-              src={image}
-              alt="Upload avatar"
-              width={200}
-              height={200}
-              style={!isImageUpload ? { opacity: "0.5" } : { objectFit: "cover" }}
-            />
-          )}
-          <IconButton sx={overlayIcon} aria-label="upload picture" component="label">
-            <input onChange={handleImageChange} hidden accept="image/*" type="file" />
-            <CameraAltIcon sx={{ fontSize: "100px" }} />
-          </IconButton>
-        </Avatar>
-        {showImageUploadError.err && (
-          <Typography align="center" variant="body1" color="error">
-            {showImageUploadError.msg}
-          </Typography>
-        )}
-
-        <Box style={editInfoContainer}>
-          <CommonTextField
-            header={editProfileHeader.displayName}
-            value={displayName}
-            handleValueChange={handleDisplayNameChange}
-            char_limit={CHAR_LIMIT.MAX_DISPLAY_NAME}
-            isErr={isPressSubmit && displayNameErr.err}
-            errMsg={displayNameErr.msg}
-          />
-
-          <CommonTextField
-            header={editProfileHeader.description}
-            value={description}
-            handleValueChange={handleDescChange}
-            isMultiLine={true}
-            char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
-            isErr={isPressSubmit && descriptionErr.err}
-            errMsg={descriptionErr.msg}
-          />
-
-          <Box style={{ width: "18vw" }}>
-            <CommonDropdown
-              header={editProfileHeader.gender}
-              value={gender}
-              handleValueChange={handleSelectChange}
-              items={Object.values(Gender)}
-            />
+      <Stack alignItems="center">
+        <Card sx={EditProfileStyle.Card}>
+          <Box display="flex">
+            <Box sx={{ flexGrow: 1 }}></Box>
+            <IconButton onClick={handleOpenModal}>
+              <CloseIcon fontSize="large" color="secondary" />
+            </IconButton>
           </Box>
-        </Box>
+          <Stack
+            spacing={2}
+            sx={{ marginTop: "-40px" }}
+            alignItems="center"
+            justifyContent="center"
+          >
+            <IconButton
+              onClick={handleCancelImageChip}
+              color="secondary"
+              style={{
+                padding: 0,
+                backgroundColor: "black",
+                position: "relative",
+                top: "70px",
+                left: "80px",
+                zIndex: "1",
+              }}
+            >
+              <CloseIcon color={showImageUploadError.err ? "error" : "primary"} fontSize="medium" />
+            </IconButton>
 
-        <Button variant="contained" onClick={editProfileBtnOnClick}>
-          SAVE
-        </Button>
-        <Typography variant="body1" color="warning.main">
-          ท่านต้องกด SAVE เพื่อบันทึกข้อมูลใหม่
-        </Typography>
+            <Avatar alt="Anya" sx={EditProfileStyle.Avatar}>
+              {input.image && (
+                <Avatar
+                  sx={
+                    !isImageUpload
+                      ? { ...EditProfileStyle.Avatar, opacity: "0.5" }
+                      : { ...EditProfileStyle.Avatar, objectFit: "cover" }
+                  }
+                  alt="Profile picture"
+                  src={input.image}
+                />
+              )}
+              <IconButton
+                sx={EditProfileStyle.DeletePictureButton}
+                aria-label="upload picture"
+                component="label"
+              >
+                <input onChange={handleImageChange} hidden accept="image/*" type="file" />
+                <CameraAltIcon sx={{ fontSize: "100px" }} />
+              </IconButton>
+            </Avatar>
+            {showImageUploadError.err && (
+              <Typography align="center" variant="body1" color="error">
+                {showImageUploadError.msg}
+              </Typography>
+            )}
+
+            <Box style={EditProfileStyle.TextField}>
+              <CommonTextField
+                header="Username"
+                icon={ICONS.EDIT}
+                placeholder="Display Name"
+                value={input.displayName}
+                handleValueChange={handleDisplayNameChange}
+                char_limit={CHAR_LIMIT.MAX_DISPLAY_NAME}
+                isErr={isPressSubmit && displayNameErr.err}
+                errMsg={displayNameErr.msg}
+              />
+
+              <DescriptionTextField
+                name="description"
+                header="Description"
+                placeholder="Tell Us More About Yourself!"
+                value={input.description}
+                handleValueChange={handleDescChange}
+                char_limit={CHAR_LIMIT.MAX_DESCRIPTION}
+                isErr={isPressSubmit && descriptionErr.err}
+                errMsg={descriptionErr.msg}
+              />
+
+              <Box style={EditProfileStyle.HalfTextField}>
+                <CommonDropdown
+                  header="Gender"
+                  value={input.gender}
+                  handleValueChange={handleSelectChange}
+                  items={Object.values(GENDER)}
+                />
+              </Box>
+            </Box>
+
+            <NormalButton label="Save" onClick={editProfileBtnOnClick} />
+            <Typography variant="body2" color="warning.main">
+              Press Save button to save new information.
+            </Typography>
+          </Stack>
+        </Card>
       </Stack>
+
+      <CommonDialog
+        openModal={isVerifyModalShow}
+        handleCloseModal={handleCloseModal}
+        header={["Are you sure to", "quit", "edit profile ?"]}
+        content="*All changes would be discarded"
+        buttonLabel="Quit"
+        buttonColor={COLOR.PRIMARY}
+        buttonAction={handleGoBackToMyProfile}
+      />
     </>
   );
 }

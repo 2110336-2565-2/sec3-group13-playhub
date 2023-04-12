@@ -7,6 +7,7 @@ export type User = {
   image: string | null;
   email: string;
   isAdmin: boolean;
+  isVerified: boolean;
 };
 
 export type UserStatus = {

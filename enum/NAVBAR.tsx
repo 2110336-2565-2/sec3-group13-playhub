@@ -6,7 +6,7 @@ export enum NAVBAR_PAGES {
   LOGOUT = "Logout",
   VERIFY = "Verify",
   POST = "Post",
-  ADVERTISEMENT = "Advertisement",
+  ADVERTISEMENT = "/admin/advertise",
   APPOINTMENT = "Appointment",
   RATE = "Rate",
   CONFIRM_REJECT = "Confirm/Reject",
