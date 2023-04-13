@@ -2,6 +2,8 @@ import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
@@ -52,7 +54,8 @@ const LoginStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 

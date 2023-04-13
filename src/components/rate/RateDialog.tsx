@@ -28,6 +28,8 @@ import { Service } from "@/services";
 import { userContext } from "supabase/user_context";
 import { PAGE_PATHS } from "enum/PAGES";
 import { useRouter } from "next/router";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 type props = {
   openModal: boolean;
@@ -42,7 +44,8 @@ type State = {
 };
 
 export default function RateDialog(props: props) {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const [ratingScore, setRatingScore] = useState<number>(0);
   const [ratingDescription, setRatingDescription] = useState<string>("");
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);

@@ -8,9 +8,12 @@ import { userContext } from "supabase/user_context";
 import { NextRouter, useRouter } from "next/router";
 import { PAGE_PATHS } from "enum/PAGES";
 import Loading from "@/components/public/Loading";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 

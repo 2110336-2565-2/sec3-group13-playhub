@@ -21,6 +21,8 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import { Post } from "../../types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 import { Service } from "@/services";
 import CommonButton from "../public/CommonButton";
 import { COLOR, COLOR_CODE } from "enum/COLOR";
@@ -48,7 +50,8 @@ type props = {
 };
 
 export default function PostCard(props: props) {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
 
   const [isUserJoin, setIsUserJoin] = useState<boolean>(false);

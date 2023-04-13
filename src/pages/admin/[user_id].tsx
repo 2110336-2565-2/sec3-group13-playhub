@@ -8,9 +8,12 @@ import { PAGE_PATHS } from "enum/PAGES";
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import AdminPostCard from "@/components/admin/AdminPostCard";
 import { Service } from "@/services";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 

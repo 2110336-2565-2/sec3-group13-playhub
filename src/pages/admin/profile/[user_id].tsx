@@ -20,6 +20,8 @@ import { Service } from "@/services";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
 import VerifyChip from "@/components/profile/VerifyChip";
 import CommonButton from "@/components/public/CommonButton";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 // style
 const profile_layout = {
@@ -29,7 +31,8 @@ const profile_layout = {
 const avatar = { width: 200, height: 200 };
 
 export default function AdminProfile() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 

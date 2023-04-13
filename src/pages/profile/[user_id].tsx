@@ -37,6 +37,8 @@ import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { ReviewExtend } from "@/types/Review";
 import FeedBackList from "@/components/rate/FeedbackList";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const MyProfileStyle = {
   Card: {
@@ -83,7 +85,8 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 

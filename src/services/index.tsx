@@ -24,10 +24,8 @@ export class Service {
   tag: TagService;
   user: UserService;
 
-  constructor() {
-    const supabaseURL: string = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const supabaseKey: string = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-    this.supabaseClient = new SupabaseClient<Database>(supabaseURL, supabaseKey);
+  constructor(supabaseClient: SupabaseClient<Database>) {
+    this.supabaseClient = supabaseClient;
     this.advertisement = new AdvertisementService(this.supabaseClient);
     this.appointment = new AppointmentService(this.supabaseClient);
     this.participant = new ParticipantService(this.supabaseClient);

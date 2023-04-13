@@ -19,6 +19,8 @@ import Participant from "@/components/post/Participant";
 import CommonButton from "@/components/public/CommonButton";
 import { COLOR, COLOR_CODE } from "enum/COLOR";
 import CommonDialog from "@/components/public/CommonDialog";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const ConfirmAppointmentStyle = {
   TextField: {
@@ -35,7 +37,8 @@ const ConfirmAppointmentStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();

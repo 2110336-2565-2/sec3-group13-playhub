@@ -3,6 +3,8 @@ import { Suspense, useContext, useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 import { Box, Stack, Typography } from "@mui/material";
 
@@ -20,7 +22,8 @@ import { SearchPanel } from "@/components/search/SearchPanel";
 import ToTop from "@/components/search/ToTop";
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 

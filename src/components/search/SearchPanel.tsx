@@ -14,6 +14,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
 import { Service } from "@/services";
 import { Post } from "@/types/Post";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 type SearchMode = "username" | "tag" | "title";
 
@@ -67,7 +69,8 @@ const helperText = {
 };
 
 export function SearchPanel(props: props) {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const [tagNames, setTagNames] = useState<string[]>([]);
   const [tagIds, setTagIds] = useState<number[]>([]);
   const [searchText, setSearchText] = useState<string>("");

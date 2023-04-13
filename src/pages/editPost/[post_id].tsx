@@ -26,6 +26,8 @@ import CommonButton from "@/components/public/CommonButton";
 import TitleTextField from "@/components/post/TitleTextField";
 import CommonDialog from "@/components/public/CommonDialog";
 import { COLOR } from "enum/COLOR";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 type EditPostInput = {
   title: string;
@@ -61,7 +63,8 @@ const EditPostStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
 

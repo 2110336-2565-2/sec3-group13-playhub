@@ -11,9 +11,12 @@ import Loading from "@/components/public/Loading";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
 import { Advertise } from "@/types/Advertisement";
 import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
 
   const [appointments, setAppointments] = useState<Appointment[]>([]);

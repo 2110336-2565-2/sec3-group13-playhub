@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 import {
   Typography,
   Avatar,
@@ -50,7 +52,8 @@ type props = {
 };
 
 export default function AdminPostCard(props: props) {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
 
   const [openDeletePostModal, setOpenDeletePostModal] = useState<boolean>(false);

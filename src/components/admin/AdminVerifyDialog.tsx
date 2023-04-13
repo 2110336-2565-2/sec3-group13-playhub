@@ -14,6 +14,8 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import React, { useEffect, useState } from "react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 import { Service } from "@/services";
 import { validation } from "@/types/Validation";
 import { validateNationalIDCardNumber } from "@/utilities/validation";
@@ -51,7 +53,8 @@ const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(function TextM
 });
 
 export default function AdminVerifyDialog(props: props) {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
 
   const [previewNationalIDCard, setPreviewNationalIDCard] = useState<string>("");

@@ -20,6 +20,8 @@ import Logo from "@/components/public/Logo";
 import { PAGE_PATHS } from "enum/PAGES";
 import { NAVBAR_PAGES } from "enum/NAVBAR";
 import { Service } from "@/services";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const NavBarMunuItemStyle = {
   justifyContent: "center",
@@ -27,7 +29,8 @@ const NavBarMunuItemStyle = {
 };
 
 export default function Navbar() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 

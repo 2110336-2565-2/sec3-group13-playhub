@@ -32,9 +32,12 @@ import CommonDialog from "@/components/public/CommonDialog";
 import AdvertiseConfirmDialog from "@/components/admin/AdvertiseConfirmDialog";
 import { STARTER_DURATION } from "enum/ADVERTISE";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 export default function Advertise() {
-  const service: Service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service: Service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
   const appTheme = useTheme();

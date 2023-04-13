@@ -13,6 +13,8 @@ import { PAGE_PATHS } from "enum/PAGES";
 
 import { Service } from "@/services";
 import NormalButton from "@/components/public/CommonButton";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 type ResetPasswordInput = {
   password: string;
@@ -34,7 +36,8 @@ const ResetPasswordStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const [canResetPassword, setCanResetPassword] = useState(false);
 

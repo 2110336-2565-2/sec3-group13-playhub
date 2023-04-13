@@ -17,6 +17,8 @@ import DescriptionTextField from "@/components/public/DescriptionTextField";
 import DisplayImages from "@/components/post/DisplayImages";
 import Participant from "@/components/post/Participant";
 import { COLOR_CODE } from "enum/COLOR";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const ParticipantAppointmentStyle = {
   TextField: {
@@ -33,7 +35,8 @@ const ParticipantAppointmentStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();

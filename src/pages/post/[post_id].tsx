@@ -28,6 +28,8 @@ import { User } from "@/types/User";
 import Participant from "@/components/post/Participant";
 import Loading from "@/components/public/Loading";
 import CommonDialog from "@/components/public/CommonDialog";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const PostStyle = {
   Card: {
@@ -40,7 +42,8 @@ const PostStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
 

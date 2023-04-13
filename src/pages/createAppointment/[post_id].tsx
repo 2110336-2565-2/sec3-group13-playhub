@@ -21,6 +21,8 @@ import { Service } from "@/services";
 import DisplayImages from "@/components/post/DisplayImages";
 import SelectParticipants from "@/components/appointment/SelectParticipants";
 import CommonButton from "@/components/public/CommonButton";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const CreatePostStyle = {
   TextField: {
@@ -37,7 +39,8 @@ const CreatePostStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
 

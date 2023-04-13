@@ -24,6 +24,8 @@ import { Service } from "@/services";
 import NormalButton from "@/components/public/CommonButton";
 import CommonDialog from "@/components/public/CommonDialog";
 import { COLOR } from "enum/COLOR";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 type EditProfileInput = {
   image: string | null;
@@ -68,7 +70,8 @@ const EditProfileStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 

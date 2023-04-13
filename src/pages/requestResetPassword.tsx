@@ -14,6 +14,8 @@ import { ICONS } from "enum/ICONS";
 
 import { Service } from "@/services";
 import NormalButton from "@/components/public/CommonButton";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const RequestResetPasswordStyle = {
   Card: {
@@ -33,7 +35,8 @@ const RequestResetPasswordStyle = {
 };
 
 export default function Home() {
-  const service = new Service();
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
 
   const [email, setEmail] = useState<string>("");
