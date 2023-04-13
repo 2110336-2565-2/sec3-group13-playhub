@@ -3,8 +3,6 @@ import { useRouter } from "next/router";
 import { Dayjs } from "dayjs";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { Box, Stack, SelectChangeEvent, Grid, Card, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
@@ -23,7 +21,7 @@ import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
-import { CreateUser } from "@/services/User";
+import { Service } from "@/services";
 import NormalButton from "@/components/public/CommonButton";
 
 type RegisterInput = {
@@ -65,7 +63,7 @@ const RegisterStyle = {
 };
 
 export default function Home() {
-  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service();
   const userStatus = useContext(userContext);
   const router = useRouter();
 
@@ -156,14 +154,14 @@ export default function Home() {
     );
 
     if (readyToCreate && input.birthDate) {
-      CreateUser(
-        input.displayName,
-        input.gender,
-        input.birthDate.toString(),
-        input.email,
-        input.password,
-        supabaseClient
-      )
+      service.user
+        .CreateUser(
+          input.displayName,
+          input.gender,
+          input.birthDate.toString(),
+          input.email,
+          input.password
+        )
         .then(() => {
           router.push(PAGE_PATHS.LOGIN);
           return;

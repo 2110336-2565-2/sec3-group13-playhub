@@ -2,8 +2,6 @@ import { Suspense, useContext, useEffect, useState } from "react";
 
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 
 import { Avatar, Chip, Typography, Stack, Box } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
@@ -18,7 +16,7 @@ import Loading from "@/components/public/Loading";
 import { User } from "@/types/User";
 import { PAGE_PATHS } from "enum/PAGES";
 import { GENDER } from "enum/GENDER";
-import { GetUserByUserId } from "@/services/User";
+import { Service } from "@/services";
 import AdminVerifyDialog from "@/components/admin/AdminVerifyDialog";
 import VerifyChip from "@/components/profile/VerifyChip";
 import CommonButton from "@/components/public/CommonButton";
@@ -31,9 +29,9 @@ const profile_layout = {
 const avatar = { width: 200, height: 200 };
 
 export default function AdminProfile() {
+  const service = new Service();
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [targetUserData, setTargetUserData] = useState<User | null>(null);
 
@@ -56,14 +54,15 @@ export default function AdminProfile() {
   useEffect(() => {
     if (!userStatus.user || !router.query.user_id || targetUserData) return;
 
-    GetUserByUserId(router.query.user_id as string, supabaseClient)
+    service.user
+      .GetUserByUserId(router.query.user_id as string)
       .then((userData) => {
         setTargetUserData(userData);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
+  }, [router.query.user_id, userStatus.user, targetUserData]);
 
   function openVerifyModal(): void {
     setIsVerifyModalShow(true);

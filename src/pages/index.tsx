@@ -3,8 +3,6 @@ import { Suspense, useContext, useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 
 import { Box, Stack, Typography } from "@mui/material";
 
@@ -14,8 +12,7 @@ import CommonPostCard from "@/components/post/CommonPostCard";
 
 import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
-import { GetPostsWithParticipants } from "@/services/Posts";
-import { GetAdvertisementUrl } from "@/services/Advertisement";
+import { Service } from "@/services";
 import { Advertise } from "@/types/Advertisement";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
 import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
@@ -23,8 +20,8 @@ import { SearchPanel } from "@/components/search/SearchPanel";
 import ToTop from "@/components/search/ToTop";
 
 export default function Home() {
+  const service = new Service();
   const router: NextRouter = useRouter();
-  const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
 
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -33,7 +30,8 @@ export default function Home() {
   useEffect(() => {
     async function getPostData() {
       if (!userStatus.user) return;
-      GetPostsWithParticipants(supabaseClient)
+      service.post
+        .GetPostsWithParticipants()
         .then((p) => {
           setPosts(p);
         })
@@ -44,7 +42,8 @@ export default function Home() {
     }
     async function getAdvertisement() {
       if (!userStatus.user) return;
-      GetAdvertisementUrl(supabaseClient)
+      service.advertisement
+        .GetAdvertisementUrl()
         .then((p) => {
           setAdvertise(p);
         })
@@ -55,7 +54,7 @@ export default function Home() {
     }
     getPostData();
     getAdvertisement();
-  }, [userStatus.user, supabaseClient]);
+  }, [userStatus.user]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {

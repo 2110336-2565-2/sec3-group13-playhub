@@ -1,8 +1,6 @@
 import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import {
   AppBar,
   Avatar,
@@ -20,12 +18,12 @@ import Logo from "@/components/public/Logo";
 
 import { PAGE_PATHS } from "enum/PAGES";
 import { NAVBAR_PAGES } from "enum/NAVBAR";
-import { SignOut } from "@/services/User";
+import { Service } from "@/services";
 
 export default function AdminNavbar() {
+  const service = new Service();
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -40,12 +38,13 @@ export default function AdminNavbar() {
   };
 
   const routeToAdvertise = (): void => {
-    router.push(PAGE_PATHS.ADVERTISEMENT)
+    router.push(PAGE_PATHS.ADVERTISEMENT);
     return;
-  }
+  };
 
   async function handleSignOut() {
-    SignOut(supabaseClient)
+    service.user
+      .SignOut()
       .then(() => {
         router.push(PAGE_PATHS.LOGIN);
         return;

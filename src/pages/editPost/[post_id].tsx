@@ -3,8 +3,6 @@ import { Dayjs } from "dayjs";
 import { useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { Typography, Stack, Box, Card, IconButton } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
@@ -21,8 +19,7 @@ import { validation } from "@/types/Validation";
 import { PAGE_PATHS } from "enum/PAGES";
 import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 
-import { GetAllTags } from "@/services/Tags";
-import { GetPostByPostId, UpdatePost } from "@/services/Posts";
+import { Service } from "@/services";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CommonButton from "@/components/public/CommonButton";
@@ -64,9 +61,9 @@ const EditPostStyle = {
 };
 
 export default function Home() {
+  const service = new Service();
   const router = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [input, setInput] = useState<EditPostInput>({
     title: "",
@@ -172,7 +169,8 @@ export default function Home() {
         startTime: input.startDate,
         endTime: input.endDate,
       };
-      UpdatePost(postId, originalImages, updatedPost, supabaseClient)
+      service.post
+        .UpdatePost(postId, originalImages, updatedPost)
         .then(() => {
           router.push(PAGE_PATHS.MY_POSTS);
           return;
@@ -198,14 +196,16 @@ export default function Home() {
   }
 
   useEffect(() => {
-    GetAllTags(supabaseClient)
+    service.tag
+      .GetAllTags()
       .then((allTags) => setTagMenu(allTags))
       .catch((err) => console.log(err));
-  }, [supabaseClient]);
+  }, []);
 
   useEffect(() => {
     if (!postId || !userStatus.user) return;
-    GetPostByPostId(userStatus.user, postId, supabaseClient)
+    service.post
+      .GetPostByPostId(userStatus.user, postId)
       .then((p) => {
         setInput({
           title: p.title,
@@ -223,7 +223,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-  }, [supabaseClient, postId, userStatus.user]);
+  }, [postId, userStatus.user]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {

@@ -21,9 +21,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 
 import { Post } from "../../types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { AddParticipantToPost, RemoveParticipantFromPost } from "@/services/Participant";
-import { Database } from "supabase/db_types";
+import { Service } from "@/services";
 import CommonButton from "../public/CommonButton";
 import { COLOR, COLOR_CODE } from "enum/COLOR";
 import DisplayTags from "./DisplayTags";
@@ -50,8 +48,8 @@ type props = {
 };
 
 export default function PostCard(props: props) {
+  const service = new Service();
   const router: NextRouter = useRouter();
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [isUserJoin, setIsUserJoin] = useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
@@ -86,7 +84,8 @@ export default function PostCard(props: props) {
     if (!props.userId) return;
     handleCloseJoinModal();
     if (!isUserJoin) {
-      AddParticipantToPost(props.userId, props.post.postId, supabaseClient)
+      service.participant
+        .AddParticipantToPost(props.userId, props.post.postId)
         .then(() => {
           setIsUserJoin(true);
         })
@@ -95,7 +94,8 @@ export default function PostCard(props: props) {
           return;
         });
     } else {
-      RemoveParticipantFromPost(props.userId, props.post.postId, supabaseClient)
+      service.participant
+        .RemoveParticipantFromPost(props.userId, props.post.postId)
         .then(() => {
           setIsUserJoin(false);
         })

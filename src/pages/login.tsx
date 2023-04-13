@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import {
   SUPABASE_LOGIN_CREDENTIALS_ERROR,
   SUPABASE_LOGIN_EMAIL_NOT_VALIDATED_ERROR,
@@ -22,7 +21,7 @@ import { PAGE_PATHS } from "enum/PAGES";
 import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import { ICONS } from "enum/ICONS";
 
-import { SignIn } from "@/services/User";
+import { Service } from "@/services";
 import NormalButton from "@/components/public/CommonButton";
 
 type LoginInput = {
@@ -53,9 +52,9 @@ const LoginStyle = {
 };
 
 export default function Home() {
+  const service = new Service();
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient();
 
   const [input, setInput] = useState<LoginInput>({
     email: "",
@@ -84,7 +83,8 @@ export default function Home() {
     });
 
     // sign in via supabase
-    SignIn(input.email, input.password, supabaseClient)
+    service.user
+      .SignIn(input.email, input.password)
       .then(() => {
         // route to post feed page
         router.push(PAGE_PATHS.HOME);

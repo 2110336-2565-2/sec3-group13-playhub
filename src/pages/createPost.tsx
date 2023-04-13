@@ -3,8 +3,6 @@ import { Dayjs } from "dayjs";
 import { useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { Typography, Stack, Box, Card, IconButton } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
@@ -19,8 +17,7 @@ import { Tag } from "@/types/Tag";
 import { PAGE_PATHS } from "enum/PAGES";
 import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 
-import { GetAllTags } from "@/services/Tags";
-import { CreatePost } from "@/services/Posts";
+import { Service } from "@/services";
 import { PostInfo } from "@/types/Post";
 import DescriptionTextField from "@/components/public/DescriptionTextField";
 import LocationTextField from "@/components/post/LocationTextField";
@@ -62,9 +59,9 @@ const CreatePostStyle = {
 };
 
 export default function Home() {
+  const service = new Service();
   const router = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [input, setInput] = useState<CreatePostInput>({
     title: "",
@@ -164,7 +161,8 @@ export default function Home() {
         startTime: input.startDate,
         endTime: input.endDate,
       };
-      CreatePost(newPost, supabaseClient)
+      service.post
+        .CreatePost(newPost)
         .then(() => {
           router.push(PAGE_PATHS.MY_POSTS);
           return;
@@ -182,10 +180,11 @@ export default function Home() {
   }
 
   useEffect(() => {
-    GetAllTags(supabaseClient)
+    service.tag
+      .GetAllTags()
       .then((allTags) => setTagMenu(allTags))
       .catch((err) => console.log(err));
-  }, [supabaseClient]);
+  }, []);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {

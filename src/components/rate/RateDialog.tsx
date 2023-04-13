@@ -24,10 +24,8 @@ import RadioButtonCheckedIcon from "@mui/icons-material/RadioButtonChecked";
 import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import { validation } from "@/types/Validation";
 import { validateTextField } from "@/utilities/validation";
-import { CreateReview, GetReviewByReviewerAndAppointmentId, UpdateReview } from "@/services/Review";
+import { Service } from "@/services";
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { PAGE_PATHS } from "enum/PAGES";
 import { useRouter } from "next/router";
 
@@ -44,6 +42,7 @@ type State = {
 };
 
 export default function RateDialog(props: props) {
+  const service = new Service();
   const [ratingScore, setRatingScore] = useState<number>(0);
   const [ratingDescription, setRatingDescription] = useState<string>("");
   const [isAnonymous, setIsAnonymous] = useState<boolean>(false);
@@ -53,7 +52,6 @@ export default function RateDialog(props: props) {
   });
   const router = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const isRatingScoreErr: boolean = ratingScore === 0;
   const ratingScoreErrMsg: string = "*Rate score can’t be blank";
@@ -133,10 +131,9 @@ export default function RateDialog(props: props) {
 
     if (!isRatingScoreErr && !ratingDescriptionError.err) {
       if (props.isEditing) {
-        UpdateReview(supabaseClient, reviewId!, ratingDescription, ratingScore, isAnonymous);
+        service.review.UpdateReview(reviewId!, ratingDescription, ratingScore, isAnonymous);
       } else {
-        CreateReview(
-          supabaseClient,
+        service.review.CreateReview(
           ratingDescription,
           ratingScore,
           props.appointmentId,
@@ -152,11 +149,8 @@ export default function RateDialog(props: props) {
   useEffect(() => {
     console.log("use effect");
     if (userStatus.user) {
-      GetReviewByReviewerAndAppointmentId(
-        supabaseClient,
-        userStatus.user.userId,
-        props.appointmentId
-      )
+      service.review
+        .GetReviewByReviewerAndAppointmentId(userStatus.user.userId, props.appointmentId)
         .then((review) => {
           if (review) {
             setRatingScore(review.score);
@@ -170,7 +164,7 @@ export default function RateDialog(props: props) {
           return;
         });
     }
-  }, [supabaseClient, userStatus.user]);
+  }, [userStatus.user]);
 
   return (
     <>

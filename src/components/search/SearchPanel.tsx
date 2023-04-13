@@ -12,11 +12,8 @@ import {
 import { useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import SearchIcon from "@mui/icons-material/Search";
-import { GetAllTags } from "@/services/Tags";
-import { Database } from "supabase/db_types";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Service } from "@/services";
 import { Post } from "@/types/Post";
-import { SearchPostByConditions } from "@/services/Search";
 
 type SearchMode = "username" | "tag" | "title";
 
@@ -70,16 +67,17 @@ const helperText = {
 };
 
 export function SearchPanel(props: props) {
+  const service = new Service();
   const [tagNames, setTagNames] = useState<string[]>([]);
   const [tagIds, setTagIds] = useState<number[]>([]);
   const [searchText, setSearchText] = useState<string>("");
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [searchMode, setSearchMode] = useState<SearchMode>("title");
   const [errMsg, setErrMsg] = useState<string>("");
-  const supabaseClient = useSupabaseClient<Database>();
 
   useEffect(() => {
-    GetAllTags(supabaseClient)
+    service.tag
+      .GetAllTags()
       .then((t) => {
         setTagNames(t.map((e) => e.name));
         setTagIds(t.map((e) => e.id));
@@ -87,7 +85,7 @@ export function SearchPanel(props: props) {
       .catch((error) => {
         console.log(error);
       });
-  }, [supabaseClient]);
+  }, []);
 
   const updatePosts = (conditions: SearchResult[]) => {
     const targetTagIndex = conditions
@@ -97,7 +95,8 @@ export function SearchPanel(props: props) {
     const targetTagIds = tagIds.filter((_, index) => targetTagIndex.includes(index));
     const targetHostNames = conditions.filter((e) => e.type == "username").map((e) => e.value);
     const targetPostNames = conditions.filter((e) => e.type == "title").map((e) => e.value);
-    SearchPostByConditions(targetTagIds, targetHostNames, targetPostNames, supabaseClient)
+    service.search
+      .SearchPostByConditions(targetTagIds, targetHostNames, targetPostNames)
       .then((matchedPosts) => {
         props.setPosts(matchedPosts);
       })

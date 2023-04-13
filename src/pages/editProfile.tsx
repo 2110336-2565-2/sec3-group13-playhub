@@ -2,8 +2,6 @@ import React, { useState, useContext, useEffect } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { Typography, SelectChangeEvent, Avatar, Stack, Box, IconButton, Card } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CloseIcon from "@mui/icons-material/Close";
@@ -22,7 +20,7 @@ import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
-import { UpdateProfile } from "@/services/Profile";
+import { Service } from "@/services";
 import NormalButton from "@/components/public/CommonButton";
 import CommonDialog from "@/components/public/CommonDialog";
 import { COLOR } from "enum/COLOR";
@@ -70,8 +68,8 @@ const EditProfileStyle = {
 };
 
 export default function Home() {
+  const service = new Service();
   const router: NextRouter = useRouter();
-  const supabaseClient = useSupabaseClient<Database>();
   const userStatus = useContext(userContext);
 
   const [input, setInput] = useState<EditProfileInput>({
@@ -127,14 +125,14 @@ export default function Home() {
       showImageUploadError.err
     );
     if (readyToSubmit) {
-      UpdateProfile(
-        input.displayName,
-        input.gender,
-        input.description,
-        fileImage,
-        userStatus.user,
-        supabaseClient
-      )
+      service.profile
+        .UpdateProfile(
+          input.displayName,
+          input.gender,
+          input.description,
+          fileImage,
+          userStatus.user
+        )
         .then(() => {
           router.push(PAGE_PATHS.PROFILE + userStatus.user?.userId);
           return;
