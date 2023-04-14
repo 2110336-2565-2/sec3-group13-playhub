@@ -66,27 +66,6 @@ export class AppointmentService {
     }
   }
 
-  async GetAppointments(): Promise<Appointment[]> {
-    const getAppointmentsResult = await this.supabaseClient.rpc("get_appointments");
-
-    if (getAppointmentsResult.error) {
-      console.log(getAppointmentsResult.error);
-      throw new Error("Something went wrong!!");
-    }
-
-    return getAppointmentsResult.data.map((appointment) => ({
-      appointmentId: appointment.id,
-      title: appointment.title,
-      ownerId: appointment.owner_id,
-      ownerName: appointment.username,
-      ownerProfilePic: appointment.image,
-      location: appointment.location,
-      startDateTime: dayjs(appointment.start_time).format("DD/MM/YYYY hh:mm A"),
-      endDateTime: dayjs(appointment.end_time).format("DD/MM/YYYY hh:mm A"),
-      participantAmount: appointment.participant_number,
-    }));
-  }
-
   async GetAppointmentsByUserIdWhichPending(userId: string): Promise<Appointment[]> {
     const getAppointmentsResult = await this.supabaseClient.rpc(
       "get_appointments_by_user_id_which_pending",
