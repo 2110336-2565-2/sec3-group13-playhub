@@ -6,7 +6,7 @@ export async function RequestResetPassword(
   supabaseClient: SupabaseClient<Database>
 ): Promise<void> {
   const sendResetPasswordEmailResult = await supabaseClient.auth.resetPasswordForEmail(email, {
-    redirectTo: "http://localhost:3000/resetPassword",
+    redirectTo: process.env.NEXT_PUBLIC_DOMAIN_NAME + "/resetPassword",
   });
   if (sendResetPasswordEmailResult.error) {
     throw new Error("Something went wrong!!");
