@@ -2,8 +2,6 @@ import React, { useContext, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 
 import {
   AppBar,
@@ -21,7 +19,9 @@ import Logo from "@/components/public/Logo";
 
 import { PAGE_PATHS } from "enum/PAGES";
 import { NAVBAR_PAGES } from "enum/NAVBAR";
-import { SignOut } from "@/services/User";
+import { Service } from "@/services";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const NavBarMunuItemStyle = {
   justifyContent: "center",
@@ -29,9 +29,10 @@ const NavBarMunuItemStyle = {
 };
 
 export default function Navbar() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [openProfileMenu, setOpenProfileMenu] = useState<null | HTMLElement>(null);
   const handleCloseProfileMenu = () => setOpenProfileMenu(null);
@@ -81,7 +82,8 @@ export default function Navbar() {
   };
 
   const handleSignOut = (): void => {
-    SignOut(supabaseClient)
+    service.user
+      .SignOut()
       .then(() => {
         router.push(PAGE_PATHS.LOGIN);
         return;
