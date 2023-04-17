@@ -4,7 +4,6 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   FormHelperText,
   IconButton,
   Stack,
@@ -15,12 +14,12 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { CHAR_LIMIT } from "enum/INPUT_LIMIT";
 import React, { useEffect, useState } from "react";
-import { UpdateUserNationalIdByUserId } from "@/services/User";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
+import { Service } from "@/services";
 import { validation } from "@/types/Validation";
 import { validateNationalIDCardNumber } from "@/utilities/validation";
 import { NextRouter, useRouter } from "next/router";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import CommonButton from "../public/CommonButton";
 import { IMaskInput } from "react-imask";
 
@@ -54,8 +53,9 @@ const TextMaskCustom = React.forwardRef<HTMLElement, CustomProps>(function TextM
 });
 
 export default function AdminVerifyDialog(props: props) {
-  const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
+  const router: NextRouter = useRouter();
 
   const [previewNationalIDCard, setPreviewNationalIDCard] = useState<string>("");
   const nationalIDCard: string = previewNationalIDCard.split("-").join("");
@@ -77,7 +77,8 @@ export default function AdminVerifyDialog(props: props) {
       return;
     }
 
-    UpdateUserNationalIdByUserId(router.query.user_id as string, nationalIDCard, supabaseClient)
+    service.user
+      .UpdateUserNationalIdByUserId(router.query.user_id as string, nationalIDCard)
       .then((is_national_id_exist) => {
         if (is_national_id_exist) {
           setIsError(true);

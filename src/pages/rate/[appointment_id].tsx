@@ -3,10 +3,10 @@ import Navbar from "@/components/public/Navbar";
 import { Typography, Box, IconButton, Stack, Card, FormHelperText, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AppointmentDetail } from "@/types/Appointment";
-import { GetAppointmentByAppointmentId } from "@/services/Appointment";
-import { useRouter } from "next/router";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
+import { Service } from "@/services";
+import { useRouter } from "next/router";
 import Loading from "@/components/public/Loading";
 import { PAGE_PATHS } from "enum/PAGES";
 import { userContext } from "supabase/user_context";
@@ -21,7 +21,6 @@ import Participant from "@/components/post/Participant";
 import { COLOR_CODE } from "enum/COLOR";
 import CommonButton from "@/components/public/CommonButton";
 import RateDialog from "@/components/rate/RateDialog";
-import { GetIsUserReviewedAppointment } from "@/services/Review";
 
 const ParticipantAppointmentStyle = {
   TextField: {
@@ -38,9 +37,10 @@ const ParticipantAppointmentStyle = {
 };
 
 export default function Home() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();
   const [isParticipant, setIsParticipant] = useState<boolean | null>(null);
 
@@ -53,7 +53,8 @@ export default function Home() {
   const appointmentId = parseInt(router.query.appointment_id as string);
 
   useEffect(() => {
-    GetAppointmentByAppointmentId(appointmentId, supabaseClient)
+    service.appointment
+      .GetAppointmentByAppointmentId(appointmentId)
       .then((appointment) => {
         setAppointment(appointment);
         setIsParticipant(appointment.ownerId !== userStatus.user?.userId);
@@ -64,11 +65,11 @@ export default function Home() {
       });
 
     if (userStatus.user) {
-      GetIsUserReviewedAppointment(supabaseClient, userStatus.user.userId, appointmentId).then(
-        (value) => setIsReviewed(value)
-      );
+      service.review
+        .GetIsUserReviewedAppointment(userStatus.user.userId, appointmentId)
+        .then((value) => setIsReviewed(value));
     }
-  }, [supabaseClient, appointmentId, userStatus.user]);
+  }, [appointmentId, userStatus.user]);
 
   function backToMyAppointments(): void {
     router.push(PAGE_PATHS.SELECT_RATE);

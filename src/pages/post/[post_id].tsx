@@ -16,10 +16,8 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CommonButton from "@/components/public/CommonButton";
 import { COLOR } from "enum/COLOR";
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { useContext, useEffect, useState } from "react";
-import { GetPostWithParticipantsByPostId, DeletePost } from "@/services/Posts";
+import { Service } from "@/services";
 import { PostInfo } from "@/types/Post";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
@@ -30,6 +28,8 @@ import { User } from "@/types/User";
 import Participant from "@/components/post/Participant";
 import Loading from "@/components/public/Loading";
 import CommonDialog from "@/components/public/CommonDialog";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const PostStyle = {
   Card: {
@@ -42,9 +42,10 @@ const PostStyle = {
 };
 
 export default function Home() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [post, setPost] = useState<PostInfo>({
     title: "",
@@ -68,7 +69,8 @@ export default function Home() {
   }
 
   function handleDelete() {
-    DeletePost(Number(router.query.post_id), supabaseClient)
+    service.post
+      .DeletePost(Number(router.query.post_id))
       .then(() => {
         handleCloseDeletePostModal();
         router.push(PAGE_PATHS.MY_POSTS);
@@ -92,7 +94,8 @@ export default function Home() {
 
   useEffect(() => {
     if (!userStatus.user) return;
-    GetPostWithParticipantsByPostId(Number(router.query.post_id), supabaseClient)
+    service.post
+      .GetPostWithParticipantsByPostId(Number(router.query.post_id))
       .then((p) => {
         setPost(p);
         if (!p.participants) return;
@@ -102,7 +105,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-  }, [userStatus.user, router.query.post_id, supabaseClient]);
+  }, [userStatus.user, router.query.post_id]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
