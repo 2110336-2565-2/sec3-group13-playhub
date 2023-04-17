@@ -12,7 +12,7 @@ export class PasswordService {
     const sendResetPasswordEmailResult = await this.supabaseClient.auth.resetPasswordForEmail(
       email,
       {
-        redirectTo: "http://localhost:3000/resetPassword",
+        redirectTo: process.env.NEXT_PUBLIC_DOMAIN_NAME + "/resetPassword",
       }
     );
     if (sendResetPasswordEmailResult.error) {
