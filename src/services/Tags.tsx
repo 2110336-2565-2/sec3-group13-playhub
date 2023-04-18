@@ -13,15 +13,3 @@ export async function GetAllTags(
   }
   return getTagsResult.data;
 }
-
-export async function GetTagsByPost(
-  postId: number,
-  supabaseClient: SupabaseClient<Database, "public", any>
-): Promise<Tag[]> {
-  const getSelectedTagResult = await supabaseClient.rpc("get_all_post_tag");
-  if (getSelectedTagResult.error) {
-    console.log(getSelectedTagResult.error);
-    throw new Error(SUPABASE_CONNECTING_ERROR);
-  }
-  return getSelectedTagResult.data.filter((data) => data.post_id == postId);
-}

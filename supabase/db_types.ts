@@ -277,7 +277,7 @@ export interface Database {
         Args: Record<PropertyKey, never>;
         Returns: {
           image_url: string;
-        }[];
+        };
       };
       get_appointment_by_appointment_id: {
         Args: {
@@ -299,7 +299,7 @@ export interface Database {
           pending_user: Json[];
           accept_user: Json[];
           reject_user: Json[];
-        }[];
+        };
       };
       get_appointment_to_rate: {
         Args: {
@@ -321,7 +321,7 @@ export interface Database {
           username: string;
           image: string;
           participant_number: number;
-        }[];
+        };
       };
       get_appointments_by_user_id: {
         Args: {
@@ -343,14 +343,14 @@ export interface Database {
           username: string;
           image: string;
           participant_number: number;
-        }[];
+        };
       };
       get_appointments_by_user_id_which_pending: {
         Args: {
           id: string;
         };
         Returns: {
-          id: string;
+          id: number;
           start_time: string;
           end_time: string;
           owner_id: string;
@@ -365,7 +365,7 @@ export interface Database {
           pending_user_names: string[];
           accept_user_names: string[];
           reject_user_names: string[];
-        }[];
+        };
       };
       get_is_email_exist: {
         Args: {
@@ -403,7 +403,7 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
-        }[];
+        };
       };
       get_post_with_participants_by_post_id: {
         Args: {
@@ -420,9 +420,12 @@ export interface Database {
           start_time: string;
           end_time: string;
           images: string[];
-          tags: Json[];
+          tags: {
+            id: number;
+            name: string;
+          }[];
           participants: Json[];
-        }[];
+        };
       };
       get_posts: {
         Args: Record<PropertyKey, never>;
@@ -439,7 +442,7 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
-        }[];
+        };
       };
       get_posts_by_user_id: {
         Args: {
@@ -458,7 +461,7 @@ export interface Database {
           tags: number[];
           tag_names: string[];
           images: string[];
-        }[];
+        };
       };
       get_posts_with_participants: {
         Args: Record<PropertyKey, never>;
@@ -475,7 +478,7 @@ export interface Database {
           images: string[];
           tags: Json[];
           participants: Json[];
-        }[];
+        };
       };
       get_review_by_reviewer_and_appointment_id: {
         Args: {
@@ -487,7 +490,7 @@ export interface Database {
           description: string;
           score: number;
           is_anonymous: boolean;
-        }[];
+        };
       };
       get_reviews_by_reviewee_id: {
         Args: {
@@ -500,7 +503,7 @@ export interface Database {
           score: number;
           appointment_title: string;
           is_anonymous: boolean;
-        }[];
+        };
       };
       get_tags: {
         Args: Record<PropertyKey, never>;
@@ -525,7 +528,7 @@ export interface Database {
           image: string;
           rating_score: number;
           is_verified: boolean;
-        }[];
+        };
       };
       http: {
         Args: {
@@ -632,27 +635,6 @@ export interface Database {
         };
         Returns: undefined;
       };
-      search_posts_by_condition: {
-        Args: {
-          tags: number[];
-          host_name: string[];
-          post_name: string[];
-        };
-        Returns: {
-          id: number;
-          title: string;
-          description: string;
-          owner_id: string;
-          location: string;
-          start_time: string;
-          end_time: string;
-          images: string[];
-          tags: number[];
-          participants: string[];
-          owner_name: string;
-          owner_profile: string;
-        }[];
-      };
       search_posts_by_conditions: {
         Args: {
           tag_ids: number[];
@@ -670,9 +652,12 @@ export interface Database {
           start_time: string;
           end_time: string;
           images: string[];
-          tags: Json[];
+          tags: {
+            id: number;
+            name: string;
+          }[];
           participants: Json[];
-        }[];
+        };
       };
       send_email_message: {
         Args: {
@@ -739,7 +724,7 @@ export interface Database {
         };
         Returns: {
           is_exist_national_id: boolean;
-        }[];
+        };
       };
       urlencode:
         | {
