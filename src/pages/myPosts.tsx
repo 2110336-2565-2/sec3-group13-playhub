@@ -3,8 +3,6 @@ import { NextRouter, useRouter } from "next/router";
 import Link from "next/link";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { Box, Fab, Grid, Stack, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -15,16 +13,18 @@ import PostCard from "@/components/post/PostCard";
 import { Post } from "@/types/Post";
 import { PAGE_PATHS } from "enum/PAGES";
 
-import { GetCurrentUserPosts } from "@/services/Posts";
+import { Service } from "@/services";
 import AdvertiseCard from "@/components/public/AdvertiseCard";
 import { Advertise } from "@/types/Advertisement";
-import { GetAdvertisementUrl } from "@/services/Advertisement";
 import { isShowAdvertise, selectAdvertise } from "@/utilities/advertise";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 export default function Home() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [posts, setPosts] = useState<Post[] | null>(null);
   const [advertise, setAdvertise] = useState<Advertise[] | null>(null);
@@ -32,7 +32,8 @@ export default function Home() {
   useEffect(() => {
     async function getPostData() {
       if (!userStatus.user) return;
-      GetCurrentUserPosts(userStatus.user, supabaseClient)
+      service.post
+        .GetCurrentUserPosts(userStatus.user)
         .then((p) => {
           setPosts(p);
         })
@@ -43,7 +44,8 @@ export default function Home() {
     }
     async function getAdvertisement() {
       if (!userStatus.user) return;
-      GetAdvertisementUrl(supabaseClient)
+      service.advertisement
+        .GetAdvertisementUrl()
         .then((p) => {
           setAdvertise(p);
           console.log(p);
@@ -55,7 +57,7 @@ export default function Home() {
     }
     getPostData();
     getAdvertisement();
-  }, [userStatus.user, supabaseClient]);
+  }, [userStatus.user]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {
