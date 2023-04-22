@@ -10,6 +10,7 @@ import { ProfileService } from "./Profile";
 import { ReviewService } from "./Review";
 import { SearchService } from "./Search";
 import { TagService } from "./Tags";
+import { NotificationService } from "./Notification";
 
 export class Service {
   supabaseClient: SupabaseClient<Database>;
@@ -23,6 +24,7 @@ export class Service {
   search: SearchService;
   tag: TagService;
   user: UserService;
+  notification: NotificationService;
 
   constructor(supabaseClient: SupabaseClient<Database>) {
     this.supabaseClient = supabaseClient;
@@ -36,5 +38,6 @@ export class Service {
     this.search = new SearchService(this.supabaseClient);
     this.tag = new TagService(this.supabaseClient);
     this.user = new UserService(this.supabaseClient);
+    this.notification = new NotificationService(this.supabaseClient);
   }
 }
