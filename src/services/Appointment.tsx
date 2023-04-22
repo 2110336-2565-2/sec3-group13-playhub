@@ -4,12 +4,16 @@ import dayjs from "dayjs";
 import { Database } from "supabase/db_types";
 import { PostInfo } from "../types/Post";
 import { User } from "@/types/User";
+import { Service } from ".";
+import { NotificationService } from "./Notification";
 
 export class AppointmentService {
   supabaseClient: SupabaseClient<Database>;
+  notificationService: NotificationService;
 
   constructor(supabaseClient: SupabaseClient<Database>) {
     this.supabaseClient = supabaseClient;
+    this.notificationService = new NotificationService(supabaseClient);
   }
 
   async CreateAppointment(
@@ -203,6 +207,14 @@ export class AppointmentService {
       console.log(endAppointmentResult.error);
       throw new Error("Something went wrong!!");
     }
+
+    endAppointmentResult.data[0].email.forEach((email: string) => {
+      this.notificationService.NotifyEndAppointment(
+        email,
+        endAppointmentResult.data[0].appt_name,
+        endAppointmentResult.data[0].appt_host
+      );
+    });
   }
 
   async GetAppointmentsToRate(userId: string): Promise<Appointment[]> {
