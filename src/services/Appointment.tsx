@@ -39,6 +39,13 @@ export class AppointmentService {
       throw new Error("Something went wrong!!");
     }
 
+    addAppointmentResult.data[0].email.forEach((email: string) => {
+      this.notificationService.NotifyCreateAppointment(
+        email,
+        addAppointmentResult.data[0].appt_name,
+        addAppointmentResult.data[0].appt_host
+      );
+    });
     return;
   }
 
