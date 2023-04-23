@@ -27,7 +27,7 @@ export class NotificationService {
     });
   }
 
-  async NotifyCreateAppointment(email: string, apptName: string, apptHost: string): Promise<void> {
+  async NotifyInviteAppointment(email: string, apptName: string, apptHost: string): Promise<void> {
     const sender = "noreply@playhub.com";
     const recipient = email;
     const subject = "Your joined boardgame appointment has been created";
