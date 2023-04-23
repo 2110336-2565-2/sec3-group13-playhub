@@ -61,6 +61,12 @@ export class AppointmentService {
       console.log(acceptAppointmentResult.error);
       throw new Error("Something went wrong!!");
     }
+
+    this.notificationService.NotifyAcceptAppointment(
+      acceptAppointmentResult.data[0].email,
+      acceptAppointmentResult.data[0].appt_name,
+      acceptAppointmentResult.data[0].accept_user
+    );
   }
 
   async RejectAppointment(appointmentId: number, userId: string): Promise<void> {
@@ -75,6 +81,12 @@ export class AppointmentService {
       console.log(rejectAppointmentResult.error);
       throw new Error("Something went wrong!!");
     }
+
+    this.notificationService.NotifyRejectAppointment(
+      rejectAppointmentResult.data[0].email,
+      rejectAppointmentResult.data[0].appt_name,
+      rejectAppointmentResult.data[0].reject_user
+    );
   }
 
   async GetAppointmentsByUserIdWhichPending(userId: string): Promise<Appointment[]> {

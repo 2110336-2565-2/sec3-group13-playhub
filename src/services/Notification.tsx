@@ -45,4 +45,50 @@ export class NotificationService {
       html_body,
     });
   }
+
+  async NotifyRejectAppointment(
+    email: string,
+    apptName: string,
+    rejectUser: string
+  ): Promise<void> {
+    const sender = "noreply@playhub.com";
+    const recipient = email;
+    const subject = "Your appointment's participant status has been changed";
+    const html_body =
+      "<html><body>" +
+      rejectUser +
+      ' has rejected your appointment "' +
+      apptName +
+      '". You can see all participant status in our website.</body></html>';
+
+    const sendEmailResult = await this.supabaseClient.rpc("send_email", {
+      sender,
+      recipient,
+      subject,
+      html_body,
+    });
+  }
+
+  async NotifyAcceptAppointment(
+    email: string,
+    apptName: string,
+    acceptUser: string
+  ): Promise<void> {
+    const sender = "noreply@playhub.com";
+    const recipient = email;
+    const subject = "Your appointment's participant status has been changed";
+    const html_body =
+      "<html><body>" +
+      acceptUser +
+      ' has accepted your appointment "' +
+      apptName +
+      '". You can see all participant status in our website.</body></html>';
+
+    const sendEmailResult = await this.supabaseClient.rpc("send_email", {
+      sender,
+      recipient,
+      subject,
+      html_body,
+    });
+  }
 }
