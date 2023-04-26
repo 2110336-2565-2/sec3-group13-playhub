@@ -3,8 +3,8 @@ Resource    ../testdata/environment.robot
 Resource    commonKeywords.robot
 
 *** Variables ***
-${test_admin_email}    jinnapatyana@gmail.com
-${test_admin_password}    333333
+${test_admin_email}    oommankung@gmail.com
+${test_admin_password}    777777
 ${login_url}    ${WEB_URL}/login
 
 *** Keywords ***
