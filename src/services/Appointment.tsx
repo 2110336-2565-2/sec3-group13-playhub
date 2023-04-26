@@ -40,7 +40,7 @@ export class AppointmentService {
     }
 
     addAppointmentResult.data[0].email.forEach((email: string) => {
-      this.notificationService.NotifyCreateAppointment(
+      this.notificationService.NotifyInviteAppointment(
         email,
         addAppointmentResult.data[0].appt_name,
         addAppointmentResult.data[0].appt_host
