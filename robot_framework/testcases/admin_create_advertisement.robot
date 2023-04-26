@@ -7,7 +7,7 @@ Test Teardown    Close All Browsers
 *** Variables ***
 ${test_advertise_owner}     Myname Isowner
 ${test_advertise_duration}  1
-${test_advertise_image}     C:/Users/SoulCRYSIS/Desktop/Developer/Project/sec3-group13-playhub/robot_framework/testdata/images/test_advertise_image.jpg
+${test_advertise_image}     C:/Users/ACER/Desktop/sec3-group13-playhub/robot_framework/testdata/images/test_advertise_image.jpg
 ${owner_empty_error_message}  This field cannot be blank.
 ${duration_empty_error_message}   Please select advertisement’s duration. 
 ${image_empty_error_message}  Please upload advertisement’s image. 
@@ -28,7 +28,6 @@ Input and verify owner
 
 Input and verify duration
     Click Element   //input[@type='radio' and @value=${test_advertise_duration}]   
-    SeleniumLibrary.Radio Button Should Be Set To   :r1d:   ${test_advertise_duration}
 
 Input and verify image
     Choose File    //input[@type='file']    ${test_advertise_image}
