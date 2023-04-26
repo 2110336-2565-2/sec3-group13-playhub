@@ -22,12 +22,12 @@ Wait add advertise load complete
     Wait Until Page Contains Element    //h1[contains(text(), '${add_advertise_title}')] 
 
 Input and verify owner
-    Input text   //input[@id=':r1b:']    ${test_advertise_owner}
-    ${value}    Get value   //input[@id=':r1b:']
+    Input text   //input[@type='text']    ${test_advertise_owner}
+    ${value}    Get value   //input[@type='text']
     Should Be Equal    ${value}    ${test_advertise_owner} 
 
 Input and verify duration
-    Click Element   //input[@name=':r1d:' and @value=${test_advertise_duration}]   
+    Click Element   //input[@type='radio' and @value=${test_advertise_duration}]   
     SeleniumLibrary.Radio Button Should Be Set To   :r1d:   ${test_advertise_duration}
 
 Input and verify image
