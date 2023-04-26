@@ -1,0 +1,1365 @@
+openapi: 3.0.3
+info:
+  title: PlayHub API Docs - OpenAPI 3.0
+  description:
+servers:
+  - url: https://yhvwtxoqpasglonyjmpe.supabase.co/rest/v1/rpc
+tags:
+  - name: advertisement
+    description: advertisement managing API
+  - name: appointment
+    description: appointment managing API
+  - name: post
+    description: post managing API
+  - name: review
+    description: review managing API
+  - name: tag
+    description: tag managing API
+  - name: user
+    description: user managing API
+paths:
+  /add_participant_id_to_post_id:
+    post:
+      tags:
+        - post
+      summary: Add participant id to a post
+      description: Add participant id to a post
+      operationId: add_participant_id_to_post_id
+      requestBody:
+        description: Add participant id to a post
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                post_id:
+                  type: number
+                user_id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /create_advertisement:
+    post:
+      tags:
+        - advertisement
+      summary: Create an advertisement
+      description: Create an advertisement
+      operationId: create_advertisement
+      requestBody:
+        description: Create an advertisement
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                end_date:
+                  type: string
+                image_url:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /create_appointment:
+    post:
+      tags:
+        - appointment
+      summary: Create an appointment
+      description: Create an appointment
+      operationId: create_appointment
+      requestBody:
+        description: Create an appointment
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                postid:
+                  type: number
+                title:
+                  type: string
+                location:
+                  type: string
+                description:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: number
+                start_time:
+                  type: string
+                end_time:
+                  type: string
+                images:
+                  type: array
+                  items:
+                    type: string
+                pending_user_id:
+                  type: array
+                  items:
+                    type: string
+                owner_id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /create_post:
+    post:
+      tags:
+        - post
+      summary: Create a post
+      description: Create a post
+      operationId: create_post
+      requestBody:
+        description: Create a post
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                location:
+                  type: string
+                description:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: number
+                start_time:
+                  type: string
+                end_time:
+                  type: string
+                images:
+                  type: array
+                  items:
+                    type: string
+                owner_id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /create_review:
+    post:
+      tags:
+        - review
+      summary: Create a review
+      description: Create a review
+      operationId: create_review
+      requestBody:
+        description: Create a review
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                description:
+                  type: string
+                score:
+                  type: number
+                appointment_id:
+                  type: number
+                reviewer_id:
+                  type: string
+                is_anonymous:
+                  type: boolean
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /create_user:
+    post:
+      tags:
+        - user
+      summary: Create a user
+      description: Create a user
+      operationId: create_user
+      requestBody:
+        description: Create a user
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+                birthdate:
+                  type: string
+                sex:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /delete_post_by_post_id:
+    post:
+      tags:
+        - post
+      summary: Delete a post by the post id
+      description: Delete a post by the post id
+      operationId: delete_post_by_post_id
+      requestBody:
+        description: Delete a post by the post id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /end_appointment:
+    post:
+      tags:
+        - appointment
+      summary: End an appointment
+      description: End an appointment
+      operationId: end_appointment
+      requestBody:
+        description: End an appointment
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                end_id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /get_advertisement:
+    post:
+      tags:
+        - advertisement
+      summary: Get all advertisements
+      description: Get all advertisements
+      operationId: get_advertisement
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  image_url:
+                    type: string
+  /get_appointment_by_appointment_id:
+    post:
+      tags:
+        - appointment
+      summary: Get an appointment by its appointment id
+      description: Get an appointment by its appointment id
+      operationId: get_appointment_by_appointment_id
+      requestBody:
+        description: Get an appointment by its appointment id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  start_time:
+                    type: string
+                  end_time:
+                    type: string
+                  owner_id:
+                    type: string
+                  location:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: string
+                  images:
+                    type: array
+                    items:
+                      type: string
+                  pending_user:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/participant"
+                  accept_user:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/participant"
+                  reject_user:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/participant"
+                  image:
+                    type: string
+                  participant_number:
+                    type: number
+  /get_appointment_to_rate:
+    post:
+      tags:
+        - appointment
+      summary: Get an appointment that need to be rated
+      description: Get an appointment that need to be rated
+      operationId: get_appointment_to_rate
+      requestBody:
+        description: Get an appointment that need to be rated
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  start_time:
+                    type: string
+                  end_time:
+                    type: string
+                  owner_id:
+                    type: string
+                  location:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: number
+                  images:
+                    type: array
+                    items:
+                      type: string
+                  pending_user_id:
+                    type: array
+                    items:
+                      type: string
+                  accept_user_id:
+                    type: array
+                    items:
+                      type: string
+                  reject_user_id:
+                    type: array
+                    items:
+                      type: string
+                  image:
+                    type: string
+                  participant_number:
+                    type: number
+                  username:
+                    type: string
+  /get_appointments_by_user_id:
+    post:
+      tags:
+        - appointment
+      summary: Get all appointments of a user by their id
+      description: Get all appointments of a user by their id
+      operationId: get_appointments_by_user_id
+      requestBody:
+        description: Get all appointments of a user by their id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  start_time:
+                    type: string
+                  end_time:
+                    type: string
+                  owner_id:
+                    type: string
+                  location:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: number
+                  images:
+                    type: array
+                    items:
+                      type: string
+                  pending_user_id:
+                    type: array
+                    items:
+                      type: string
+                  accept_user_id:
+                    type: array
+                    items:
+                      type: string
+                  reject_user_id:
+                    type: array
+                    items:
+                      type: string
+                  image:
+                    type: string
+                  participant_number:
+                    type: number
+                  username:
+                    type: string
+  /get_appointments_by_user_id_which_pending:
+    post:
+      tags:
+        - appointment
+      summary: Get all appointments of a user by their id which are pending
+      description: Get all appointments of a user by their id which are pending
+      operationId: get_appointments_by_user_id_which_pending
+      requestBody:
+        description: Get all appointments of a user by their id which are pending
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  start_time:
+                    type: string
+                  end_time:
+                    type: string
+                  owner_id:
+                    type: string
+                  location:
+                    type: string
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: number
+                  images:
+                    type: array
+                    items:
+                      type: string
+                  pending_user_id:
+                    type: array
+                    items:
+                      type: string
+                  accept_user_id:
+                    type: array
+                    items:
+                      type: string
+                  reject_user_id:
+                    type: array
+                    items:
+                      type: string
+                  image:
+                    type: string
+                  participant_number:
+                    type: number
+                  username:
+                    type: string
+  /get_is_email_exist:
+    post:
+      tags:
+        - user
+      summary: Get whether the email is exist
+      description: Get whether the email is exist
+      operationId: get_is_email_exist
+      requestBody:
+        description: Get whether the email is exist
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+            schema:
+              type: boolean
+  /get_is_user_reviewed_appointment:
+    post:
+      tags:
+        - appointment
+      summary: Get whether is the user had reviewed that appointment
+      description: Get whether is the user had reviewed that appointment
+      operationId: get_is_user_reviewed_appointment
+      requestBody:
+        description: Get whether is the user had reviewed that appointment
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                appointment_id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: boolean
+  /get_owner_email_by_appointment_id:
+    post:
+      tags:
+        - appointment
+      summary: Get the email of an appointent owner given its appointment id
+      description: Get the email of an appointent owner given its appointment id
+      operationId: get_owner_email_by_appointment_id
+      requestBody:
+        description: Get the email of an appointent owner given its appointment id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: string
+  /get_post_by_post_id:
+    post:
+      tags:
+        - post
+      summary: Get a post by its id
+      description: Get a post by its id
+      operationId: get_post_by_post_id
+      requestBody:
+        description: Get a post by its id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  owner_id:
+                    type: string
+                  owner_name:
+                    type: string
+                  owner_profile:
+                    type: string
+                  location:
+                    type: string
+                  start_time:
+                    type: string
+                  end_time:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: number
+                  tag_names:
+                    type: array
+                    items:
+                      type: string
+                  images:
+                    type: array
+                    items:
+                      type: string
+  /get_post_with_participants_by_post_id:
+    post:
+      tags:
+        - post
+      summary: Get a post with its participants by its id
+      description: Get a post with its participants by its id
+      operationId: get_post_with_participants_by_post_id
+      requestBody:
+        description: Get a post with its participants by its id
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  owner_id:
+                    type: string
+                  owner_name:
+                    type: string
+                  owner_profile:
+                    type: string
+                  location:
+                    type: string
+                  start_time:
+                    type: string
+                  end_time:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/tag"
+                  participants:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/participant"
+                  images:
+                    type: array
+                    items:
+                      type: string
+  /get_posts:
+    post:
+      tags:
+        - post
+      summary: Get all posts
+      description: Get all posts
+      operationId: get_posts
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  owner_id:
+                    type: string
+                  owner_name:
+                    type: string
+                  owner_profile:
+                    type: string
+                  location:
+                    type: string
+                  start_time:
+                    type: string
+                  end_time:
+                    type: string
+                  tags:
+                    type: array
+                    items:
+                      type: number
+                  tag_names:
+                    type: array
+                    items:
+                      type: string
+                  images:
+                    type: array
+                    items:
+                      type: string
+  /get_posts_by_user_id:
+    post:
+      tags:
+        - post
+      summary: get posts by user's ID
+      description: get posts by user's ID
+      operationId: get_posts_by_user_id
+      requestBody:
+        description: user's ID
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                id:
+                  type: number
+                title:
+                  type: string
+                description:
+                  type: string
+                owner_id:
+                  type: string
+                owner_name:
+                  type: string
+                owner_profile:
+                  type: string
+                location:
+                  type: string
+                start_time:
+                  type: string
+                end_time:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: number
+                tag_names:
+                  type: array
+                  items:
+                    type: string
+                images:
+                  type: array
+                  items:
+                    type: string
+  /get_posts_with_participants:
+    post:
+      tags:
+        - post
+      summary: get posts with participants
+      description: get posts with participants
+      operationId: get_posts_with_participants
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                id:
+                  type: number
+                title:
+                  type: string
+                description:
+                  type: string
+                owner_id:
+                  type: string
+                owner_name:
+                  type: string
+                owner_profile:
+                  type: string
+                location:
+                  type: string
+                start_time:
+                  type: string
+                end_time:
+                  type: string
+                images:
+                  type: array
+                  items:
+                    type: string
+                tags:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/tag"
+                participants:
+                  type: array
+                  items:
+                    $ref: "#/components/schemas/participant"
+  /get_review_by_reviewer_and_appointment_id:
+    post:
+      tags:
+        - review
+      summary: get reviews by appointment which reviewer participate in
+      description: get reviews by appointment which reviewer participate in
+      operationId: get_review_by_reviewer_and_appointment_id
+      requestBody:
+        description: reviewer and appointment's ID
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                reviewer_id:
+                  type: string
+                appointment_id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                id:
+                  type: number
+                description:
+                  type: string
+                score:
+                  type: number
+                is_anonymous:
+                  type: boolean
+  /get_reviews_by_reviewee_id:
+    post:
+      tags:
+        - review
+      summary: get reviews by reviewee's ID
+      description: get reviews by reviewee's ID
+      operationId: get_reviews_by_reviewee_id
+      requestBody:
+        description: reviewee's ID
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                id:
+                  type: number
+                reviewer_name:
+                  type: string
+                description:
+                  type: string
+                score:
+                  type: number
+                appointment_title:
+                  type: string
+                is_anonymous:
+                  type: boolean
+  /get_tags:
+    post:
+      tags:
+        - tag
+      summary: get all tag data
+      description: get all tag data
+      operationId: get_tags
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/tag"
+  /get_user_by_user_id:
+    post:
+      tags:
+        - user
+      summary: get user's data by user's ID
+      description: get user's data by user's ID
+      operationId: get_user_by_user_id
+      requestBody:
+        description: user's ID
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/user"
+  /remove_participant_id_from_post_id:
+    post:
+      tags:
+        - post
+      summary: remove participant from post
+      description: remove participant from post
+      operationId: remove_participant_id_from_post_id
+      requestBody:
+        description: user's ID and post's ID
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_id:
+                  type: string
+                post_id:
+                  type: number
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /search_posts_by_conditions:
+    post:
+      tags:
+        - post
+      summary: search post by conditions
+      description: search post by conditions
+      operationId: search_posts_by_conditions
+      requestBody:
+        description: any conditions
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tag_ids:
+                  type: array
+                  example: [1, 7]
+                  items:
+                    type: number
+                host_names:
+                  type: array
+                  example: ["paper", "test"]
+                  items:
+                    type: string
+                post_names:
+                  type: array
+                  example: ["hola", "play"]
+                  items:
+                    type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  title:
+                    type: string
+                  description:
+                    type: string
+                  owner_id:
+                    type: string
+                  owner_name:
+                    type: string
+                  owner_profile:
+                    type: string
+                  location:
+                    type: string
+                  start_time:
+                    type: string
+                  end_time:
+                    type: string
+                  images:
+                    type: array
+                    items:
+                      type: string
+                  tags:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/tag"
+                  participants:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/participant"
+  /update_accept_appointment_by_appointment_id:
+    post:
+      tags:
+        - appointment
+      summary: update accept appointment user by appointment's ID
+      description: update accept appointment user by appointment's ID
+      operationId: update_accept_appointment_by_appointment_id
+      requestBody:
+        description: appointment's ID (id) and user's ID (user_id)
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                user_id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /update_post_by_post_id:
+    post:
+      tags:
+        - post
+      summary: update post by post's ID
+      description: update post by post's ID
+      operationId: update_post_by_post_id
+      requestBody:
+        description: new appointment's data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                title:
+                  type: string
+                location:
+                  type: string
+                tags:
+                  type: array
+                  items:
+                    type: number
+                start_time:
+                  type: string
+                end_time:
+                  type: string
+                description:
+                  type: string
+                images:
+                  type: array
+                  items:
+                    type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /update_reject_appointment_by_appointment_id:
+    post:
+      tags:
+        - appointment
+      summary: update reject appointment user by appointment's ID
+      description: update reject appointment user by appointment's ID
+      operationId: update_reject_appointment_by_appointment_id
+      requestBody:
+        description: appointment's ID (id) and user's ID (user_id)
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                user_id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /update_review:
+    post:
+      tags:
+        - review
+      summary: update review
+      description: update review
+      operationId: update_review
+      requestBody:
+        description: new user's data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: number
+                description:
+                  type: string
+                score:
+                  type: number
+                is_anonymous:
+                  type: boolean
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /update_user_by_user_id:
+    post:
+      tags:
+        - user
+      summary: update user by user's ID
+      description: update user by user's ID
+      operationId: update_user_by_user_id
+      requestBody:
+        description: new user's data
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                username:
+                  type: string
+                sex:
+                  type: string
+                description:
+                  type: string
+                image:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+  /update_user_national_id_by_user_id:
+    post:
+      tags:
+        - user
+      summary: Update user's national ID
+      description: Update user's national ID
+      operationId: update_user_national_id_by_user_id
+      requestBody:
+        description: user's ID and national ID
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                national_id:
+                  type: string
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  is_exist_national_id:
+                    type: boolean
+components:
+  schemas:
+    advertisement:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        image_url:
+          type: string
+        end_date:
+          type: string
+    appointment:
+      type: object
+      properties:
+        id:
+          type: number
+        start_time:
+          type: string
+        end_time:
+          type: string
+        owner_id:
+          type: string
+        location:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        tags:
+          type: array
+          items:
+            type: number
+        images:
+          type: array
+          items:
+            type: string
+        pending_user_id:
+          type: array
+          items:
+            type: string
+        accept_user_id:
+          type: array
+          items:
+            type: string
+        reject_user_id:
+          type: array
+          items:
+            type: string
+        is_end:
+          type: boolean
+    post:
+      type: object
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        description:
+          type: string
+        owner_id:
+          type: string
+        location:
+          type: string
+        start_time:
+          type: string
+        end_time:
+          type: string
+        tags:
+          type: array
+          items:
+            type: number
+        images:
+          type: array
+          items:
+            type: string
+        participants:
+          type: array
+          items:
+            type: string
+    review:
+      type: object
+      properties:
+        id:
+          type: number
+        reviewer_id:
+          type: string
+        description:
+          type: string
+        score:
+          type: number
+        appointment_id:
+          type: number
+        is_anonymous:
+          type: boolean
+    tag:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+    user:
+      type: object
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        email:
+          type: string
+        birthdate:
+          type: string
+        sex:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        is_enabled:
+          type: boolean
+        rating_score:
+          type: number
+        is_admin:
+          type: boolean
+        national_id:
+          type: string
+    participant:
+      type: object
+      properties:
+        userId:
+          type: string
+        username:
+          type: string
+        birthdate:
+          type: string
+        sex:
+          type: string
+        description:
+          type: string
+        image:
+          type: string
+        email:
+          type: string
+        isAdmin:
+          type: boolean
+        isVerified:
+          type: boolean
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: apikey
+      in: header
+security:
+  - ApiKeyAuth: []

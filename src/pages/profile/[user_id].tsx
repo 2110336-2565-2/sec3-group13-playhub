@@ -2,8 +2,6 @@ import { Suspense, useCallback, useContext, useEffect, useState } from "react";
 import { NextRouter, useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import {
   Avatar,
   IconButton,
@@ -34,12 +32,13 @@ import VerifyChip from "@/components/profile/VerifyChip";
 import { User } from "@/types/User";
 import { PAGE_PATHS } from "enum/PAGES";
 import { GENDER } from "enum/GENDER";
-import { GetUserByUserId } from "@/services/User";
+import { Service } from "@/services";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import { ReviewExtend } from "@/types/Review";
-import { GetReviewsByRevieweeId } from "@/services/Review";
 import FeedBackList from "@/components/rate/FeedbackList";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const MyProfileStyle = {
   Card: {
@@ -86,9 +85,10 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
 }));
 
 export default function Home() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [targetUserData, setTargetUserData] = useState<User | null>(null);
   const [feedbacks, setFeedbacks] = useState<ReviewExtend[]>([]);
@@ -107,17 +107,17 @@ export default function Home() {
   useEffect(() => {
     async function getTargetUserData() {
       if (!userStatus.user || !router.query.user_id || targetUserData) return;
-      const userData = await GetUserByUserId(router.query.user_id as string, supabaseClient);
+      const userData = await service.user.GetUserByUserId(router.query.user_id as string);
       setTargetUserData(userData);
     }
     getTargetUserData();
 
     if (router.query.user_id) {
-      GetReviewsByRevieweeId(supabaseClient, router.query.user_id as string).then((reviews) =>
-        setFeedbacks(reviews)
-      );
+      service.review
+        .GetReviewsByRevieweeId(router.query.user_id as string)
+        .then((reviews) => setFeedbacks(reviews));
     }
-  }, [router.query.user_id, supabaseClient, userStatus.user, targetUserData]);
+  }, [router.query.user_id, userStatus.user, targetUserData]);
 
   function handleEditProfile(): void {
     router.push(PAGE_PATHS.EDIT_PROFILE);

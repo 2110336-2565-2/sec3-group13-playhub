@@ -3,13 +3,19 @@ import { Tag } from "@/types/Tag";
 import { SupabaseClient } from "@supabase/auth-helpers-react";
 import { Database } from "supabase/db_types";
 
-export async function GetAllTags(
-  supabaseClient: SupabaseClient<Database, "public", any>
-): Promise<Tag[]> {
-  const getTagsResult = await supabaseClient.rpc("get_tags");
-  if (getTagsResult.error) {
-    console.log(getTagsResult.error);
-    throw new Error(SUPABASE_CONNECTING_ERROR);
+export class TagService {
+  supabaseClient: SupabaseClient<Database>;
+
+  constructor(supabaseClient: SupabaseClient<Database>) {
+    this.supabaseClient = supabaseClient;
   }
-  return getTagsResult.data;
+
+  async GetAllTags(): Promise<Tag[]> {
+    const getTagsResult = await this.supabaseClient.rpc("get_tags");
+    if (getTagsResult.error) {
+      console.log(getTagsResult.error);
+      throw new Error(SUPABASE_CONNECTING_ERROR);
+    }
+    return getTagsResult.data;
+  }
 }

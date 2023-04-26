@@ -3,14 +3,8 @@ import Navbar from "@/components/public/Navbar";
 import { Typography, Box, Grid, IconButton, Stack, Card, FormHelperText } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AppointmentDetail } from "@/types/Appointment";
-import {
-  AcceptAppointment,
-  GetAppointmentByAppointmentId,
-  RejectAppointment,
-} from "@/services/Appointment";
+import { Service } from "@/services";
 import { useRouter } from "next/router";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import { PAGE_PATHS } from "enum/PAGES";
 import { userContext } from "supabase/user_context";
@@ -25,6 +19,8 @@ import Participant from "@/components/post/Participant";
 import CommonButton from "@/components/public/CommonButton";
 import { COLOR, COLOR_CODE } from "enum/COLOR";
 import CommonDialog from "@/components/public/CommonDialog";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const ConfirmAppointmentStyle = {
   TextField: {
@@ -41,9 +37,10 @@ const ConfirmAppointmentStyle = {
 };
 
 export default function Home() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();
   const [isParticipant, setIsParticipant] = useState<boolean | null>(null);
 
@@ -59,7 +56,7 @@ export default function Home() {
 
   function handleAcceptAppointment(): void {
     if (userStatus.user) {
-      AcceptAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch((err) => {
+      service.appointment.AcceptAppointment(appointmentId, userStatus.user.userId).catch((err) => {
         console.log(err);
         return;
       });
@@ -70,7 +67,7 @@ export default function Home() {
 
   function handleRejectAppointment(): void {
     if (userStatus.user) {
-      RejectAppointment(appointmentId, userStatus.user.userId, supabaseClient).catch((err) => {
+      service.appointment.RejectAppointment(appointmentId, userStatus.user.userId).catch((err) => {
         console.log(err);
         return;
       });
@@ -81,7 +78,8 @@ export default function Home() {
 
   useEffect(() => {
     if (!appointmentId) return;
-    GetAppointmentByAppointmentId(appointmentId, supabaseClient)
+    service.appointment
+      .GetAppointmentByAppointmentId(appointmentId)
       .then((appointment) => {
         setAppointment(appointment);
         setIsParticipant(appointment.ownerId !== userStatus.user?.userId);
@@ -90,7 +88,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-  }, [supabaseClient, appointmentId, userStatus.user]);
+  }, [appointmentId, userStatus.user]);
 
   function backToSelectAppointment(): void {
     router.push(PAGE_PATHS.SELECT_APPOINTMENT);
