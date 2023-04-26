@@ -225,7 +225,6 @@ export interface Database {
           pending_user_id: string[];
           owner_id: string;
         };
-        Returns: undefined;
       };
       create_post: {
         Args: {
@@ -510,7 +509,7 @@ export interface Database {
         Returns: {
           id: number;
           name: string;
-        }[];
+        };
       };
       get_user_by_user_id: {
         Args: {
