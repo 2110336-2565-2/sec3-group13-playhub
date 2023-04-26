@@ -91,9 +91,11 @@ export async function UpdateUserNationalIdByUserId(
   nationalId: string,
   supabaseClient: SupabaseClient<Database>
 ): Promise<boolean> {
-  const updateResult = await supabaseClient.rpc("update_user_national_id_by_user_id", {
-    id,
-    national_id: nationalId,
+  const updateResult = await supabaseClient.functions.invoke("update_user_national_id_by_user_id", {
+    body: {
+      id,
+      national_id: nationalId,
+    },
   });
 
   if (updateResult.error) {
@@ -101,5 +103,5 @@ export async function UpdateUserNationalIdByUserId(
     throw new Error("Something went wrong!!");
   }
   console.log(updateResult.data);
-  return updateResult.data[0].is_exist_national_id;
+  return !updateResult.error;
 }
