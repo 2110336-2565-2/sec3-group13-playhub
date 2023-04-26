@@ -3,14 +3,11 @@
 // This enables autocomplete, go to definition, etc.
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { updateNationalID } from "./updateNationalID";
+import { updateNationalID } from "./updateNationalID.ts";
 
 serve(async (req: Request) => {
   const body = await req.json();
-  // return updateNationalID(body);
-  return new Response(JSON.stringify(body), {
-    headers: { "Content-Type": "application/json" },
-  });
+  return updateNationalID(body);
 });
 
 // To invoke:

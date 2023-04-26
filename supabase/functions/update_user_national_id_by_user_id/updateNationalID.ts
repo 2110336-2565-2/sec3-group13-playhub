@@ -1,5 +1,3 @@
-import "whatwg-fetch";
-
 type MessageResponse = {
   message: string;
   success: Boolean;
