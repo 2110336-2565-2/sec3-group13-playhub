@@ -3,10 +3,8 @@ import Navbar from "@/components/public/Navbar";
 import { Typography, Box, IconButton, Stack, Card, FormHelperText, Grid } from "@mui/material";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { AppointmentDetail } from "@/types/Appointment";
-import { GetAppointmentByAppointmentId, EndAppointment } from "@/services/Appointment";
+import { Service } from "@/services";
 import { useRouter } from "next/router";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import Loading from "@/components/public/Loading";
 import { PAGE_PATHS, ROLE } from "enum/PAGES";
 import { userContext } from "supabase/user_context";
@@ -20,6 +18,8 @@ import DisplayImages from "@/components/post/DisplayImages";
 import Participant from "@/components/post/Participant";
 import { COLOR_CODE } from "enum/COLOR";
 import CommonButton from "@/components/public/CommonButton";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const HostAppointmentStyle = {
   TextField: {
@@ -34,15 +34,17 @@ const HostAppointmentStyle = {
 };
 
 export default function Home() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
   const [appointment, setAppointment] = useState<AppointmentDetail | null>();
   const [isParticipant, setIsParticipant] = useState<boolean | null>(null);
 
   const appointmentId = parseInt(router.query.appointment_id as string);
   useEffect(() => {
-    GetAppointmentByAppointmentId(appointmentId, supabaseClient)
+    service.appointment
+      .GetAppointmentByAppointmentId(appointmentId)
       .then((appointment) => {
         setAppointment(appointment);
         setIsParticipant(appointment.ownerId !== userStatus.user?.userId);
@@ -51,7 +53,7 @@ export default function Home() {
         console.log(err);
         return;
       });
-  }, [supabaseClient, appointmentId, userStatus.user]);
+  }, [appointmentId, userStatus.user]);
 
   function compareDate(): boolean {
     if (appointment) {
@@ -78,7 +80,8 @@ export default function Home() {
   }
 
   function handleEndAppointment(): void {
-    EndAppointment(appointmentId, supabaseClient)
+    service.appointment
+      .EndAppointment(appointmentId)
       .then(() => {
         router.push(PAGE_PATHS.MY_APPOINTMENTS);
         return;

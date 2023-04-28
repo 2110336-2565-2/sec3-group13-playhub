@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 import {
   Typography,
   Avatar,
@@ -20,11 +22,9 @@ import { styled } from "@mui/material/styles";
 import { IconButtonProps } from "@mui/material/IconButton";
 
 import { Post } from "../../types/Post";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { NextRouter, useRouter } from "next/router";
 import { PAGE_PATHS } from "enum/PAGES";
-import { DeletePost } from "@/services/Posts";
+import { Service } from "@/services";
 import CommonDialog from "../public/CommonDialog";
 import { COLOR } from "enum/COLOR";
 import DisplayTags from "../post/DisplayTags";
@@ -52,19 +52,20 @@ type props = {
 };
 
 export default function AdminPostCard(props: props) {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router: NextRouter = useRouter();
 
   const [openDeletePostModal, setOpenDeletePostModal] = useState<boolean>(false);
   const [hiddenPostDetail, setHiddenPostDetail] = useState<boolean>(true);
-
-  const supabaseClient = useSupabaseClient<Database>();
 
   const handleOpenDeletePostModal = (): void => setOpenDeletePostModal(true);
   const handleCloseDeletePostModal = (): void => setOpenDeletePostModal(false);
   const handleExpandDetail = (): void => setHiddenPostDetail(!hiddenPostDetail);
 
   async function handleDelete() {
-    DeletePost(props.post.postId, supabaseClient)
+    service.post
+      .DeletePost(props.post.postId)
       .then(() => {
         props.handleDeletePost(props.post);
         handleCloseDeletePostModal();

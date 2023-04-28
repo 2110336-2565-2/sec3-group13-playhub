@@ -3,9 +3,6 @@ import { NextRouter, useRouter } from "next/router";
 import { Box, Card, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
-
 import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
 import PasswordTextField from "@/components/public/PasswordTextField";
@@ -14,8 +11,10 @@ import { validateConfirmNewPassword } from "@/utilities/validation";
 import { validation } from "@/types/Validation";
 import { PAGE_PATHS } from "enum/PAGES";
 
-import { ResetPassword } from "@/services/Password";
+import { Service } from "@/services";
 import NormalButton from "@/components/public/CommonButton";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 type ResetPasswordInput = {
   password: string;
@@ -37,8 +36,9 @@ const ResetPasswordStyle = {
 };
 
 export default function Home() {
-  const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
+  const router: NextRouter = useRouter();
   const [canResetPassword, setCanResetPassword] = useState(false);
 
   const [newPassword, setNewPassword] = useState<ResetPasswordInput>({
@@ -67,7 +67,8 @@ export default function Home() {
     if (!arePasswordsErr.err) {
       // reset password end point goes here
       setIsRequesting(true);
-      ResetPassword(newPassword.password, supabaseClient)
+      service.password
+        .ResetPassword(newPassword.password)
         .then(() => {
           router.push(PAGE_PATHS.SUCCESS_RESET_PASSWORD);
           return;
@@ -81,12 +82,12 @@ export default function Home() {
   }
 
   useEffect(() => {
-    supabaseClient.auth.onAuthStateChange(async (event, session) => {
+    service.supabaseClient.auth.onAuthStateChange(async (event, session) => {
       if (event == "PASSWORD_RECOVERY") {
         setCanResetPassword(true);
       }
     });
-  }, [supabaseClient.auth]);
+  }, [service.supabaseClient.auth]);
 
   useEffect(() => {
     if (router.asPath.indexOf("access_token") == -1) {

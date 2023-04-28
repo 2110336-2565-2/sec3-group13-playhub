@@ -2,7 +2,6 @@ export enum PAGE_PATHS {
   // not require auth
   LOGIN = "/login/",
   REGISTER = "/register/",
-
   // require auth <-> exist userStatus
   HOME = "/",
 
@@ -13,12 +12,9 @@ export enum PAGE_PATHS {
 
   PROFILE = "/profile/", // subfix : user_id
   EDIT_PROFILE = "/editProfile/",
-
   VERIFY = "/verify/",
-
   RESET_PASSWORD = "/resetPassword/",
   SUCCESS_RESET_PASSWORD = "/successResetPassword/",
-
   REQUEST_RESET_PASSWORD = "/requestResetPassword/",
   SUCCESS_REQUEST_RESET_PASSWORD = "/successRequestResetPassword/",
 
@@ -34,7 +30,7 @@ export enum PAGE_PATHS {
   // admin
   ADMIN_HOME = "/admin/", // subfix : user_id
   ADMIN_PROFILE = "/admin/profile/", // subfix : user_id
-  ADVERTISEMENT = "/admin/advertise"
+  ADVERTISEMENT = "/admin/advertise",
 }
 
 export enum ROLE {
