@@ -1,6 +1,4 @@
 import { Post } from "@/types/Post";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { Suspense, useContext, useEffect, useState } from "react";
 import { userContext } from "supabase/user_context";
 import { Box, Stack } from "@mui/material";
@@ -9,11 +7,14 @@ import { NextRouter, useRouter } from "next/router";
 import { PAGE_PATHS } from "enum/PAGES";
 import AdminNavbar from "@/components/admin/AdminNavbar";
 import AdminPostCard from "@/components/admin/AdminPostCard";
-import { GetPosts } from "@/services/Posts";
+import { Service } from "@/services";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 export default function Home() {
-  const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
+  const router: NextRouter = useRouter();
   const userStatus = useContext(userContext);
 
   const [posts, setPosts] = useState<Post[] | null>(null);
@@ -26,7 +27,8 @@ export default function Home() {
     async function getPostData() {
       if (!userStatus.user) return;
 
-      GetPosts(supabaseClient)
+      service.post
+        .GetPosts()
         .then((p) => {
           setPosts(p);
         })
@@ -37,7 +39,7 @@ export default function Home() {
     }
 
     getPostData();
-  }, [userStatus.user, supabaseClient]);
+  }, [userStatus.user]);
 
   if (userStatus.isLoading) return <Loading />;
   if (!userStatus.user) {

@@ -2,7 +2,7 @@ import { Dayjs } from "dayjs";
 import { User } from "./User";
 
 export type Appointment = {
-  appointmentId: string;
+  appointmentId: number;
   title: string;
   ownerId: string;
   ownerName: string;

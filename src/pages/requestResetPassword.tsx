@@ -3,9 +3,6 @@ import { NextRouter, useRouter } from "next/router";
 import { Box, Card, Stack, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
 
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
-
 import Loading from "@/components/public/Loading";
 import Background from "@/components/public/Background";
 import NormalTextField from "@/components/public/CommonTextField";
@@ -15,8 +12,10 @@ import { validation } from "@/types/Validation";
 import { PAGE_PATHS } from "enum/PAGES";
 import { ICONS } from "enum/ICONS";
 
-import { RequestResetPassword } from "@/services/Password";
+import { Service } from "@/services";
 import NormalButton from "@/components/public/CommonButton";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const RequestResetPasswordStyle = {
   Card: {
@@ -36,8 +35,9 @@ const RequestResetPasswordStyle = {
 };
 
 export default function Home() {
-  const router: NextRouter = useRouter();
   const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
+  const router: NextRouter = useRouter();
 
   const [email, setEmail] = useState<string>("");
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
@@ -58,7 +58,8 @@ export default function Home() {
     if (!isEmailErr.err) {
       // reset password end point goes here
       setIsRequesting(true);
-      RequestResetPassword(email, supabaseClient)
+      service.password
+        .RequestResetPassword(email)
         .then(() => {
           router.push(PAGE_PATHS.SUCCESS_REQUEST_RESET_PASSWORD);
           return;

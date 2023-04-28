@@ -2,8 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import { useRouter } from "next/router";
 
 import { userContext } from "supabase/user_context";
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
-import { Database } from "supabase/db_types";
 import { Typography, Stack, Box, Card, IconButton, FormHelperText } from "@mui/material";
 
 import Loading from "@/components/public/Loading";
@@ -19,11 +17,12 @@ import TitleTextField from "@/components/post/TitleTextField";
 import { User } from "@/types/User";
 import DisplayDateTime from "@/components/appointment/DisplayDateTime";
 
-import { GetPostWithParticipantsByPostId } from "@/services/Posts";
-import { CreateAppointment } from "@/services/Appointment";
+import { Service } from "@/services";
 import DisplayImages from "@/components/post/DisplayImages";
 import SelectParticipants from "@/components/appointment/SelectParticipants";
 import CommonButton from "@/components/public/CommonButton";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { Database } from "supabase/db_types";
 
 const CreatePostStyle = {
   TextField: {
@@ -40,9 +39,10 @@ const CreatePostStyle = {
 };
 
 export default function Home() {
+  const supabaseClient = useSupabaseClient<Database>();
+  const service = new Service(supabaseClient);
   const router = useRouter();
   const userStatus = useContext(userContext);
-  const supabaseClient = useSupabaseClient<Database>();
 
   const [postInfo, setPostInfo] = useState<PostInfo | null>(null);
   const [availableParticipants, setAvailableParticipants] = useState<User[] | null>(null);
@@ -76,7 +76,8 @@ export default function Home() {
 
     if (postInfo) {
       setIsCreatingAppointment(true);
-      CreateAppointment(postId, postInfo, selectedParticipants, supabaseClient)
+      service.appointment
+        .CreateAppointment(postId, postInfo, selectedParticipants)
         .then(() => {
           router.push(PAGE_PATHS.MY_APPOINTMENTS);
           return;
@@ -91,7 +92,8 @@ export default function Home() {
 
   useEffect(() => {
     if (!postId || !userStatus.user) return;
-    GetPostWithParticipantsByPostId(postId, supabaseClient)
+    service.post
+      .GetPostWithParticipantsByPostId(postId)
       .then((p: PostInfo) => {
         setPostInfo(p);
         if (!p.participants) return;
@@ -104,7 +106,7 @@ export default function Home() {
         router.push(PAGE_PATHS.CREATE_APPOINTMENT);
         return;
       });
-  }, [supabaseClient, postId, userStatus.user, router]);
+  }, [postId, userStatus.user, router]);
 
   function backToPost(): void {
     router.push(PAGE_PATHS.POST + router.query.post_id);
