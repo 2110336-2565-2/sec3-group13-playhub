@@ -41,3 +41,5 @@ output.html
 output.xml
 report.html
 selenium-screenshot*.png
+
+volumes/db/data
